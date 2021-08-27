@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -23,10 +24,19 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    public const ROLE_ENUM = [
+        'admin'     => 1,
+        'analista'  => 2,
+        'candidato' => 3,
+    ];
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
+        'primeiro_acesso'
     ];
 
     /**
@@ -58,4 +68,16 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function setAtributes($input)
+    {
+        $this->name = $input['name'];
+        $this->email = $input['email'];
+        $this->password = Hash::make($input['password']);
+    }
+
+    public function candidato()
+    {
+        return $this->hasOne(Candidato::class, 'user_id');
+    }
 }
