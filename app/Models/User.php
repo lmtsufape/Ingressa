@@ -74,8 +74,6 @@ class User extends Authenticatable
         $this->name = $input['name'];
         $this->email = $input['email'];
         $this->password = Hash::make($input['password']);
-        $this->role = User::ROLE_ENUM['analista'];
-        $this->primeiro_acesso = false;
     }
 
     public function candidato()
