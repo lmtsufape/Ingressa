@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Candidato extends Model
 {
     use HasFactory;
+
+    public function inscricoes()
+    {
+        return $this->hasMany(Inscricao::class, 'user_id');
+    }
 }

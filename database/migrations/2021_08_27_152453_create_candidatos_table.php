@@ -17,7 +17,6 @@ class CreateCandidatosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('protocolo');
             $table->unsignedBigInteger('co_termo_adesao');
             $table->unsignedBigInteger('co_etapa');
             $table->unsignedBigInteger('co_evento');
