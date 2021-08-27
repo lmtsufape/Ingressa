@@ -11,6 +11,7 @@ class Inscricao extends Model
 
     protected $fillable = [
         'candidato_id',
+        'chamada_id',
         'protocolo',
     ];
 
@@ -22,5 +23,10 @@ class Inscricao extends Model
     public function arquivos()
     {
         return $this->hasMany(Arquivo::class, 'inscricao_id');
+    }
+
+    public function chamada()
+    {
+        return $this->belongsTo(Chamada::class, 'chamada_id');
     }
 }

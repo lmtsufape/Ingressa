@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Candidato extends Model
+class Curso extends Model
 {
     use HasFactory;
 
-    public function inscricoes()
-    {
-        return $this->hasMany(Inscricao::class, 'candidato_id');
-    }
+    protected $fillable = [
+        'nome',
+        'turno',
+        'cod_curso',
+        'vagas',
+    ];
 }
