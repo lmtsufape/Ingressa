@@ -27,7 +27,8 @@ class ChamadaController extends Controller
     public function create($id)
     {
         $sisu = Sisu::find($id);
-        return view('chamada.create', compact('sisu'));
+        $tem_regular = Chamada::where([['sisu_id', $id], ['regular', true]])->first();
+        return view('chamada.create', compact('sisu', 'tem_regular'));
     }
 
     /**
@@ -94,8 +95,12 @@ class ChamadaController extends Controller
      * @param  \App\Models\Chamada  $chamada
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Chamada $chamada)
+    public function destroy($id)
     {
-        //
+        $chamada = Chamada::find($id);
+        $sisu = Sisu::find($chamada->sisu_id);
+        $chamada->delete();
+
+        return redirect(route('sisus.show', ['sisu' => $sisu->id]))->with(['success' => 'Chamada deletada com sucesso!']);
     }
 }

@@ -66,10 +66,10 @@
                                 <div class="col-sm-6 form-group">
                                     <p>Por favor, selecione se a chamada é regular: <span style="color: red; font-weight: bold;">*</span></p>
                                     <label for="regular_sim">{{ __('Sim') }}</label>
-                                    <input type="radio" id="regular_sim" name="regular" value="true">
+                                    <input type="radio" id="regular_sim" name="regular" value="true" {{$tem_regular == null ? '' : 'disabled' }}>
 
                                     <label for="regular_nao">{{ __('Não') }}</label>
-                                    <input type="radio" id="regular_nao" name="regular" value="false">
+                                    <input type="radio" id="regular_nao" name="regular" value="false" {{$tem_regular == null ? '' : 'checked' }}>
                                 </div>
                             </div>
 
