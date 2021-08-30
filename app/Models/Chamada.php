@@ -10,6 +10,7 @@ class Chamada extends Model
     use HasFactory;
 
     protected $fillable = [
+        'sisu_id',
         'nome',
         'descricao',
         'regular',
@@ -22,5 +23,10 @@ class Chamada extends Model
     public function inscricoes()
     {
         return $this->hasMany(Inscricao::class, 'chamada_id');
+    }
+
+    public function sisu()
+    {
+        return $this->belongsTo(Sisu::class, 'sisu_id');
     }
 }
