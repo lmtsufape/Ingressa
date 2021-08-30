@@ -13,6 +13,7 @@ class Inscricao extends Model
         'candidato_id',
         'chamada_id',
         'protocolo',
+        'status',
     ];
 
     public function candidato()

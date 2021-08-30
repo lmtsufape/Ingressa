@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ChamadaController;
+use App\Http\Controllers\SisuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -24,4 +26,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('usuarios', UserController::class);
+
+    Route::resource('sisus', SisuController::class);
+
+    Route::resource('chamadas', ChamadaController::class);
+
+    Route::get('/sisus/{sisu_id}/criar-chamada', [ChamadaController::class, 'create'])
+        ->name('chamadas.create');
 });

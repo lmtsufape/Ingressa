@@ -21,6 +21,12 @@
                             {{ __('Usuários') }}
                         </x-jet-nav-link>
                     @endif
+
+                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                        <x-jet-nav-link href="{{route('sisus.index')}}" :active="request()->routeIs('sisus.*')">
+                            {{ __('SiSU') }}
+                        </x-jet-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -150,6 +156,12 @@
             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                 <x-jet-responsive-nav-link href="{{route('usuarios.index')}}" :active="request()->routeIs('usuarios.*')">
                     {{ __('Usuários') }}
+                </x-jet-responsive-nav-link>
+            @endif
+
+            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                <x-jet-responsive-nav-link href="{{route('sisus.index')}}" :active="request()->routeIs('sisus.*')">
+                    {{ __('SiSU') }}
                 </x-jet-responsive-nav-link>
             @endif
         </div>

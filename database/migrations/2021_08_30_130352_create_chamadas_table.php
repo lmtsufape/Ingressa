@@ -15,11 +15,13 @@ class CreateChamadasTable extends Migration
     {
         Schema::create('chamadas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sisu_id');
+            $table->foreign('sisu_id')->references('id')->on('sisus');
             $table->string('nome');
             $table->string('descricao');
             $table->boolean('regular');
-            $table->string('caminho_resultado');
-            $table->string('caminho_import_sisu_gestao');
+            $table->string('caminho_resultado')->nullable();
+            $table->string('caminho_import_sisu_gestao')->nullable();
             $table->date('data_inicio');
             $table->date('data_fim');
             $table->timestamps();
