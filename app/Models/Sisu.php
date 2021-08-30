@@ -13,6 +13,11 @@ class Sisu extends Model
         'edicao',
     ];
 
+    public function setAtributes($input)
+    {
+        $this->edicao = $input['edicao'];
+    }
+
     public function chamadas()
     {
         return $this->hasMany(Chamada::class, 'sisu_id');
