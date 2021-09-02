@@ -4,6 +4,7 @@ use App\Http\Controllers\ChamadaController;
 use App\Http\Controllers\SisuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CursoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::get('/sisus/{sisu_id}/criar-chamada', [ChamadaController::class, 'create'])
         ->name('chamadas.create');
+
+    Route::resource('cursos', CursoController::class);
 });

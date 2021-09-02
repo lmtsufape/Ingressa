@@ -17,7 +17,7 @@ class CreateCursosTable extends Migration
             $table->id();
             $table->string('nome');
             $table->integer('turno');
-            $table->unsignedBigInteger('cod_curso');
+            $table->string('cod_curso');
             $table->integer('vagas');
             $table->timestamps();
         });

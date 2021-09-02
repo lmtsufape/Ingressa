@@ -20,11 +20,11 @@
                         <x-jet-nav-link href="{{route('usuarios.index')}}" :active="request()->routeIs('usuarios.*')">
                             {{ __('Usuários') }}
                         </x-jet-nav-link>
-                    @endif
-
-                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                         <x-jet-nav-link href="{{route('sisus.index')}}" :active="request()->routeIs('sisus.*')">
                             {{ __('SiSU') }}
+                        </x-jet-nav-link>
+                        <x-jet-nav-link href="{{route('cursos.index')}}" :active="request()->routeIs('cursos.*')">
+                            {{ __('Cursos') }}
                         </x-jet-nav-link>
                     @endif
                 </div>
