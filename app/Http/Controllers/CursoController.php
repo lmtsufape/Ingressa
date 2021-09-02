@@ -64,7 +64,8 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $curso = Curso::find($id);
+        return view('curso.edit')->with(['curso' => $curso, 'turnos' => Curso::TURNO_ENUM]);
     }
 
     /**
@@ -74,9 +75,14 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CursoRequest $request, $id)
     {
-        //
+        $request->validated();
+        $curso = Curso::find($id);
+        $curso->setAtributes($request);
+        $curso->update();
+
+        return redirect(route('cursos.index'))->with(['success' => 'Curso atualizado com sucesso!']);
     }
 
     /**
@@ -87,6 +93,9 @@ class CursoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $curso = Curso::find($id);
+        $curso->delete();
+
+        return redirect(route('cursos.index'))->with(['success' => 'Curso deletado com sucesso!']);
     }
 }

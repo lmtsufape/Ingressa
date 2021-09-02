@@ -39,23 +39,12 @@
                                 <tbody>
                                     @foreach ($cursos as $i => $curso)
                                         <tr>
-                                            <td> {{$i+1}}</td>
+                                            <td>{{$i+1}}</td>
                                             <td>{{$curso->nome}}</td>
                                             <td>{{$curso->turno}}</td>
                                             <td>
-                                                {{-- <div class="btn-group">
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-light dropdown-toggle shadow-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <img class="filter-green" src="{{asset('img/icon_acoes.svg')}}" style="width: 4px;">
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                            @if(Auth::user()->role == \App\Models\User::ROLE_ENUM['admin'] || Auth::user()->role == \App\Models\User::ROLE_ENUM['analista'])
-                                                                <a class="dropdown-item" href="{{route('sisus.show', ['sisu' => $sisu->id])}}">Visualizar edição</a>
-                                                                <a class="dropdown-item" data-toggle="modal" data-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="color: red; cursor: pointer;">Deletar edição</a>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
+                                                <a class="btn btn-primary" href="{{route('cursos.edit', ['curso' => $curso])}}">Editar</a>
+                                                <a class="btn btn-danger" data-toggle="modal" data-target="#delete-curso-{{$curso->id}}">Deletar</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -66,4 +55,33 @@
             </div>
         </div>
     </div>
+
+    @foreach ($cursos as $curso)
+  
+    <!-- Modal -->
+    <div class="modal fade" id="delete-curso-{{$curso->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #dc3545;">
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Deletar curso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="delete-curso-{{$curso->id}}-form" method="POST" action="{{route('cursos.destroy', ['curso' => $curso])}}">
+                        @csrf
+                        <input type="hidden" name="_method" value="DELETE">
+                        Tem certeza que deseja deletar esse curso?
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" form="delete-curso-{{$curso->id}}-form">Sim</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    @endforeach
 </x-app-layout>
