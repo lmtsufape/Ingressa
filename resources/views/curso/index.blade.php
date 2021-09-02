@@ -41,7 +41,22 @@
                                         <tr>
                                             <td>{{$i+1}}</td>
                                             <td>{{$curso->nome}}</td>
-                                            <td>{{$curso->turno}}</td>
+                                            <td>
+                                                @switch($curso->turno)
+                                                    @case($turnos['matutino'])
+                                                        {{__('Matutino')}}
+                                                        @break
+                                                    @case($turnos['vespertino'])
+                                                        {{__('Vespertino')}}
+                                                        @break
+                                                    @case($turnos['noturno'])
+                                                        {{__('Noturno')}}
+                                                        @break
+                                                    @case($turnos['integral'])
+                                                        {{__('Integral')}}
+                                                        @break 
+                                                @endswitch
+                                            </td>
                                             <td>
                                                 <a class="btn btn-primary" href="{{route('cursos.edit', ['curso' => $curso])}}">Editar</a>
                                                 <a class="btn btn-danger" data-toggle="modal" data-target="#delete-curso-{{$curso->id}}">Deletar</a>

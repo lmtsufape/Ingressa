@@ -16,7 +16,7 @@ class CursoController extends Controller
     public function index()
     {
         $cursos = Curso::orderBy('nome')->get();
-        return view('curso.index', compact('cursos'));
+        return view('curso.index', compact('cursos'))->with(['turnos' => Curso::TURNO_ENUM]);
     }
 
     /**
