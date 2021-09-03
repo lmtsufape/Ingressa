@@ -23,6 +23,11 @@ class Curso extends Model
         'vagas',
     ];
 
+    public function cotas()
+    {
+        return $this->belongsToMany(Curso::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'percentual_cota');
+    }
+
     public function setAtributes(CursoRequest $request) 
     {
         $this->nome = $request->nome;

@@ -26,6 +26,9 @@
                         <x-jet-nav-link href="{{route('cursos.index')}}" :active="request()->routeIs('cursos.*')">
                             {{ __('Cursos') }}
                         </x-jet-nav-link>
+                        <x-jet-nav-link href="{{route('cotas.index')}}" :active="request()->routeIs('cotas.*')">
+                            {{ __('Cotas') }}
+                        </x-jet-nav-link>
                     @endif
                 </div>
             </div>

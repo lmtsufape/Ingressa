@@ -5,6 +5,7 @@ use App\Http\Controllers\SisuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\CotaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
         ->name('chamadas.create');
 
     Route::resource('cursos', CursoController::class);
+
+    Route::resource('cotas', CotaController::class);
 });
