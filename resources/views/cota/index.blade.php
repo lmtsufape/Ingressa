@@ -44,7 +44,7 @@
                                             <td>{{$cota->cod_cota}}</td>
                                             <td>
                                                 <a class="btn btn-primary" href="{{route('cotas.edit', ['cota' => $cota])}}">Editar</a>
-                                                <a class="btn btn-danger" data-toggle="modal" data-target="#delete-curso-{{$cota->id}}">Deletar</a>
+                                                <a class="btn btn-danger" data-toggle="modal" data-target="#delete-cota-{{$cota->id}}">Deletar</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -56,32 +56,32 @@
         </div>
     </div>
 
-    {{-- @foreach ($cursos as $curso)
+    @foreach ($cotas as $cota)
   
     <!-- Modal -->
-    <div class="modal fade" id="delete-curso-{{$curso->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="delete-cota-{{$cota->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #dc3545;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Deletar curso</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Deletar cota</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="delete-curso-{{$curso->id}}-form" method="POST" action="{{route('cursos.destroy', ['curso' => $curso])}}">
+                    <form id="delete-cota-{{$cota->id}}-form" method="POST" action="{{route('cotas.destroy', ['cota' => $cota])}}">
                         @csrf
                         <input type="hidden" name="_method" value="DELETE">
-                        Tem certeza que deseja deletar esse curso?
+                        Tem certeza que deseja deletar essa cota?
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger" form="delete-curso-{{$curso->id}}-form">Sim</button>
+                    <button type="submit" class="btn btn-danger" form="delete-cota-{{$cota->id}}-form">Sim</button>
                 </div>
             </div>
         </div>
     </div>
   
-    @endforeach --}}
+    @endforeach
 </x-app-layout>

@@ -109,7 +109,11 @@ class CotaController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
+        $cota = Cota::find($id);
+        $this->desvincularCursos($cota);
+        $cota->delete();
+
+        return redirect(route('cotas.index'))->with(['success' => 'Cota deletada com sucesso!']);
     }
 
     /**
