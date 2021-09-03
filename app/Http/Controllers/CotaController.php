@@ -48,7 +48,7 @@ class CotaController extends Controller
         $cota = new Cota();
         $cota->setAtributes($request);
         $cota->save();
-        $this->vincularCursos($request, $cota, 'create');
+        $this->vincularCursos($request, $cota);
         
         return redirect(route('cota.index'))->with(['success' => 'Cota criada com sucesso!']);
     }
@@ -72,7 +72,9 @@ class CotaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $cota = Cota::find($id);
+        $cursos = Curso::orderBy('nome')->get();
+        return view('cota.edit', compact('cota', 'cursos'));
     }
 
     /**
@@ -82,9 +84,21 @@ class CotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CotaRequest $request, $id)
     {
-        //
+        $cota = Cota::find($id);
+        $request->validated();
+        $validated = $this->validarOpcionalObrigatorio($request);
+        if ($validated != null) {
+            return $validated;
+        }
+        
+        $cota->setAtributes($request);
+        $cota->update();
+        $this->desvincularCursos($cota);
+        $this->vincularCursos($request, $cota);
+
+        return redirect(route('cotas.index'))->with(['success' => 'Cota atualizada com sucesso!']);
     }
 
     /**
@@ -95,7 +109,7 @@ class CotaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        dd($id);
     }
 
     /**
@@ -121,15 +135,26 @@ class CotaController extends Controller
      * @param  String  $metodo
      * @return void
      */
-    private function vincularCursos(CotaRequest $request, Cota $cota, $metodo)
+    private function vincularCursos(CotaRequest $request, Cota $cota)
     {
-        if ($metodo == "create") {
-            foreach ($request->cursos as $i => $curso_id) {
-                if ($curso_id != null) {
-                    $curso = Curso::find($curso_id);
-                    $curso->cotas()->attach($cota->id, ['percentual_cota' => $request->percentual[$i]]);
-                }
+        foreach ($request->cursos as $i => $curso_id) {
+            if ($curso_id != null) {
+                $curso = Curso::find($curso_id);
+                $curso->cotas()->attach($cota->id, ['percentual_cota' => $request->percentual[$i]]);
             }
+        }
+    }
+
+    /**
+     * Desvincula todos os cursos da cota passada.
+     *
+     * @param  App\Models\Cota  $cota
+     * @return void
+     */
+    private function desvincularCursos(Cota $cota)
+    {
+        foreach ($cota->cursos as $curso) {
+            $curso->cotas()->detach($cota->id);
         }
     }
 }

@@ -43,7 +43,7 @@
                                             <td>{{$cota->nome}}</td>
                                             <td>{{$cota->cod_cota}}</td>
                                             <td>
-                                                <a class="btn btn-primary" href="{{route('cursos.edit', ['cota' => $cota])}}">Editar</a>
+                                                <a class="btn btn-primary" href="{{route('cotas.edit', ['cota' => $cota])}}">Editar</a>
                                                 <a class="btn btn-danger" data-toggle="modal" data-target="#delete-curso-{{$cota->id}}">Deletar</a>
                                             </td>
                                         </tr>
