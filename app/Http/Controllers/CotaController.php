@@ -50,7 +50,7 @@ class CotaController extends Controller
         $cota->save();
         $this->vincularCursos($request, $cota);
         
-        return redirect(route('cota.index'))->with(['success' => 'Cota criada com sucesso!']);
+        return redirect(route('cotas.index'))->with(['success' => 'Cota criada com sucesso!']);
     }
 
     /**

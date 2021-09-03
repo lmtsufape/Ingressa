@@ -94,8 +94,22 @@ class CursoController extends Controller
     public function destroy($id)
     {
         $curso = Curso::find($id);
+        $this->desvincularCotas($curso);
         $curso->delete();
 
         return redirect(route('cursos.index'))->with(['success' => 'Curso deletado com sucesso!']);
+    }
+
+    /**
+     * Desvincula todos as cotas do curso passado.
+     *
+     * @param  App\Models\Curso  $curso
+     * @return void
+     */
+    private function desvincularCotas(Curso $curso)
+    {
+        foreach ($curso->cotas as $cota) {
+            $cota->cursos()->detach($curso->id);
+        }
     }
 }

@@ -25,7 +25,7 @@ class Curso extends Model
 
     public function cotas()
     {
-        return $this->belongsToMany(Curso::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'percentual_cota');
+        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'percentual_cota');
     }
 
     public function setAtributes(CursoRequest $request) 
