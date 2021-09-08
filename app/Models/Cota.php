@@ -21,6 +21,16 @@ class Cota extends Model
         return $this->belongsToMany(Curso::class, 'cota_curso', 'cota_id', 'curso_id')->withPivot('vagas_ocupadas', 'percentual_cota');
     }
 
+    public function remanejamentos() 
+    {
+        return $this->hasMany(Remanejamento::class, 'cota_id');
+    }
+
+    public function remanejamento()
+    {
+        return $this->belongsTo(Remanejamento::class, 'id_prox_cota');
+    }
+
     public function setAtributes(CotaRequest $request)
     {
         $this->nome = $request->nome;

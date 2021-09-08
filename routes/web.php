@@ -39,4 +39,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('cursos', CursoController::class);
 
     Route::resource('cotas', CotaController::class);
+
+    Route::get('cotas/{cota}/remanejamento', [CotaController::class, 'remanejamento'])->name('cotas.remanejamento');
+
+    Route::post('cotas/{cota}/remanejamento/atualizar', [CotaController::class, 'remanejamentoUpdate'])->name('cotas.remanejamento.update');
 });
