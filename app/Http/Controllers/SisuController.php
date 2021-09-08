@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SisuRequest;
+use App\Models\Chamada;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
 
@@ -54,7 +55,7 @@ class SisuController extends Controller
     public function show($id)
     {
         $sisu = Sisu::find($id);
-        $chamadas = $sisu->chamadas;
+        $chamadas = Chamada::where('sisu_id', '=', $sisu->id)->orderBy('created_at', 'ASC')->get();
         return view('sisu.show', compact('sisu', 'chamadas'));
     }
 
@@ -64,9 +65,10 @@ class SisuController extends Controller
      * @param  \App\Models\Sisu  $sisu
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sisu $sisu)
+    public function edit($id)
     {
-        //
+        $sisu = Sisu::find($id);
+        return view('sisu.edit', compact('sisu'));
     }
 
     /**
@@ -76,9 +78,14 @@ class SisuController extends Controller
      * @param  \App\Models\Sisu  $sisu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sisu $sisu)
+    public function update(SisuRequest $request, $id)
     {
-        //
+        $request->validated();
+        $sisu = Sisu::find($id);
+        $sisu->setAtributes($request);
+        $sisu->update();
+
+        return redirect(route('sisus.index'))->with(['success' => 'Edição editada com sucesso!']);
     }
 
     /**

@@ -34,6 +34,7 @@
                                         <th scope="col">Nome</th>
                                         <th scope="col">Início</th>
                                         <th scope="col">Fim</th>
+                                        <th scope="col">Regular</th>
                                         <th scope="col">Opções</th>
                                     </tr>
                                 </thead>
@@ -43,7 +44,13 @@
                                             <td> {{$chamada->nome}}</td>
                                             <td>{{$chamada->data_inicio}}</td>
                                             <td>{{$chamada->data_fim}}</td>
+                                            @if ($chamada->regular)
+                                                <td>Sim</td>
+                                            @else
+                                                <td>Não</td>
+                                            @endif
                                             <td>
+                                                <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarChamada_{{$chamada->id}}">
                                                     Deletar
                                                 </button>

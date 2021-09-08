@@ -27,7 +27,8 @@ class ChamadaController extends Controller
     public function create($id)
     {
         $sisu = Sisu::find($id);
-        return view('chamada.create', compact('sisu'));
+        $tem_regular = Chamada::where([['sisu_id', $id], ['regular', true]])->first();
+        return view('chamada.create', compact('sisu', 'tem_regular'));
     }
 
     /**
@@ -44,7 +45,7 @@ class ChamadaController extends Controller
 
         $chamada->sisu_id = $request->sisu;
 
-        if($request->regular == true){
+        if($request->regular == "true"){
             $chamada->regular = true;
         }else{
             $chamada->regular = false;
@@ -71,9 +72,11 @@ class ChamadaController extends Controller
      * @param  \App\Models\Chamada  $chamada
      * @return \Illuminate\Http\Response
      */
-    public function edit(Chamada $chamada)
+    public function edit($id)
     {
-        //
+        $chamada = Chamada::find($id);
+        $tem_regular = (Chamada::where([['sisu_id', $chamada->sisu->id], ['regular', true]])->first()) != null;
+        return view('chamada.edit', compact('chamada', 'tem_regular'));
     }
 
     /**
@@ -83,9 +86,20 @@ class ChamadaController extends Controller
      * @param  \App\Models\Chamada  $chamada
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Chamada $chamada)
+    public function update(ChamadaRequest $request, $id)
     {
-        //
+        $request->validated();
+        $chamada = Chamada::find($id);
+        $chamada->setAtributes($request);
+
+        if($request->regular == "true"){
+            $chamada->regular = true;
+        }else{
+            $chamada->regular = false;
+        }
+        $chamada->update();
+
+        return redirect(route('sisus.show', ['sisu' => $chamada->sisu]))->with(['success' => 'Chamada editada com sucesso!']);
     }
 
     /**
@@ -94,8 +108,12 @@ class ChamadaController extends Controller
      * @param  \App\Models\Chamada  $chamada
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Chamada $chamada)
+    public function destroy($id)
     {
-        //
+        $chamada = Chamada::find($id);
+        $sisu = Sisu::find($chamada->sisu_id);
+        $chamada->delete();
+
+        return redirect(route('sisus.show', ['sisu' => $sisu->id]))->with(['success' => 'Chamada deletada com sucesso!']);
     }
 }
