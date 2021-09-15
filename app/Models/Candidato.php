@@ -9,8 +9,18 @@ class Candidato extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'nu_cpf_inscrito',
+    ];
+
     public function inscricoes()
     {
         return $this->hasMany(Inscricao::class, 'candidato_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

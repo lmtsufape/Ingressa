@@ -36,6 +36,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/sisus/{sisu_id}/criar-chamada', [ChamadaController::class, 'create'])
         ->name('chamadas.create');
 
+    Route::post('/sisus/{sisu_id}/importar-candidatos/{chamada_id}', [ChamadaController::class, 'importarCandidatos'])
+    ->name('chamadas.importar.candidatos');
+
     Route::resource('cursos', CursoController::class);
 
     Route::resource('cotas', CotaController::class);
