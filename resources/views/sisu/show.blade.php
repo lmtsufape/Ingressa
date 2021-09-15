@@ -50,6 +50,9 @@
                                                 <td>Não</td>
                                             @endif
                                             <td>
+                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
+                                                    Importar candidatos
+                                                </button>
                                                 <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarChamada_{{$chamada->id}}">
                                                     Deletar
@@ -87,6 +90,33 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger" form="deletar-chamada-form-{{$chamada->id}}">Sim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach ($chamadas as $chamada)
+        <!-- Modal importar candidatos da chamada -->
+        <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #28a745;">
+                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Importar Candidatos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="arquivo" accept=".csv" required><br>
+                            Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao">Importar</button>
                     </div>
                 </div>
             </div>
