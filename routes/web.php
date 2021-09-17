@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\CotaController;
+use App\Http\Controllers\CandidatoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,11 @@ use App\Http\Controllers\CotaController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/primeiroAcesso', [CandidatoController::class, 'prepararAdicionar']);
+Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('primeiroAcesso.verificacao');
+Route::get('/editar', [CandidatoController::class , 'editarAcesso'])->name('primeiroAcesso.editar');
+Route::post('/atualizar', [UserController::class , 'update'])->name('primeiroAcesso.atualizar');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

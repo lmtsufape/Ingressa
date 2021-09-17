@@ -43,6 +43,12 @@
                     {{ __('Log in') }}
                 </x-jet-button>
             </div>
+            <div>
+                <a href="/primeiroAcesso"
+                   class="btn btn-primary ml-5" id="newLogin">
+                    Primeiro Acesso
+                </a>
+            </div>
         </form>
     </x-jet-authentication-card>
 </x-guest-layout>
