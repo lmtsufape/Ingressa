@@ -15,6 +15,7 @@ class CursoController extends Controller
      */
     public function index()
     {
+        $this->authorize('isAdmin', User::class);
         $cursos = Curso::orderBy('nome')->get();
         return view('curso.index', compact('cursos'))->with(['turnos' => Curso::TURNO_ENUM]);
     }
@@ -26,6 +27,7 @@ class CursoController extends Controller
      */
     public function create()
     {
+        $this->authorize('isAdmin', User::class);
         return view('curso.create')->with(['turnos' => Curso::TURNO_ENUM]);
     }
 
@@ -37,11 +39,12 @@ class CursoController extends Controller
      */
     public function store(CursoRequest $request)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $curso =  new Curso();
         $curso->setAtributes($request);
         $curso->save();
-        
+
         return redirect(route('cursos.index'))->with(['success' => 'Curso criado com sucesso!']);
     }
 
@@ -64,6 +67,7 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('isAdmin', User::class);
         $curso = Curso::find($id);
         return view('curso.edit')->with(['curso' => $curso, 'turnos' => Curso::TURNO_ENUM]);
     }
@@ -77,6 +81,7 @@ class CursoController extends Controller
      */
     public function update(CursoRequest $request, $id)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $curso = Curso::find($id);
         $curso->setAtributes($request);
@@ -93,6 +98,7 @@ class CursoController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin', User::class);
         $curso = Curso::find($id);
         $this->desvincularCotas($curso);
         $curso->delete();
@@ -108,6 +114,7 @@ class CursoController extends Controller
      */
     private function desvincularCotas(Curso $curso)
     {
+        $this->authorize('isAdmin', User::class);
         foreach ($curso->cotas as $cota) {
             $cota->cursos()->detach($curso->id);
         }

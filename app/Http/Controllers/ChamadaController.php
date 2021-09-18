@@ -31,6 +31,7 @@ class ChamadaController extends Controller
      */
     public function create($id)
     {
+        $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($id);
         $tem_regular = Chamada::where([['sisu_id', $id], ['regular', true]])->first();
         return view('chamada.create', compact('sisu', 'tem_regular'));
@@ -44,6 +45,7 @@ class ChamadaController extends Controller
      */
     public function store(ChamadaRequest $request)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $chamada = new Chamada();
         $chamada->setAtributes($request);
@@ -79,6 +81,7 @@ class ChamadaController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($id);
         $tem_regular = (Chamada::where([['sisu_id', $chamada->sisu->id], ['regular', true]])->first()) != null;
         return view('chamada.edit', compact('chamada', 'tem_regular'));
@@ -93,6 +96,7 @@ class ChamadaController extends Controller
      */
     public function update(ChamadaRequest $request, $id)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $chamada = Chamada::find($id);
         $chamada->setAtributes($request);
@@ -115,6 +119,7 @@ class ChamadaController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($id);
         $sisu = Sisu::find($chamada->sisu_id);
         $chamada->delete();
@@ -124,6 +129,7 @@ class ChamadaController extends Controller
 
     public function importarCandidatos(Request $request, $sisu_id, $chamada_id)
     {
+        $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($chamada_id);
         if($chamada->caminho_import_sisu_gestao != null){
             if (Storage::disk()->exists('public/' . $chamada->caminho_import_sisu_gestao)) {
@@ -144,6 +150,7 @@ class ChamadaController extends Controller
 
     public function cadastrarCandidatosRegular($dados, $chamada)
     {
+        $this->authorize('isAdmin', User::class);
         $primeira = true;
         ini_set('max_execution_time', 300);
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {

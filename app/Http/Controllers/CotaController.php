@@ -17,6 +17,7 @@ class CotaController extends Controller
      */
     public function index()
     {
+        $this->authorize('isAdmin', User::class);
         $cotas = Cota::orderBy('nome')->get();
         return view('cota.index', compact('cotas'));
     }
@@ -28,6 +29,7 @@ class CotaController extends Controller
      */
     public function create()
     {
+        $this->authorize('isAdmin', User::class);
         $cursos = Curso::orderBy('nome')->get();
         return view('cota.create', compact('cursos'));
     }
@@ -40,6 +42,7 @@ class CotaController extends Controller
      */
     public function store(CotaRequest $request)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $validated = $this->validarOpcionalObrigatorio($request);
         if ($validated != null) {
@@ -50,7 +53,7 @@ class CotaController extends Controller
         $cota->setAtributes($request);
         $cota->save();
         $this->vincularCursos($request, $cota);
-        
+
         return redirect(route('cotas.index'))->with(['success' => 'Cota criada com sucesso!']);
     }
 
@@ -73,6 +76,7 @@ class CotaController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('isAdmin', User::class);
         $cota = Cota::find($id);
         $cursos = Curso::orderBy('nome')->get();
         return view('cota.edit', compact('cota', 'cursos'));
@@ -87,13 +91,14 @@ class CotaController extends Controller
      */
     public function update(CotaRequest $request, $id)
     {
+        $this->authorize('isAdmin', User::class);
         $cota = Cota::find($id);
         $request->validated();
         $validated = $this->validarOpcionalObrigatorio($request);
         if ($validated != null) {
             return $validated;
         }
-        
+
         $cota->setAtributes($request);
         $cota->update();
         $this->desvincularCursos($cota);
@@ -110,6 +115,7 @@ class CotaController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin', User::class);
         $cota = Cota::find($id);
         $this->desvincularCursos($cota);
         $cota->delete();
@@ -125,6 +131,7 @@ class CotaController extends Controller
      */
     public function remanejamento($id)
     {
+        $this->authorize('isAdmin', User::class);
         $cota = Cota::find($id);
         $cotas = Cota::where('id', '!=', $id)->orderBy('nome')->get();
         return view('cota.remanejamento', compact('cota', 'cotas'));
@@ -139,6 +146,7 @@ class CotaController extends Controller
      */
     public function remanejamentoUpdate(Request $request, $id)
     {
+        $this->authorize('isAdmin', User::class);
         $validated = $this->validarOpcionalObrigatorioRemanejamento($request);
         if ($validated != null) {
             return $validated;
@@ -146,7 +154,7 @@ class CotaController extends Controller
         $cota = Cota::find($id);
 
         $this->vincularOrdem($request, $cota);
-        
+
         return redirect(route('cotas.index'))->with(['success' => 'Ordem de remanejamento salva com sucesso!']);
     }
 
@@ -158,6 +166,7 @@ class CotaController extends Controller
      */
     private function vincularOrdem(Request $request, Cota $cota)
     {
+        $this->authorize('isAdmin', User::class);
         switch ($request->modo) {
             case 'create':
                 foreach ($request->cotas as $i => $valor) {
@@ -208,6 +217,7 @@ class CotaController extends Controller
      */
     private function criarRemanejamento($ordem, Cota $cota, Cota $prox_cota)
     {
+        $this->authorize('isAdmin', User::class);
         $remanejamento = new Remanejamento();
         $remanejamento->setAtributes($ordem, $cota, $prox_cota);
         $remanejamento->save();
@@ -253,6 +263,7 @@ class CotaController extends Controller
      */
     private function vincularCursos(CotaRequest $request, Cota $cota)
     {
+        $this->authorize('isAdmin', User::class);
         foreach ($request->cursos as $i => $curso_id) {
             if ($curso_id != null) {
                 $curso = Curso::find($curso_id);
@@ -269,6 +280,7 @@ class CotaController extends Controller
      */
     private function desvincularCursos(Cota $cota)
     {
+        $this->authorize('isAdmin', User::class);
         foreach ($cota->cursos as $curso) {
             $curso->cotas()->detach($cota->id);
         }
