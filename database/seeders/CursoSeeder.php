@@ -52,10 +52,16 @@ class CursoSeeder extends Seeder
                 'vagas' => 40,
             ],
             [
-                'nome' => 'Bacharelado em Zootecnia',
-                'turno' => Curso::TURNO_ENUM['noturno'],
+                'nome' => 'Bacharelado em Zootecnia (manhã)',
+                'turno' => Curso::TURNO_ENUM['matutino'],
                 'cod_curso' => '91738',
-                'vagas' => 80,
+                'vagas' => 40,
+            ],
+            [
+                'nome' => 'Bacharelado em Zootecnia (tarde)',
+                'turno' => Curso::TURNO_ENUM['vespertino'],
+                'cod_curso' => '91738',
+                'vagas' => 40,
             ],
             [
                 'nome' => 'Licenciatura em Letras',

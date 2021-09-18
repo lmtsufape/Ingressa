@@ -30,6 +30,11 @@
                             {{ __('Cotas') }}
                         </x-jet-nav-link>
                     @endif
+                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['candidato'])
+                        <x-jet-nav-link href="{{route('inscricaos.index')}}" :active="request()->routeIs('inscricaos.*')">
+                            {{ __('Minhas Inscrições') }}
+                        </x-jet-nav-link>
+                    @endif
                 </div>
             </div>
 

@@ -50,9 +50,15 @@
                                                 <td>Não</td>
                                             @endif
                                             <td>
-                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
-                                                    Importar candidatos
-                                                </button>
+                                                @if ($chamada->caminho_import_sisu_gestao == null)
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
+                                                        Importar candidatos
+                                                    </button>
+                                                @else
+                                                    <button type="button" class="btn btn-success" disabled>
+                                                        Candidatos importados
+                                                    </button>
+                                                @endif
                                                 <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarChamada_{{$chamada->id}}">
                                                     Deletar
