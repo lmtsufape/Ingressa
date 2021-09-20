@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChamadaRequest;
 use App\Models\Candidato;
 use App\Models\Chamada;
+use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\Sisu;
 use App\Models\User;
@@ -148,7 +149,7 @@ class ChamadaController extends Controller
         $chamada->update();return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Candidatos importados com sucesso!']);
     }
 
-    public function cadastrarCandidatosRegular($dados, $chamada)
+    private function cadastrarCandidatosRegular($dados, $chamada)
     {
         $this->authorize('isAdmin', User::class);
         $primeira = true;
@@ -247,5 +248,36 @@ class ChamadaController extends Controller
                 }
             }
         }
+    }
+
+    public function candidatosChamada($sisu_id, $chamada_id)
+    {
+        $chamada = Chamada::find($chamada_id);
+        $this->authorize('isAdminOrAnalista', User::class);
+        $cursos = Curso::orderBy('nome')->get();
+        return view('chamada.candidatos-chamada', compact('chamada', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM]);
+    }
+
+    public function candidatosCurso($sisu_id, $chamada_id, $curso_id)
+    {
+        $this->authorize('isAdminOrAnalista', User::class);
+        $chamada = Chamada::find($chamada_id);
+        $curso = Curso::find($curso_id);
+
+        if($curso->turno == Curso::TURNO_ENUM['matutino']){
+            $turno = 'Matutino';
+        }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+            $turno = 'Vespertino';
+        }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+            $turno = 'Noturno';
+        }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+            $turno = 'Integral';
+        }
+        if($curso->cod_curso == 118468){
+            $candidatos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])->get();
+        }else{
+            $candidatos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])->get();
+        }
+        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos'));
     }
 }

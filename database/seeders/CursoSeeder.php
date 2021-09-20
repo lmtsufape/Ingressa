@@ -19,13 +19,13 @@ class CursoSeeder extends Seeder
                 'nome' => 'Bacharelado em Agronomia (manhã)',
                 'turno' => Curso::TURNO_ENUM['matutino'],
                 'cod_curso' => '91555',
-                'vagas' => 80,
+                'vagas' => 40,
             ],
             [
                 'nome' => 'Bacharelado em Agronomia (tarde)',
                 'turno' => Curso::TURNO_ENUM['vespertino'],
                 'cod_curso' => '91555',
-                'vagas' => 80,
+                'vagas' => 40,
             ],
             [
                 'nome' => 'Bacharelado em Ciências da Computação',
@@ -36,7 +36,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Engenharia de Alimentos',
                 'turno' => Curso::TURNO_ENUM['integral'],
-                'cod_curso' => '118766',
+                'cod_curso' => '118466',
                 'vagas' => 80,
             ],
             [

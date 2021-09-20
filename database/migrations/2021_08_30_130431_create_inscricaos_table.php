@@ -21,8 +21,8 @@ class CreateInscricaosTable extends Migration
             $table->foreign('chamada_id')->references('id')->on('chamadas');
             $table->string('protocolo');
             $table->string('status');
-            $table->unsignedBigInteger('co_ies_curso');
-            $table->unsignedBigInteger('co_ies');
+            $table->string('co_ies_curso');
+            $table->string('co_ies');
             $table->string('ds_turno');
             //$table->string('co_oferta_mod_concorrencia');
             $table->double('nu_nota_candidato');
