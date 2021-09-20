@@ -29,6 +29,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Nome</th>
+                                        <th scope="col">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,6 +37,7 @@
                                         <tr>
                                             <td>{{$i+1}}</td>
                                             <td>{{$candidato->candidato->user->name}}</td>
+                                            <td><a class="btn btn-primary" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Analisar documentos</a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>

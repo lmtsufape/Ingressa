@@ -18,7 +18,7 @@ class CreateAvaliacaosTable extends Migration
             $table->unsignedBigInteger('arquivo_id');
             $table->foreign('arquivo_id')->references('id')->on('arquivos');
             $table->string('avaliacao');
-            $table->text('comentario');
+            $table->text('comentario')->nullable();
             $table->timestamps();
         });
     }

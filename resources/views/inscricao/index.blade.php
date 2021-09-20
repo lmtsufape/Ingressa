@@ -70,6 +70,16 @@
                                                             Enviar documentos
                                                         </a>
                                                         @break
+                                                    @case($situacoes['documentos_enviados'])
+                                                        <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
+                                                            Documentos em análise
+                                                        </a>
+                                                        @break
+                                                    @case($situacoes['documentos_aceitos'])
+                                                        <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
+                                                            Documentos aceitos
+                                                        </a>
+                                                        @break
                                                 @endswitch
                                             </td>
                                         </tr>
