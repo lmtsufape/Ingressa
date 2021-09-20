@@ -56,7 +56,7 @@ class CreateInscricaosTable extends Migration
             $table->string('no_acao_afirmativa_bonus')->nullable();
 
 
-            $table->date('dt_nascimento');
+
             $table->string('tp_sexo');
             $table->string('nu_rg');
             $table->string('no_mae')->nullable();

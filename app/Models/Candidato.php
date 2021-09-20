@@ -12,6 +12,7 @@ class Candidato extends Model
     protected $fillable = [
         'user_id',
         'nu_cpf_inscrito',
+        'dt_nascimento',
     ];
 
     public function inscricoes()

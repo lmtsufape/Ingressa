@@ -161,7 +161,7 @@ class ChamadaController extends Controller
                     'ds_formacao' => $data[5],
                     'qt_vagas_concorrencia' => $data[6],
                     'co_inscricao_enem' => $data[7],
-                    'dt_nascimento' => $data[11],
+
                     'tp_sexo' => $data[12],
                     'nu_rg' => $data[13],
                     'no_mae' => $data[14],
@@ -216,6 +216,7 @@ class ChamadaController extends Controller
 
                     $candidato = new Candidato([
                         'nu_cpf_inscrito' => $data[10],
+                        'dt_nascimento' => $data[11],
                     ]);
                     $candidato->user_id = $user->id;
                     $candidato->save();

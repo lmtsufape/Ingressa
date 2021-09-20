@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CursoSeeder::class,
             SisuSeeder::class,
             ChamadaSeeder::class,
+            CandidatoSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Jetstream\Jetstream;
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
@@ -77,9 +80,24 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'email' => ['required','string','email','max:255','unique:users'],
+            'password'         => 'required',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('editar')->withErrors($validator->errors())->withInput();
+        }
+
+        $user = User::find($request->id);
+        $user->setAtributes($request);
+        $user->primeiro_acesso = false;
+        $user->update();
+
+        return view('welcome');
     }
 
     /**
