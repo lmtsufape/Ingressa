@@ -16,7 +16,7 @@ class SisuController extends Controller
      */
     public function index()
     {
-        $this->authorize('isAdmin', User::class);
+        $this->authorize('isAdminOrAnalista', User::class);
         $sisus = Sisu::orderBy('edicao', 'DESC')->get();
         return view('sisu.index', compact('sisus'));
     }
@@ -57,6 +57,7 @@ class SisuController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('isAdminOrAnalista', User::class);
         $sisu = Sisu::find($id);
         $chamadas = Chamada::where('sisu_id', '=', $sisu->id)->orderBy('created_at', 'ASC')->get();
         return view('sisu.show', compact('sisu', 'chamadas'));

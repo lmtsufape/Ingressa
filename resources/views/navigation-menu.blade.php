@@ -29,6 +29,10 @@
                         <x-jet-nav-link href="{{route('cotas.index')}}" :active="request()->routeIs('cotas.*')">
                             {{ __('Cotas') }}
                         </x-jet-nav-link>
+                    @elseif(auth()->user()->role == \App\Models\User::ROLE_ENUM['analista'])
+                        <x-jet-nav-link href="{{route('sisus.index')}}" :active="request()->routeIs('sisus.*')">
+                            {{ __('SiSU') }}
+                        </x-jet-nav-link>
                     @endif
                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['candidato'])
                         <x-jet-nav-link href="{{route('inscricaos.index')}}" :active="request()->routeIs('inscricaos.*')">
