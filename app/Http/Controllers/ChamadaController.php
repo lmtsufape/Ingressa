@@ -158,7 +158,7 @@ class ChamadaController extends Controller
                 $primeira = false;
             }else{
                 $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['em_chamada'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
                     'protocolo' => Hash::make($data[8].$chamada->id),
                     'nu_etapa' => $data[0],
                     'no_campus' => $data[1],

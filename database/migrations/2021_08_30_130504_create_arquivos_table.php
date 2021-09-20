@@ -16,7 +16,7 @@ class CreateArquivosTable extends Migration
         Schema::create('arquivos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('inscricao_id');
-            $table->foreign('inscricao_id')->references('id')->on('inscricaos');
+            $table->foreign('inscricao_id')->references('id')->on('inscricaos')->nullable();
             $table->string('caminho');
             $table->string('nome');
             $table->timestamps();
