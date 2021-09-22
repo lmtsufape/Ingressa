@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\CotaController;
 use App\Http\Controllers\CandidatoController;
+use App\Http\Controllers\InscricaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/primeiroAcesso', [CandidatoController::class, 'prepararAdicionar']);
+Route::get('/primeiroAcesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
 Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('primeiroAcesso.verificacao');
 Route::get('/editar', [CandidatoController::class , 'editarAcesso'])->name('primeiroAcesso.editar');
 Route::post('/atualizar', [UserController::class , 'update'])->name('primeiroAcesso.atualizar');
@@ -45,9 +46,23 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::post('/sisus/{sisu_id}/importar-candidatos/{chamada_id}', [ChamadaController::class, 'importarCandidatos'])
     ->name('chamadas.importar.candidatos');
 
+    Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada', [ChamadaController::class, 'candidatosChamada'])
+    ->name('chamadas.candidatos');
+
+    Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}', [ChamadaController::class, 'candidatosCurso'])
+    ->name('chamadas.candidatos.curso');
+
     Route::resource('cursos', CursoController::class);
 
     Route::resource('cotas', CotaController::class);
+
+    Route::resource('inscricaos', InscricaoController::class);
+    Route::get('/inscricaos/{inscricao_id}/documentacao', [InscricaoController::class, 'showInscricaoDocumentacao'])->name('inscricao.documentacao');
+    Route::post('/inscricaos/{inscricao_id}/enviar-documentos', [InscricaoController::class, 'enviarDocumentos'])->name('inscricao.enviar.documentos');
+    Route::post('/inscricaos/{inscricao_id}/analisar-documentos', [InscricaoController::class, 'analisarDocumentos'])->name('inscricao.analisar.documentos');
+    Route::get('/inscricaos/{inscricao_id}/ver-documento/{documento_nome}', [InscricaoController::class, 'showDocumento'])->name('inscricao.arquivo');
+    Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/inscricao/{inscricao_id}', [InscricaoController::class, 'showAnalisarDocumentos'])
+    ->name('inscricao.show.analisar.documentos');
 
     Route::get('cotas/{cota}/remanejamento', [CotaController::class, 'remanejamento'])->name('cotas.remanejamento');
 

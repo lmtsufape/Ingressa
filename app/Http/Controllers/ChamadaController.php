@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChamadaRequest;
 use App\Models\Candidato;
 use App\Models\Chamada;
+use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\Sisu;
 use App\Models\User;
@@ -31,6 +32,7 @@ class ChamadaController extends Controller
      */
     public function create($id)
     {
+        $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($id);
         $tem_regular = Chamada::where([['sisu_id', $id], ['regular', true]])->first();
         return view('chamada.create', compact('sisu', 'tem_regular'));
@@ -44,6 +46,7 @@ class ChamadaController extends Controller
      */
     public function store(ChamadaRequest $request)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $chamada = new Chamada();
         $chamada->setAtributes($request);
@@ -79,6 +82,7 @@ class ChamadaController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($id);
         $tem_regular = (Chamada::where([['sisu_id', $chamada->sisu->id], ['regular', true]])->first()) != null;
         return view('chamada.edit', compact('chamada', 'tem_regular'));
@@ -93,6 +97,7 @@ class ChamadaController extends Controller
      */
     public function update(ChamadaRequest $request, $id)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $chamada = Chamada::find($id);
         $chamada->setAtributes($request);
@@ -115,6 +120,7 @@ class ChamadaController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($id);
         $sisu = Sisu::find($chamada->sisu_id);
         $chamada->delete();
@@ -124,6 +130,7 @@ class ChamadaController extends Controller
 
     public function importarCandidatos(Request $request, $sisu_id, $chamada_id)
     {
+        $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($chamada_id);
         if($chamada->caminho_import_sisu_gestao != null){
             if (Storage::disk()->exists('public/' . $chamada->caminho_import_sisu_gestao)) {
@@ -142,8 +149,9 @@ class ChamadaController extends Controller
         $chamada->update();return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Candidatos importados com sucesso!']);
     }
 
-    public function cadastrarCandidatosRegular($dados, $chamada)
+    private function cadastrarCandidatosRegular($dados, $chamada)
     {
+        $this->authorize('isAdmin', User::class);
         $primeira = true;
         ini_set('max_execution_time', 300);
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
@@ -151,7 +159,7 @@ class ChamadaController extends Controller
                 $primeira = false;
             }else{
                 $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['em_chamada'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
                     'protocolo' => Hash::make($data[8].$chamada->id),
                     'nu_etapa' => $data[0],
                     'no_campus' => $data[1],
@@ -240,5 +248,36 @@ class ChamadaController extends Controller
                 }
             }
         }
+    }
+
+    public function candidatosChamada($sisu_id, $chamada_id)
+    {
+        $chamada = Chamada::find($chamada_id);
+        $this->authorize('isAdminOrAnalista', User::class);
+        $cursos = Curso::orderBy('nome')->get();
+        return view('chamada.candidatos-chamada', compact('chamada', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM]);
+    }
+
+    public function candidatosCurso($sisu_id, $chamada_id, $curso_id)
+    {
+        $this->authorize('isAdminOrAnalista', User::class);
+        $chamada = Chamada::find($chamada_id);
+        $curso = Curso::find($curso_id);
+
+        if($curso->turno == Curso::TURNO_ENUM['matutino']){
+            $turno = 'Matutino';
+        }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+            $turno = 'Vespertino';
+        }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+            $turno = 'Noturno';
+        }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+            $turno = 'Integral';
+        }
+        if($curso->cod_curso == 118468){
+            $candidatos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])->get();
+        }else{
+            $candidatos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])->get();
+        }
+        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos'));
     }
 }

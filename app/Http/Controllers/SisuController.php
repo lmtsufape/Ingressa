@@ -16,6 +16,7 @@ class SisuController extends Controller
      */
     public function index()
     {
+        $this->authorize('isAdminOrAnalista', User::class);
         $sisus = Sisu::orderBy('edicao', 'DESC')->get();
         return view('sisu.index', compact('sisus'));
     }
@@ -27,6 +28,7 @@ class SisuController extends Controller
      */
     public function create()
     {
+        $this->authorize('isAdmin', User::class);
         return view('sisu.create');
     }
 
@@ -38,6 +40,7 @@ class SisuController extends Controller
      */
     public function store(SisuRequest $request)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $sisu = new Sisu();
         $sisu->setAtributes($request);
@@ -54,6 +57,7 @@ class SisuController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('isAdminOrAnalista', User::class);
         $sisu = Sisu::find($id);
         $chamadas = Chamada::where('sisu_id', '=', $sisu->id)->orderBy('created_at', 'ASC')->get();
         return view('sisu.show', compact('sisu', 'chamadas'));
@@ -67,6 +71,7 @@ class SisuController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($id);
         return view('sisu.edit', compact('sisu'));
     }
@@ -80,6 +85,7 @@ class SisuController extends Controller
      */
     public function update(SisuRequest $request, $id)
     {
+        $this->authorize('isAdmin', User::class);
         $request->validated();
         $sisu = Sisu::find($id);
         $sisu->setAtributes($request);
@@ -96,6 +102,7 @@ class SisuController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($id);
         $sisu->delete();
 

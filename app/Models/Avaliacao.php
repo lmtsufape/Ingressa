@@ -9,6 +9,12 @@ class Avaliacao extends Model
 {
     use HasFactory;
 
+    public const AVALIACAO_ENUM = [
+        'aceito' => 1,
+        'recusado' => 2,
+        'reenviado' => 3,
+    ];
+
     protected $fillable = [
         'arquivo_id',
         'user_avaliador_id',

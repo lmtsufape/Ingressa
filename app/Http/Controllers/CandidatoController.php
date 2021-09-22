@@ -11,7 +11,7 @@ class CandidatoController extends Controller
 
     public static function verificacao(Request $request)
     {
-        $cpf = $request->cpf;
+        $cpf = preg_replace('/[^0-9]/', '', $request->cpf);
         $dt_nasc = $request->dt_nasc;
         $candidato = Candidato::where([
             ['nu_cpf_inscrito', '=', $cpf],

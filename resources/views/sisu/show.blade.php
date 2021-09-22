@@ -50,9 +50,15 @@
                                                 <td>Não</td>
                                             @endif
                                             <td>
-                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
-                                                    Importar candidatos
-                                                </button>
+                                                <div class="btn-group">
+                                                    @if ($chamada->caminho_import_sisu_gestao == null)
+                                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
+                                                            Importar candidatos
+                                                        </button>
+                                                    @else
+                                                        <a class="btn btn-success shadow-sm" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img src="{{ asset('img/icon_candidato.svg') }}" alt="Candidatos inscritos no sisu {{$sisu->edicao}}" width="23.5px" ></a>
+                                                    @endif
+                                                </div>
                                                 <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarChamada_{{$chamada->id}}">
                                                     Deletar

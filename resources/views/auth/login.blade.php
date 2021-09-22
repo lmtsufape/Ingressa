@@ -44,7 +44,7 @@
                 </x-jet-button>
             </div>
             <div>
-                <a href="/primeiroAcesso"
+                <a href="{{route('primeiro.acesso')}}"
                    class="btn btn-primary ml-5" id="newLogin">
                     Primeiro Acesso
                 </a>
