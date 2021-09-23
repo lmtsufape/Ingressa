@@ -109,6 +109,7 @@ class InscricaoController extends Controller
     public function showInscricaoDocumentacao($id)
     {
         $inscricao = Inscricao::find($id);
+        $this->authorize('isCandidatoDono', $inscricao);
         $documentos = $this->documentosRequisitados($id);
         return view('inscricao.envio-documentos', compact('inscricao', 'documentos'));
     }
@@ -116,6 +117,7 @@ class InscricaoController extends Controller
     public function showAnalisarDocumentos($sisu_id, $chamada_id, $curso_id, $inscricao_id)
     {
         $inscricao = Inscricao::find($inscricao_id);
+        $this->authorize('isAdminOrAnalista', User::class);
         $documentos = $this->documentosRequisitados($inscricao_id);
         $chamada = Chamada::find($chamada_id);
         $curso = Curso::find($curso_id);
@@ -125,6 +127,7 @@ class InscricaoController extends Controller
     public function enviarDocumentos(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricao_id);
+        $this->authorize('isCandidatoDono', $inscricao);
         if ($request->documentos == null) {
             return redirect()->back()->withErrors(['error' => 'Anexe os documentos que devem ser enviados.'])->withInput($request->all());
         }
@@ -170,6 +173,7 @@ class InscricaoController extends Controller
     public function showDocumento($inscricao_id, $documento_nome)
     {
         $inscricao = Inscricao::find($inscricao_id);
+        $this->authorize('isCandidatoDono', $inscricao);
         $arquivo = Arquivo::where([['inscricao_id', $inscricao_id], ['nome', $documento_nome]])->first();
         return Storage::disk()->exists('public/' . $arquivo->caminho) ? response()->file('storage/' . $arquivo->caminho) : abort(404);
     }
