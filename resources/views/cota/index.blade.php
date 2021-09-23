@@ -32,7 +32,6 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Nome</th>
-                                        <th scope="col">Código da cota</th>
                                         <th scope="col">Opções</th>
                                     </tr>
                                 </thead>
@@ -41,7 +40,6 @@
                                         <tr>
                                             <td>{{$i+1}}</td>
                                             <td>{{$cota->nome}}</td>
-                                            <td>{{$cota->cod_cota}}</td>
                                             <td>
                                                 <a class="btn btn-info" href="{{route('cotas.remanejamento', ['cota' => $cota])}}">Remanejamento</a>
                                                 <a class="btn btn-primary" href="{{route('cotas.edit', ['cota' => $cota])}}">Editar</a>
