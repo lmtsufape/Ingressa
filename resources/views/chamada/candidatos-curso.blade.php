@@ -28,16 +28,34 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Ações</th>
+                                        <th scope="col" style="text-align: center">Nome</th>
+                                        <th scope="col" style="text-align: center">Status</th>
+                                        <th scope="col" style="text-align: center">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($candidatos as $i => $candidato)
                                         <tr>
                                             <td>{{$i+1}}</td>
-                                            <td>{{$candidato->candidato->user->name}}</td>
-                                            <td><a class="btn btn-primary" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Analisar documentos</a></td>
+                                            <td style="text-align: center">{{$candidato->candidato->user->name}}</td>
+                                            <td style="text-align: center">
+                                                <div class="btn-group">
+                                                    @if($candidato->candidato->user->email != null)
+                                                        <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato concluído">
+                                                    @else
+                                                        <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato não concluído">
+                                                    @endif
+
+                                                    @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos'])
+                                                        <img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                    @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                        <img src="{{asset('img/icons-document-yellow.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                                    @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_requeridos'])
+                                                        <img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos requeridos">
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td style="text-align: center"><a class="btn btn-primary" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Analisar documentos</a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
