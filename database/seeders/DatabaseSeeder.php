@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             SisuSeeder::class,
             ChamadaSeeder::class,
             CandidatoSeeder::class,
+            CotaSeeder::class,
         ]);
     }
 }
