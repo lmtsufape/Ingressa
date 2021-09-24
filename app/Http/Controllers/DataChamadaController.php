@@ -76,9 +76,16 @@ class DataChamadaController extends Controller
      * @param  \App\Models\DataChamada  $dataChamada
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DataChamada $dataChamada)
+    public function update(DataChamadaRequest $request, $id)
     {
-        //
+        $this->authorize('isAdmin', User::class);
+        $request->validated();
+        $dataChamada = DataChamada::find($id);
+        $dataChamada->setAtributes($request);
+
+        $dataChamada->update();
+
+        return redirect()->back()->with(['success_data' => 'Data editada com sucesso']);
     }
 
     /**
@@ -87,8 +94,15 @@ class DataChamadaController extends Controller
      * @param  \App\Models\DataChamada  $dataChamada
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DataChamada $dataChamada)
+    public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin', User::class);
+        $dataChamada = DataChamada::find($id);
+        if($dataChamada->listagem->first() != null){
+            return redirect()->back()->with(['error_data' => 'Esta data possui listagens. Não é possível deletar.']);
+        }
+        $dataChamada->delete();
+
+        return redirect()->back()->with(['success_data' => 'Data deletada com sucesso.']);
     }
 }

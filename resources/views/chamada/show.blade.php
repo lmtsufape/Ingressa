@@ -20,6 +20,13 @@
                                     </div>
                                 </div>
                             @endif
+                            @if(session('error_data'))
+                                <div class="col-md-12" style="margin-top: 5px;">
+                                    <div class="alert alert-danger" role="alert">
+                                        <p>{{session('error_data')}}</p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         @if ($datas->first() != null)
@@ -28,10 +35,10 @@
                                     <div div class="form-row">
                                     @foreach ($datas as $data)
                                         <div class="col-md-12">
-                                            <div class="d-flex justify-content-left align-items-center">
+                                            <div class="d-flex justify-content-left align-items-center" data-toggle="modal" data-target="#modalStaticEditarData_{{$data->id}}">
                                                 <div style="margin-right:10px; margin-top:-20px">
                                                     @if ($data->tipo == $tipos['convocacao'])
-                                                        <img class="" src="{{asset('img/icon_convocacao.png')}}" alt="" width="40px">
+                                                        <a ><img class="" src="{{asset('img/icon_convocacao.png')}}" alt="" width="40px"></a>
                                                     @elseif($data->tipo == $tipos['envio'])
                                                         <img class="" src="{{asset('img/icon_envio.png')}}" alt="" width="40px">
                                                     @elseif($data->tipo == $tipos['resultado'])
@@ -43,6 +50,7 @@
                                                     <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
                                                 </div>
                                             </div>
+                                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarData_{{$data->id}}">x</button>
                                         </div>
                                         <hr>
                                     @endforeach
@@ -58,7 +66,10 @@
             <div class="col-md-8">
                 <div class="form-row">
                     <div class="col-md-10">
-                        <h2 class="card-title">Listagens</h2>
+                        <div class="btn-group">
+                            <h2 class="card-title">Listagens</h2>
+                            <a data-toggle="modal" data-target="#modalStaticCriarListagem"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova listagem" width="30.5px" ></a>
+                        </div>
                     </div>
                 </div>
                 <div class="card" style="width: 100%;">
@@ -77,24 +88,16 @@
                                 <tbody>
                                     <div div class="form-row">
                                     @foreach ($datas as $data)
-                                        <div class="col-md-12">
-                                            <div class="d-flex justify-content-left align-items-center">
-                                                <div style="margin-right:10px; margin-top:-20px">
-                                                    @if ($data->tipo == $tipos['convocacao'])
-                                                        <img class="" src="{{asset('img/icon_convocacao.png')}}" alt="" width="40px">
-                                                    @elseif($data->tipo == $tipos['envio'])
-                                                        <img class="" src="{{asset('img/icon_envio.png')}}" alt="" width="40px">
-                                                    @elseif($data->tipo == $tipos['resultado'])
-                                                        <img class="" src="{{asset('img/icon_resultado.png')}}" alt="" width="40px">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group">
-                                                    <div style="margin-bottom: -8px;"><h5 style=" font-size:17px; font-weight: bold;">{{$data->titulo}}</h5></div>
-                                                    <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
+                                        @foreach ($data->listagem as $listagem)
+                                            <div class="col-md-12">
+                                                <div class="d-flex justify-content-left align-items-center">
+                                                    <div class="form-group">
+                                                        <div style="margin-bottom: -8px;"><h5 style=" font-size:17px; font-weight: bold;">{{$listagem->titulo}}</h5></div>
+                                                        <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <hr>
+                                        @endforeach
                                     @endforeach
                                 </div>
                                 </tbody>
@@ -210,32 +213,134 @@
                 </div>
             </div>
         </div>
-    @endforeach
 
-    {{--@foreach ($chamadas as $chamada)
-        <!-- Modal importar candidatos da chamada -->
-        <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <!-- Modal editar data -->
+        <div class="modal fade" id="modalStaticEditarData_{{$data->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #28a745;">
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Importar Candidatos</h5>
+                    <div class="modal-header" style="background-color: #3591dc;">
+                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Editar data</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
+                        <form id="editar-data-form-{{$data->id}}" method="POST" action="{{route('datas.update', ['data' => $data])}}">
                             @csrf
-                            <input type="file" name="arquivo" accept=".csv" required><br>
-                            Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
+                            <input type="hidden" name="_method" value="PUT">
+                            <div class="form-row">
+                                <div class="col-sm-12 form-group">
+                                    <label for="titulo">{{__('Título da data')}}</label>
+                                    <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror" value="{{old('titulo')!=null ? old('titulo') : $data->titulo}}" required autofocus autocomplete="titulo">
+
+                                    @error('titulo')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-sm-8 form-group">
+                                    <label for="tipo">{{__('Tipo da data')}}</label>
+                                    <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
+                                        <option value="{{$data->id}}" selected >@if ($data->tipo == $tipos['convocacao']) Convocação @elseif($data->tipo == $tipos['envio']) Envio de documentos @elseif($data->tipo == $tipos['resultado']) Resultado @endif</option>
+                                        @if ($data->tipo != $tipos['convocacao'])
+                                            <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
+
+                                        @endif
+                                        @if ($data->tipo != $tipos['envio'])
+                                            <option @if(old('tipo') == $tipos['envio']) selected @endif value="{{$tipos['envio']}}">Envio de documentos</option>
+                                        @endif
+                                        @if ($data->tipo != $tipos['resultado'])
+                                            <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
+                                        @endif
+                                    </select>
+
+                                    @error('tipo')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-sm-6 form-group">
+                                    <label for="data_inicio">{{ __('Data de início') }} </label>
+                                    <input type="date" @error('data_inicio') is-invalid @enderror id="data_inicio" name="data_inicio" value="{{old('data_inicio')!=null ? old('data_inicio') : $data->data_inicio}}" required autofocus autocomplete="data_inicio">
+
+                                    @error('data_inicio')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <label for="data_fim">{{ __('Data de fim') }} </label>
+                                    <input type="date" @error('data_fim') is-invalid @enderror id="data_fim" name="data_fim" required autofocus autocomplete="data_fim" value="{{old('data_fim')!=null ? old('data_fim') : $data->data_fim}}" required autofocus autocomplete="data_fim">
+
+                                    @error('data_fim')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao">Importar</button>
+                        <button type="submit" class="btn btn-success" form="editar-data-form-{{$data->id}}">Editar</button>
                     </div>
                 </div>
             </div>
         </div>
-    @endforeach--}}
+    @endforeach
+
+   <!-- Modal criar listagem -->
+   <div class="modal fade" id="modalStaticCriarListagem" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #ffffff00;">
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: rgb(0, 142, 185);">Insira uma nova listagem</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="criar-listagem-form" method="POST" action="{{route('listagems.store')}}">
+                        @csrf
+                        <input type="hidden" name="chamada" value="{{$chamada->id}}">
+                        <div class="form-row">
+                            <div class="col-sm-12 form-group">
+                                <label for="titulo">{{__('Título da listagem')}}</label>
+                                <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required>
+
+                                @error('titulo')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label for="data">{{__('Selecione uma data')}}</label>
+                            <select name="data" id="data" class="form-control @error('data') is-invalid @enderror" required>
+                                <option value="">-- {{__('Selecione uma data')}} --</option>
+                                @foreach ($datas as $data)
+                                    @if ($data->tipo != $tipos['envio'])
+                                        <option value="{{$data->id}}">{{$data->titulo}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                    <button type="submit" class="btn btn-success" form="criar-listagem-form">Publicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
