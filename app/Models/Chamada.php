@@ -37,4 +37,9 @@ class Chamada extends Model
     {
         return $this->hasMany(DataChamada::class, 'chamada_id');
     }
+
+    public function listagem()
+    {
+        return $this->hasMany(Listagem::class, 'chamada_id');
+    }
 }

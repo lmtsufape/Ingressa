@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DataChamadaRequest;
-use App\Models\DataChamada;
+use App\Http\Requests\ListagemRequest;
+use App\Models\Listagem;
 use Illuminate\Http\Request;
 
-class DataChamadaController extends Controller
+class ListagemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,26 +34,27 @@ class DataChamadaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DataChamadaRequest $request)
+    public function store(ListagemRequest $request)
     {
         $this->authorize('isAdmin', User::class);
         $request->validated();
-        $data = new DataChamada();
-        $data->setAtributes($request);
+        $listagem = new Listagem();
+        $listagem->setAtributes($request);
+        //Falta produzir a listagem de fato pra colocar o pdf no caminho
+        //dd($request->all());
+        $listagem->caminho_listagem = 'caminho';
+        $listagem->save();
 
-        $data->chamada_id = $request->chamada;
-        $data->save();
-
-        return redirect()->back()->with(['success_data' => 'Data criada com sucesso']);
+        return redirect()->back()->with(['success_listagem' => 'Listagem criada com sucesso']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DataChamada  $dataChamada
+     * @param  \App\Models\Listagem  $listagem
      * @return \Illuminate\Http\Response
      */
-    public function show(DataChamada $dataChamada)
+    public function show(Listagem $listagem)
     {
         //
     }
@@ -61,10 +62,10 @@ class DataChamadaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DataChamada  $dataChamada
+     * @param  \App\Models\Listagem  $listagem
      * @return \Illuminate\Http\Response
      */
-    public function edit(DataChamada $dataChamada)
+    public function edit(Listagem $listagem)
     {
         //
     }
@@ -73,33 +74,26 @@ class DataChamadaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DataChamada  $dataChamada
+     * @param  \App\Models\Listagem  $listagem
      * @return \Illuminate\Http\Response
      */
-    public function update(DataChamadaRequest $request, $id)
+    public function update(Request $request, Listagem $listagem)
     {
-        $this->authorize('isAdmin', User::class);
-        $request->validated();
-        $dataChamada = DataChamada::find($id);
-        $dataChamada->setAtributes($request);
-
-        $dataChamada->update();
-
-        return redirect()->back()->with(['success_data' => 'Data editada com sucesso']);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DataChamada  $dataChamada
+     * @param  \App\Models\Listagem  $listagem
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $this->authorize('isAdmin', User::class);
-        $dataChamada = DataChamada::find($id);
-        $dataChamada->delete();
+        $listagem = Listagem::find($id);
+        $listagem->delete();
 
-        return redirect()->back()->with(['success_data' => 'Data deletada com sucesso.']);
+        return redirect()->back()->with(['success_listagem' => 'Listagem deletada com sucesso.']);
     }
 }

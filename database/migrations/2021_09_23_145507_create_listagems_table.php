@@ -16,9 +16,10 @@ class CreateListagemsTable extends Migration
         Schema::create('listagems', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
+            $table->integer('tipo');
             $table->string('caminho_listagem');
-            $table->unsignedBigInteger('data_chamada_id');
-            $table->foreign('data_chamada_id')->references('id')->on('data_chamadas');
+            $table->unsignedBigInteger('chamada_id');
+            $table->foreign('chamada_id')->references('id')->on('chamadas');
             $table->timestamps();
         });
     }

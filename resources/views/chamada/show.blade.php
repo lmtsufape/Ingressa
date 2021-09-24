@@ -20,13 +20,6 @@
                                     </div>
                                 </div>
                             @endif
-                            @if(session('error_data'))
-                                <div class="col-md-12" style="margin-top: 5px;">
-                                    <div class="alert alert-danger" role="alert">
-                                        <p>{{session('error_data')}}</p>
-                                    </div>
-                                </div>
-                            @endif
                         </div>
 
                         @if ($datas->first() != null)
@@ -83,12 +76,11 @@
                                 </div>
                             @endif
                         </div>
-                        @if ($datas->first() != null)
+                        @if ($listagens->first() != null)
                             <table cellspacing="0" cellpadding="1"width="100%" >
                                 <tbody>
                                     <div div class="form-row">
-                                    @foreach ($datas as $data)
-                                        @foreach ($data->listagem as $listagem)
+                                        @foreach ($listagens as $listagem)
                                             <div class="col-md-12">
                                                 <div class="d-flex justify-content-left align-items-center">
                                                     <div class="form-group">
@@ -97,9 +89,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
                                         @endforeach
-                                    @endforeach
-                                </div>
+                                    </div>
                                 </tbody>
                             </table>
                         @else
@@ -324,15 +316,91 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <label for="data">{{__('Selecione uma data')}}</label>
-                            <select name="data" id="data" class="form-control @error('data') is-invalid @enderror" required>
-                                <option value="">-- {{__('Selecione uma data')}} --</option>
-                                @foreach ($datas as $data)
-                                    @if ($data->tipo != $tipos['envio'])
-                                        <option value="{{$data->id}}">{{$data->titulo}}</option>
-                                    @endif
-                                @endforeach
+                            <label for="tipo">{{__('Selecione o tipo')}}</label>
+                            <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
+                                <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
+                                <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
+                                <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
                             </select>
+
+                            @error('tipo')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <br>
+
+                        <div class="accordion" id="cursosHeading">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Cursos
+                                        </button>
+                                    </h2>
+                                </div>
+
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#cursosHeading">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <label for="curso">{{__('Selecione o(s) curso(s)')}}</label>
+                                            <div class="col-sm-12 form-group">
+                                                <div class="form-check">
+                                                    <input type="checkbox" id="chk_marcar_desmarcar_todos_cursos" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_curso')">
+                                                    <label for="btn_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
+                                                </div>
+                                            </div>
+                                            @foreach ($cursos as $curso)
+                                                <div class="col-sm-12 form-group">
+                                                    <div class="form-check">
+                                                        <input class="checkbox_curso" type="checkbox" name="cursos[]" value="{{$curso->id}}" id="curso_{{$curso->id}}">
+                                                        <label class="form-check-label" for="curso_{{$curso->id}}">
+                                                            {{$curso->nome}}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion" id="cotasHeading">
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                            Cotas
+                                        </button>
+                                    </h2>
+                                </div>
+
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#cotasHeading">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <label for="cota">{{__('Selecione a(s) cota(s)')}}</label>
+                                            <div class="col-sm-12 form-group">
+                                                <div class="form-check">
+                                                    <input type="checkbox" id="chk_marcar_desmarcar_todas_cotas" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_cota')">
+                                                    <label for="btn_marcar_desmarcar_todas_cotas"><b>Selecionar todas</b></label>
+                                                </div>
+                                            </div>
+                                            @foreach ($cotas as $cota)
+                                                <div class="col-sm-12 form-group">
+                                                    <div class="form-check">
+                                                        <input class="checkbox_cota" type="checkbox" name="cotas[]" value="{{$cota->id}}" id="cota_{{$cota->id}}">
+                                                        <label class="form-check-label" for="cota_{{$cota->id}}">
+                                                            {{$cota->nome}}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -343,4 +411,31 @@
             </div>
         </div>
     </div>
+    @foreach ($listagens as $listagem)
+        <!-- Modal deletar listagem -->
+        <div class="modal fade" id="modalStaticDeletarListagem_{{$listagem->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #dc3545;">
+                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deletar-listagem-form-{{$listagem->id}}" method="POST" action="{{route('listagems.destroy', ['listagem' => $listagem])}}">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            Tem certeza que deseja deletar a listagem {{$listagem->titulo}}?
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger" form="deletar-listagem-form-{{$listagem->id}}">Sim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 </x-app-layout>
+<script src="{{ asset('js/checkbox_marcar_todos.js') }}" defer></script>

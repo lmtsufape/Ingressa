@@ -28,10 +28,6 @@ class DataChamada extends Model
         return $this->belongsTo(Chamada::class, 'chamada_id');
     }
 
-    public function listagem()
-    {
-        return $this->hasMany(Listagem::class, 'data_chamada_id');
-    }
 
     public function setAtributes(DataChamadaRequest $request)
     {
