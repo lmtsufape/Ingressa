@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\CotaController;
 use App\Http\Controllers\CandidatoController;
+use App\Http\Controllers\DataChamadaController;
 use App\Http\Controllers\InscricaoController;
 
 /*
@@ -55,6 +56,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('cursos', CursoController::class);
 
     Route::resource('cotas', CotaController::class);
+
+    Route::resource('datas', DataChamadaController::class);
 
     Route::resource('inscricaos', InscricaoController::class);
     Route::get('/inscricaos/{inscricao_id}/documentacao', [InscricaoController::class, 'showInscricaoDocumentacao'])->name('inscricao.documentacao');

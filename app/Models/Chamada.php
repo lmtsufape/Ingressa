@@ -14,18 +14,13 @@ class Chamada extends Model
         'nome',
         'descricao',
         'regular',
-        'caminho_resultado',
         'caminho_import_sisu_gestao',
-        'data_inicio',
-        'data_fim',
     ];
 
     public function setAtributes($input)
     {
         $this->nome = $input['nome'];
         $this->descricao = $input['descricao'];
-        $this->data_inicio = $input['data_inicio'];
-        $this->data_fim = $input['data_fim'];
     }
 
     public function inscricoes()
@@ -36,5 +31,10 @@ class Chamada extends Model
     public function sisu()
     {
         return $this->belongsTo(Sisu::class, 'sisu_id');
+    }
+
+    public function datasChamada()
+    {
+        return $this->hasMany(DataChamada::class, 'chamada_id');
     }
 }
