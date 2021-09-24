@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChamadaRequest extends FormRequest
+class ListagemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,7 @@ class ChamadaRequest extends FormRequest
     public function rules()
     {
         return [
-            'nome'                                          => 'required|max:100',
-            'descricao'                                     => 'required|max:1000',
-            'regular'                                       => 'required',
+            'titulo' => 'required|string|max:255',
         ];
     }
 }

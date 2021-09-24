@@ -32,8 +32,6 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Nome</th>
-                                        <th scope="col">Início</th>
-                                        <th scope="col">Fim</th>
                                         <th scope="col">Regular</th>
                                         <th scope="col">Opções</th>
                                     </tr>
@@ -42,8 +40,6 @@
                                     @foreach ($chamadas as $chamada)
                                         <tr>
                                             <td> {{$chamada->nome}}</td>
-                                            <td>{{$chamada->data_inicio}}</td>
-                                            <td>{{$chamada->data_fim}}</td>
                                             @if ($chamada->regular)
                                                 <td>Sim</td>
                                             @else
@@ -60,6 +56,7 @@
                                                     @endif
                                                 </div>
                                                 <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
+                                                <a class="btn btn-info" href="{{route('chamadas.show', ['chamada' => $chamada])}}">Ver</a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarChamada_{{$chamada->id}}">
                                                     Deletar
                                                 </button>

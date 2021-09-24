@@ -20,10 +20,7 @@ class CreateChamadasTable extends Migration
             $table->string('nome');
             $table->string('descricao');
             $table->boolean('regular');
-            $table->string('caminho_resultado')->nullable();
             $table->string('caminho_import_sisu_gestao')->nullable();
-            $table->date('data_inicio');
-            $table->date('data_fim');
             $table->timestamps();
         });
     }

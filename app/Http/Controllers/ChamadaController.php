@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChamadaRequest;
 use App\Models\Candidato;
 use App\Models\Chamada;
+use App\Models\Cota;
 use App\Models\Curso;
+use App\Models\DataChamada;
 use App\Models\Inscricao;
 use App\Models\Sisu;
 use App\Models\User;
@@ -69,9 +71,14 @@ class ChamadaController extends Controller
      * @param  \App\Models\Chamada  $chamada
      * @return \Illuminate\Http\Response
      */
-    public function show(Chamada $chamada)
+    public function show($id)
     {
-        //
+        $this->authorize('isAdmin', User::class);
+        $chamada = Chamada::find($id);
+        $datas = $chamada->datasChamada;
+        $listagens = $chamada->listagem;
+
+        return view('chamada.show', compact('chamada', 'datas', 'listagens'))->with(['tipos' => DataChamada::TIPO_ENUM, 'cursos' => Curso::all(), 'cotas' => Cota::all()]);;
     }
 
     /**
