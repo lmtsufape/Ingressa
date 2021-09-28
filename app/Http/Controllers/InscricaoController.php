@@ -262,4 +262,19 @@ class InscricaoController extends Controller
         $curso = Curso::find($request->curso_id);
         return redirect(route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id]))->with(['success' => 'Análise enviada com sucesso.']);
     }
+
+    public function updateStatusEfetivado(Request $request)
+    {
+        $inscricao = Inscricao::find($request->inscricaoID);
+        if($inscricao->cd_efetivado==true){
+            $inscricao->cd_efetivado = false;
+            $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição não efetivada";
+        }else {
+            $inscricao->cd_efetivado = true;
+            $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição efetivada";
+        }
+        $inscricao->update();
+
+        return redirect()->back()->with(['success' => $message]);
+    }
 }

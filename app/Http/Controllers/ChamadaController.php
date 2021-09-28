@@ -176,7 +176,7 @@ class ChamadaController extends Controller
                     'ds_formacao' => $data[5],
                     'qt_vagas_concorrencia' => $data[6],
                     'co_inscricao_enem' => $data[7],
-
+                    'cd_efetivado' => false,
                     'tp_sexo' => $data[12],
                     'nu_rg' => $data[13],
                     'no_mae' => $data[14],
@@ -281,9 +281,19 @@ class ChamadaController extends Controller
             $turno = 'Integral';
         }
         if($curso->cod_curso == 118468){
-            $candidatos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])->get();
+            $candidatos = Inscricao::select('inscricaos.*')->
+            where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])
+                ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                ->join('users','users.id','=','candidatos.user_id')
+                ->orderBy('name')
+                ->get();
         }else{
-            $candidatos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])->get();
+            $candidatos = Inscricao::select('inscricaos.*')->
+            where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])
+                ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                ->join('users','users.id','=','candidatos.user_id')
+                ->orderBy('name')
+                ->get();
         }
         return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos'));
     }
