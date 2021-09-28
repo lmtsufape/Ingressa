@@ -65,7 +65,7 @@
                                                         </button>
                                                     @else
                                                         <button type="button" data-toggle="modal" data-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="efetivar a inscrição de ">
-                                                            <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato efetivado">
+                                                            <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato não efetivado">
                                                         </button>
                                                     @endif
 
