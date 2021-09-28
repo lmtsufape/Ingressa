@@ -17,7 +17,7 @@ class CandidatoSeeder extends Seeder
         $candidatos = [
             [
                 'user_id'           => '3',
-                'nu_cpf_inscrito' => '341.885.220-38',
+                'nu_cpf_inscrito' => '34188522038',
                 'dt_nascimento' => '2021-09-17',
             ],
         ];
