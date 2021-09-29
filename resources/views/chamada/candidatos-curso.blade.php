@@ -60,11 +60,11 @@
                                             <td style="text-align: center">
                                                 <div class="btn-group">
                                                     @if($candidato->cd_efetivado == true)
-                                                        <button type="button" data-toggle="modal" data-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="cancelar a efetivação da inscrição de ">
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="cancelar a efetivação da inscrição de ">
                                                             <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato efetivado">
                                                         </button>
                                                     @else
-                                                        <button type="button" data-toggle="modal" data-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="efetivar a inscrição de ">
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="efetivar a inscrição de ">
                                                             <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato não efetivado">
                                                         </button>
                                                     @endif
@@ -77,7 +77,7 @@
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <h5 class="modal-title" id="confirmModalLabel"></h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fechar">
                                                                             <span aria-hidden="true">&times;</span>
                                                                         </button>
                                                                     </div>
@@ -85,7 +85,7 @@
                                                                             <div class="form-group">
                                                                                 <input type="hidden" name="inscricaoID" value="{{$candidato->id}}"/>
                                                                             </div>
-                                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                                                                             <button type="submit" class="btn btn-success">Confirmar</button>
                                                                     </div>
                                                                 </div>

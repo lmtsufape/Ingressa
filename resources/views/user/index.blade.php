@@ -44,7 +44,7 @@
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->email}}</td>
                                             <td>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarUser_{{$user->id}}">
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarUser_{{$user->id}}">
                                                     Deletar
                                                 </button>
                                             </td>
@@ -62,12 +62,12 @@
 
     @foreach ($users as $user)
         <!-- Modal deletar user -->
-        <div class="modal fade" id="modalStaticDeletarUser_{{$user->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modalStaticDeletarUser_{{$user->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -79,7 +79,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger" form="deletar-user-form-{{$user->id}}">Sim</button>
                     </div>
                 </div>
