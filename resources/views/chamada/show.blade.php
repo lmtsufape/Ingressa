@@ -1,113 +1,4 @@
 <x-app-layout>
-    {{-- <div class="container" style="padding-top: 3rem;  ">
-        <div class="form-row justify-content-left">
-            <div class="col-md-4">
-                <div class="card" style="width: 100%;">
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="btn-group">
-                                    <h5 class="card-title" style="color:#1492E6; font-weight: bold;">Datas importantes da {{$chamada->nome}} da edição {{$chamada->sisu->edicao}}</h5>
-                                    <a data-toggle="modal" data-target="#modalStaticCriarData_{{$chamada->id}}"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova data" width="50.5px" ></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div div class="form-row">
-                            @if(session('success_data'))
-                                <div class="col-md-12" style="margin-top: 5px;">
-                                    <div class="alert alert-success" role="alert">
-                                        <p>{{session('success_data')}}</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-
-                        @if ($datas->first() != null)
-                            <table cellspacing="0" cellpadding="1"width="100%" >
-                                <tbody>
-                                    <div div class="form-row">
-                                    @foreach ($datas as $data)
-                                        <div class="col-md-12">
-                                            <div class="d-flex justify-content-left align-items-center" data-toggle="modal" data-target="#modalStaticEditarData_{{$data->id}}">
-                                                <div style="margin-right:10px; margin-top:-20px">
-                                                    @if ($data->tipo == $tipos['convocacao'])
-                                                        <a ><img class="" src="{{asset('img/icon_convocacao.png')}}" alt="" width="40px"></a>
-                                                    @elseif($data->tipo == $tipos['envio'])
-                                                        <img class="" src="{{asset('img/icon_envio.png')}}" alt="" width="40px">
-                                                    @elseif($data->tipo == $tipos['resultado'])
-                                                        <img class="" src="{{asset('img/icon_resultado.png')}}" alt="" width="40px">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group">
-                                                    <div style="margin-bottom: -8px;"><h5 style=" font-size:17px; font-weight: bold;">{{$data->titulo}}</h5></div>
-                                                    <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
-                                                </div>
-                                            </div>
-                                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarData_{{$data->id}}">x</button>
-                                        </div>
-                                        <hr>
-                                    @endforeach
-                                </div>
-                                </tbody>
-                            </table>
-                        @else
-
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="form-row">
-                    <div class="col-md-10">
-                        <div class="btn-group">
-                            <h2 class="card-title">Listagens</h2>
-                            <a data-toggle="modal" data-target="#modalStaticCriarListagem"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova listagem" width="30.5px" ></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card" style="width: 100%;">
-                    <div class="card-body">
-                        <div div class="form-row">
-                            @if(session('success_listagem'))
-                                <div class="col-md-12" style="margin-top: 5px;">
-                                    <div class="alert alert-success" role="alert">
-                                        <p>{{session('success_listagem')}}</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        @if ($listagens->first() != null)
-                            <table cellspacing="0" cellpadding="1"width="100%" >
-                                <tbody>
-                                    @foreach ($listagens as $listagem)
-                                    <div class="card" style="margin-bottom: 10px;">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <div class="col-md-10 form-group">
-                                                    <div style="margin-bottom: -8px;"><h5 style=" font-size:17px; font-weight: bold;">{{$listagem->titulo}}</h5></div>
-                                                    <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
-                                                </div>
-                                                <div class="col-md-2 form-group">
-                                                    <a class="btn btn-primary" href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck">Arquivo</a>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @else
-
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div> --}}
     <div class="fundo px-5 py-5"> 
         <div class="py-3 px-4 row ms-0 justify-content-between">
             <div class="col-md-3 shadow p-3 caixa">
@@ -190,7 +81,7 @@
                                         </div>
                                         <div class="col-md-5" style="float: right;">
                                             <a class="btn btn-primary" href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck">Arquivo</a>
-                                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
+                                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -509,12 +400,12 @@
     </div>
     @foreach ($listagens as $listagem)
         <!-- Modal deletar listagem -->
-        <div class="modal fade" id="modalStaticDeletarListagem_{{$listagem->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modalStaticDeletarListagem_{{$listagem->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -526,7 +417,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger" form="deletar-listagem-form-{{$listagem->id}}">Sim</button>
                     </div>
                 </div>
