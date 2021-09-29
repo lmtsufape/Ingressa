@@ -50,4 +50,9 @@ class Cota extends Model
         $this->descricao = $request->input('descrição');
         $this->cod_cota = $request->codigo;
     }
+
+    public function getCodCota() 
+    {
+        return $this::COD_COTA_ENUM[$this->cod_cota];
+    }
 }

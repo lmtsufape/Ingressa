@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="461.687" height="461.687" viewBox="0 0 461.687 461.687">
+  <defs>
+    <filter id="Retângulo_4060" x="4.106" y="4.5" width="452.688" height="452.688" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="12.5" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Retângulo_4061" x="0" y="0" width="461.687" height="461.687" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="12.5" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Retângulo_4062" x="30.086" y="24.658" width="401.516" height="400.631" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="12.5" result="blur-3"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Grupo_1654" data-name="Grupo 1654" transform="translate(-1041.156 -374.634)">
+    <g transform="matrix(1, 0, 0, 1, 1041.16, 374.63)" filter="url(#Retângulo_4060)">
+      <rect id="Retângulo_4060-2" data-name="Retângulo 4060" width="326.027" height="326.027" rx="19" transform="matrix(0.98, 0.17, -0.17, 0.98, 98.22, 39)" fill="#fefefe"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 1041.16, 374.63)" filter="url(#Retângulo_4061)">
+      <rect id="Retângulo_4061-2" data-name="Retângulo 4061" width="326.027" height="326.027" rx="19" transform="matrix(0.98, -0.21, 0.21, 0.98, 37.5, 102.28)" fill="#fefefe"/>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 1041.16, 374.63)" filter="url(#Retângulo_4062)">
+      <rect id="Retângulo_4062-2" data-name="Retângulo 4062" width="326.516" height="325.631" rx="19" transform="translate(67.59 59.16)" fill="#7dcbff"/>
+    </g>
+    <path id="Icon_material-playlist-add-check" data-name="Icon material-playlist-add-check" d="M135.024,53.008H3v22H135.024Zm0-44.008H3V31H135.024ZM3,119.02H91.016v-22H3ZM217.54,69.511l16.5,16.5-76.9,77.014-49.619-49.509,16.5-16.5,33.116,33.006Z" transform="translate(1152.852 516.638)" fill="#fff"/>
+  </g>
+</svg>

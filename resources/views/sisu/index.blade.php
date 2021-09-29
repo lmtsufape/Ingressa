@@ -42,19 +42,17 @@
                                             <td> {{$sisu->id}}</td>
                                             <td>{{$sisu->edicao}}</td>
                                             <td>
-                                                <div class="btn-group">
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-light dropdown-toggle shadow-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <img class="filter-green" src="{{asset('img/icon_acoes.svg')}}" style="width: 4px;">
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                            @if(Auth::user()->role == \App\Models\User::ROLE_ENUM['admin'] || Auth::user()->role == \App\Models\User::ROLE_ENUM['analista'])
-                                                                <a class="dropdown-item" href="{{route('sisus.show', ['sisu' => $sisu->id])}}">Visualizar edição</a>
-                                                                <a class="dropdown-item" href="{{route('sisus.edit', ['sisu' => $sisu->id])}}">Editar edição</a>
-                                                                <a class="dropdown-item" data-toggle="modal" data-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="color: red; cursor: pointer;">Deletar edição</a>
-                                                            @endif
-                                                        </div>
-                                                    </div>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="filter-green" src="{{asset('img/icon_acoes.svg')}}" style="width: 4px;">
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                        @if(Auth::user()->role == \App\Models\User::ROLE_ENUM['admin'] || Auth::user()->role == \App\Models\User::ROLE_ENUM['analista'])
+                                                            <a class="dropdown-item" href="{{route('sisus.show', ['sisu' => $sisu->id])}}">Visualizar edição</a>
+                                                            <a class="dropdown-item" href="{{route('sisus.edit', ['sisu' => $sisu->id])}}">Editar edição</a>
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="color: red; cursor: pointer;">Deletar edição</a>
+                                                        @endif
+                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>
