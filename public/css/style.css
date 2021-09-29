@@ -67,7 +67,6 @@ body, html{
 .redirecionamento{
     color: var(--secundaria);
     font-weight: 600;
-
 }
 
 .legenda{
@@ -173,6 +172,10 @@ body, html{
     font-weight: 600;
     font-size: 20px;
     color: white;
+}
+
+.img-card-data {
+    display: inline-block;
 }
 
 /* X CUSTOM X */

@@ -12,13 +12,15 @@
         
         @livewireStyles
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/main.css')}}">
 
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-        <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>  
+        <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+        <script src="{{asset('bootstrap/js/bootstrap.js')}}" defer></script>  
 
     </head>
     <body class="font-sans antialiased">

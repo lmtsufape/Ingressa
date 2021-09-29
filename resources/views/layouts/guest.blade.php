@@ -17,7 +17,8 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-        <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>        
+        <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+        <script src="{{asset('bootstrap/js/bootstrap.js')}}" defer></script>        
         
     </head>
     <body>
