@@ -50,7 +50,14 @@ class ListagemController extends Controller
         $listagem->caminho_listagem = 'caminho';
         $listagem->save();
 
-        $listagem->caminho_listagem = $this->gerarListagem($request, $listagem);
+        switch ($request->tipo) {
+            case Listagem::TIPO_ENUM['convocacao']:
+                $listagem->caminho_listagem = $this->gerarListagemConvocacao($request, $listagem);
+                break;
+            case Listagem::TIPO_ENUM['resultado']:
+                $listagem->caminho_listagem = $this->gerarListagemResultado($request, $listagem);
+                break;
+        }
         $listagem->update();
 
         return redirect()->back()->with(['success_listagem' => 'Listagem criada com sucesso']);
@@ -111,12 +118,12 @@ class ListagemController extends Controller
     }
 
     /**
-     * Gera o arquivo pdf da listagem e retorn o caminho do arquivo.
+     * Gera o arquivo pdf da listagem de convocacao e retorna o caminho do arquivo.
      *
      * @param  \App\Http\Requests\ListagemRequest  $request
      * @return string $caminho_do_arquivo
      */
-    private function gerarListagem(ListagemRequest $request, Listagem $listagem)
+    private function gerarListagemConvocacao(ListagemRequest $request, Listagem $listagem)
     {
         $chamada = Chamada::find($request->chamada);
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
@@ -132,7 +139,6 @@ class ListagemController extends Controller
             }
         }
         $pdf = PDF::loadView('listagem.inscricoes', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
-        $arquivo = $pdf->stream();
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
@@ -150,5 +156,31 @@ class ListagemController extends Controller
         $nome = 'listagem.pdf';
         Storage::put('public/' . $path . $nome, $arquivo);
         return $path . $nome;
+    }
+
+    /**
+     * Gera o arquivo pdf da listagem de resultado e retorna o caminho do arquivo.
+     *
+     * @param  \App\Http\Requests\ListagemRequest  $request
+     * @return string $caminho_do_arquivo
+     */
+    private function gerarListagemResultado(ListagemRequest $request, Listagem $listagem)
+    {
+        $chamada = Chamada::find($request->chamada);
+        $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
+        $cotas = Cota::whereIn('id', $request->cotas)->orderBy('nome')->get();
+        $inscricoes = collect();
+        foreach ($cursos as $i => $curso) {
+            $inscricoes_curso = collect();
+            foreach ($cotas as $j => $cota) {
+                $inscricoes_curso = $inscricoes_curso->concat(Inscricao::where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['cd_efetivado', true]])->orderBy('nu_classificacao')->get());
+            }
+            if ($inscricoes_curso->count() > 0) {
+                $inscricoes->push($inscricoes_curso->groupBy('no_modalidade_concorrencia'));
+            }
+        }
+        $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
+
+        return $this->salvarListagem($listagem, $pdf->stream());
     }
 }
