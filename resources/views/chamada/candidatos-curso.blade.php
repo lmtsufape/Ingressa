@@ -31,6 +31,7 @@
                                         <th scope="col" style="text-align: center">Nome</th>
                                         <th scope="col" style="text-align: center">Status</th>
                                         <th scope="col" style="text-align: center">Ações</th>
+                                        <th scope="col" style="text-align: center">Efetivado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,6 +57,23 @@
                                                 </div>
                                             </td>
                                             <td style="text-align: center"><a class="btn btn-primary" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Analisar documentos</a></td>
+                                            <td style="text-align: center">
+                                                <div class="btn-group">
+                                                    <form method="post" action="{{route('inscricao.status.efetivado',['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}">
+                                                        @csrf
+                                                        <input type="hidden" name="inscricaoID" value="{{$candidato->id}}"/>
+                                                        @if($candidato->cd_efetivado == true)
+                                                            <button  type="submit">
+                                                                <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato efetivado">
+                                                            </button>
+                                                        @else
+                                                            <button  type="submit">
+                                                                <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px"  autodata-toggle="tooltip" data-placement="top" title="Candidato não efetivado">
+                                                            </button>
+                                                        @endif
+                                                    </form>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

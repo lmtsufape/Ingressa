@@ -22,6 +22,7 @@ class Inscricao extends Model
         'chamada_id',
         'protocolo',
         'status',
+        'cd_efetivado',
         'nu_etapa',
         'no_campus',
         'co_ies_curso',
