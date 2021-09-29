@@ -48,7 +48,7 @@
                                             <td>
                                                 <div class="btn-group">
                                                     @if ($chamada->caminho_import_sisu_gestao == null)
-                                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
                                                             Importar candidatos
                                                         </button>
                                                     @else
@@ -57,7 +57,7 @@
                                                 </div>
                                                 <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
                                                 <a class="btn btn-info" href="{{route('chamadas.show', ['chamada' => $chamada])}}">Ver</a>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarChamada_{{$chamada->id}}">
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}">
                                                     Deletar
                                                 </button>
                                             </td>
@@ -74,12 +74,12 @@
 
     @foreach ($chamadas as $chamada)
         <!-- Modal deletar chamada -->
-        <div class="modal fade" id="modalStaticDeletarChamada_{{$chamada->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modalStaticDeletarChamada_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -91,7 +91,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger" form="deletar-chamada-form-{{$chamada->id}}">Sim</button>
                     </div>
                 </div>
@@ -101,12 +101,12 @@
 
     @foreach ($chamadas as $chamada)
         <!-- Modal importar candidatos da chamada -->
-        <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #28a745;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Importar Candidatos</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -118,7 +118,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao">Importar</button>
                     </div>
                 </div>
