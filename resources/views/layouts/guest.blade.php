@@ -12,24 +12,19 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('css/main.css')}}">
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>        
+        
     </head>
     <body>
+        @component('layouts.nav_bar')@endcomponent
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
+        @component('layouts.footer')@endcomponent
     </body>
-    <script>
-        $(document).ready(function () {
-            var btn = document.getElementById("submeterFormBotao");
-            if(btn){
-                $(document).on('submit', 'form', function() {
-                    $('button').attr('disabled', 'disabled');
-                    btn.textContent = 'Aguarde...';
-                });
-            }
-        })
-    </script>
 </html>

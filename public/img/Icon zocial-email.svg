@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="50"
+   height="50"
+   viewBox="0 0 50 50"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="Icon zocial-email.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="5.6948425"
+     inkscape:cx="28.446792"
+     inkscape:cy="33.275723"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <path
+     id="Icon_zocial-email"
+     data-name="Icon zocial-email"
+     d="M -4.1153405e-7,40.225285 V 10.567654 q 0,-0.05147 0.14384973153405,-0.9779067 L 16.405023,24.52067 0.19179923,41.25466 A 4.0656798,4.3640533 0 0 1 -4.1153405e-7,40.225285 Z M 2.1585144,7.5293364 A 2.0672555,2.2189679 0 0 1 2.9736617,7.3749301 H 46.769627 a 2.7161247,2.9154566 0 0 1 0.863096,0.1544063 L 31.3236,22.510067 l -2.158515,1.853706 -4.269079,3.758881 -4.26908,-3.758881 -2.159288,-1.853706 z M 2.2064666,43.263603 18.56354,26.426675 l 6.331694,5.509648 6.331696,-5.509648 16.357845,16.836928 a 2.3031376,2.4721611 0 0 1 -0.815146,0.154405 H 2.9736617 A 2.1724357,2.3318672 0 0 1 2.2064643,43.263603 Z M 33.386215,24.52067 49.595572,9.5889172 a 2.8615209,3.0715232 0 0 1 0.143849,0.9779068 v 29.658461 a 3.6766677,3.9464921 0 0 1 -0.143849,1.029375 z"
+     fill="#53f2c7"
+     style="stroke-width:0.80126" />
+</svg>

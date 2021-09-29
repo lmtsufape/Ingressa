@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="50"
+   height="50"
+   viewBox="0 0 49.999999 50"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="Icon awesome-facebook.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="5.7490096"
+     inkscape:cx="31.135798"
+     inkscape:cy="32.44037"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <path
+     id="Icon_awesome-facebook"
+     data-name="Icon awesome-facebook"
+     d="M 49.694513,25.149429 A 24.694513,25.034876 0 1 0 21.1416,49.88114 V 32.386281 H 14.86829 V 25.149429 H 21.1416 V 19.63432 c 0,-6.273972 3.684429,-9.739386 9.32674,-9.739386 a 38.003783,38.527587 0 0 1 5.528523,0.488113 v 6.157664 h -3.118316 c -3.066596,0 -4.023908,1.930526 -4.023908,3.90872 v 4.699044 h 6.848825 l -1.095549,7.236852 H 28.8584 V 49.88114 A 24.702976,25.043456 0 0 0 49.694513,25.149429 Z"
+     fill="#53f2c7"
+     style="stroke-width:0.946844" />
+</svg>
