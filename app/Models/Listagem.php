@@ -31,5 +31,4 @@ class Listagem extends Model
         $this->tipo = $input['tipo'];
         $this->chamada_id = $input['chamada'];
     }
-
 }

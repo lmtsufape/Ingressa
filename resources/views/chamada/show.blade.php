@@ -79,19 +79,24 @@
                         @if ($listagens->first() != null)
                             <table cellspacing="0" cellpadding="1"width="100%" >
                                 <tbody>
-                                    <div div class="form-row">
-                                        @foreach ($listagens as $listagem)
-                                            <div class="col-md-12">
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="form-group">
-                                                        <div style="margin-bottom: -8px;"><h5 style=" font-size:17px; font-weight: bold;">{{$listagem->titulo}}</h5></div>
-                                                        <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
-                                                    </div>
+                                    @foreach ($listagens as $listagem)
+                                    <div class="card" style="margin-bottom: 10px;">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-10 form-group">
+                                                    <div style="margin-bottom: -8px;"><h5 style=" font-size:17px; font-weight: bold;">{{$listagem->titulo}}</h5></div>
+                                                    <div><h5 style="font-size:15px; font-weight: normal; color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5></div>
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <a class="btn btn-primary" href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck">Arquivo</a>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
-                                        @endforeach
+                                            <div class="form-row">
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    @endforeach
                                 </tbody>
                             </table>
                         @else
