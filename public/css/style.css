@@ -1,0 +1,181 @@
+/* CONFIG */
+
+:root{
+    --textcolor: #373737;
+    --textcolor2: #6C6C6C;
+    --bgcolor: #f5f5f5;
+    --primaria: #53F2C7;
+    --secundaria: #1492E6;
+    --textorodape: #707070;
+    --veterinaria: #F97171;
+    --bcc: #9BE2FC;
+    --engalimentos: #FFCA61;
+    --pedagogia: #FBEE3F;
+    --zootec: #D693F2;
+    --letras: #FC9BEF;
+    --agronomia: #7CEF90;
+}
+
+/* X CONFIG X */
+
+/* CUSTOM */
+body, html{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#header{
+    width: 100%;
+    background-color: transparent;
+    transition: background ease-out 0.2s;
+}
+
+#header .navbar-collapse{
+    width: auto;
+}
+
+#header .nav-link{
+    font-size: 13px;
+    font-weight: 600;
+    padding-left: 0;
+    padding-right: 0;
+    color: var(--textcolor2);
+    border-bottom: solid 3px transparent;
+    
+}
+
+#header .nav-link:hover{
+    border-bottom: solid 3px #a5a5a5;
+}
+
+#header .active{
+    border-bottom: solid 3px var(--textcolor);
+
+}
+
+.fundo{
+    background-color: var(--bgcolor);
+}
+
+.data{
+    color: var(--secundaria);
+    font-size: 25px;
+    font-weight: 600;
+    border-bottom: solid 2px #f5f5f5;
+    padding-bottom: 7px;
+}
+
+.redirecionamento{
+    color: var(--secundaria);
+    font-weight: 600;
+}
+
+.legenda{
+    color: black;
+    font-weight: 600;
+}
+
+.titulo{
+    color: var(--textcolor);
+    font-size: 37px;
+    font-weight: 600;
+}
+
+.tituloBorda{
+    border-bottom: solid 3px var(--textcolor);
+    padding-bottom: 6px;
+}
+
+.caixa{
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+.textoRodape{
+    color: var(--textorodape);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.textoagronomia{
+    color: var(--agronomia);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 30px;
+}
+
+.textobcc{
+    color: var(--bcc);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.textoeng{
+    color: var(--engalimentos);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.textovet{
+    color: var(--veterinaria);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.textozoo{
+    color: var(--zootec);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 30px;
+}
+
+.textopedagogia{
+    color: var(--pedagogia);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 30px;
+}
+
+.textoletras{
+    color: var(--letras);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.subtitulo{
+    color: var(--textcolor2);
+    font-size: 13px;
+    margin-top: 30px;
+}
+
+.subtitulo2{
+    color: var(--textcolor2);
+    font-size: 13px;
+}
+
+.cabecalho{
+    background-color: var(--primaria);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.corpo{
+    background-color: white;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.tituloTabelas{
+    font-weight: 600;
+    font-size: 20px;
+    color: white;
+}
+
+.img-card-data {
+    display: inline-block;
+}
+
+/* X CUSTOM X */

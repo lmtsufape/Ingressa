@@ -59,18 +59,38 @@
                                             <td style="text-align: center"><a class="btn btn-primary" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Analisar documentos</a></td>
                                             <td style="text-align: center">
                                                 <div class="btn-group">
+                                                    @if($candidato->cd_efetivado == true)
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="cancelar a efetivação da inscrição de ">
+                                                            <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato efetivado">
+                                                        </button>
+                                                    @else
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="efetivar a inscrição de ">
+                                                            <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato não efetivado">
+                                                        </button>
+                                                    @endif
+
                                                     <form method="post" action="{{route('inscricao.status.efetivado',['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}">
                                                         @csrf
-                                                        <input type="hidden" name="inscricaoID" value="{{$candidato->id}}"/>
-                                                        @if($candidato->cd_efetivado == true)
-                                                            <button  type="submit">
-                                                                <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato efetivado">
-                                                            </button>
-                                                        @else
-                                                            <button  type="submit">
-                                                                <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px"  autodata-toggle="tooltip" data-placement="top" title="Candidato não efetivado">
-                                                            </button>
-                                                        @endif
+                                                        <!--Modal Confirm-->
+                                                        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="confirmModalLabel"></h5>
+                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fechar">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                            <div class="form-group">
+                                                                                <input type="hidden" name="inscricaoID" value="{{$candidato->id}}"/>
+                                                                            </div>
+                                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                                            <button type="submit" class="btn btn-success">Confirmar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </td>
@@ -84,3 +104,15 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    $('#confirmModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Botão que acionou o modal
+        var recipient = button.data('id')
+        var texto = button.data('texto')
+        var nome = button.data('nome')
+        var modal = $(this)
+        modal.find('.modal-title').text('Deseja ' + texto + nome)
+        modal.find('.modal-body input').val(recipient)
+    })
+</script>

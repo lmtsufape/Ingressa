@@ -24,4 +24,18 @@ class Candidato extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function getCpfPDF() 
+    {
+        $cpf = "";
+        for ($i = 0; $i < strlen($this->nu_cpf_inscrito); $i++) {
+            if ($i > 2 && $i < 7) {
+                $cpf .= "*";
+            } else {
+                $cpf .= $this->nu_cpf_inscrito[$i];
+            }
+            
+        }
+        return $cpf;
+    }
 }

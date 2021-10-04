@@ -88,4 +88,14 @@ class Inscricao extends Model
     {
         return $this->belongsTo(Chamada::class, 'chamada_id');
     }
+
+    public function curso() 
+    {
+        return $this->belongsTo(Curso::class, 'co_curso_inscricao', 'cod_curso');
+    }
+
+    public function notaMedia()
+    {
+        return ($this->nu_nota_l + $this->nu_nota_ch + $this->nu_nota_cn + $this->nu_nota_m + $this->nu_nota_r) / 5;
+    }
 }

@@ -59,7 +59,7 @@
                                             </td>
                                             <td>
                                                 <a class="btn btn-primary" href="{{route('cursos.edit', ['curso' => $curso])}}">Editar</a>
-                                                <a class="btn btn-danger" data-toggle="modal" data-target="#delete-curso-{{$curso->id}}">Deletar</a>
+                                                <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-curso-{{$curso->id}}">Deletar</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -74,12 +74,12 @@
     @foreach ($cursos as $curso)
   
     <!-- Modal -->
-    <div class="modal fade" id="delete-curso-{{$curso->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="delete-curso-{{$curso->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #dc3545;">
                     <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Deletar curso</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -91,7 +91,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger" form="delete-curso-{{$curso->id}}-form">Sim</button>
                 </div>
             </div>
