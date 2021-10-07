@@ -82,9 +82,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color: #198754;">
                 <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Criar um curso</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="criar-curso-form" method="POST" action="{{route('cursos.store')}}" enctype="multipart/form-data">
@@ -195,9 +193,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color: #198754;">
                 <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Editar um curso</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="editar-curso-form" method="POST" action="{{route('cursos.update.ajax')}}" enctype="multipart/form-data">
