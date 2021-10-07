@@ -19,6 +19,8 @@ class CreateCursosTable extends Migration
             $table->integer('turno');
             $table->string('cod_curso');
             $table->integer('vagas');
+            $table->string('icone')->nullable();
+            $table->string('cor_padrao')->nullable();
             $table->timestamps();
         });
     }
