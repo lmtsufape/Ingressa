@@ -21,6 +21,7 @@ class CreateCursosTable extends Migration
             $table->integer('vagas');
             $table->string('icone')->nullable();
             $table->string('cor_padrao')->nullable();
+            $table->integer('grau_academico');
             $table->timestamps();
         });
     }
