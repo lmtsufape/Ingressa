@@ -147,7 +147,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #53F2C7;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Deletar cota</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Editar cota</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -193,7 +193,7 @@
                             <div class="row" style="border: 1px solid rgb(156, 156, 156); border-radius: 5px; margin-top: 10px; margin-left: 0px; margin-right: 0px; padding:10px;">
                                 <div class="col-md-6 mb-3">
                                     <input class="limpar" id="curso-input-edit-{{$curso->id}}" type="hidden" name="cursos[]" value="{{old('cursos.'.$i)}}">
-                                    <input class="limpar" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValue(this, {{$curso->id}})" @if(old('cursos.'.$i) != null) checked @endif>
+                                    <input class="limpar" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValueEdit(this, {{$curso->id}})" @if(old('cursos.'.$i) != null) checked @endif>
                                     <label for="curso-{{$curso->id}}">{{$curso->nome}} (@switch($curso->turno)
                                         @case($turnos['matutino']){{"Manhã"}}@break
                                         @case($turnos['vespertino']){{"Tarde"}}@break

@@ -12,8 +12,8 @@
                 <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                     <span class="align-middle titulo">Cursos</span>
                     <span class="aling-middle">
-                        <a data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Criar um novo curso"></a>
-                        <a data-bs-toggle="modal" data-bs-target="#editar-curso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="icone-busca"> </a>
+                        <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Criar um novo curso"></a>
+                        <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editar-curso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="icone-busca"> </a>
                     </span> 
                 </div> 
             </div>
@@ -87,6 +87,7 @@
             <div class="modal-body">
                 <form id="criar-curso-form" method="POST" action="{{route('cursos.store')}}" enctype="multipart/form-data">
                     @csrf
+                        <input type="hidden" id="curso" name="curso" value="0">
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="nome" class="form-label">{{__('Name')}}</label>
@@ -169,7 +170,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="cor" class="form-label">{{__('Cor do curso')}}</label>
-                                <input type="color" class="form-control form-control-color @error('cor') is-invalid @enderror" value="null" id="cor" name="cor" title="Escolha a cor padrão do curso" style="width: 100%;">
+                                <input type="color" class="form-control form-control-color @error('cor') is-invalid @enderror" value="#000000" id="cor" name="cor" title="Escolha a cor padrão do curso" style="width: 100%;">
                             
                                 @error('cor')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -199,6 +200,7 @@
                 <form id="editar-curso-form" method="POST" action="{{route('cursos.update.ajax')}}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" id="curso-edit" name="curso" value="">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="curso" class="form-label">{{__('Curso')}}</label>
@@ -303,7 +305,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cor-edit" class="form-label">{{__('Cor do curso')}}</label>
-                            <input type="color" class="form-control form-control-color @error('cor') is-invalid @enderror" value="null" id="cor-edit" name="cor" title="Escolha a cor padrão do curso" style="width: 100%;">
+                            <input type="color" class="form-control form-control-color @error('cor') is-invalid @enderror" value="#000000" id="cor-edit" name="cor" title="Escolha a cor padrão do curso" style="width: 100%;">
                         
                             @error('cor')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
@@ -349,6 +351,20 @@
     </div>
 @endforeach
 
+@if (old('curso') != null && old('curso') == 0)
+    <script>
+        $(document).ready(function() {
+            $('#criar-curso').modal('show');
+        });
+    </script>
+@elseif (old('curso') != null && old('curso') > 0)
+    <script>
+        $(document).ready(function() {
+            $('#editar-curso').modal('show');
+        });
+    </script>
+@endif
+
 <script>
     function carregarInformacoes(select) {
         $.ajax({
@@ -357,6 +373,7 @@
             data: {"curso_id": select.value},
             dataType:'json',
             success: function(curso) {
+                document.getElementById('curso-edit').value = curso.id;
                 document.getElementById('nome-edit').value = curso.nome;
                 document.getElementById('turno-edit').value = curso.turno;
                 document.getElementById('grau_acadêmico-edit').value = curso.grau_academico;
@@ -371,6 +388,14 @@
                 }
             }
         });
+    }
+
+    function limparValidacao() {
+        var textos = document.getElementsByClassName('is-invalid');
+        
+        for (var i = 0; i < textos.length; i++) {
+            textos[i].className = "form-control";
+        }
     }
 </script>
 </x-app-layout>
