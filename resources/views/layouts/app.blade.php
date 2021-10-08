@@ -21,10 +21,10 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-        <script src="https://unpkg.com/@popperjs/core@2" defer></script>
-        <script src="{{asset('bootstrap/js/bootstrap.js')}}" defer></script>  
+        <script src="https://unpkg.com/@popperjs/core@2" ></script>
+        <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>  
 
-        <script src="{{asset('js/jquery-3.6.0.min.js')}}" defer></script>
+        <script src="{{asset('js/jquery-3.6.0.min.js')}}"></script>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />

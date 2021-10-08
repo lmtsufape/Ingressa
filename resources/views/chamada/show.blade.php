@@ -2,9 +2,9 @@
     <div class="fundo px-5 py-5"> 
         <div class="py-3 px-4 row ms-0 justify-content-between">
             <div class="col-md-3 shadow p-3 caixa">
-                <div class="col-md-12 data">
+                <div class="col-md-12 data" style="font-weight: bolder;">
                     Datas Importantes
-                    <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right;"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova data" width="50.5px" style="width: 25px;"></a>
+                    <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right; cursor:pointer;"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova data" width="50.5px" style="width: 25px;"></a>
                 </div>
                 <div div class="form-row">
                     @if(session('success_data'))
@@ -47,17 +47,17 @@
                     <div class="col-md-12 text-center">
                         <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
                     </div>
-                    <div class="col-md-12 text-center legenda">
+                    <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
                         Nenhuma data foi adicionada
-                        <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="cursor: pointer;">clique aqui</a> <span class="legenda">para adicionar</span></p>
+                        <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="cursor: pointer; font-weight: bolder;">clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
                     </div>
                 @endif
             </div>
   
             <div class="col-md-8 pt-0">
                 <div class="col-md-12 tituloBorda">
-                    <span class="titulo pt-0">Listagens</span>
-                    <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="float: right; margin-top: 20px;"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova listagem" width="25px" ></a>
+                    <span class="titulo pt-0" style="font-weight: bolder;">Listagens</span>
+                    <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="float: right; margin-top: 20px; cursor:pointer;"><img src="{{ asset('img/icon_adicionar.png') }}" alt="Inserir nova listagem" width="25px" ></a>
                 </div>
                 <div class="col-md-12 mt-4 p-2 caixa shadow">
                     @if(session('success_listagem'))
@@ -89,11 +89,11 @@
                         </div>
                         @endforeach
                     @else
-                        <div class="text-center" style="margin-bottom: 10px;">
+                        <div class="text-center" style="margin-bottom: 10px;" >
                             <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1654.svg')}}">
-                            <div class="col-md-12 text-center legenda">
+                            <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
                                     Nenhuma listagem foi adicionada
-                                <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="cursor: pointer;" >clique aqui</a> <span class="legenda">para adicionar</span></p>
+                                <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="cursor: pointer; font-weight: bolder;" >clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
                             </div>
                         </div>
                     @endif
@@ -106,7 +106,7 @@
     <div class="modal fade" id="modalStaticCriarData_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="background-color: rgba(59, 131, 246, 0.795);">
                     <h5 class="modal-title" id="staticBackdropLabel">Insira uma nova data</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -114,9 +114,9 @@
                     <form id="criar-data-form" method="POST" action="{{route('datas.store')}}">
                         @csrf
                         <input type="hidden" name="chamada" value="{{$chamada->id}}">
-                        <div class="form-row">
-                            <div class="col-sm-12 form-group">
-                                <label for="titulo">{{__('Título da data')}}</label>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <label for="titulo" class="form-label">{{__('Título da data')}}</label>
                                 <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required>
 
                                 @error('titulo')
@@ -126,9 +126,9 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-sm-8 form-group">
-                                <label for="tipo">{{__('Tipo da data')}}</label>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <label for="tipo" class="form-label">{{__('Tipo da data')}}</label>
                                 <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da data --</option>
                                     <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
@@ -143,10 +143,10 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-sm-6 form-group">
-                                <label for="data_inicio">{{ __('Data de início') }} </label>
-                                <input type="date" @error('data_inicio') is-invalid @enderror id="data_inicio" name="data_inicio" required autofocus autocomplete="data_inicio">
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label for="data_inicio" class="form-label">{{ __('Data de início') }} </label>
+                                <input class="form-control @error('data_inicio') is-invalid @enderror" type="date"  id="data_inicio" name="data_inicio" required autocomplete="data_inicio">
 
                                 @error('data_inicio')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -154,9 +154,9 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label for="data_fim">{{ __('Data de fim') }} </label>
-                                <input type="date" @error('data_fim') is-invalid @enderror id="data_fim" name="data_fim" required autofocus autocomplete="data_fim">
+                            <div class="col-sm-6 mb-3">
+                                <label for="data_fim" class="form-label">{{ __('Data de fim') }} </label>
+                                <input class="form-control @error('data_inicio') is-invalid @enderror" type="date"  id="data_fim" name="data_fim" required autocomplete="data_fim">
 
                                 @error('data_fim')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -169,7 +169,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                    <button type="submit" class="btn btn-success" form="criar-data-form">Publicar</button>
+                    <button type="submit" class="btn btn-success btn-data-listagem" form="criar-data-form">Publicar</button>
                 </div>
             </div>
         </div>
@@ -182,9 +182,7 @@
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form id="deletar-data-form-{{$data->id}}" method="POST" action="{{route('datas.destroy', ['data' => $data])}}">
@@ -205,18 +203,16 @@
         <div class="modal fade" id="modalStaticEditarData_{{$data->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #3591dc;">
+                    <div class="modal-header" style="background-color: rgba(59, 131, 246, 0.795);">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Editar data</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form id="editar-data-form-{{$data->id}}" method="POST" action="{{route('datas.update', ['data' => $data])}}">
                             @csrf
                             <input type="hidden" name="_method" value="PUT">
-                            <div class="form-row">
-                                <div class="col-sm-12 form-group">
+                            <div class="row">
+                                <div class="col-sm-12 mb-3">
                                     <label for="titulo">{{__('Título da data')}}</label>
                                     <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror" value="{{old('titulo')!=null ? old('titulo') : $data->titulo}}" required autofocus autocomplete="titulo">
 
@@ -227,8 +223,8 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="col-sm-8 form-group">
+                            <div class="row">
+                                <div class="col-sm-12 mb-3">
                                     <label for="tipo">{{__('Tipo da data')}}</label>
                                     <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
                                         <option value="{{$data->id}}" selected >@if ($data->tipo == $tipos['convocacao']) Convocação @elseif($data->tipo == $tipos['envio']) Envio de documentos @elseif($data->tipo == $tipos['resultado']) Resultado @endif</option>
@@ -251,10 +247,10 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="col-sm-6 form-group">
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
                                     <label for="data_inicio">{{ __('Data de início') }} </label>
-                                    <input type="date" @error('data_inicio') is-invalid @enderror id="data_inicio" name="data_inicio" value="{{old('data_inicio')!=null ? old('data_inicio') : $data->data_inicio}}" required autofocus autocomplete="data_inicio">
+                                    <input type="date" class="form-control @error('data_fim') is-invalid @enderror" id="data_inicio" name="data_inicio" value="{{old('data_inicio')!=null ? old('data_inicio') : $data->data_inicio}}" required autofocus autocomplete="data_inicio">
 
                                     @error('data_inicio')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
@@ -262,9 +258,9 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-sm-6 form-group">
+                                <div class="col-sm-6 mb-3">
                                     <label for="data_fim">{{ __('Data de fim') }} </label>
-                                    <input type="date" @error('data_fim') is-invalid @enderror id="data_fim" name="data_fim" required autofocus autocomplete="data_fim" value="{{old('data_fim')!=null ? old('data_fim') : $data->data_fim}}" required autofocus autocomplete="data_fim">
+                                    <input type="date" class="form-control @error('data_fim') is-invalid @enderror"  id="data_fim" name="data_fim" required autofocus autocomplete="data_fim" value="{{old('data_fim')!=null ? old('data_fim') : $data->data_fim}}" required autofocus autocomplete="data_fim">
 
                                     @error('data_fim')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
@@ -277,7 +273,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success" form="editar-data-form-{{$data->id}}">Editar</button>
+                        <button type="submit" class="btn btn-success btn-data-listagem" form="editar-data-form-{{$data->id}}">Editar</button>
                     </div>
                 </div>
             </div>
@@ -288,18 +284,16 @@
    <div class="modal fade" id="modalStaticCriarListagem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #ffffff00;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: rgb(0, 142, 185);">Insira uma nova listagem</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="modal-header" style="background-color: rgba(59, 131, 246, 0.795);">
+                    <h5 class="modal-title" id="staticBackdropLabel" >Insira uma nova listagem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="criar-listagem-form" method="POST" action="{{route('listagems.store')}}">
                         @csrf
                         <input type="hidden" name="chamada" value="{{$chamada->id}}">
-                        <div class="form-row">
-                            <div class="col-sm-12 form-group">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
                                 <label for="titulo">{{__('Título da listagem')}}</label>
                                 <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required>
 
@@ -310,26 +304,28 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-row">
-                            <label for="tipo">{{__('Selecione o tipo')}}</label>
-                            <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
-                                <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
-                                <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
-                                <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <label for="tipo">{{__('Selecione o tipo')}}</label>
+                                <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
+                                    <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
+                                    <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
+                                    <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
+                                </select>
 
-                            @error('tipo')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                @error('tipo')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div>
                         <br>
 
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                         Cursos
                                     </button>
                                 </h2>
@@ -337,16 +333,16 @@
                             
                             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#cursosHeading">
                                 <div class="card-body">
-                                    <div class="form-row">
+                                    <div class="row">
                                         <label for="curso">{{__('Selecione o(s) curso(s)')}}</label>
-                                        <div class="col-sm-12 form-group">
+                                        <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input type="checkbox" id="chk_marcar_desmarcar_todos_cursos" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_curso')">
                                                 <label for="btn_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
                                             </div>
                                         </div>
                                         @foreach ($cursos as $curso)
-                                            <div class="col-sm-12 form-group">
+                                            <div class="col-sm-12">
                                                 <div class="form-check">
                                                     <input class="checkbox_curso" type="checkbox" name="cursos[]" value="{{$curso->id}}" id="curso_{{$curso->id}}">
                                                     <label class="form-check-label" for="curso_{{$curso->id}}">
@@ -393,7 +389,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                    <button type="submit" class="btn btn-success" form="criar-listagem-form">Publicar</button>
+                    <button type="submit" class="btn btn-success btn-data-listagem" form="criar-listagem-form">Publicar</button>
                 </div>
             </div>
         </div>
@@ -405,9 +401,7 @@
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form id="deletar-listagem-form-{{$listagem->id}}" method="POST" action="{{route('listagems.destroy', ['listagem' => $listagem])}}">
