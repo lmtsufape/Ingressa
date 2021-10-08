@@ -19,7 +19,9 @@ class CotaController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $cotas = Cota::orderBy('nome')->get();
-        return view('cota.index', compact('cotas'));
+        $cursos = Curso::orderBy('nome')->get();
+        $turnos = Curso::TURNO_ENUM;
+        return view('cota.index', compact('cotas', 'cursos', 'turnos'));
     }
 
     /**
@@ -284,5 +286,59 @@ class CotaController extends Controller
         foreach ($cota->cursos as $curso) {
             $curso->cotas()->detach($cota->id);
         }
+    }
+
+    /**
+     * Retorna as informações de uma cota passada.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function infoCota(Request $request) 
+    {
+        $cota = Cota::find($request->cota_id);
+        $cursos = [];
+        foreach ($cota->cursos as $curso) {
+            $curso_pivot = [
+                'id' => $curso->id,
+                'nome' => $curso->nome,
+                'percentual' => $curso->pivot->percentual_cota,
+            ];
+            array_push($cursos, $curso_pivot);
+        }
+
+        $cotaInfo = [
+            'id' => $cota->id,
+            'nome' => $cota->nome,
+            'descricao' => $cota->descricao,
+            'cod_cota' => $cota->cod_cota,
+            'cursos' => $cursos,
+        ];
+
+        return response()->json($cotaInfo);
+    }
+
+    /**
+     * Função que atualiza via modal uma cota.
+     *
+     * @param  \App\Http\Requests\CotaRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateModal(CotaRequest $request) {
+
+        $this->authorize('isAdmin', User::class);
+        $cota = Cota::find($request->cota);
+        $request->validated();
+        $validated = $this->validarOpcionalObrigatorio($request);
+        if ($validated != null) {
+            return $validated;
+        }
+
+        $cota->setAtributes($request);
+        $cota->update();
+        $this->desvincularCursos($cota);
+        $this->vincularCursos($request, $cota);
+
+        return redirect(route('cotas.index'))->with(['success' => 'Cota atualizada com sucesso!']);
     }
 }

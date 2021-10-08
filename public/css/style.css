@@ -362,6 +362,23 @@ body, html{
     background-color: rgba(59, 131, 246, 0.795);
     border-color: rgba(59, 131, 246, 0.795);
     box-shadow: 0 0 0 0.2rem rgba(59, 131, 246, 0.486);
-  }
+}
+
+.btn-cota {
+    background-color: #53F2C7;
+    border-color: #53F2C7;
+}
+
+.btn-cota:hover {
+    background-color: #38a88a;
+    border-color: #38a88a;
+}
+
+.btn-cota:focus, .btn-cota.focus {
+    color: #fff;
+    background-color: #206452;
+    border-color: #206452;
+    box-shadow: 0 0 0 0.2rem #206452;
+}
 
 /* X CUSTOM 2 X */

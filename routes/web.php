@@ -79,4 +79,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::put('/curso/info', [CursoController::class, 'updateAjax'])->name('cursos.update.ajax');
 
     Route::get('/curso/info', [CursoController::class, 'infoCurso'])->name('cursos.info.ajax');
+    Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
+    Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
 });
