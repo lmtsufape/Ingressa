@@ -37,6 +37,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('usuarios', UserController::class);
+    Route::post('/usuarios/{id}/update-analista', [UserController::class, 'updateAnalista'])
+        ->name('usuarios.update.analista');
 
     Route::resource('sisus', SisuController::class);
 
@@ -81,4 +83,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/curso/info', [CursoController::class, 'infoCurso'])->name('cursos.info.ajax');
     Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
+
+    Route::get('/usuario/info', [UserController::class, 'infoUser'])->name('usuario.info.ajax');
 });
