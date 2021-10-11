@@ -26,9 +26,10 @@ class CotaRequest extends FormRequest
     public function rules()
     {
         return [
+            'cota' => 'required',
             'nome' => 'required|string|max:255',
-            'codigo' => 'required|string|min:5|max:255',
-            'descrição' => 'required|string|min:50|max:1000',
+            'codigo' => 'required|string|min:2|max:255',
+            'descrição' => 'required|string|min:10|max:1000',
             'cursos.*'    => 'nullable',
         ];
     }

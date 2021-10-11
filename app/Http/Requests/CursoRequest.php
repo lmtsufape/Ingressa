@@ -25,10 +25,14 @@ class CursoRequest extends FormRequest
     public function rules()
     {
         return [
+            'curso' => 'required',
             'nome'  => 'required|string|max:255',
             'codigo'=> 'required|string|min:5',
             'turno' => 'required',
             'quantidade_de_vagas' => 'required|integer|min:30|max:200',
+            'grau_acadêmico' => 'required',
+            'icone' => 'nullable|file|mimes:png|max:2048',
+            'cor'   => 'nullable',
         ];
     }
 }

@@ -17,7 +17,7 @@ class CursoController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $cursos = Curso::orderBy('nome')->get();
-        return view('curso.index', compact('cursos'))->with(['turnos' => Curso::TURNO_ENUM]);
+        return view('curso.index', compact('cursos'))->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
     /**
@@ -43,7 +43,6 @@ class CursoController extends Controller
         $request->validated();
         $curso =  new Curso();
         $curso->setAtributes($request);
-        $curso->save();
 
         return redirect(route('cursos.index'))->with(['success' => 'Curso criado com sucesso!']);
     }
@@ -85,7 +84,6 @@ class CursoController extends Controller
         $request->validated();
         $curso = Curso::find($id);
         $curso->setAtributes($request);
-        $curso->update();
 
         return redirect(route('cursos.index'))->with(['success' => 'Curso atualizado com sucesso!']);
     }
@@ -109,14 +107,45 @@ class CursoController extends Controller
     /**
      * Desvincula todos as cotas do curso passado.
      *
-     * @param  App\Models\Curso  $curso
+     * @param  App\Models\CursoRequest  $curso
      * @return void
      */
-    private function desvincularCotas(Curso $curso)
+    private function desvincularCotas(CursoRequest $curso)
     {
         $this->authorize('isAdmin', User::class);
         foreach ($curso->cotas as $cota) {
             $cota->cursos()->detach($curso->id);
         }
+    }
+
+    /**
+     * Atualizar dados de um curso que foi preenchido pelo ajax.
+     *
+     * @param  \App\Http\Requests\CursoRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAjax(CursoRequest $request)
+    {
+        $request->validate([
+            'curso' => 'required',
+        ]);
+        
+        $curso = Curso::find($request->curso);
+        $curso->setAtributes($request);
+        
+        return redirect(route('cursos.index'))->with(['success' => 'Curso atualizado com sucesso!']);
+    }
+
+    /**
+     * Retorna um json com as informações do curso passado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function infoCurso(Request $request)
+    {
+        $curso = Curso::find($request->curso_id);
+        
+        return response()->json($curso);
     }
 }
