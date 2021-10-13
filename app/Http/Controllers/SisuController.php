@@ -6,6 +6,7 @@ use App\Http\Requests\SisuRequest;
 use App\Models\Chamada;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 
 class SisuController extends Controller
 {
@@ -60,7 +61,16 @@ class SisuController extends Controller
         $this->authorize('isAdminOrAnalista', User::class);
         $sisu = Sisu::find($id);
         $chamadas = Chamada::where('sisu_id', '=', $sisu->id)->orderBy('created_at', 'ASC')->get();
-        return view('sisu.show', compact('sisu', 'chamadas'));
+
+        $batches = collect();
+        foreach($chamadas as $chamada){
+            if($chamada->job_batch_id != null){
+                $batches->add(Bus::findBatch($chamada->job_batch_id));
+            }else{
+                $batches->add(null);
+            }
+        }
+        return view('sisu.show', compact('sisu', 'chamadas', 'batches'));
     }
 
     /**

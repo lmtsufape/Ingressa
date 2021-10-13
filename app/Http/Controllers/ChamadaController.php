@@ -14,6 +14,7 @@ use App\Models\Sisu;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
 
 class ChamadaController extends Controller
@@ -151,11 +152,14 @@ class ChamadaController extends Controller
         Storage::putFileAs('public/'.$path, $arquivo, $nome);
         $chamada->caminho_import_sisu_gestao = $path . $nome;
         if($chamada->regular){
-            $this->cadastrarCandidatosRegular($chamada);
-            //CadastroRegularCandidato::dispatch($chamada);
+            //$this->cadastrarCandidatosRegular($chamada);
+            $batch = Bus::batch([
+                new CadastroRegularCandidato($chamada),
+            ])->name('Importar Chamada Regular '.$chamada->id)->dispatch();
+            $chamada->job_batch_id = $batch->id;
         }
         $chamada->update();
-        return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Candidatos importados com sucesso!']);
+        return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Candidatos importados com sucesso. Aguarde o cadastro!']);
     }
 
     private function cadastrarCandidatosRegular($chamada)

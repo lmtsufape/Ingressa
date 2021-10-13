@@ -6,6 +6,7 @@ use App\Models\Chamada;
 use App\Models\Candidato;
 use App\Models\Inscricao;
 use App\Models\User;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class CadastroRegularCandidato implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $chamada;
 
     /**
@@ -36,7 +37,7 @@ class CadastroRegularCandidato implements ShouldQueue
      */
     public function handle()
     {
-        $dados = fopen('storage/'.$this->chamada->caminho_import_sisu_gestao, "r");
+        $dados = fopen(public_path('storage/'.$this->chamada->caminho_import_sisu_gestao), "r");
         $primeira = true;
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
             if($primeira){
@@ -53,7 +54,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'ds_formacao' => $data[5],
                     'qt_vagas_concorrencia' => $data[6],
                     'co_inscricao_enem' => $data[7],
-
+                    'cd_efetivado' => false,
                     'tp_sexo' => $data[12],
                     'nu_rg' => $data[13],
                     'no_mae' => $data[14],
