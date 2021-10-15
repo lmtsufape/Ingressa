@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('isAdmin', User::class);
-        $users = User::paginate(15);
+        $users = User::where('role', User::ROLE_ENUM['analista'])->paginate(15);
         return view('user.index', compact('users'));
     }
 
@@ -101,6 +101,38 @@ class UserController extends Controller
         $user->update();
 
         return view('welcome');
+    }
+
+    public function updateAnalista(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $validator = Validator::make($request->all(),[
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required','string','email','max:255','unique:users,email,'.$user->id,],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->update();
+
+        return redirect()->back()->with(['success' => 'Analista editado com sucesso']);
+    }
+
+    public function infoUser(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $userInfo = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ];
+
+        return response()->json($userInfo);
     }
 
     /**

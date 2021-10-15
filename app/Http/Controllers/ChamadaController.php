@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChamadaRequest;
+use App\Jobs\CadastroRegularCandidato;
 use App\Models\Candidato;
 use App\Models\Chamada;
 use App\Models\Cota;
@@ -13,6 +14,7 @@ use App\Models\Sisu;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
 
 class ChamadaController extends Controller
@@ -150,15 +152,20 @@ class ChamadaController extends Controller
         Storage::putFileAs('public/'.$path, $arquivo, $nome);
         $chamada->caminho_import_sisu_gestao = $path . $nome;
         if($chamada->regular){
-            $data = fopen($arquivo,'r');
-            $this->cadastrarCandidatosRegular($data, $chamada);
+            //$this->cadastrarCandidatosRegular($chamada);
+            $batch = Bus::batch([
+                new CadastroRegularCandidato($chamada),
+            ])->name('Importar Chamada Regular '.$chamada->id)->dispatch();
+            $chamada->job_batch_id = $batch->id;
         }
-        $chamada->update();return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Candidatos importados com sucesso!']);
+        $chamada->update();
+        return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Candidatos importados com sucesso. Aguarde o cadastro!']);
     }
 
-    private function cadastrarCandidatosRegular($dados, $chamada)
+    private function cadastrarCandidatosRegular($chamada)
     {
         $this->authorize('isAdmin', User::class);
+        $dados = fopen('storage/'.$chamada->caminho_import_sisu_gestao, "r");
         $primeira = true;
         ini_set('max_execution_time', 300);
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {

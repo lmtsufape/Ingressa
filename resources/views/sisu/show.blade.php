@@ -37,7 +37,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($chamadas as $chamada)
+                                    @foreach ($chamadas as $i => $chamada)
                                         <tr>
                                             <td> {{$chamada->nome}}</td>
                                             @if ($chamada->regular)
@@ -52,7 +52,12 @@
                                                             Importar candidatos
                                                         </button>
                                                     @else
-                                                        <a class="btn btn-success shadow-sm" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img src="{{ asset('img/icon_candidato.svg') }}" alt="Candidatos inscritos no sisu {{$sisu->edicao}}" width="23.5px" ></a>
+
+                                                        @if($batches[$i]->finished())
+                                                            <a class="btn btn-success shadow-sm" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img src="{{ asset('img/icon_candidato.svg') }}" alt="Candidatos inscritos no sisu {{$sisu->edicao}}" width="23.5px" ></a>
+                                                        @else
+                                                            <a><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
+                                                        @endif
                                                     @endif
                                                 </div>
                                                 <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
@@ -126,3 +131,29 @@
         </div>
     @endforeach
 </x-app-layout>
+
+{{--<script>
+    $(document).ready(function() {
+        $.ajax({
+            url:"{{route('chamada.queue.status')}}",
+            type:"get",
+            dataType:'json',
+            success: function(status) {
+
+            }
+        });
+    });
+
+    var timeout;
+
+    function loaded() {
+        $('#loading').html('The Ajax Call Data');
+    }
+
+    function startLoad() {
+        $('#loading').html('<img src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif"/>');
+        clearTimeout(timeout);
+        timeout = setTimeout(loaded, 1500);
+    }
+    startLoad();
+</script>--}}
