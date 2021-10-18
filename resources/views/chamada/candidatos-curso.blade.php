@@ -15,6 +15,11 @@
                                 <h6 class="card-subtitle mb-2 text-muted">Candidatos</h6>
                             </div>
                         </div>
+                        @error('error')
+                            <div class="alert alert-danger" role="alert">
+                                {{$message}}
+                            </div>
+                        @enderror
                         <div div class="form-row">
                             @if(session('success'))
                                 <div class="col-md-12" style="margin-top: 5px;">
@@ -72,6 +77,7 @@
                                                     <form method="post" action="{{route('inscricao.status.efetivado',['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}">
                                                         @csrf
                                                         <!--Modal Confirm-->
+                                                        <input type="hidden" name="curso" value="{{$curso->id}}"/>
                                                         <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">

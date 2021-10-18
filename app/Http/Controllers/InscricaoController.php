@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Arquivo;
 use App\Models\Avaliacao;
 use App\Models\Chamada;
+use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
@@ -266,14 +267,23 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
+        $cota = Cota::where('nome', $inscricao->no_modalidade_concorrencia)->first();
+        if($cota == null){
+            return redirect()->back()->withErrors(['error' => 'Não encontramos a modalidade de concorrência "'.$inscricao->no_modalidade_concorrencia.'" do candidato nos vínculos de cota e curso.']);
+        }
+        $curso = Curso::find($request->curso);
+        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
         if($inscricao->cd_efetivado==true){
+            $cota_curso->vagas_ocupadas -= 1;
             $inscricao->cd_efetivado = false;
             $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição não efetivada";
         }else {
+            $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = true;
             $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição efetivada";
         }
         $inscricao->update();
+        $cota_curso->update();
 
         return redirect()->back()->with(['success' => $message]);
     }
