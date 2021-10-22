@@ -10,7 +10,7 @@ use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\DataChamadaController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ListagemController;
-
+include "fortify.php";
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,9 +24,9 @@ use App\Http\Controllers\ListagemController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('index');
 
-Route::get('/primeiroAcesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
+Route::get('/primeiro-acesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
 Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('primeiroAcesso.verificacao');
 Route::get('/editar', [CandidatoController::class , 'editarAcesso'])->name('primeiroAcesso.editar');
 Route::post('/atualizar', [UserController::class , 'update'])->name('primeiroAcesso.atualizar');

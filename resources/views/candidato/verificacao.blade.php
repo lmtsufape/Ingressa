@@ -1,68 +1,60 @@
 <x-guest-layout>
-    <x-jet-authentication-card>
-        <x-slot name="logo">
-            <x-jet-authentication-card-logo />
-        </x-slot>
-
-        <x-jet-validation-errors class="mb-4" />
-
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('primeiroAcesso.verificacao') }}">
-            @csrf
-
-            <div>
-
-                <x-jet-label for="cpf" value="CPF:" />
-                <x-jet-input id="cpf" class="block mt-1 w-full"  onkeydown="fMasc( this, mCPF );" placeholder="000.000.000-00"  type="text" name="cpf" :value="old('cpf')" required autofocus />
-            </div>
-
-            <div class="mt-4">
-                <x-jet-label for="dt_nasc" value="Data de Nascimento:" />
-                <x-jet-input id="dt_nasc" class="block mt-1 w-full" type="date" name="dt_nasc" required />
-            </div>
-
-            <br>
-            <div class="flex items-center justify-end mt-12">
-                <div class="ml-4">
-                    <a href="{{ route('login') }}"
-                       class="btn btn-primary ml-5">
-                        Voltar
-                    </a>
+    @if (session('status'))
+        <div class="mb-4 font-medium text-sm text-green-600">
+            {{ session('status') }}
+        </div>
+    @endif
+    <div class="fundo px-5 py-5">
+        <div class="container">
+            <div class="py-3 px-4 row ms-0 justify-content-center">
+                <div class="col-md-5 caixa shadow p-3 bg-white">
+                    <div class="data bordinha">
+                        Primeiro acesso
+                    </div>
+                    <div class="mt-2 subtexto">
+                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="primeiro-acesso-form" class="my-4" method="POST" action="{{route('primeiroAcesso.verificacao')}}">
+                                <div class="form-group textoInput">
+                                    <label for="exampleInputEmail1">Data de Nascimento</label>
+                                    <input id="cpf" class="form-control form-control-sm caixaDeTexto @error('cpf') is-invalid @enderror" type="text" placeholder="Insira seu CPF" name="cpf" value="{{old('cpf')}}" required>
+                                
+                                    @error('cpf')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group mt-2 textoInput">
+                                    <label for="exampleInputPassword1">Data de nascimento:</label>
+                                    <input class="form-control form-control-sm caixaDeTexto" placeholder="Insira sua data de nascimento" type="date" name="dt_nasc" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom: 10px;">
+                            <div class="text-center">
+                                <a href="{{route('index')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a> 
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <button type="submit" class="btn botaoEntrar col-md-10" form="primeiro-acesso-form" style="width: 100%;">Confirmar</button> 
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <x-jet-button type="submit">
-                        Confirmar
-                    </x-jet-button>
-                </div>
-            </div>
-        </form>
-
-    </x-jet-authentication-card>
+            </div> 
+        </div>
+    </div>
 </x-guest-layout>
+
 <script type="text/javascript">
-
-    function fMasc(objeto,mascara) {
-        obj=objeto
-        masc=mascara
-        setTimeout("fMascEx()",1)
-    }
-
-    function fMascEx() {
-        obj.value=masc(obj.value)
-    }
-
-    function mCPF(cpf){
-        cpf=cpf.replace(/\D/g,"")
-        cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
-        cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
-        cpf=cpf.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
-        return cpf
-    }
-
+    $(document).ready(function(){
+        $('#cpf').mask('000.000.000-00');
+    });
 </script>
 

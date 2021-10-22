@@ -62,9 +62,9 @@
                         <li class="nav-item">
                             <a class="nav-link mx-3" href="#">Sobre</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link mx-3 @if(request()->routeIs('login')) active @endif" href="{{route('login')}}">Login</a>
-                        </li>
+                        </li> --}}
                     @endauth
                 </ul>
             </div>

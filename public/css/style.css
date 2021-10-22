@@ -347,38 +347,73 @@ body, html{
     padding-bottom: 90px;
 }
 
-.btn-data-listagem {
-    background-color: rgba(59, 131, 246, 0.795);
-    border-color: rgba(59, 131, 246, 0.795);
+.tituloLista{
+    color: black;
+    font-weight: 600;
+    font-size: 16px;
 }
 
-.btn-data-listagem:hover {
-    background-color: rgba(16, 86, 199, 0.795);
-    border-color: rgba(16, 86, 199, 0.795);
+.destaqueLista{
+    color: black;
+    font-weight: 700;
+    font-size: 16px;
 }
 
-.btn-data-listagem:focus, .btn-data-listagem.focus {
-    color: #fff;
-    background-color: rgba(59, 131, 246, 0.795);
-    border-color: rgba(59, 131, 246, 0.795);
-    box-shadow: 0 0 0 0.2rem rgba(59, 131, 246, 0.486);
+.link{
+    color: var(--secundaria);
+    font-size: 13px;
 }
 
-.btn-cota {
-    background-color: #53F2C7;
-    border-color: #53F2C7;
+.listagemLista{
+    border-bottom:solid 2px #f5f5f5;
 }
 
-.btn-cota:hover {
-    background-color: #38a88a;
-    border-color: #38a88a;
+.datinha{
+    color: var(--textorodape);
+    font-size: 13px;
+    font-weight: 600;
 }
 
-.btn-cota:focus, .btn-cota.focus {
-    color: #fff;
-    background-color: #206452;
-    border-color: #206452;
-    box-shadow: 0 0 0 0.2rem #206452;
+.subtexto{
+    color: var(--textorodape);
+    font-size: 13px;
+}
+
+.textoInput{
+    color: black;
+    font-size: 14px;
+}
+
+.checkbox{
+    color: var(--textorodape);
+    font-size: 13px;
+}
+
+.caixaDeTexto{
+    background-color: #f5f5f5;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+}
+
+.botaoEntrar{
+    background-color: var(--secundaria);
+    size: 100%;
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    border-radius: 0.5rem;
+}
+
+.tituloEntrada{
+    font-size: 30px;
+    color: var(--primaria);
+    font-weight: 700;
+}
+
+.textoEntrada{
+    font-size: 18px;
+    color: var(--textcolor);
+    font-weight: 600;
 }
 
 .btn-claro {
@@ -397,5 +432,4 @@ body, html{
     border-color: #203064;
     box-shadow: 0 0 0 0.2rem #203064;
 }
-
 /* X CUSTOM 2 X */
