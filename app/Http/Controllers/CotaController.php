@@ -269,7 +269,7 @@ class CotaController extends Controller
         foreach ($request->cursos as $i => $curso_id) {
             if ($curso_id != null) {
                 $curso = Curso::find($curso_id);
-                $curso->cotas()->attach($cota->id, ['percentual_cota' => $request->percentual[$i]]);
+                $curso->cotas()->attach($cota->id, ['percentual_cota' => $request->percentual[$i], 'vagas_ocupadas' => 0]);
             }
         }
     }
@@ -294,7 +294,7 @@ class CotaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function infoCota(Request $request) 
+    public function infoCota(Request $request)
     {
         $cota = Cota::find($request->cota_id);
         $cursos = [];

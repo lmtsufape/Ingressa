@@ -4,23 +4,23 @@
             {{ __('Cotas') }}
         </h2>
     </x-slot> --}}
-    <div class="fundo2 px-5"> 
+    <div class="fundo2 px-5">
         <div class="row justify-content-center">
-            <div class="col-md-4 cabecalho p-2 px-3 align-items-center"> 
+            <div class="col-md-4 cabecalho p-2 px-3 align-items-center">
               <div class="row justify-content-between">
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center">
-                    <img src="{{asset('img/Grupo 1662.svg')}}" 
+                    <img src="{{asset('img/Grupo 1662.svg')}}"
                           alt="" width="40" class="img-flex">
                       <span class="tituloTabelas ps-1">Cotas</span>
                   </div>
-                    <a data-bs-toggle="modal" data-bs-target="#criar-cota" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}"></a> 
+                    <a data-bs-toggle="modal" data-bs-target="#criar-cota" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}"></a>
                 </div>
               </div>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-4 corpo p-2 px-3"> 
+            <div class="col-md-4 corpo p-2 px-3">
                 @if(session('success'))
                     <div class="row mt-3">
                         <div class="col-md-12">
@@ -29,7 +29,7 @@
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                 </symbol>
                             </svg>
-            
+
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -52,7 +52,7 @@
                             <td class="align-middle">{{$cota->cod_cota}}</td>
                             <td class="align-middle text-center">
                             <a id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="icone-busca"></a>
-                            <a onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="icone-busca"></a> 
+                            <a onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="icone-busca"></a>
                             </td>
                         </tr>
                         @endforeach
@@ -79,7 +79,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="nome">{{__('Name')}}</label>
                                     <input type="text" id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-                                
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -89,7 +89,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="codigo">{{__('Código da cota')}}</label>
                                     <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-                                
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -101,7 +101,7 @@
                                 <div class="col-md-12 mb-3">
                                     <label for="descrição">{{__('Descrição')}}</label>
                                     <textarea name="descrição" id="descrição" cols="30" rows="3" class="form-control @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
-                                
+
                                     @error('descrição')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -118,7 +118,7 @@
                                             @case($turnos['matutino']){{"Manhã"}}@break
                                             @case($turnos['vespertino']){{"Tarde"}}@break
                                             @case($turnos['noturno']){{"Noturno"}}@break
-                                            @case($turnos['integral']){{"Integral"}}@break   
+                                            @case($turnos['integral']){{"Integral"}}@break
                                         @endswitch)</label>
                                     </div>
                                     <div class="col-md-6 mb-3">
@@ -159,7 +159,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="nome">{{__('Name')}}</label>
                                 <input type="text" id="nome-edit" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-                            
+
                                 @error('nome')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -169,7 +169,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="codigo">{{__('Código da cota')}}</label>
                                 <input type="text" id="codigo-edit" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-                            
+
                                 @error('codigo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -181,7 +181,7 @@
                             <div class="col-md-12 mb-3">
                                 <label for="descrição">{{__('Descrição')}}</label>
                                 <textarea name="descrição" id="descrição-edit" cols="30" rows="3" class="form-control @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
-                            
+
                                 @error('descrição')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -198,7 +198,7 @@
                                         @case($turnos['matutino']){{"Manhã"}}@break
                                         @case($turnos['vespertino']){{"Tarde"}}@break
                                         @case($turnos['noturno']){{"Noturno"}}@break
-                                        @case($turnos['integral']){{"Integral"}}@break   
+                                        @case($turnos['integral']){{"Integral"}}@break
                                     @endswitch)</label>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -246,7 +246,7 @@
                 </div>
             </div>
         </div>
-  
+
     @endforeach
     @if(old('cota') != null && old('cota') == 0)
         <script>
@@ -267,6 +267,14 @@
                 document.getElementById('curso-input-'+id).value = id;
             } else {
                 document.getElementById('curso-input-'+id).value = null;
+            }
+        }
+
+        function alocarValueEdit(checkbox, id){
+            if(checkbox.checked) {
+                document.getElementById('curso-input-edit-'+id).value = id;
+            } else {
+                document.getElementById('curso-input-edit-'+id).value = null;
             }
         }
 
@@ -295,7 +303,7 @@
 
         function limpar() {
             var inputs = document.getElementsByClassName('limpar');
-            
+
             for (var i = 0; i < inputs.length; i++) {
                 if (inputs[i].type == "hidden") {
                     inputs[i].value = "";
@@ -308,3 +316,5 @@
         }
     </script>
 </x-app-layout>
+
+

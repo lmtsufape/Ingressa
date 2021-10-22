@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Arquivo;
 use App\Models\Avaliacao;
 use App\Models\Chamada;
+use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
@@ -204,6 +205,54 @@ class InscricaoController extends Controller
         return $documentos;
     }
 
+    public function avaliarDocumento(Request $request)
+    {
+        $this->authorize('isAdminOrAnalista', User::class);
+        if ($request->documento_id == null) {
+            return redirect()->back()->withErrors(['error' => 'Envie a avaliação do documento que deseja avaliar.'])->withInput($request->all());
+        }
+        $inscricao = Inscricao::find($request->inscricao_id);
+        $arquivo = Arquivo::find($request->documento_id);
+        if($request->aprovar == 'true'){
+            $avaliacao = Avaliacao::AVALIACAO_ENUM['aceito'];
+        }elseif($request->aprovar == 'false'){
+            $avaliacao = Avaliacao::AVALIACAO_ENUM['recusado'];
+        }
+        if($arquivo->avaliacao != null){
+            $arquivoAvaliacao = $arquivo->avaliacao;
+            $arquivoAvaliacao->avaliacao = $avaliacao;
+            $arquivoAvaliacao->comentario = $request->comentario;
+            $arquivoAvaliacao->update();
+        }else{
+            Avaliacao::create([
+                'arquivo_id'  => $arquivo->id,
+                'avaliacao'  =>  $avaliacao,
+                'comentario' => $request->comentario,
+            ]);
+        }
+
+        $documentosAceitos = true;
+        foreach($inscricao->arquivos as $arquivo){
+            if($arquivo->avaliacao != null){
+                if($arquivo->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
+                    $documentosAceitos = false;
+                    break;
+                }
+            }else{
+                $documentosAceitos = false;
+                break;
+            }
+        }
+        if($documentosAceitos){
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
+        }else{
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_requeridos'];
+        }
+        $inscricao->update();
+
+        return redirect()->back()->with(['success' => 'Documento avaliado com sucesso!']);
+    }
+
     public function analisarDocumentos(Request $request)
     {
         $this->authorize('isAdminOrAnalista', User::class);
@@ -266,15 +315,55 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
+        $cota = Cota::where('nome', $inscricao->no_modalidade_concorrencia)->first();
+        if($cota == null){
+            return redirect()->back()->withErrors(['error' => 'Não encontramos a modalidade de concorrência "'.$inscricao->no_modalidade_concorrencia.'" do candidato nos vínculos de cota e curso.']);
+        }
+        $curso = Curso::find($request->curso);
+        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
         if($inscricao->cd_efetivado==true){
+            $cota_curso->vagas_ocupadas -= 1;
             $inscricao->cd_efetivado = false;
             $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição não efetivada";
         }else {
+            $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = true;
             $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição efetivada";
         }
         $inscricao->update();
+        $cota_curso->update();
 
         return redirect()->back()->with(['success' => $message]);
+    }
+
+    public function inscricaoDocumentoAjax(Request $request)
+    {
+        $inscricao = Inscricao::find($request->inscricao_id);
+        $this->authorize('isCandidatoDono', $inscricao);
+        $arquivo = Arquivo::where([['inscricao_id', $request->inscricao_id], ['nome', $request->documento_nome]])->first();
+        if($arquivo != null){
+            if($arquivo->avaliacao != null){
+                $documento = [
+                    'id' => $arquivo->id,
+                    'caminho' => route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $request->documento_nome]),
+                    'avaliacao' => $arquivo->avaliacao->avaliacao,
+                    'comentario' => $arquivo->avaliacao->comentario,
+                ];
+            }else{
+                $documento = [
+                    'id' => $arquivo->id,
+                    'caminho' => route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $request->documento_nome]),
+                    'avaliacao' => null,
+                    'comentario' => null,
+                ];
+            }
+        }else{
+            $documento = [
+                'id' => null,
+            ];
+        }
+
+
+        return response()->json($documento);
     }
 }
