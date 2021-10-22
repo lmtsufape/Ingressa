@@ -10,7 +10,7 @@ use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\DataChamadaController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ListagemController;
-
+include "fortify.php";
 /*
 |--------------------------------------------------------------------------
 | Web Routes
