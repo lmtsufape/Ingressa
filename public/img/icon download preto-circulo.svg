@@ -1,0 +1,12 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 78 78" width="78" height="78">
+	<title>icon download preto-svg</title>
+	<defs>
+		<image  width="74" height="74" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEoAAABKCAMAAAArDjJDAAAAAXNSR0IB2cksfwAAAThQTFRFSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oSZ/oeI9J4QAAAGh0Uk5TADljhqnF1uf/OBZkrvHuCFaz+1QGEXvoeR+R9I8aBG3tbEjX8kwD/oAKsK3OzBQJx8YCrJBaTSj17ylwHPMdJSagmBn20HjAB/j3PGhgiNPg2M24Faeh0dLwS4yLhEkn1BJ6qjrEpmHHo+X+AAACKklEQVR4nLXYZ1vCMBAH8FMRTwVREHEALlwooogiSxw4cA+c4F7f/xvYWlApbUjS8/+6z++B9pJcDoCVpuYWW6u9DbHN3mpraW5nPmyejk6HE3XpsnV2iDqu7h633tHi7vH0CkDePp+xo8XX7+WEBgaHWJCaIX+AAwoOjzSC1IyMBhtJY+M8kJrxMbbkCfFKiM4JBjTp54eUTE1PmkkzYSFJyeyMsRSYE5UQI/NGUnRBXEJcjNZLMYeMhLgUq6PichJiXC8ty0qIK7VSYlWeSqZqyoC7xo1i/1sSaSsSYvpXymStUaG1H0q4yvUJV6WcyYbJH/d6hdqwKiFuatKW5R+FmA9QfD4t2kfcpqC2vwudQkJMKNQODbWjULs01C7AXoGG2nfBAY2EeACHVNSR/O6pz7H1pVxNGE6oqBM4paJOgdlJicQHRGWFWKCkCP8g2Ws/oyuGc8oSJVs4cbrlfEi5ybj2aaTCHtmGfEF3TKRpDy/CI5XyoN+ioIpkTdFGpb9at96q5apt36VV6uqnF10TuAUaJZv5j2Yb4NqKdFNzMUkl5aXbRA0FK/LUHehSkpVKegliS3KSo/5qCdFFGWnB4MILUIyIS3NFI0m5Fc6KSmGT4YCSsph0bwopmaibfpkn9MCSAB6feKWnHFsCCI7yDZ2GGw6dlDyX842gfPmZA1LjfWEP6F54B3Rqej3mY8NukbHhdwyHma/iw8xK3n5HrO8f95/sEesXOn2xcmyZ8AQAAAAASUVORK5CYII="/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #000000 } 
+	</style>
+	<use id="Camada 2" href="#img1" x="2" y="2" />
+	<path id="Icon_material-file-download" class="shp0" d="M55.51 31.94L46.22 31.94L46.22 18L32.29 18L32.29 31.94L23 31.94L39.26 48.19L55.51 31.94ZM23 52.84L23 57.48L55.51 57.48L55.51 52.84L23 52.84Z" />
+</svg>

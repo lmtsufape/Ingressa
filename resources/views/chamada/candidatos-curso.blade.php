@@ -1,105 +1,78 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Candidatos do curso {{$curso->nome}}
-        </h2>
-    </x-slot>
-    <div class="container" style="padding-top: 5rem; padding-bottom: 8rem;">
-        <div class="form-row justify-content-center">
-            <div class="col-md-10">
-                <div class="card" style="width: 100%;">
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="col-md-8">
-                                <h5 class="card-title">Candidatos do curso {{$curso->nome}} da {{$chamada->nome}} da edição {{$chamada->sisu->edicao}} cadastrados</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Candidatos</h6>
-                            </div>
+    <div class="fundo2 px-5">
+        <div class="row justify-content-center" >
+            <div class="col-md-9 cabecalho p-2 px-3 align-items-center"  style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
+                <div class="row justify-content-between" >
+                    <div class="d-flex align-items-center justify-content-between" >
+                        <div class="d-flex align-items-center">
+                            <img style="border:2px solid white; border-radius: 50%;"  src="{{asset('storage/'.$curso->icone)}}"
+                            alt="" width="40" class="img-flex">
+                            <span class="tituloTabelas ps-1">{{$curso->nome}} - {{$turno}}</span>
                         </div>
-                        <div div class="form-row">
-                            @if(session('success'))
-                                <div class="col-md-12" style="margin-top: 5px;">
-                                    <div class="alert alert-success" role="alert">
-                                        <p>{{session('success')}}</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" style="text-align: center">Nome</th>
-                                        <th scope="col" style="text-align: center">Status</th>
-                                        <th scope="col" style="text-align: center">Ações</th>
-                                        <th scope="col" style="text-align: center">Efetivado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($candidatos as $i => $candidato)
-                                        <tr>
-                                            <td>{{$i+1}}</td>
-                                            <td style="text-align: center">{{$candidato->candidato->user->name}}</td>
-                                            <td style="text-align: center">
-                                                <div class="btn-group">
-                                                    @if($candidato->candidato->user->email != null)
-                                                        <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato concluído">
-                                                    @else
-                                                        <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato não concluído">
-                                                    @endif
 
-                                                    @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos'])
-                                                        <img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
-                                                    @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
-                                                        <img src="{{asset('img/icons-document-yellow.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
-                                                    @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_requeridos'])
-                                                        <img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos requeridos">
-                                                    @endif
-                                                </div>
-                                            </td>
-                                            <td style="text-align: center"><a class="btn btn-primary" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Analisar documentos</a></td>
-                                            <td style="text-align: center">
-                                                <div class="btn-group">
-                                                    @if($candidato->cd_efetivado == true)
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="cancelar a efetivação da inscrição de ">
-                                                            <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato efetivado">
-                                                        </button>
-                                                    @else
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="{{$candidato->id}}" data-nome="{{$candidato->candidato->user->name}}" data-texto="efetivar a inscrição de ">
-                                                            <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Candidato não efetivado">
-                                                        </button>
-                                                    @endif
-
-                                                    <form method="post" action="{{route('inscricao.status.efetivado',['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}">
-                                                        @csrf
-                                                        <!--Modal Confirm-->
-                                                        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="confirmModalLabel"></h5>
-                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fechar">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                            <div class="form-group">
-                                                                                <input type="hidden" name="inscricaoID" value="{{$candidato->id}}"/>
-                                                                            </div>
-                                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                                                                            <button type="submit" class="btn btn-success">Confirmar</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-9 corpo p-2 px-3">
+                @if(session('success'))
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </symbol>
+                            </svg>
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @error('error')
+                    <div class="alert alert-danger" role="alert">
+                        {{$message}}
+                    </div>
+                @enderror
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Pessoa</th>
+                                <th scope="col">Status</th>
+                                <th scope="col" class="text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($candidatos as $i => $candidato)
+                                <tr>
+                                    <th class="align-middle"> {{$i+1}}</th>
+                                    <td class="align-middle">{{$candidato->candidato->user->name}}</td>
+                                    <td class="align-middle">
+                                        <div class="btn-group">
+                                            @if($candidato->candidato->user->email != null)
+                                                <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato concluído">
+                                            @else
+                                                <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato não concluído">
+                                            @endif
+
+                                            @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos'])
+                                                <img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                <img src="{{asset('img/icons-document-yellow.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_requeridos'])
+                                                <img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos requeridos">
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-center"><a class="btn btn-success btn-cota" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Avaliar</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
             </div>
         </div>
     </div>

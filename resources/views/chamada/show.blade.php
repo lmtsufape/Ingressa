@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="fundo px-5 py-5"> 
+    <div class="fundo px-5 py-5">
         <div class="py-3 px-4 row ms-0 justify-content-between">
             <div class="col-md-3 shadow p-3 caixa">
                 <div class="col-md-12 data" style="font-weight: bolder;">
@@ -20,7 +20,7 @@
                         <div class="container" style="margin: 0px; padding: 0px;">
                             <div class="card" style="margin-bottom: 10px;">
                                 <div class="card-body">
-                                    <div div class="row" data-bs-toggle="modal" data-bs-target="#modalStaticEditarData_{{$data->id}}">
+                                    <div class="row" data-bs-toggle="modal" data-bs-target="#modalStaticEditarData_{{$data->id}}">
                                         <div class="col-md-3">
                                             @if ($data->tipo == $tipos['convocacao'])
                                                 <a ><img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="" width="40px"></a>
@@ -53,7 +53,7 @@
                     </div>
                 @endif
             </div>
-  
+
             <div class="col-md-8 pt-0">
                 <div class="col-md-12 tituloBorda">
                     <span class="titulo pt-0" style="font-weight: bolder;">Listagens</span>
@@ -73,17 +73,12 @@
                             <div class="card" style="margin-bottom: 10px;">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <h5>{{$listagem->titulo}}</h5>
-                                        </div>
-                                         <div class="col-md-5">
-                                            <h5 style="color:#909090">{{date('d/m/Y',strtotime($data->data_inicio))}} - {{date('d/m/Y',strtotime($data->data_fim))}}</h5>
-                                        </div>
                                         <div class="col-md-5" style="float: right;">
+                                            <h5>{{$listagem->titulo}}</h5>
                                             <a class="btn btn-primary" href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck">Arquivo</a>
                                             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarListagem_{{$listagem->id}}">x</button>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -330,7 +325,7 @@
                                     </button>
                                 </h2>
                             </div>
-                            
+
                             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#cursosHeading">
                                 <div class="card-body">
                                     <div class="row">

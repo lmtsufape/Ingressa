@@ -302,6 +302,6 @@ class ChamadaController extends Controller
                 ->orderBy('name')
                 ->get();
         }
-        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos'));
+        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno'));
     }
 }
