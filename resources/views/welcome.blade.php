@@ -58,11 +58,23 @@
                                 @csrf
                                 <div class="form-group textoInput">
                                     <label for="email">E-mail</label>
-                                    <input class="form-control form-control-sm caixaDeTexto" id="email" name="email" value="{{old('email')}}" type="text" placeholder="E-mail">
+                                    <input class="form-control form-control-sm caixaDeTexto @error('email') is-invalid @enderror" id="email" name="email" value="{{old('email')}}" type="text" placeholder="E-mail" required>
+                                
+                                    @error('email')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="form-group mt-2 textoInput">
                                     <label for="password">Senha</label>
-                                    <input class="form-control form-control-sm caixaDeTexto" type="password" id="password" name="password" value="{{old('password')}}" type="text" placeholder="Senha">
+                                    <input class="form-control form-control-sm caixaDeTexto @error('password') is-invalid @enderror" type="password" id="password" name="password" value="{{old('password')}}" type="text" placeholder="Senha" required>
+                                
+                                    @error('password')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="mt-3">
                                     <div class="form-check mb-0 pb-0 checkbox">

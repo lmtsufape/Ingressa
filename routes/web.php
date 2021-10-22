@@ -24,9 +24,9 @@ include "fortify.php";
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('index');
 
-Route::get('/primeiroAcesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
+Route::get('/primeiro-acesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
 Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('primeiroAcesso.verificacao');
 Route::get('/editar', [CandidatoController::class , 'editarAcesso'])->name('primeiroAcesso.editar');
 Route::post('/atualizar', [UserController::class , 'update'])->name('primeiroAcesso.atualizar');
