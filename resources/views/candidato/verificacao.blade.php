@@ -17,6 +17,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form id="primeiro-acesso-form" class="my-4" method="POST" action="{{route('primeiroAcesso.verificacao')}}">
+                                @csrf
                                 <div class="form-group textoInput">
                                     <label for="exampleInputEmail1">Data de Nascimento</label>
                                     <input id="cpf" class="form-control form-control-sm caixaDeTexto @error('cpf') is-invalid @enderror" type="text" placeholder="Insira seu CPF" name="cpf" value="{{old('cpf')}}" required>

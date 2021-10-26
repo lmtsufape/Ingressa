@@ -26,7 +26,7 @@ class CandidatoController extends Controller
         else{
             $user = User::where('id','=',$candidato->user_id)->first();
             if ($user->primeiro_acesso == true){
-                return  view('candidato.acesso_edit', ['user' => $user]);
+                return view('candidato.acesso_edit', compact('user'));
             }
             else{
                 return redirect('primeiroAcesso')

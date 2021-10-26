@@ -1,63 +1,73 @@
 <x-guest-layout>
-    <x-jet-authentication-card>
-        <x-slot name="logo">
-            <x-jet-authentication-card-logo />
-        </x-slot>
 
-        <x-jet-validation-errors class="mb-4" />
+    <div class="fundo px-5 py-5">
+        <div class="container">
+            <div class="py-3 px-4 row ms-0 justify-content-center">
+                <div class="col-md-5 caixa shadow p-3 bg-white">
+                    <div class="data bordinha">
+                        Primeiro acesso
+                    </div>
+                    <div class="mt-2 subtexto">
+                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="primeiro-acesso-form" class="my-4" method="POST" action="{{route('primeiroAcesso.atualizar')}}">
+                                @csrf
 
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
-        @endif
+                                @if($user->id == null)
+                                    <x-jet-input type="hidden" name="id" :value="old('id')"/>
+                                    <x-jet-input type="hidden" name="role" :value="old('role')"/>
+                                    <x-jet-input type="hidden" name="name" :value="old('name')"/>
+                                @else
+                                    <x-jet-input type="hidden" name="id" value="{{ $user->id }}"/>
+                                    <x-jet-input type="hidden" name="role" value="{{ $user->role }}"/>
+                                    <x-jet-input type="hidden" name="name" value="{{ $user->name }}"/>
+                                @endif
 
-        <form method="POST" action="{{ route('primeiroAcesso.atualizar') }}">
-            @csrf
-
-            @if($user->id == null)
-                <x-jet-input type="hidden" name="id" :value="old('id')"/>
-                <x-jet-input type="hidden" name="role" :value="old('role')"/>
-                <x-jet-input type="hidden" name="name" :value="old('name')"/>
-            @else
-                <x-jet-input type="hidden" name="id" value="{{ $user->id }}"/>
-                <x-jet-input type="hidden" name="role" value="{{ $user->role }}"/>
-                <x-jet-input type="hidden" name="name" value="{{ $user->name }}"/>
-            @endif
-
-            <div class="mt-4">
-                <x-jet-label for="email" value="{{ __('Email') }}" />
-                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
-
-
-            <div class="mt-4">
-                <x-jet-label for="password" value="{{ __('Password') }}" />
-                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-jet-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-jet-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <br>
-
-            <div class="flex items-center justify-end mt-12">
-                <div class="ml-4">
-                    <a href="{{ route('login') }}"
-                       class="btn btn-primary ml-5">
-                        Voltar
-                    </a>
+                                <div class="form-group textoInput">
+                                    <label for="exampleInputEmail1">{{ __('Email') }}</label>
+                                    <input id="email" class="form-control form-control-sm caixaDeTexto @error('email') is-invalid @enderror" type="text" placeholder="Insira um e-mail para ser usado no login" name="email" value="{{old('email')}}" required>
+                                
+                                    @error('email')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group textoInput">
+                                    <label for="exampleInputEmail1">{{ __('Password') }}</label>
+                                    <input id="password" class="form-control form-control-sm caixaDeTexto @error('password') is-invalid @enderror" type="password" placeholder="Insira uma senha para ser usada no login" name="password" value="" required>
+                                
+                                    @error('password')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group mt-2 textoInput">
+                                    <label for="exampleInputPassword1">{{ __('Confirm Password') }}</label>
+                                    <input class="form-control form-control-sm caixaDeTexto" placeholder="Insira a senha novamente" type="password" name="password_confirmation" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom: 10px;">
+                            <div class="text-center">
+                                <a href="{{route('index')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a> 
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <button type="submit" class="btn botaoEntrar col-md-10" form="primeiro-acesso-form" style="width: 100%;">Confirmar</button> 
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <x-jet-button type="submit">
-                        Confirmar
-                    </x-jet-button>
-                </div>
-            </div>
-        </form>
-
-    </x-jet-authentication-card>
+            </div> 
+        </div>
+    </div>
+    
 </x-guest-layout>
 
