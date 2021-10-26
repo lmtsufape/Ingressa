@@ -47,6 +47,11 @@
                         </div>
                     </div>
                     <div class="col-md-3 caixa shadow p-3 bg-white">
+                        @if (session('success'))
+                            <div class="mb-4 font-medium text-sm text-green-600">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         <div class="data bordinha">
                             Entrar
                         </div>

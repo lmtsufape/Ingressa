@@ -100,7 +100,7 @@ class UserController extends Controller
         $user->primeiro_acesso = false;
         $user->update();
 
-        return view('welcome');
+        return view('welcome')->with(['success']);
     }
 
     public function updateAnalista(Request $request)
