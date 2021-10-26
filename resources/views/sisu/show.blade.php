@@ -1,77 +1,82 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Chamadas') }}
-        </h2>
-    </x-slot>
-
-    <div class="container" style="padding-top: 5rem; padding-bottom: 8rem;">
-        <div class="form-row justify-content-center">
-            <div class="col-md-10">
-                <div class="card" style="width: 100%;">
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="col-md-8">
-                                <h5 class="card-title">Chamadas da edição {{$sisu->edicao}} cadastradas no sistema</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Chamadas</h6>
-                            </div>
-                            <div class="col-md-4" style="text-align: right">
-                                <a class="btn btn-primary" href="{{route('chamadas.create', $sisu->id)}}">Criar nova chamada</a>
-                            </div>
+    <div class="fundo2 px-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9 cabecalho p-2 px-3 align-items-center">
+                <div class="row justify-content-between">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <span class="tituloTabelas ps-1">Chamadas da edição {{$sisu->edicao}}
+                            </span>
                         </div>
-                        <div div class="form-row">
-                            @if(session('success'))
-                                <div class="col-md-12" style="margin-top: 5px;">
-                                    <div class="alert alert-success" role="alert">
-                                        <p>{{session('success')}}</p>
-                                    </div>
-                                </div>
-                            @endif
+                        <div class="col-md-4" style="text-align: right">
+                            <a class="btn btn-primary" href="{{route('chamadas.create', $sisu->id)}}">Criar nova chamada</a>
                         </div>
-                        <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Regular</th>
-                                        <th scope="col">Opções</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($chamadas as $i => $chamada)
-                                        <tr>
-                                            <td> {{$chamada->nome}}</td>
-                                            @if ($chamada->regular)
-                                                <td>Sim</td>
-                                            @else
-                                                <td>Não</td>
-                                            @endif
-                                            <td>
-                                                <div class="btn-group">
-                                                    @if ($chamada->caminho_import_sisu_gestao == null)
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
-                                                            Importar candidatos
-                                                        </button>
-                                                    @else
-
-                                                        @if($batches[$i]->finished())
-                                                            <a class="btn btn-success shadow-sm" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img src="{{ asset('img/icon_candidato.svg') }}" alt="Candidatos inscritos no sisu {{$sisu->edicao}}" width="23.5px" ></a>
-                                                        @else
-                                                            <a><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
-                                                        @endif
-                                                    @endif
-                                                </div>
-                                                <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
-                                                <a class="btn btn-info" href="{{route('chamadas.show', ['chamada' => $chamada])}}">Ver</a>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}">
-                                                    Deletar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-9 corpo p-2 px-3">
+                @if(session('success'))
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </symbol>
+                            </svg>
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Regular</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($chamadas as $i => $chamada)
+                            <tr>
+                                <th class="align-middle"> {{$i+1}}</th>
+                                <td> {{$chamada->nome}}</td>
+                                @if ($chamada->regular)
+                                    <td>Sim</td>
+                                @else
+                                    <td>Não</td>
+                                @endif
+                                <td>
+                                    <div class="btn-group">
+                                        @if ($chamada->caminho_import_sisu_gestao == null)
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
+                                                Importar candidatos
+                                            </button>
+                                        @else
+
+                                            @if($batches[$i]->finished())
+                                                <a class="btn btn-success shadow-sm" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img src="{{ asset('img/icon_candidato.svg') }}" alt="Candidatos inscritos no sisu {{$sisu->edicao}}" width="23.5px" ></a>
+                                            @else
+                                                <a><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
+                                    <a class="btn btn-info" href="{{route('chamadas.show', ['chamada' => $chamada])}}">Ver</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}">
+                                        Deletar
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

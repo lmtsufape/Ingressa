@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="fundo px-5 py-5">
         <div class="py-3 px-4 row ms-0 justify-content-between">
-            <div class="col-md-8 cabecalho shadow p-3 caixa align-items-center"  style="background-color: #24cee8">
+            <div class="col-md-8 cabecalho shadow p-3 align-items-center"  style="background-color: #24cee8">
                 <div class="row justify-content-between" >
                     <div class="d-flex align-items-center justify-content-between" >
                         <div class="d-flex align-items-center">
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div class="col-md-8 shadow p-3 caixa align-items-center">
+            <div class="col-md-8 shadow p-3 corpo align-items-center">
                 @if(session('success'))
                     <div class="row mt-3" id="mensagemSucesso">
                         <div class="col-md-12">
