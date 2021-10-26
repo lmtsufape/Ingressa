@@ -268,8 +268,31 @@ class ChamadaController extends Controller
     {
         $chamada = Chamada::find($chamada_id);
         $this->authorize('isAdminOrAnalista', User::class);
+        $concluidos = collect();
+        $chamados = collect();
         $cursos = Curso::orderBy('nome')->get();
-        return view('chamada.candidatos-chamada', compact('chamada', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM]);
+        foreach($cursos as $curso){
+            if($curso->turno == Curso::TURNO_ENUM['matutino']){
+                $turno = 'Matutino';
+            }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+                $turno = 'Vespertino';
+            }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+                $turno = 'Noturno';
+            }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+                $turno = 'Integral';
+            }
+            if($curso->cod_curso == 118468){
+                $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno], ['status', Inscricao::STATUS_ENUM['documentos_aceitos']]])->get();
+                $candidatosChamados = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])->get();
+            }else{
+                $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno], ['status', Inscricao::STATUS_ENUM['documentos_aceitos']]])->get();
+                $candidatosChamados = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])->get();
+            }
+            $chamados->push(count($candidatosChamados));
+            $concluidos->push(count($candidatosConcluidos));
+        }
+
+        return view('chamada.candidatos-chamada', compact('chamada', 'cursos', 'concluidos', 'chamados'))->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
     public function candidatosCurso($sisu_id, $chamada_id, $curso_id)
