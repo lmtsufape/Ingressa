@@ -22,7 +22,7 @@
                                 <div class="col-md-6 form-group">
                                     <label for="nome">{{__('Name')}}</label>
                                     <input type="text" id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-                                
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -32,7 +32,7 @@
                                 <div class="col-md-6 form-group">
                                     <label for="codigo">{{__('Código da cota')}}</label>
                                     <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-                                
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -44,7 +44,7 @@
                                 <div class="col-md-12 form-group">
                                     <label for="descrição">{{__('Descrição')}}</label>
                                     <textarea name="descrição" id="descrição" cols="30" rows="3" class="form-control @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
-                                
+
                                     @error('descrição')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -60,7 +60,7 @@
                                         <label for="curso-{{$curso->id}}">{{$curso->nome}}</label>
                                     </div>
                                     <div class="col-md-6 form-group">
-                                        <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
+                                        <label for="percentual-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
                                         <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
 
                                         @error('percentual.'.$i)
@@ -95,3 +95,4 @@
         }
     </script>
 </x-app-layout>
+

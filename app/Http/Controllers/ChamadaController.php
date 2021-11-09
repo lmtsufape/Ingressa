@@ -327,4 +327,44 @@ class ChamadaController extends Controller
         }
         return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno'));
     }
+
+    public function aprovarCandidatosChamada($sisu_id, $chamada_id)
+    {
+        $this->authorize('isAdmin', User::class);
+        $chamada = Chamada::find($chamada_id);
+        $quantidade = $chamada->inscricoes()->get()->count();
+        $candidatos = $chamada->inscricoes()->inRandomOrder()->limit((int)$quantidade/2)->get();
+        foreach($candidatos as $candidato){
+            $candidato->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
+            $candidato->cd_efetivado = true;
+
+            $cota = Cota::where('descricao', $candidato->no_modalidade_concorrencia)->first();
+            if($cota == null){
+                dd($candidato->no_modalidade_concorrencia);
+            }
+
+            if($candidato->ds_turno == 'Matutino'){
+                $turno =  Curso::TURNO_ENUM['matutino'];
+            }elseif($candidato->ds_turno == 'Vespertino'){
+                $turno = Curso::TURNO_ENUM['vespertino'];
+            }elseif($candidato->ds_turno == 'Noturno'){
+                $turno = Curso::TURNO_ENUM['noturno'];
+            }elseif($candidato->ds_turno == 'Integral'){
+                $turno = Curso::TURNO_ENUM['integral'];
+            }
+
+            $curso = $candidato->curso;
+            if($curso == null){
+                dd($candidato->cod_ies_curso);
+            }
+
+            $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
+            $cota_curso->vagas_ocupadas += 1;
+
+            $candidato->update();
+            $cota_curso->update();
+
+        }
+        return redirect()->back()->with(['success' => 'Candidatos efetivados com sucesso.']);
+    }
 }

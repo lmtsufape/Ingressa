@@ -36,10 +36,10 @@ class Curso extends Model
 
     public function cotas()
     {
-        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'percentual_cota');
+        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'quantidade_vagas');
     }
 
-    public function setAtributes(CursoRequest $request) 
+    public function setAtributes(CursoRequest $request)
     {
         $this->nome = $request->nome;
         $this->turno = $request->turno;
@@ -55,7 +55,7 @@ class Curso extends Model
         $this->icone = $request->file('icone') != null ? $this->salvarArquivo($request->file('icone')) : null;
     }
 
-    public function salvarArquivo($file) 
+    public function salvarArquivo($file)
     {
         if (Storage::disk()->exists('public/'.$this->icone)) {
             Storage::delete('public/'.$this->icone);

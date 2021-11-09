@@ -23,7 +23,7 @@
                                 <div class="col-md-6 form-group">
                                     <label for="nome">{{__('Name')}}</label>
                                     <input type="text" id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome', $cota->nome)}}" autofocus required>
-                                
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -33,7 +33,7 @@
                                 <div class="col-md-6 form-group">
                                     <label for="codigo">{{__('Código da cota')}}</label>
                                     <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo', $cota->cod_cota)}}" required>
-                                
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -45,7 +45,7 @@
                                 <div class="col-md-12 form-group">
                                     <label for="descrição">{{__('Descrição')}}</label>
                                     <textarea name="descrição" id="descrição" cols="30" rows="3" class="form-control @error('descrição') is-invalid @enderror" required>{{old('descrição', $cota->descricao)}}</textarea>
-                                
+
                                     @error('descrição')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -61,8 +61,8 @@
                                         <label for="curso-{{$curso->id}}">{{$curso->nome}}</label>
                                     </div>
                                     <div class="col-md-6 form-group">
-                                        <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
-                                        <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i, $cota->cursos->contains('id', $curso->id) ?  $cota->cursos()->where('curso_id', $curso->id)->first()->pivot->percentual_cota : null)}}">
+                                        <label for="percentual-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
+                                        <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i, $cota->cursos->contains('id', $curso->id) ?  $cota->cursos()->where('curso_id', $curso->id)->first()->pivot->quantidade_vagas : null)}}">
 
                                         @error('percentual.'.$i)
                                             <div id="validationServer03Feedback" class="invalid-feedback">

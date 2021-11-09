@@ -17,7 +17,7 @@ class CreateCursosTable extends Migration
             $table->id();
             $table->string('nome');
             $table->integer('turno');
-            $table->string('cod_curso');
+            $table->integer('cod_curso');
             $table->integer('vagas');
             $table->string('icone')->nullable();
             $table->string('cor_padrao')->nullable();

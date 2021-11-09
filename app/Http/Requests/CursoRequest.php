@@ -27,7 +27,7 @@ class CursoRequest extends FormRequest
         return [
             'curso' => 'required',
             'nome'  => 'required|string|max:255',
-            'codigo'=> 'required|string|min:5',
+            'codigo'=> 'required|integer|min:5',
             'turno' => 'required',
             'quantidade_de_vagas' => 'required|integer|min:30|max:200',
             'grau_acadêmico' => 'required',
