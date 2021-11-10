@@ -32,7 +32,6 @@ class Inscricao extends Model
         'qt_vagas_concorrencia',
         'co_inscricao_enem',
         'no_inscrito',
-        'no_social',
         'nu_cpf_inscrito',
         'dt_nascimento',
         'tp_sexo',
@@ -89,9 +88,9 @@ class Inscricao extends Model
         return $this->belongsTo(Chamada::class, 'chamada_id');
     }
 
-    public function curso() 
+    public function curso()
     {
-        return $this->belongsTo(Curso::class, 'co_curso_inscricao', 'cod_curso');
+        return $this->belongsTo(Curso::class, 'co_ies_curso', 'cod_curso');
     }
 
     public function notaMedia()

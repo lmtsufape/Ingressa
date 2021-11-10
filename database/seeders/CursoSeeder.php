@@ -18,7 +18,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Agronomia',
                 'turno' => Curso::TURNO_ENUM['matutino'],
-                'cod_curso' => '91555',
+                'cod_curso' => 91555,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#7CEF90",
                 'vagas' => 40,
@@ -27,16 +27,16 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Agronomia',
                 'turno' => Curso::TURNO_ENUM['vespertino'],
-                'cod_curso' => '91555',
+                'cod_curso' => 91555,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#7CEF90",
                 'vagas' => 40,
                 'icone' => 'img-seeder/agronomia.svg',
             ],
             [
-                'nome' => 'Ciências da Computação',
+                'nome' => 'Ciência da Computação',
                 'turno' => Curso::TURNO_ENUM['noturno'],
-                'cod_curso' => '118468​',
+                'cod_curso' => 118468,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#9BE2FC",
                 'vagas' => 80,
@@ -45,7 +45,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Engenharia de Alimentos',
                 'turno' => Curso::TURNO_ENUM['integral'],
-                'cod_curso' => '118466',
+                'cod_curso' => 118466,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#FFCA61",
                 'vagas' => 80,
@@ -54,7 +54,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Medicina Veterinária',
                 'turno' => Curso::TURNO_ENUM['matutino'],
-                'cod_curso' => '91561',
+                'cod_curso' => 91561,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#F97171",
                 'vagas' => 40,
@@ -63,7 +63,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Medicina Veterinária',
                 'turno' => Curso::TURNO_ENUM['vespertino'],
-                'cod_curso' => '91561',
+                'cod_curso' => 91561,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#F97171",
                 'vagas' => 40,
@@ -72,7 +72,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Zootecnia',
                 'turno' => Curso::TURNO_ENUM['matutino'],
-                'cod_curso' => '91738',
+                'cod_curso' => 91738,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#D693F2",
                 'vagas' => 40,
@@ -81,7 +81,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Zootecnia',
                 'turno' => Curso::TURNO_ENUM['vespertino'],
-                'cod_curso' => '91738',
+                'cod_curso' => 91738,
                 'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
                 'cor_padrao' => "#D693F2",
                 'vagas' => 40,
@@ -90,7 +90,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Letras - Inglês e Português',
                 'turno' => Curso::TURNO_ENUM['noturno'],
-                'cod_curso' => '118470',
+                'cod_curso' => 118470,
                 'cor_padrao' => "#FC9BEF",
                 'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
                 'vagas' => 80,
@@ -99,7 +99,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Pedagogia',
                 'turno' => Curso::TURNO_ENUM['matutino'],
-                'cod_curso' => '91969',
+                'cod_curso' => 91969,
                 'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
                 'cor_padrao' => "#FBEE3F",
                 'vagas' => 40,
@@ -108,7 +108,7 @@ class CursoSeeder extends Seeder
             [
                 'nome' => 'Pedagogia',
                 'turno' => Curso::TURNO_ENUM['vespertino'],
-                'cod_curso' => '91969',
+                'cod_curso' => 91969,
                 'cor_padrao' => "#FBEE3F",
                 'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
                 'vagas' => 40,

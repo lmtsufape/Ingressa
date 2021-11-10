@@ -122,7 +122,7 @@
                                         @endswitch)</label>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
+                                        <label for="percentual-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
                                         <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
 
                                         @error('percentual.'.$i)
@@ -202,7 +202,7 @@
                                     @endswitch)</label>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
+                                    <label for="percentual-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
                                     <input type="number" name="percentual[]" id="percentual-edit-{{$curso->id}}" class="form-control limpar @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
 
                                     @error('percentual.'.$i)

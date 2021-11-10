@@ -16,7 +16,7 @@ class CreateCotaCursoTable extends Migration
         Schema::create('cota_curso', function (Blueprint $table) {
             $table->id();
             $table->integer('vagas_ocupadas')->nullable();
-            $table->integer('percentual_cota')->nullable();
+            $table->integer('quantidade_vagas')->nullable();
             $table->unsignedBigInteger('cota_id');
             $table->foreign('cota_id')->references('id')->on('cotas');
             $table->unsignedBigInteger('curso_id');

@@ -31,10 +31,10 @@ class Cota extends Model
 
     public function cursos()
     {
-        return $this->belongsToMany(Curso::class, 'cota_curso', 'cota_id', 'curso_id')->withPivot('vagas_ocupadas', 'percentual_cota');
+        return $this->belongsToMany(Curso::class, 'cota_curso', 'cota_id', 'curso_id')->withPivot('vagas_ocupadas', 'quantidade_vagas');
     }
 
-    public function remanejamentos() 
+    public function remanejamentos()
     {
         return $this->hasMany(Remanejamento::class, 'cota_id');
     }
@@ -51,7 +51,7 @@ class Cota extends Model
         $this->cod_cota = $request->codigo;
     }
 
-    public function getCodCota() 
+    public function getCodCota()
     {
         return $this::COD_COTA_ENUM[$this->cod_cota];
     }
