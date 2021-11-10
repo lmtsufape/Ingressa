@@ -11,6 +11,8 @@ class Candidato extends Model
 
     protected $fillable = [
         'user_id',
+        'no_inscrito',
+        'no_social',
         'nu_cpf_inscrito',
         'dt_nascimento',
     ];
@@ -25,7 +27,7 @@ class Candidato extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function getCpfPDF() 
+    public function getCpfPDF()
     {
         $cpf = "";
         for ($i = 0; $i < strlen($this->nu_cpf_inscrito); $i++) {
@@ -34,7 +36,7 @@ class Candidato extends Model
             } else {
                 $cpf .= $this->nu_cpf_inscrito[$i];
             }
-            
+
         }
         return $cpf;
     }

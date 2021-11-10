@@ -78,7 +78,6 @@ class CreateInscricaosTable extends Migration
             $table->double('nu_nota_r');
             //$table->string('st_matricula');
             //$table->integer('st_aprovado')->nullable();
-            $table->string('no_social')->nullable();
 
             $table->string('sg_ies');
             $table->string('no_ies');

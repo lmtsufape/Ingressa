@@ -107,10 +107,20 @@ class CadastroRegularCandidato implements ShouldQueue
                     }
                     $user->save();
 
-                    $candidato = new Candidato([
-                        'nu_cpf_inscrito' => $data[10],
-                        'dt_nascimento' => $data[11],
-                    ]);
+                    if($data[9] != null){
+                        $candidato = new Candidato([
+                            'no_inscrito' => $data[8],
+                            'no_social' => $data[9],
+                            'nu_cpf_inscrito' => $data[10],
+                            'dt_nascimento' => $data[11],
+                        ]);
+                    }else{
+                        $candidato = new Candidato([
+                            'no_inscrito' => $data[8],
+                            'nu_cpf_inscrito' => $data[10],
+                            'dt_nascimento' => $data[11],
+                        ]);
+                    }
                     $candidato->user_id = $user->id;
                     $candidato->save();
 
@@ -120,6 +130,8 @@ class CadastroRegularCandidato implements ShouldQueue
 
                 }else{
                     if($data[9] != null){
+                        $candidatoExistente->no_social = $data[9];
+                        $candidatoExistente->update();
                         $candidatoExistente->user->name = $data[9];
                     }else{
                         $candidatoExistente->user->name = $data[8];

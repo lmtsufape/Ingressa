@@ -32,7 +32,6 @@ class Inscricao extends Model
         'qt_vagas_concorrencia',
         'co_inscricao_enem',
         'no_inscrito',
-        'no_social',
         'nu_cpf_inscrito',
         'dt_nascimento',
         'tp_sexo',
