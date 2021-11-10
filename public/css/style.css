@@ -14,6 +14,7 @@
     --zootec: #D693F2;
     --letras: #FC9BEF;
     --agronomia: #7CEF90;
+    --botao: #53BCF2;
 }
 
 /* X CONFIG X */
@@ -203,7 +204,7 @@ body, html{
     padding-right: 0;
     color: var(--textcolor2);
     border-bottom: solid 3px transparent;
-
+    
 }
 
 #header .nav-link:hover{
@@ -335,7 +336,7 @@ body, html{
 }
 
 .botao{
-    background-color: var(--secundaria);
+    background-color: var(--botao);
     border-radius: 00.5rem;
     color: white;
     font-weight: 600;
@@ -416,20 +417,35 @@ body, html{
     font-weight: 600;
 }
 
-.btn-claro {
-    background-color: #5AB8EB;
-    border-color: #5AB8EB;
+.modalFundo{
+    background-color: white;
+    border-radius: 0.5rem;
+    border: solid 1px transparent;
 }
 
-.btn-claro:hover {
-    background-color: #30548b;
-    border-color: #30548b;
+.tituloModal{
+    color: var(--secundaria);
+    font-weight: 600;
+    font-size: 23px;
+    border-bottom: solid 2px var(--secundaria);
 }
 
-.btn-claro:focus, .btn-claro.focus {
-    color: #fff;
-    background-color: #203064;
-    border-color: #203064;
-    box-shadow: 0 0 0 0.2rem #203064;
+.campoDeTexto{
+    background-color: #f5f5f5;
+    border-radius: 00.5rem;
+    border: 0px;
+}
+
+.textoModal{
+    color: var(--textcolor);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.botaoVerde{
+    background-color: var(--primaria);
+    border-radius: 00.5rem;
+    color: white;
+    font-weight: 600
 }
 /* X CUSTOM 2 X */

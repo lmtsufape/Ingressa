@@ -37,7 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('usuarios', UserController::class);
-    Route::post('/usuarios/{id}/update-analista', [UserController::class, 'updateAnalista'])
+    Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])
         ->name('usuarios.update.analista');
 
     Route::resource('sisus', SisuController::class);
