@@ -39,6 +39,26 @@ class Curso extends Model
         return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'quantidade_vagas');
     }
 
+    public function getTurno()
+    {
+        switch ($this->turno) {
+            case Curso::TURNO_ENUM['matutino']:
+                return 'Matutino';
+                break;
+            case Curso::TURNO_ENUM['vespertino']:
+                return 'Vespertino';
+                break;
+            case Curso::TURNO_ENUM['noturno']:
+                return 'Noturno';
+                break;
+            case Curso::TURNO_ENUM['integral']:
+                return 'Integral';
+                break;
+            default:
+                break;
+        }
+    }
+
     public function setAtributes(CursoRequest $request)
     {
         $this->nome = $request->nome;

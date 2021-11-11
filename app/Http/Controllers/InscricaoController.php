@@ -28,16 +28,7 @@ class InscricaoController extends Controller
 
         //dd($inscricoes);
         foreach($inscricoes as $inscricao){
-            if($inscricao->ds_turno == 'Matutino'){
-                $turno = Curso::TURNO_ENUM['matutino'];
-            }elseif($inscricao->ds_turno == 'Vespertino'){
-                $turno = Curso::TURNO_ENUM['vespertino'];
-            }elseif($inscricao->ds_turno == 'Integral'){
-                $turno = Curso::TURNO_ENUM['integral'];
-            }elseif($inscricao->ds_turno == 'Noturno'){
-                $turno = Curso::TURNO_ENUM['noturno'];
-            }
-            $cursos->push(Curso::where([['cod_curso', $inscricao->co_ies_curso], ['turno', $turno]])->first());
+            $cursos->push($inscricao->curso);
         }
         return view('inscricao.index', compact('inscricoes', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM, 'situacoes' => Inscricao::STATUS_ENUM]);
     }
@@ -315,7 +306,7 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
-        $cota = Cota::where('descricao', $inscricao->no_modalidade_concorrencia)->first();
+        $cota = $inscricao->cota;
         if($cota == null){
             return redirect()->back()->withErrors(['error' => 'Não encontramos a modalidade de concorrência "'.$inscricao->no_modalidade_concorrencia.'" do candidato nos vínculos de cota e curso.']);
         }

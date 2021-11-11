@@ -61,8 +61,8 @@
             text-align: right;
             border-top: 1px solid gray;
         }
-        #footer .page:after{ 
-            content: counter(page); 
+        #footer .page:after{
+            content: counter(page);
         }
         #modalidade {
             border: solid 1px rgb(126, 126, 126);
@@ -82,20 +82,20 @@
             background-color: rgb(196, 196, 196);
         }
     </style>
-    
+
 </head>
 <body>
     <div id="head">
         <img src="{{asset('img/logo_ufape_blue.png')}}" width="35px" alt="">
         <span id="head-span-left">
             UNIVERSIDADE FEDERAL DO AGRESTE DE PERNAMBUCO<br>
-            PRÓ-REITORIA DE GRADUAÇÃO<br>
+            PRÓ-REITORIA DE ENSINO DE GRADUAÇÃO<br>
             SETOR DE ESCOLARIDADE<br>
-            SELEÇÃO DE MATRÍCULA 
+            RELAÇÃO DOS CANDIDATOS CLASSIFICADOS <span style="text-transform:uppercase">{{$chamada->nome}} - {{$chamada->sisu->edicao}}</span><br>
         </span>
         <span id="head-span-rigth">
-            Processo seletivo {{$chamada->sisu->edicao}}<br>
-            Chamada regular
+            DATA: {{date('d/m/Y', strtotime(today()))}}<br>
+            PAG:
         </span>
     </div>
     <div id="body">
@@ -106,13 +106,27 @@
             @if ($collect->count() > 0)
                 @foreach ($collect as $j => $inscricoes)
                     @if ($exibirNomeCurso)
-                        <h3>Curso: {{$inscricoes[0]->curso->nome}}</h3>
+                        <h3>Curso: {{$inscricoes[0]->curso->nome}} - @switch($inscricoes[0]->curso->turno)
+                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                                Matutino
+                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                                Vespertino
+                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                                Noturno
+                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                                Integral
+                                @break
+                            @endswitch</h3>
                         @php
                             $exibirNomeCurso = false;
                         @endphp
                     @endif
                     <div id="modalidade">
-                        <h4 style="position: relative; left: 10px; right: 10px;">Modalidade: {{$inscricoes[0]->no_modalidade_concorrencia}}</h4>
+                        <h4 style="position: relative; left: 10px; right: 10px;">@if($inscricoes[0]->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                        $inscricoes[0]->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' || $inscricoes[0]->no_modalidade_concorrencia == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$inscricoes[0]->cota->cod_cota}} - {{$inscricoes[0]->no_modalidade_concorrencia}} @endif</h4>
                         <table>
                             <thead>
                                 <tr class="esquerda">
@@ -120,6 +134,7 @@
                                     <th>CPF</th>
                                     <th>Nome do candidato</th>
                                     <th>Nota</th>
+                                    <th>AF</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -128,14 +143,23 @@
                                         <th>{{$k+1}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
                                         <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
-                                        <th>{{$inscricao->notaMedia()}}</th>
+                                        <th>{{$inscricao->nu_nota_candidato}}</th>
+                                        @if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.')
+                                            <th>SIM</th>
+                                        @else
+                                            @if($inscricao->st_bonus_perc == 'SIM')
+                                                <th>SIM</th>
+                                            @else
+                                                <th></th>
+                                            @endif
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 @endforeach
-                
+
             @endif
         @endforeach
     </div>
