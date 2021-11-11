@@ -4,6 +4,7 @@
             {{ __('Cotas') }}
         </h2>
     </x-slot> --}}
+
     <div class="fundo2 px-5">
         <div class="row justify-content-center">
             <div class="col-md-4 cabecalho p-2 px-3 align-items-center">
@@ -64,32 +65,124 @@
     </div>
 
     <div class="modal fade" id="criar-cota" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #53F2C7;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Criar cota</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+        <div class="modal-dialog">
+            <div class="modal-dialog">
+                <div class="modal-content modalFundo p-3">
+                    <div class="col-md-12 tituloModal">Insira uma nova cota</div>
+        
                     <form id="criar-cota-form" method="POST" action="{{route('cotas.store')}}">
                         @csrf
                         <input type="hidden" name="cota" value="0">
-                        @csrf
+                        <div class="pt-3 pb-2 textoModal">
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="nome">{{__('Name')}}</label>
-                                    <input type="text" id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-
+                                <div class="col-sm-12">
+                                    <label class="pb-2" for="codigoCota">{{__('Name')}}</label>
+                                    <input type="text" class="form-control campoDeTexto @error('nome') is-invalid @enderror" id="nome" name="nome" value="{{old('nome')}}" placeholder="Insira o código da cota">
+                                    
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="codigo">{{__('Código da cota')}}</label>
-                                    <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="pb-2 pt-2" for="codigoCota">Código da cota:</label>
+                                    <input type="text" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" id="codigo" name="codigo" value="{{old('codigo')}}" placeholder="Insira o código da cota">
+                                    
+                                    @error('codigo')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="pb-2 pt-2" for="descricaoCota">Descrição da cota</label>
+                                    <textarea class="form-control campoDeTexto @error('descrição') is-invalid @enderror" id="descrição" name="descrição" rows="3">{{old('descrição')}}</textarea>
+                                
+                                    @error('descrição')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+            
+                            <div class="pb-2 pt-2">Selecione o curso e o percentual da cota:</div>
+                            
+                            @foreach ($cursos as $i => $curso)
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input id="curso-input-{{$curso->id}}" type="hidden" name="cursos[]" value="{{old('cursos.'.$i)}}">
+                                        <input id="curso-{{$curso->id}}" type="checkbox" onclick="alocarValue(this, {{$curso->id}})" class="form-check-input" data-bs-toggle="collapse" href="#curso_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
+                                        <label class="form-check-label" for="curso_{{$curso->id}}">
+                                            {{$curso->nome}} (@switch($curso->turno)
+                                                @case($turnos['matutino']){{"Manhã"}}@break
+                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                @case($turnos['noturno']){{"Noturno"}}@break
+                                                @case($turnos['integral']){{"Integral"}}@break
+                                            @endswitch)
+                                        </label>
+                                        <div class="collapse col-md-6 py-1 @if(old('cursos.'.$i) != null) show @endif" id="curso_{{$curso->id}}">
+                                            <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
+                                            <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control campoDeTexto @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
+
+                                            @error('percentual.'.$i)
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                            <div class="row justify-content-between mt-4">
+                                <div class="col-md-3">
+                                    <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-cota-form"><span class="px-4">Salvar</span></button>
+                                </div>       
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editar-cota" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-dialog">
+                <div class="modal-content modalFundo p-3">
+                    <div class="col-md-12 tituloModal">Editar cota</div>
+                    <div class="pt-3 pb-2 textoModal">
+                        <form id="edit-cota-form" method="POST" action="{{route('cotas.update.modal')}}">
+                            @csrf
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" id="cota-edit" name="cota" value="">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="pb-2" for="nome">{{__('Name')}}</label>
+                                    <input type="text" id="nome-edit" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
+    
+                                    @error('nome')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="pb-2 pt-2" for="codigo">{{__('Código da cota')}}</label>
+                                    <input type="text" id="codigo-edit" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
+    
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -98,10 +191,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    <label for="descrição">{{__('Descrição')}}</label>
-                                    <textarea name="descrição" id="descrição" cols="30" rows="3" class="form-control @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
-
+                                <div class="col-md-12">
+                                    <label class="pb-2 pt-2" for="descrição">{{__('Descrição')}}</label>
+                                    <textarea name="descrição" id="descrição-edit" cols="30" rows="3" class="form-control campoDeTexto @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
+    
                                     @error('descrição')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -110,114 +203,41 @@
                                 </div>
                             </div>
                             @foreach ($cursos as $i => $curso)
-                                <div class="row" style="border: 1px solid rgb(156, 156, 156); border-radius: 5px; margin-top: 10px; margin-left: 0px; margin-right: 0px; padding:10px;">
-                                    <div class="col-md-6 mb-3">
-                                        <input id="curso-input-{{$curso->id}}" type="hidden" name="cursos[]" value="{{old('cursos.'.$i)}}">
-                                        <input id="curso-{{$curso->id}}" type="checkbox" onclick="alocarValue(this, {{$curso->id}})" @if(old('cursos.'.$i) != null) checked @endif>
-                                        <label for="curso-{{$curso->id}}">{{$curso->nome}} (@switch($curso->turno)
-                                            @case($turnos['matutino']){{"Manhã"}}@break
-                                            @case($turnos['vespertino']){{"Tarde"}}@break
-                                            @case($turnos['noturno']){{"Noturno"}}@break
-                                            @case($turnos['integral']){{"Integral"}}@break
-                                        @endswitch)</label>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
-                                        <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input class="limpar" id="curso-input-edit-{{$curso->id}}" type="hidden" name="cursos[]" value="{{old('cursos.'.$i)}}">
+                                        <input class="limpar form-check-input form-check-cursos" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValueEdit(this, {{$curso->id}})" data-bs-toggle="collapse" href="#curso_edit_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
+                                        <label class="form-check-label" for="curso_{{$curso->id}}">
+                                            {{$curso->nome}} (@switch($curso->turno)
+                                                @case($turnos['matutino']){{"Manhã"}}@break
+                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                @case($turnos['noturno']){{"Noturno"}}@break
+                                                @case($turnos['integral']){{"Integral"}}@break
+                                            @endswitch)
+                                        </label>
+                                        <div class="collapse collapse-edit col-md-6 py-1 @if(old('cursos.'.$i) != null) show @endif" id="curso_edit_{{$curso->id}}" idcurso="{{$curso->id}}">
+                                            <label for="percentual-edit-{{$curso->id}}">{{__('Percentual da cota')}}</label>
+                                            <input type="number" name="percentual[]" id="percentual-edit-{{$curso->id}}" class="form-control campoDeTexto @error('percentual.'.$i) is-invalid @enderror limpar form-cursos-number" value="{{old('percentual.'.$i)}}" >
 
-                                        @error('percentual.'.$i)
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                            @error('percentual.'.$i)
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success btn-cota" form="criar-cota-form">Criar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="editar-cota" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #53F2C7;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Editar cota</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="edit-cota-form" method="POST" action="{{route('cotas.update.modal')}}">
-                        @csrf
-                        <input type="hidden" name="_method" value="PUT">
-                        <input type="hidden" id="cota-edit" name="cota" value="">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="nome">{{__('Name')}}</label>
-                                <input type="text" id="nome-edit" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-
-                                @error('nome')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                        </form>
+                        <div class="row justify-content-between mt-4">
+                            <div class="col-md-3">
+                                <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="codigo">{{__('Código da cota')}}</label>
-                                <input type="text" id="codigo-edit" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-
-                                @error('codigo')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn botaoVerde my-2 py-1" form="edit-cota-form"><span class="px-4">Salvar</span></button>
+                            </div>       
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="descrição">{{__('Descrição')}}</label>
-                                <textarea name="descrição" id="descrição-edit" cols="30" rows="3" class="form-control @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
-
-                                @error('descrição')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                        @foreach ($cursos as $i => $curso)
-                            <div class="row" style="border: 1px solid rgb(156, 156, 156); border-radius: 5px; margin-top: 10px; margin-left: 0px; margin-right: 0px; padding:10px;">
-                                <div class="col-md-6 mb-3">
-                                    <input class="limpar" id="curso-input-edit-{{$curso->id}}" type="hidden" name="cursos[]" value="{{old('cursos.'.$i)}}">
-                                    <input class="limpar" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValueEdit(this, {{$curso->id}})" @if(old('cursos.'.$i) != null) checked @endif>
-                                    <label for="curso-{{$curso->id}}">{{$curso->nome}} (@switch($curso->turno)
-                                        @case($turnos['matutino']){{"Manhã"}}@break
-                                        @case($turnos['vespertino']){{"Tarde"}}@break
-                                        @case($turnos['noturno']){{"Noturno"}}@break
-                                        @case($turnos['integral']){{"Integral"}}@break
-                                    @endswitch)</label>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="percentual-{{$curso->id}}">{{__('Percentual da cota')}}</label>
-                                    <input type="number" name="percentual[]" id="percentual-edit-{{$curso->id}}" class="form-control limpar @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
-
-                                    @error('percentual.'.$i)
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
-                        @endforeach
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success btn-cota" form="edit-cota-form">Sim</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -227,22 +247,27 @@
         <!-- Modal -->
         <div class="modal fade" id="delete-cota-{{$cota->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #dc3545;">
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Deletar cota</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-dialog">
+                    <div class="modal-content modalFundo p-3">
+                        <div class="col-md-12 tituloModal">Editar cota</div>
+                            <div class="pt-3 pb-2 textoModal">
+                                <form id="delete-cota-{{$cota->id}}-form" method="POST" action="{{route('cotas.destroy', ['cota' => $cota])}}">
+                                    @csrf
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    Tem certeza que deseja deletar essa cota?
+                                </form>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="delete-cota-{{$cota->id}}-form" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <form id="delete-cota-{{$cota->id}}-form" method="POST" action="{{route('cotas.destroy', ['cota' => $cota])}}">
-                            @csrf
-                            <input type="hidden" name="_method" value="DELETE">
-                            Tem certeza que deseja deletar essa cota?
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger" form="delete-cota-{{$cota->id}}-form">Sim</button>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -290,29 +315,49 @@
                     document.getElementById('codigo-edit').value = cota.cod_cota;
                     document.getElementById('descrição-edit').value = cota.descricao;
 
-                    limpar();
+                    limpar(cota.cursos);
 
                     for(var i = 0; i < cota.cursos.length; i++) {
                         document.getElementById('curso-input-edit-'+cota.cursos[i].id).value = cota.cursos[i].id;
-                        document.getElementById('curso-edit-'+cota.cursos[i].id).checked = true;
+                        if (document.getElementById('curso-edit-'+cota.cursos[i].id).checked == false) {
+                            $('#curso-edit-'+cota.cursos[i].id).click();
+                        }
                         document.getElementById('percentual-edit-'+cota.cursos[i].id).value = cota.cursos[i].percentual;
                     }
                 }
             });
         }
 
-        function limpar() {
+        function limpar(cursos) {
             var inputs = document.getElementsByClassName('limpar');
+            var check_collapse = document.getElementsByClassName('form-check-cursos');
+            var collapses = document.getElementsByClassName('collapse-edit');
+            var inputs_numbers = document.getElementsByClassName('form-cursos-number');
 
             for (var i = 0; i < inputs.length; i++) {
                 if (inputs[i].type == "hidden") {
                     inputs[i].value = "";
-                } else if (inputs[i].type == "checkbox") {
-                    inputs[i].checked = false;
-                } else if (inputs[i].type == "number") {
-                    inputs[i].value = "";
+                } 
+            }
+
+            for (var i = 0; i < collapses.length; i++) {
+                if (!(idExiste(cursos, collapses[i].getAttribute("idcurso")))) {
+                    if (check_collapse[i].checked) {
+                        $("#"+check_collapse[i].id).click();
+                    }
+                    inputs_numbers[i].value = "";
+                   
                 }
             }
+        }
+
+        function idExiste(cursos, id) {
+            for (var i = 0; i < cursos.length; i++) {
+                if (cursos[i].id == id) {
+                    return true;
+                }
+            }
+            return false;
         }
     </script>
 </x-app-layout>

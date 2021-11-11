@@ -192,7 +192,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-user-form-{{$user->id}}" style="background-color: #f95656;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-user-form-{{$user->id}}" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
                         </div>       
                     </div>
                 </div>
