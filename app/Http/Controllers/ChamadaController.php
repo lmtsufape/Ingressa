@@ -560,22 +560,9 @@ class ChamadaController extends Controller
         $chamados = collect();
         $cursos = Curso::orderBy('nome')->get();
         foreach($cursos as $curso){
-            if($curso->turno == Curso::TURNO_ENUM['matutino']){
-                $turno = 'Matutino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
-                $turno = 'Vespertino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
-                $turno = 'Noturno';
-            }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
-                $turno = 'Integral';
-            }
-            if($curso->cod_curso == 118468){
-                $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno], ['status', Inscricao::STATUS_ENUM['documentos_aceitos']]])->get();
-                $candidatosChamados = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])->get();
-            }else{
-                $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno], ['status', Inscricao::STATUS_ENUM['documentos_aceitos']]])->get();
-                $candidatosChamados = Inscricao::where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])->get();
-            }
+            $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos']]])->get();
+            $candidatosChamados = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])->get();
+
             $chamados->push(count($candidatosChamados));
             $concluidos->push(count($candidatosConcluidos));
         }
@@ -589,30 +576,13 @@ class ChamadaController extends Controller
         $chamada = Chamada::find($chamada_id);
         $curso = Curso::find($curso_id);
 
-        if($curso->turno == Curso::TURNO_ENUM['matutino']){
-            $turno = 'Matutino';
-        }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
-            $turno = 'Vespertino';
-        }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
-            $turno = 'Noturno';
-        }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
-            $turno = 'Integral';
-        }
-        if($curso->cod_curso == 118468){
-            $candidatos = Inscricao::select('inscricaos.*')->
-            where([['chamada_id', $chamada->id], ['co_ies_curso', '118468'], ['ds_turno', $turno]])
-                ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                ->join('users','users.id','=','candidatos.user_id')
-                ->orderBy('name')
-                ->get();
-        }else{
-            $candidatos = Inscricao::select('inscricaos.*')->
-            where([['chamada_id', $chamada->id], ['co_ies_curso', $curso->cod_curso], ['ds_turno', $turno]])
-                ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                ->join('users','users.id','=','candidatos.user_id')
-                ->orderBy('name')
-                ->get();
-        }
+        $turno = $curso->getTurno();
+        $candidatos = Inscricao::select('inscricaos.*')->
+        where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
+            ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+            ->join('users','users.id','=','candidatos.user_id')
+            ->orderBy('name')
+            ->get();
         return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno'));
     }
 
@@ -635,17 +605,7 @@ class ChamadaController extends Controller
                 dd($candidato->no_modalidade_concorrencia);
             }
 
-            if($candidato->ds_turno == 'Matutino'){
-                $turno =  Curso::TURNO_ENUM['matutino'];
-            }elseif($candidato->ds_turno == 'Vespertino'){
-                $turno = Curso::TURNO_ENUM['vespertino'];
-            }elseif($candidato->ds_turno == 'Noturno'){
-                $turno = Curso::TURNO_ENUM['noturno'];
-            }elseif($candidato->ds_turno == 'Integral'){
-                $turno = Curso::TURNO_ENUM['integral'];
-            }
-
-            $curso = Curso::where([['cod_curso', $candidato->co_ies_curso], ['turno', $turno]])->first();
+            $curso = $candidato->curso;
             if($curso == null){
                 dd($candidato->cod_ies_curso);
             }

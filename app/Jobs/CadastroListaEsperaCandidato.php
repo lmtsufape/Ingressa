@@ -274,6 +274,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                             $inscricao->chamada_id = $this->chamada->id;
                             $inscricao->candidato_id = $candidato->id;
+                            $inscricao->cota_id = $cota->id;
+                            $inscricao->curso_id = $curs->id;
                             $inscricao->save();
 
                         }else{

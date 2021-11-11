@@ -19,6 +19,8 @@ class CreateInscricaosTable extends Migration
             $table->foreign('candidato_id')->references('id')->on('candidatos');
             $table->unsignedBigInteger('chamada_id');
             $table->foreign('chamada_id')->references('id')->on('chamadas');
+            $table->unsignedBigInteger('curso_id');
+            $table->foreign('curso_id')->references('id')->on('cursos');
             $table->string('protocolo');
             $table->string('status');
             $table->string('cd_efetivado');
