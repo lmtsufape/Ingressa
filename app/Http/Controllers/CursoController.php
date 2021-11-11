@@ -107,10 +107,10 @@ class CursoController extends Controller
     /**
      * Desvincula todos as cotas do curso passado.
      *
-     * @param  App\Models\CursoRequest  $curso
+     * @param  App\Models\Curso  $curso
      * @return void
      */
-    private function desvincularCotas(CursoRequest $curso)
+    private function desvincularCotas(Curso $curso)
     {
         $this->authorize('isAdmin', User::class);
         foreach ($curso->cotas as $cota) {
