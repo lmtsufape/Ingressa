@@ -44,8 +44,8 @@
                                 @case($graus['tecnologo']){{"Tecnólogo"}}@break
                             @endswitch -
                             @switch($cursos[$count]->turno)
-                                @case($turnos['matutino']){{"Manhã"}}@break
-                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                @case($turnos['matutino']){{"Matutino"}}@break
+                                @case($turnos['vespertino']){{"Vespertino"}}@break
                                 @case($turnos['noturno']){{"Noturno"}}@break
                                 @case($turnos['integral']){{"Integral"}}@break
                             @endswitch)
