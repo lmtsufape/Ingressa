@@ -122,8 +122,8 @@
                                         <input id="curso-{{$curso->id}}" type="checkbox" onclick="alocarValue(this, {{$curso->id}})" class="form-check-input" data-bs-toggle="collapse" href="#curso_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
                                         <label class="form-check-label" for="curso_{{$curso->id}}">
                                             {{$curso->nome}} (@switch($curso->turno)
-                                                @case($turnos['matutino']){{"Manhã"}}@break
-                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                @case($turnos['matutino']){{"Matutino"}}@break
+                                                @case($turnos['vespertino']){{"Vespertino"}}@break
                                                 @case($turnos['noturno']){{"Noturno"}}@break
                                                 @case($turnos['integral']){{"Integral"}}@break
                                             @endswitch)
@@ -209,8 +209,8 @@
                                         <input class="limpar form-check-input form-check-cursos" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValueEdit(this, {{$curso->id}})" data-bs-toggle="collapse" href="#curso_edit_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
                                         <label class="form-check-label" for="curso_{{$curso->id}}">
                                             {{$curso->nome}} (@switch($curso->turno)
-                                                @case($turnos['matutino']){{"Manhã"}}@break
-                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                @case($turnos['matutino']){{"Matutino"}}@break
+                                                @case($turnos['vespertino']){{"Vespertino"}}@break
                                                 @case($turnos['noturno']){{"Noturno"}}@break
                                                 @case($turnos['integral']){{"Integral"}}@break
                                             @endswitch)
