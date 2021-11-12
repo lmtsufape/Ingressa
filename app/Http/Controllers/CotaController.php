@@ -100,7 +100,7 @@ class CotaController extends Controller
         if ($validated != null) {
             return $validated;
         }
-        
+
         $cota->setAtributes($request);
         $cota->update();
         $this->desvincularCursos($cota);
@@ -250,7 +250,7 @@ class CotaController extends Controller
     {
         foreach ($request->cursos as $i => $valor) {
             if ($valor != null && $request->percentual[$i] == null) {
-                return redirect()->back()->withErrors(['percentual.'.$i => 'O campo de porcetagem é obrigatório caso o curso esteja marcado.'])->withInput($request->all());
+                return redirect()->back()->withErrors(['percentual.'.$i => 'O campo de quantidade de vagas é obrigatório caso o curso esteja marcado.'])->withInput($request->all());
             }
         }
     }
@@ -324,7 +324,7 @@ class CotaController extends Controller
      * @param  \App\Http\Requests\CotaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function updateModal(CotaRequest $request) 
+    public function updateModal(CotaRequest $request)
     {
         $this->authorize('isAdmin', User::class);
         $cota = Cota::find($request->cota);
