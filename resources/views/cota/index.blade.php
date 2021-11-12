@@ -113,7 +113,7 @@
                                 </div>
                             </div>
 
-                            <div class="pb-2 pt-2">Selecione o curso e a quantidade de vagas:</div>
+                            <div class="pb-2 pt-2">Selecione o curso e digita a quantidade de vagas:</div>
 
                             @foreach ($cursos as $i => $curso)
                                 <div class="row">
@@ -129,10 +129,10 @@
                                             @endswitch)
                                         </label>
                                         <div class="collapse col-md-6 py-1 @if(old('cursos.'.$i) != null) show @endif" id="curso_{{$curso->id}}">
-                                            <label for="percentual-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
-                                            <input type="number" name="percentual[]" id="percentual-{{$curso->id}}" class="form-control campoDeTexto @error('percentual.'.$i) is-invalid @enderror" value="{{old('percentual.'.$i)}}">
+                                            <label for="quantidade-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
+                                            <input type="number" name="quantidade[]" id="quantidade-{{$curso->id}}" class="form-control campoDeTexto @error('quantidade.'.$i) is-invalid @enderror" value="{{old('quantidade.'.$i)}}">
 
-                                            @error('percentual.'.$i)
+                                            @error('quantidade.'.$i)
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -216,10 +216,10 @@
                                             @endswitch)
                                         </label>
                                         <div class="collapse collapse-edit col-md-6 py-1 @if(old('cursos.'.$i) != null) show @endif" id="curso_edit_{{$curso->id}}" idcurso="{{$curso->id}}">
-                                            <label for="percentual-edit-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
-                                            <input type="number" name="percentual[]" id="percentual-edit-{{$curso->id}}" class="form-control campoDeTexto @error('percentual.'.$i) is-invalid @enderror limpar form-cursos-number" value="{{old('percentual.'.$i)}}" >
+                                            <label for="quantidade-edit-{{$curso->id}}">{{__('Quantidade de vagas')}}</label>
+                                            <input type="number" name="quantidade[]" id="quantidade-edit-{{$curso->id}}" class="form-control campoDeTexto @error('quantidade.'.$i) is-invalid @enderror limpar form-cursos-number" value="{{old('quantidade.'.$i)}}" >
 
-                                            @error('percentual.'.$i)
+                                            @error('quantidade.'.$i)
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -322,7 +322,7 @@
                         if (document.getElementById('curso-edit-'+cota.cursos[i].id).checked == false) {
                             $('#curso-edit-'+cota.cursos[i].id).click();
                         }
-                        document.getElementById('percentual-edit-'+cota.cursos[i].id).value = cota.cursos[i].percentual;
+                        document.getElementById('quantidade-edit-'+cota.cursos[i].id).value = cota.cursos[i].quantidade;
                     }
                 }
             });

@@ -249,8 +249,8 @@ class CotaController extends Controller
     private function validarOpcionalObrigatorio(CotaRequest $request)
     {
         foreach ($request->cursos as $i => $valor) {
-            if ($valor != null && $request->percentual[$i] == null) {
-                return redirect()->back()->withErrors(['percentual.'.$i => 'O campo de quantidade de vagas é obrigatório caso o curso esteja marcado.'])->withInput($request->all());
+            if ($valor != null && $request->quantidade[$i] == null) {
+                return redirect()->back()->withErrors(['quantidade.'.$i => 'O campo de quantidade é obrigatório caso o curso esteja marcado.'])->withInput($request->all());
             }
         }
     }
@@ -269,7 +269,7 @@ class CotaController extends Controller
         foreach ($request->cursos as $i => $curso_id) {
             if ($curso_id != null) {
                 $curso = Curso::find($curso_id);
-                $curso->cotas()->attach($cota->id, ['quantidade_vagas' => $request->percentual[$i], 'vagas_ocupadas' => 0]);
+                $curso->cotas()->attach($cota->id, ['quantidade_vagas' => $request->quantidade[$i], 'vagas_ocupadas' => 0]);
             }
         }
     }
@@ -302,7 +302,7 @@ class CotaController extends Controller
             $curso_pivot = [
                 'id' => $curso->id,
                 'nome' => $curso->nome,
-                'percentual' => $curso->pivot->quantidade_vagas,
+                'quantidade' => $curso->pivot->quantidade_vagas,
             ];
             array_push($cursos, $curso_pivot);
         }
