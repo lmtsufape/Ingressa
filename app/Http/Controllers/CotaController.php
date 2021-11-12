@@ -269,7 +269,7 @@ class CotaController extends Controller
         foreach ($request->cursos as $i => $curso_id) {
             if ($curso_id != null) {
                 $curso = Curso::find($curso_id);
-                $curso->cotas()->attach($cota->id, ['percentual_cota' => $request->percentual[$i], 'vagas_ocupadas' => 0]);
+                $curso->cotas()->attach($cota->id, ['quantidade_vagas' => $request->percentual[$i], 'vagas_ocupadas' => 0]);
             }
         }
     }
@@ -302,7 +302,7 @@ class CotaController extends Controller
             $curso_pivot = [
                 'id' => $curso->id,
                 'nome' => $curso->nome,
-                'percentual' => $curso->pivot->percentual_cota,
+                'percentual' => $curso->pivot->quantidade_vagas,
             ];
             array_push($cursos, $curso_pivot);
         }

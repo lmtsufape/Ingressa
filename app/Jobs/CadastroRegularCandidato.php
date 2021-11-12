@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Chamada;
 use App\Models\Candidato;
+use App\Models\Cota;
+use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
 use Illuminate\Bus\Batchable;
@@ -107,19 +109,52 @@ class CadastroRegularCandidato implements ShouldQueue
                     }
                     $user->save();
 
-                    $candidato = new Candidato([
-                        'nu_cpf_inscrito' => $data[10],
-                        'dt_nascimento' => $data[11],
-                    ]);
+                    if($data[9] != null){
+                        $candidato = new Candidato([
+                            'no_inscrito' => $data[8],
+                            'no_social' => $data[9],
+                            'nu_cpf_inscrito' => $data[10],
+                            'dt_nascimento' => $data[11],
+                        ]);
+                    }else{
+                        $candidato = new Candidato([
+                            'no_inscrito' => $data[8],
+                            'nu_cpf_inscrito' => $data[10],
+                            'dt_nascimento' => $data[11],
+                        ]);
+                    }
                     $candidato->user_id = $user->id;
                     $candidato->save();
 
+                    if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                    $inscricao->no_modalidade_concorrencia == 'Ampla concorrência' || $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'){
+                        $cota = Cota::where('descricao',  'Ampla concorrência')->first();
+                    }else{
+                        $cota = Cota::where('descricao', $inscricao->no_modalidade_concorrencia)->first();
+                    }
+
+                    if($inscricao->ds_turno == 'Matutino'){
+                        $turno =  Curso::TURNO_ENUM['matutino'];
+                    }elseif($inscricao->ds_turno  == 'Vespertino'){
+                        $turno = Curso::TURNO_ENUM['vespertino'];
+                    }elseif($inscricao->ds_turno == 'Noturno'){
+                        $turno = Curso::TURNO_ENUM['noturno'];
+                    }elseif($inscricao->ds_turno == 'Integral'){
+                        $turno = Curso::TURNO_ENUM['integral'];
+                    }
+
+                    $curs = Curso::where([['cod_curso', $inscricao->co_ies_curso], ['turno', $turno]])->first();
+
                     $inscricao->chamada_id = $this->chamada->id;
                     $inscricao->candidato_id = $candidato->id;
+                    $inscricao->cota_id = $cota->id;
+                    $inscricao->curso_id = $curs->id;
                     $inscricao->save();
 
                 }else{
                     if($data[9] != null){
+                        $candidatoExistente->no_social = $data[9];
+                        $candidatoExistente->update();
                         $candidatoExistente->user->name = $data[9];
                     }else{
                         $candidatoExistente->user->name = $data[8];

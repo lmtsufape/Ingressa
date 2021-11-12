@@ -19,10 +19,12 @@ class CreateInscricaosTable extends Migration
             $table->foreign('candidato_id')->references('id')->on('candidatos');
             $table->unsignedBigInteger('chamada_id');
             $table->foreign('chamada_id')->references('id')->on('chamadas');
+            $table->unsignedBigInteger('curso_id');
+            $table->foreign('curso_id')->references('id')->on('cursos');
             $table->string('protocolo');
             $table->string('status');
             $table->string('cd_efetivado');
-            $table->string('co_ies_curso');
+            $table->integer('co_ies_curso');
             $table->string('co_ies');
             $table->string('ds_turno');
             //$table->string('co_oferta_mod_concorrencia');
@@ -78,7 +80,6 @@ class CreateInscricaosTable extends Migration
             $table->double('nu_nota_r');
             //$table->string('st_matricula');
             //$table->integer('st_aprovado')->nullable();
-            $table->string('no_social')->nullable();
 
             $table->string('sg_ies');
             $table->string('no_ies');

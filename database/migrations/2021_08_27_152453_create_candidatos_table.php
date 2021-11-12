@@ -19,6 +19,8 @@ class CreateCandidatosTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('nu_cpf_inscrito');
             $table->date('dt_nascimento');
+            $table->string('no_inscrito');
+            $table->string('no_social')->nullable();
             $table->timestamps();
         });
     }

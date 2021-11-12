@@ -28,16 +28,7 @@ class InscricaoController extends Controller
 
         //dd($inscricoes);
         foreach($inscricoes as $inscricao){
-            if($inscricao->ds_turno == 'Matutino'){
-                $turno = Curso::TURNO_ENUM['matutino'];
-            }elseif($inscricao->ds_turno == 'Vespertino'){
-                $turno = Curso::TURNO_ENUM['vespertino'];
-            }elseif($inscricao->ds_turno == 'Integral'){
-                $turno = Curso::TURNO_ENUM['integral'];
-            }elseif($inscricao->ds_turno == 'Noturno'){
-                $turno = Curso::TURNO_ENUM['noturno'];
-            }
-            $cursos->push(Curso::where([['cod_curso', $inscricao->co_ies_curso], ['turno', $turno]])->first());
+            $cursos->push($inscricao->curso);
         }
         return view('inscricao.index', compact('inscricoes', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM, 'situacoes' => Inscricao::STATUS_ENUM]);
     }
@@ -315,7 +306,7 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
-        $cota = Cota::where('nome', $inscricao->no_modalidade_concorrencia)->first();
+        $cota = $inscricao->cota;
         if($cota == null){
             return redirect()->back()->withErrors(['error' => 'Não encontramos a modalidade de concorrência "'.$inscricao->no_modalidade_concorrencia.'" do candidato nos vínculos de cota e curso.']);
         }
@@ -326,6 +317,9 @@ class InscricaoController extends Controller
             $inscricao->cd_efetivado = false;
             $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição não efetivada";
         }else {
+            if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos']){
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
+            }
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = true;
             $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição efetivada";
