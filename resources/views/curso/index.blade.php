@@ -238,7 +238,7 @@
                     <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
                 </div>
                 <div class="col-md-4">
-                    <button type="button" class="btn botaoVerde my-2 py-1"><span class="px-4">Publicar</span></button>
+                    {{-- <button type="button" class="btn botaoVerde my-2 py-1"><span class="px-4">Publicar</span></button> --}}
                 </div>       
             </div>
         </div>
@@ -248,7 +248,7 @@
 <div class="modal fade" id="editar-curso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modalFundo p-3">
-            <div class="col-md-12 tituloModal">Editar um curso</div>
+            <div class="col-md-12 tituloModal">Editar curso</div>
 
             <div class="col-md-12 pt-3 pb-2 textoModal">
                 <form id="editar-curso-form" method="POST" action="{{route('cursos.update.ajax')}}" enctype="multipart/form-data">
@@ -364,7 +364,7 @@
     <div class="modal fade" id="delete-curso-{{$curso->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content modalFundo p-3">
-                <div class="col-md-12 tituloModal">Editar um curso</div>
+                <div class="col-md-12 tituloModal">Excluir curso</div>
     
                 <div class="col-md-12 pt-3 pb-2 textoModal">
                     <form id="delete-curso-{{$curso->id}}-form" method="POST" action="{{route('cursos.destroy', ['curso' => $curso])}}">
