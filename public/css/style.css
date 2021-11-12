@@ -14,6 +14,7 @@
     --zootec: #D693F2;
     --letras: #FC9BEF;
     --agronomia: #7CEF90;
+    --botao: #53BCF2;
 }
 
 /* X CONFIG X */
@@ -35,7 +36,7 @@ body, html{
 
 #header .nav-link{
     font-size: 13px;
-    font-weight: 600;
+    font-weight: bolder;
     padding-left: 0;
     padding-right: 0;
     color: var(--textcolor2);
@@ -59,25 +60,25 @@ body, html{
 .data{
     color: var(--secundaria);
     font-size: 25px;
-    font-weight: 600;
+    font-weight: bolder;
     border-bottom: solid 2px #f5f5f5;
     padding-bottom: 7px;
 }
 
 .redirecionamento{
     color: var(--secundaria);
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .legenda{
     color: black;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .titulo{
     color: var(--textcolor);
     font-size: 37px;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .tituloBorda{
@@ -99,49 +100,49 @@ body, html{
 .textoagronomia{
     color: var(--agronomia);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 30px;
 }
 
 .textobcc{
     color: var(--bcc);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
 .textoeng{
     color: var(--engalimentos);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
 .textovet{
     color: var(--veterinaria);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
 .textozoo{
     color: var(--zootec);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 30px;
 }
 
 .textopedagogia{
     color: var(--pedagogia);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 30px;
 }
 
 .textoletras{
     color: var(--letras);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
@@ -169,7 +170,7 @@ body, html{
 }
 
 .tituloTabelas{
-    font-weight: 600;
+    font-weight: bolder;
     font-size: 20px;
     color: white;
 }
@@ -198,12 +199,12 @@ body, html{
 
 #header .nav-link{
     font-size: 13px;
-    font-weight: 600;
+    font-weight: bolder;
     padding-left: 0;
     padding-right: 0;
     color: var(--textcolor2);
     border-bottom: solid 3px transparent;
-
+    
 }
 
 #header .nav-link:hover{
@@ -218,26 +219,26 @@ body, html{
 .data{
     color: var(--secundaria);
     font-size: 23px;
-    font-weight: 600;
+    font-weight: bolder;
     border-bottom: solid 2px #f5f5f5;
     padding-bottom: 7px;
 }
 
 .redirecionamento{
     color: var(--secundaria);
-    font-weight: 600;
+    font-weight: bolder;
 
 }
 
 .legenda{
     color: black;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .titulo{
     color: var(--textcolor);
     font-size: 37px;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .tituloBorda{
@@ -259,49 +260,49 @@ body, html{
 .textoagronomia{
     color: var(--agronomia);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 30px;
 }
 
 .textobcc{
     color: var(--bcc);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
 .textoeng{
     color: var(--engalimentos);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
 .textovet{
     color: var(--veterinaria);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
 .textozoo{
     color: var(--zootec);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 30px;
 }
 
 .textopedagogia{
     color: var(--pedagogia);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 30px;
 }
 
 .textoletras{
     color: var(--letras);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bolder;
     margin-top: 15px;
 }
 
@@ -329,16 +330,16 @@ body, html{
 }
 
 .tituloTabelas{
-    font-weight: 600;
+    font-weight: bolder;
     font-size: 20px;
     color: white;
 }
 
 .botao{
-    background-color: var(--secundaria);
+    background-color: var(--botao);
     border-radius: 00.5rem;
     color: white;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .fundo2{
@@ -349,7 +350,7 @@ body, html{
 
 .tituloLista{
     color: black;
-    font-weight: 600;
+    font-weight: bolder;
     font-size: 16px;
 }
 
@@ -371,7 +372,7 @@ body, html{
 .datinha{
     color: var(--textorodape);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .subtexto{
@@ -399,7 +400,7 @@ body, html{
     background-color: var(--secundaria);
     size: 100%;
     color: white;
-    font-weight: 600;
+    font-weight: bolder;
     font-size: 17px;
     border-radius: 0.5rem;
 }
@@ -413,23 +414,42 @@ body, html{
 .textoEntrada{
     font-size: 18px;
     color: var(--textcolor);
-    font-weight: 600;
+    font-weight: bolder;
 }
 
-.btn-claro {
-    background-color: #5AB8EB;
-    border-color: #5AB8EB;
+.modalFundo{
+    background-color: white;
+    border-radius: 0.5rem;
+    border: solid 1px transparent;
 }
 
-.btn-claro:hover {
-    background-color: #30548b;
-    border-color: #30548b;
+.tituloModal{
+    color: var(--secundaria);
+    font-weight: bolder;
+    font-size: 23px;
+    border-bottom: solid 2px var(--secundaria);
 }
 
-.btn-claro:focus, .btn-claro.focus {
-    color: #fff;
-    background-color: #203064;
-    border-color: #203064;
-    box-shadow: 0 0 0 0.2rem #203064;
+.campoDeTexto{
+    background-color: #f5f5f5;
+    border-radius: 00.5rem;
+    border: 0px;
+}
+
+.textoModal{
+    color: var(--textcolor);
+    font-weight: bolder;
+    font-size: 15px;
+}
+
+.botaoVerde{
+    background-color: var(--primaria);
+    border-radius: 00.5rem;
+    color: white;
+    font-weight: bolder
+}
+
+.form-label {
+    font-weight: bolder;
 }
 /* X CUSTOM 2 X */

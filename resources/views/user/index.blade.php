@@ -35,30 +35,36 @@
                         </div>
                     </div>
                 @endif
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">E-mail</th>
-                            <th class="text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($users as $i => $user)
+                @if($users->count() > 0)
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <th class="align-middle"> {{$i+1}}</th>
-                                <td class="align-middle">{{$user->name}}</td>
-                                <td class="align-middle">{{$user->email}}</td>
-                                <td class="align-middle text-center">
-                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarUser_{{$user->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
-                                    <a onclick="editarAnalista({{$user->id}})" data-bs-toggle="modal" data-bs-target="#editar-user-modal" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1665.svg')}}"  alt="icone-busca"></a>
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">E-mail</th>
+                                <th class="text-center">Ações</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{$users->links()}}
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $i => $user)
+                                <tr>
+                                    <th class="align-middle"> {{$i+1}}</th>
+                                    <td class="align-middle">{{$user->name}}</td>
+                                    <td class="align-middle">{{$user->email}}</td>
+                                    <td class="align-middle text-center">
+                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarUser_{{$user->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
+                                        <a onclick="editarAnalista({{$user->id}})" data-bs-toggle="modal" data-bs-target="#editar-user-modal" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1665.svg')}}"  alt="icone-busca"></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    {{$users->links()}}
+                @else 
+                    <div class="pt-3 pb-3">
+                        Nenhum analista cadastrado no sistema.
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -67,104 +73,101 @@
 
     <div class="modal fade" id="criar-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #53F2C7;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Criar analista</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" id="criar-analista" action="{{route('usuarios.store')}}">
-                        @csrf
-                        <div class="form-row">
-                            <div class="col-md-12 mb-3">
-                                <label for="name">{{ __('Nome') }}</label>
-                                <input id="name" class="form-control apenas_letras @error('name') is-invalid @enderror" type="text" name="name" value="{{old('name')}}" required autofocus autocomplete="name">
-
-                                @error('name')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+            <div class="modal-content modalFundo p-3">
+                <div class="col-md-12 tituloModal">Insira um novo analista</div>
+                <form method="POST" id="criar-analista" action="{{route('usuarios.store')}}">
+                    @csrf
+                    <input type="hidden" id="user" name="user_id" value="none">
+                    <div class="col-md-12 pt-3 textoModal">
+                        <label class="pb-2" for="name">Nome completo:</label>
+                        <input id="name" class="form-control apenas_letras campoDeTexto @error('name') is-invalid @enderror" type="text" name="name" value="{{old('name')}}" required autofocus autocomplete="name" placeholder="Insira o nome completo do analista">
+                        
+                        @error('name')
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                {{ $message }}
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="email">{{ __('Email') }}</label>
-                                <input id="email" class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{old('email')}}" required autofocus autocomplete="email">
-
-                                @error('email')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                        @enderror
+                    </div>
+                    <div class="col-md-12 pt-3 textoModal">
+                        <label class="pb-2 pt-2" for="email">E-mail:</label>
+                        <input id="email" class="form-control campoDeTexto @error('email') is-invalid @enderror" type="email" name="email" value="{{old('email')}}" required autofocus autocomplete="email" placeholder="Insira o e-mail de acesso do analista">
+        
+                        @error('email')
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                {{ $message }}
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-12 mb-3">
-                                <label for="password">{{ __('Senha') }}</label>
-                                <input id="password" class="form-control @error('password') is-invalid @enderror" type="password" name="password" required autofocus autocomplete="new-password">
-
+                        @enderror
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
+                                <label class="pb-2" for="codigoCota">Senha:</label>
+                                <input id="password" class="form-control campoDeTexto @error('password') is-invalid @enderror" type="password" name="password" required autofocus autocomplete="new-password">  
+                            
                                 @error('password')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="password_confirmation">{{ __('Confirme a senha') }}</label>
-                                <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password">
+                            <div class="col-md-6">
+                                <label class="pb-2" for="codigoCota">Confirme a senha:</label>
+                                <input id="password_confirmation" class="form-control campoDeTexto" type="password" name="password_confirmation" required autocomplete="new-password">  
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success btn-cota" form="criar-analista">Criar</button>
-                </div>
+                    </div>
+                </form>
+              
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-analista"><span class="px-4" style="font-weight: bolder;">Salvar</span></button>
+                    </div>       
+                </div>              
             </div>
         </div>
     </div>
 
     <div class="modal fade" id="editar-user-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #53F2C7;">
-                    <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Editar analista</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" id="editar-analista" action="{{route('usuarios.update.analista', ['id' => $user])}}">
-                        @csrf
-                        <input type="hidden" id="user-edit" name="user_id" value="">
-                        <div class="form-row">
-                            <div class="col-md-12 mb-3">
-                                <label for="name">{{ __('Nome') }}</label>
-                                <input id="name-edit" class="form-control apenas_letras @error('name') is-invalid @enderror" type="text" name="name" value="{{old('name')}}" required autofocus>
+            <div class="modal-content modalFundo p-3">
+                <div class="col-md-12 tituloModal">Editar analista</div>
 
-                                @error('name')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="email">{{ __('Email') }}</label>
-                                <input id="email-edit" class="form-control @error('email') is-invalid @enderror" type="email" name="email"  value="{{old('email')}}" required autofocus>
-
-                                @error('email')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                <form method="POST" id="editar-analista" action="{{route('usuarios.update.analista')}}">
+                    @csrf
+                    <input type="hidden" id="user-edit" name="user_id" value="">
+                    <div class="form-row">
+                        <div class="col-md-12 pt-3 textoModal">
+                            <label class="pb-2" for="name">Nome completo:</label>
+                            <input id="name-edit" class="form-control apenas_letras campoDeTexto @error('name') is-invalid @enderror" type="text" name="name" value="{{old('name')}}" required autofocus autocomplete="name" placeholder="Insira o nome completo do analista">
+                            
+                            @error('name')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success btn-cota" form="editar-analista">Editar</button>
+                        <div class="col-md-12 pt-3 textoModal">
+                            <label class="pb-2 pt-2" for="email">E-mail:</label>
+                            <input id="email-edit" class="form-control campoDeTexto @error('email') is-invalid @enderror" type="email" name="email" value="{{old('email')}}" required autofocus autocomplete="email" placeholder="Insira o e-mail de acesso do analista">
+            
+                            @error('email')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                </form>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-analista"><span class="px-4" style="font-weight: bolder;" >Salvar</span></button>
+                    </div>       
                 </div>
             </div>
         </div>
@@ -174,29 +177,45 @@
         <!-- Modal deletar user -->
         <div class="modal fade" id="modalStaticDeletarUser_{{$user->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #dc3545;">
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="deletar-user-form-{{$user->id}}" method="POST" action="{{route('usuarios.destroy', ['usuario' => $user])}}">
-                            @csrf
+                <div class="modal-content modalFundo p-3">
+                    <div class="col-md-12 tituloModal">Excluir analista</div>
+                    
+                    <form id="deletar-user-form-{{$user->id}}" method="POST" action="{{route('usuarios.destroy', ['usuario' => $user])}}">
+                        @csrf
+                        <div class="pt-3">
                             <input type="hidden" name="_method" value="DELETE">
                             Tem certeza que deseja deletar o analista {{$user->name}}?
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger" form="deletar-user-form-{{$user->id}}">Sim</button>
+                        </div>
+                    </form>
+                    <div class="row justify-content-between mt-4">
+                        <div class="col-md-3">
+                            <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-user-form-{{$user->id}}" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
+                        </div>       
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
 </x-app-layout>
+
+@if(old('user_id') == "none")
+    <script>
+        $(document).ready(function(){
+            $('#criar-user').modal('show');
+        });
+    </script>
+@endif
+
+@if(old('user_id') != "none" && old('user_id') != null)
+    <script>
+        $(document).ready(function(){
+            $('#editar-user-modal').modal('show');
+        });
+    </script>
+@endif
 
 <script>
     function editarAnalista(id) {
