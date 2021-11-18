@@ -141,6 +141,7 @@ class ChamadaController extends Controller
 
     public function importarCandidatos(Request $request, $sisu_id, $chamada_id)
     {
+        $data = $request->all();
         $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($chamada_id);
         if($chamada->caminho_import_sisu_gestao != null){
@@ -177,7 +178,7 @@ class ChamadaController extends Controller
         $dados = fopen('storage/'.$chamada->caminho_import_sisu_gestao, "r");
         $primeira = true;
         ini_set('max_execution_time', 300);
-        while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
+        while ( ($data = fgetcsv($dados,";",";") ) !== FALSE ) {
             if($primeira){
                 $primeira = false;
             }else{
@@ -206,19 +207,19 @@ class ChamadaController extends Controller
                     'nu_fone1' => $data[22],
                     'nu_fone2' => $data[23],
                     'ds_email' => $data[24],
-                    'nu_nota_l' => floatval($data[25]),
-                    'nu_nota_ch' => floatval($data[26]),
-                    'nu_nota_cn' => floatval($data[27]),
-                    'nu_nota_m' => floatval($data[28]),
-                    'nu_nota_r' => floatval($data[29]),
+                    'nu_nota_l' => floatval(str_replace( ',', '.', $data[25])),
+                    'nu_nota_ch' => floatval(str_replace( ',', '.', $data[26])),
+                    'nu_nota_cn' => floatval(str_replace( ',', '.', $data[27])),
+                    'nu_nota_m' => floatval(str_replace( ',', '.', $data[28])),
+                    'nu_nota_r' => floatval(str_replace( ',', '.', $data[29])),
                     'co_curso_inscricao' => $data[30],
                     'st_opcao' => $data[31],
                     'no_modalidade_concorrencia' => $data[32],
                     'st_bonus_perc' => $data[33],
                     'qt_bonus_perc' => $data[34],
                     'no_acao_afirmativa_bonus' => $data[35],
-                    'nu_nota_candidato' => floatval($data[36]),
-                    'nu_notacorte_concorrida' => floatval($data[37]),
+                    'nu_nota_candidato' => floatval(str_replace( ',', '.', $data[36])),
+                    'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => $data[39],
                     'dt_operacao' => $data[40],
@@ -231,6 +232,8 @@ class ChamadaController extends Controller
                     'st_lei_etnia_p' => $data[47],
                     'st_lei_etnia_i' => $data[48],
                 ]);
+
+                dd($inscricao);
 
                 $candidatoExistente = Candidato::where('nu_cpf_inscrito', $data[10])->first();
                 if($candidatoExistente == null){

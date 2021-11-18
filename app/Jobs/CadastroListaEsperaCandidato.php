@@ -82,19 +82,19 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_fone1' => $data[22],
                     'nu_fone2' => $data[23],
                     'ds_email' => $data[24],
-                    'nu_nota_l' => floatval($data[25]),
-                    'nu_nota_ch' => floatval($data[26]),
-                    'nu_nota_cn' => floatval($data[27]),
-                    'nu_nota_m' => floatval($data[28]),
-                    'nu_nota_r' => floatval($data[29]),
+                    'nu_nota_l' => floatval(str_replace( ',', '.', $data[25])),
+                    'nu_nota_ch' => floatval(str_replace( ',', '.', $data[26])),
+                    'nu_nota_cn' => floatval(str_replace( ',', '.', $data[27])),
+                    'nu_nota_m' => floatval(str_replace( ',', '.', $data[28])),
+                    'nu_nota_r' => floatval(str_replace( ',', '.', $data[29])),
                     'co_curso_inscricao' => $data[30],
                     'st_opcao' => $data[31],
                     'no_modalidade_concorrencia' => $data[32],
                     'st_bonus_perc' => $data[33],
                     'qt_bonus_perc' => $data[34],
                     'no_acao_afirmativa_bonus' => $data[35],
-                    'nu_nota_candidato' => floatval($data[36]),
-                    'nu_notacorte_concorrida' => floatval($data[37]),
+                    'nu_nota_candidato' => floatval(str_replace( ',', '.', $data[36])),
+                    'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => $data[39],
                     'dt_operacao' => $data[40],
@@ -138,14 +138,14 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 }else{
                     $modalidade = $porModalidade;
                     $modalidade = $modalidade->sortBy(function($candidato){
-                        return $candidato['nu_nota_candidato'];
+                        return $candidato['nu_classificacao'];
                     });
                     $modalidades->push($modalidade);
                 }
             }
-            //ordenamos os inscritos da modalidade daquele curso pela nota
+            //ordenamos os inscritos da modalidade daquele curso pela classificacao
             $ampla = $ampla->sortByDesc(function($candidato){
-                return $candidato['nu_nota_candidato'];
+                return $candidato['nu_classificacao'];
             });
             $modalidades->push($ampla);
             $cursos->push($modalidades);
