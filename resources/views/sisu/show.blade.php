@@ -111,8 +111,8 @@
 
     @foreach ($chamadas as $chamada)
         <!-- Modal importar candidatos da chamada -->
-        <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade bd-example-modal-lg" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #28a745;">
                         <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Importar Candidatos</h5>
@@ -121,11 +121,76 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
-                            @csrf
-                            <input type="file" name="arquivo" accept=".csv" required><br>
-                            Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
-                        </form>
+                        @if($chamada->regular)
+                            <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="arquivo" accept=".csv" required><br>
+                                Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
+                            </form>
+                        @else
+                            <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="arquivo" accept=".csv" required><br>
+                                Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
+                                <div class="accordion" id="accordionExample">
+                                    @foreach ($cursos as $i => $curso)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading-{{$curso->id}}">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$curso->id}}" aria-expanded="false" aria-controls="collapse-{{$curso->id}}">
+                                                    {{$curso->nome}} - @switch($curso->turno)
+                                                    @case($turnos['matutino']){{"Matutino"}}@break
+                                                    @case($turnos['vespertino']){{"Vespertino"}}@break
+                                                    @case($turnos['noturno']){{"Noturno"}}@break
+                                                    @case($turnos['integral']){{"Integral"}}@break
+                                                    @endswitch
+                                                </button>
+                                            </h2>
+                                            <div id="collapse-{{$curso->id}}" class="collapse" aria-labelledby="heading-{{$curso->id}}" data-parent="#{{$curso->id}}-Heading">
+                                                <div class="card-body">
+                                                    @foreach ($curso->cotas as $cota)
+                                                        @if($cota->cod_cota != "B4342")
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <label><strong>{{$cota->cod_cota}}</strong></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-4">
+                                                                    <div class="" id="vagas{{$curso->id}}_{{$cota->id}}">
+                                                                        <label for="vagas-{{$curso->id}}-{{$cota->id}}">{{__('Número de vagas')}}</label>
+                                                                        <input type="number" id="vagas-curso-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->quantidade_vagas}}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="" id="efetivados{{$curso->id}}_{{$cota->id}}">
+                                                                        <label for="efetivados-{{$curso->id}}-{{$cota->id}}">{{__('Número de efetivados')}}</label>
+                                                                        <input type="number" id="candidatos-efetivados-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->vagas_ocupadas}}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="" id="multiplicador_{{$curso->id}}_{{$cota->id}}">
+                                                                        <label for="multiplicador-{{$curso->id}}-{{$cota->id}}">{{__('Multiplicador de vagas')}}</label>
+                                                                        <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
+                                                                        <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
+
+                                                                        @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
+                                                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                                                {{ $message }}
+                                                                            </div>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </form>
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -137,28 +202,5 @@
     @endforeach
 </x-app-layout>
 
-{{--<script>
-    $(document).ready(function() {
-        $.ajax({
-            url:"{{route('chamada.queue.status')}}",
-            type:"get",
-            dataType:'json',
-            success: function(status) {
-
-            }
-        });
-    });
-
-    var timeout;
-
-    function loaded() {
-        $('#loading').html('The Ajax Call Data');
-    }
-
-    function startLoad() {
-        $('#loading').html('<img src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif"/>');
-        clearTimeout(timeout);
-        timeout = setTimeout(loaded, 1500);
-    }
-    startLoad();
-</script>--}}
+<script>
+</script>

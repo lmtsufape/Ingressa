@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ChamadaSeeder::class,
             CandidatoSeeder::class,
             CotaSeeder::class,
+            RemanejamentoSeeder::class,
         ]);
     }
 }

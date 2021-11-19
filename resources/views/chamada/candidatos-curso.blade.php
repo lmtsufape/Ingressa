@@ -42,6 +42,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Pessoa</th>
+                                <th scope="col">Cota</th>
                                 <th scope="col">Status</th>
                                 <th scope="col" class="text-center">Ação</th>
                             </tr>
@@ -51,6 +52,7 @@
                                 <tr>
                                     <th class="align-middle"> {{$i+1}}</th>
                                     <td class="align-middle">{{$candidato->candidato->user->name}}</td>
+                                    <td class="align-middle">{{$candidato->cota->cod_cota}}</td>
                                     <td class="align-middle">
                                         <div class="btn-group">
                                             @if($candidato->candidato->user->email != null)

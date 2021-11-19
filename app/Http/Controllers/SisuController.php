@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SisuRequest;
 use App\Models\Chamada;
+use App\Models\Curso;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
@@ -60,7 +61,7 @@ class SisuController extends Controller
     {
         $this->authorize('isAdminOrAnalista', User::class);
         $sisu = Sisu::find($id);
-        $chamadas = Chamada::where('sisu_id', '=', $sisu->id)->orderBy('created_at', 'ASC')->get();
+        $chamadas = Chamada::where('sisu_id', '=', $sisu->id)->orderBy('created_at', 'DESC')->get();
 
         $batches = collect();
         foreach($chamadas as $chamada){
@@ -70,7 +71,9 @@ class SisuController extends Controller
                 $batches->add(null);
             }
         }
-        return view('sisu.show', compact('sisu', 'chamadas', 'batches'));
+        $cursos = Curso::orderBy('nome')->get();
+        $turnos = Curso::TURNO_ENUM;
+        return view('sisu.show', compact('sisu', 'chamadas', 'batches', 'cursos', 'turnos'));
     }
 
     /**
