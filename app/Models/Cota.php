@@ -31,12 +31,12 @@ class Cota extends Model
 
     public function cursos()
     {
-        return $this->belongsToMany(Curso::class, 'cota_curso', 'cota_id', 'curso_id')->withPivot('vagas_ocupadas', 'quantidade_vagas');
+        return $this->belongsToMany(Curso::class, 'cota_curso', 'cota_id', 'curso_id')->withPivot('id', 'vagas_ocupadas', 'quantidade_vagas');
     }
 
     public function remanejamentos()
     {
-        return $this->hasMany(Remanejamento::class, 'cota_id');
+        return $this->hasMany(Remanejamento::class, 'cota_id')->orderBy('ordem');
     }
 
     public function remanejamento()

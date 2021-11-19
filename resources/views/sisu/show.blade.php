@@ -171,10 +171,10 @@
                                                                 <div class="col-sm-4">
                                                                     <div class="" id="multiplicador_{{$curso->id}}_{{$cota->id}}">
                                                                         <label for="multiplicador-{{$curso->id}}-{{$cota->id}}">{{__('Multiplicador de vagas')}}</label>
-                                                                        <input type="number" name="quantidade_curso_{{$curso->id}}[]" id="quantidade-{{$curso->id}}-{{$cota->id}}" class="form-control @error('quantidade-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('quantidade-'.$curso->id.'-'.$cota->id)!=null ? old('quantidade-'.$curso->id.'-'.$cota->id) : 3}}">
-                                                                        <input type="hidden" name="cota_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" class="form-control @error('cota-id-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{$cota->id}}">
+                                                                        <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
+                                                                        <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
 
-                                                                        @error('quantidade-'.$curso->id.'-'.$cota->id)
+                                                                        @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
                                                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                                                 {{ $message }}
                                                                             </div>

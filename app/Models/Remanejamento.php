@@ -22,7 +22,7 @@ class Remanejamento extends Model
 
     public function proximaCota()
     {
-        return $this->hasOne(Cota::class, 'id_prox_cota');
+        return $this->belongsTo(Cota::class, 'id_prox_cota');
     }
 
     public function setAtributes($ordem, Cota $cota, Cota $prox_cota)
