@@ -306,9 +306,11 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
-        $cota = $inscricao->cota;
-        if($cota == null){
-            return redirect()->back()->withErrors(['error' => 'Não encontramos a modalidade de concorrência "'.$inscricao->no_modalidade_concorrencia.'" do candidato nos vínculos de cota e curso.']);
+        $cotaRemanejamento = $inscricao->cotaRemanejada;
+        if($cotaRemanejamento != null){
+            $cota = $inscricao->cota;
+        }else{
+            $cota = $cotaRemanejamento;
         }
         $curso = Curso::find($request->curso);
         $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;

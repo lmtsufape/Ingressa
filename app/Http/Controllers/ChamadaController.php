@@ -561,10 +561,11 @@ class ChamadaController extends Controller
             $candidato->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
             $candidato->cd_efetivado = true;
 
-            if($candidato->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' || $candidato->no_modalidade_concorrencia == 'Ampla concorrência' || $candidato->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'){
-                $cota = Cota::where('descricao',  'Ampla concorrência')->first();
+            $cotaRemanejamento = $candidato->cotaRemanejada;
+            if($cotaRemanejamento != null){
+                $cota = $cotaRemanejamento;
             }else{
-                $cota = Cota::where('descricao', $candidato->no_modalidade_concorrencia)->first();
+                $cota = $candidato->cota;
             }
             if($cota == null){
                 dd($candidato->no_modalidade_concorrencia);
