@@ -307,7 +307,7 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($request->inscricaoID);
         $cotaRemanejamento = $inscricao->cotaRemanejada;
-        if($cotaRemanejamento != null){
+        if($cotaRemanejamento == null){
             $cota = $inscricao->cota;
         }else{
             $cota = $cotaRemanejamento;
