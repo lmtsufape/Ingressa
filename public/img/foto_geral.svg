@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="267" viewBox="0 0 200 267">
+  <g id="Grupo_1671" data-name="Grupo 1671" transform="translate(-7679 -9961)">
+    <rect id="Imagem_1" data-name="Imagem 1" width="200" height="267" rx="19" transform="translate(7679 9961)" fill="#fff"/>
+    <path id="Icon_awesome-camera" data-name="Icon awesome-camera" d="M56.116,14.525V46.091a5.262,5.262,0,0,1-5.261,5.261H5.261A5.262,5.262,0,0,1,0,46.091V14.525A5.262,5.262,0,0,1,5.261,9.265h9.645l1.348-3.606A5.254,5.254,0,0,1,21.175,2.25H34.93a5.254,5.254,0,0,1,4.921,3.409L41.21,9.265h9.645A5.262,5.262,0,0,1,56.116,14.525ZM41.21,30.308A13.152,13.152,0,1,0,28.058,43.46,13.163,13.163,0,0,0,41.21,30.308Zm-3.507,0a9.645,9.645,0,1,1-9.645-9.645A9.659,9.659,0,0,1,37.7,30.308Z" transform="translate(7751 10067.75)" fill="#24cee8"/>
+    <g id="Elipse_414" data-name="Elipse 414" transform="translate(7710 10025)" fill="none" stroke="#24cee8" stroke-width="4">
+      <circle cx="69.5" cy="69.5" r="69.5" stroke="none"/>
+      <circle cx="69.5" cy="69.5" r="67.5" fill="none"/>
+    </g>
+  </g>
+</svg>

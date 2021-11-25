@@ -73,7 +73,8 @@ class SisuController extends Controller
         }
         $cursos = Curso::orderBy('nome')->get();
         $turnos = Curso::TURNO_ENUM;
-        return view('sisu.show', compact('sisu', 'chamadas', 'batches', 'cursos', 'turnos'));
+        $tem_regular = Chamada::where([['sisu_id', $id], ['regular', true]])->first();
+        return view('sisu.show', compact('sisu', 'chamadas', 'batches', 'cursos', 'turnos', 'tem_regular'));
     }
 
     /**

@@ -222,25 +222,25 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 }
                 //Então assim faremos
                 if(!is_null($modalidadeDaCotaIndex)){
-                    $vagasCota = $this->fazerCadastro($cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
+                    $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
                 }
 
                 //Caso restem vagas, faremos o remanejamento
                 if($vagasCota > 0){
                     foreach($cota->remanejamentos as $remanejamento){
-                        $proximaCota = $remanejamento->proximaCota;
+                        $cotaRemanejamento = $remanejamento->proximaCota;
                         $cursoAtual = $cotasCursosCOD[$indexCurso];
 
                         $modalidadeDaCotaIndex = null;
 
                         foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
-                            if($modalidadeCursoAtualRemanejamento == $proximaCota->descricao){
+                            if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
                                 $modalidadeDaCotaIndex = $indexRemanejamento;
                                 break;
                             }
                         }
                         if(!is_null($modalidadeDaCotaIndex)){
-                            $vagasCota = $this->fazerCadastro($proximaCota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
+                            $vagasCota = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
                         }
                         if($vagasCota == 0){
                             break;
@@ -251,7 +251,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         }
     }
 
-    private function fazerCadastro($cota, $curs, $porModalidade, $vagasCota)
+    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota)
     {
         //enquanto houver vagas e inscritos daquela modalidade, o laço irá continuar
         foreach($porModalidade as $inscrito){
@@ -346,7 +346,12 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                     $inscricao->chamada_id = $this->chamada->id;
                     $inscricao->candidato_id = $candidato->id;
-                    $inscricao->cota_id = $cota->id;
+                    if($cotaRemanejamento != $cota){
+                        $inscricao->cota_id = $cotaRemanejamento->id;
+                        $inscricao->cota_remanejamento_id = $cota->id;
+                    }else{
+                        $inscricao->cota_id = $cota->id;
+                    }
                     $inscricao->curso_id = $curs->id;
                     $inscricao->save();
 
@@ -373,6 +378,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                         $inscricao->chamada_id = $this->chamada->id;
                         $inscricao->candidato_id = $candidatoExistente->id;
+                        if($cotaRemanejamento != $cota){
+                            $inscricao->cota_id = $cotaRemanejamento->id;
+                            $inscricao->cota_remanejamento_id = $cota->id;
+                        }else{
+                            $inscricao->cota_id = $cota->id;
+                        }
+                        $inscricao->curso_id = $curs->id;
                         $inscricao->save();
                     }else{
                         $vagasCota += 1;

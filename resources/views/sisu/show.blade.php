@@ -1,22 +1,22 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="row justify-content-center">
-            <div class="col-md-9 cabecalho p-2 px-3 align-items-center">
-                <div class="row justify-content-between">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <span class="tituloTabelas ps-1">Chamadas da edição {{$sisu->edicao}}
-                            </span>
-                        </div>
-                        <div class="col-md-4" style="text-align: right">
-                            <a class="btn btn-primary" href="{{route('chamadas.create', $sisu->id)}}">Criar nova chamada</a>
-                        </div>
-                    </div>
+            <div class="col-md-7 cabecalho p-2 px-3 align-items-center">
+              <div class="row justify-content-between">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <img src="{{asset('img/Grupo 1684.svg')}}"
+                          alt="" width="40" class="img-flex">
+                      <span class="tituloTabelas ps-1">Chamadas da edição <span style="font-weight: 600;">{{$sisu->edicao}}</span></span>
+                  </div>
+                  <a data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
                 </div>
+
+              </div>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-9 corpo p-2 px-3">
+            <div class="col-md-7 corpo p-2 px-3">
                 @if(session('success'))
                     <div class="row mt-3">
                         <div class="col-md-12">
@@ -39,47 +39,107 @@
                             <th scope="col">#</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Regular</th>
-                            <th scope="col">Opções</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($chamadas as $i => $chamada)
                             <tr>
                                 <th class="align-middle"> {{$i+1}}</th>
-                                <td> {{$chamada->nome}}</td>
+                                <td class="align-middle"> {{$chamada->nome}}</td>
                                 @if ($chamada->regular)
-                                    <td>Sim</td>
+                                    <td class="align-middle">Sim</td>
                                 @else
-                                    <td>Não</td>
+                                    <td class="align-middle">Não</td>
                                 @endif
-                                <td>
+                                <td class="align-middle text-center">
                                     <div class="btn-group">
                                         @if ($chamada->caminho_import_sisu_gestao == null)
-                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}">
-                                                Importar candidatos
-                                            </button>
+                                            <a data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
                                         @else
-
                                             @if($batches[$i]->finished())
-                                                <a class="btn btn-success shadow-sm" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img src="{{ asset('img/icon_candidato.svg') }}" alt="Candidatos inscritos no sisu {{$sisu->edicao}}" width="23.5px" ></a>
+                                                <a href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="icone-busca"></a>
                                             @else
                                                 <a><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
                                             @endif
                                         @endif
                                     </div>
-                                    <a class="btn btn-primary" href="{{route('chamadas.edit', ['chamada' => $chamada])}}">Editar</a>
-                                    <a class="btn btn-info" href="{{route('chamadas.show', ['chamada' => $chamada])}}">Ver</a>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}">
-                                        Deletar
-                                    </button>
+                                    <a href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
+                                    <a href="{{route('chamadas.edit', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
+                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
                                 </td>
-                            </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <a class="btn botao my-2 py-1" href="{{route('sisus.index')}}"> <span class="px-4">Voltar</span></a>
             </div>
         </div>
     </div>
+
+  <!--CORPO-->
+
+ <!--MODAL-->
+
+ <div class="modal fade" id="adicionarChamada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modalFundo p-3">
+            <div class="col-md-12 tituloModal">Insira uma nova chamada</div>
+
+            <div class="col-md-12 pt-3 pb-2 textoModal">
+                <form method="POST" id="criar-chamada" action="{{route('chamadas.store')}}">
+                    @csrf
+                    <input type="hidden" name="sisu" value="{{$sisu->id}}">
+                    <div class="form-row">
+                        <div class="col-md-12 form-group">
+                            <label class="pb-2" for="nome"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome da chamada:') }}</label>
+                            <input id="nome" class="form-control l campoDeTexto @error('nome') is-invalid @enderror"  placeholder="Insira o nome da chamada" type="name" name="nome" required autofocus autocomplete="nome">
+
+                            @error('nome')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 form-group">
+                            <label class="pb-2 pt-2" for="descricao"><span style="color: red; font-weight: bold;">* </span>{{ __('Descrição da chamada:') }}</label>
+                            <textarea id="descricao" class="form-control campoDeTexto @error('descricao') is-invalid @enderror" rows="3" type="text" name="descricao" required autofocus autocomplete="descricao"></textarea>
+
+                            @error('descricao')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <label class="pb-2 pt-2"><span style="color: red; font-weight: bold;">*</span> Selecione se é uma chamada regular ou não:</label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="regular_sim" name="regular" value="true" {{$tem_regular == null ? '' : 'disabled' }}>
+                            <label class="form-check-label" for="regular_sim">Sim</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="regular_nao" name="regular" value="false" {{$tem_regular == null ? '' : 'checked' }}>
+                            <label class="form-check-label" for="regular_nao">Não</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row justify-content-between mt-4">
+                <div class="col-md-3">
+                    <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-chamada" ><span class="px-4">Publicar</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL-->
 
 
     @foreach ($chamadas as $chamada)
