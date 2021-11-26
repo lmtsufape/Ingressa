@@ -1,6 +1,9 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="row justify-content-center" >
+            <div class="col-md-9 p-0" style="text-align: right">
+                <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}"> <span class="px-4">Voltar</span></a>
+            </div>
             <div class="col-md-9 cabecalho p-2 px-3 align-items-center"  style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
                 <div class="row justify-content-between" >
                     <div class="d-flex align-items-center justify-content-between" >

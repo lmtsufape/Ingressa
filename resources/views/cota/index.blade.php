@@ -249,7 +249,7 @@
             <div class="modal-dialog">
                 <div class="modal-dialog">
                     <div class="modal-content modalFundo p-3">
-                        <div class="col-md-12 tituloModal">Editar cota</div>
+                        <div class="col-md-12 tituloModal">Deletar cota</div>
                             <div class="pt-3 pb-2 textoModal">
                                 <form id="delete-cota-{{$cota->id}}-form" method="POST" action="{{route('cotas.destroy', ['cota' => $cota])}}">
                                     @csrf

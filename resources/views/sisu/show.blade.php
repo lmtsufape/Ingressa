@@ -9,7 +9,9 @@
                           alt="" width="40" class="img-flex">
                       <span class="tituloTabelas ps-1">Chamadas da edição <span style="font-weight: 600;">{{$sisu->edicao}}</span></span>
                   </div>
-                  <a data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
+                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                        <a data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
+                    @endif
                 </div>
 
               </div>
@@ -55,7 +57,11 @@
                                 <td class="align-middle text-center">
                                     <div class="btn-group">
                                         @if ($chamada->caminho_import_sisu_gestao == null)
-                                            <a data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                                                <a data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                            @else
+                                                <a style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                            @endif
                                         @else
                                             @if($batches[$i]->finished())
                                                 <a href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="icone-busca"></a>
@@ -64,14 +70,18 @@
                                             @endif
                                         @endif
                                     </div>
-                                    <a href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
-                                    <a href="{{route('chamadas.edit', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
-                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
+                                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                                        <a href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
+                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
+                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
+                                    @endif
                                 </td>
                         @endforeach
                     </tbody>
                 </table>
-                <a class="btn botao my-2 py-1" href="{{route('sisus.index')}}"> <span class="px-4">Voltar</span></a>
+                @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                    <a class="btn botao my-2 py-1" href="{{route('sisus.index')}}"> <span class="px-4">Voltar</span></a>
+                @endif
             </div>
         </div>
     </div>
@@ -143,26 +153,92 @@
 
 
     @foreach ($chamadas as $chamada)
-        <!-- Modal deletar chamada -->
+        <!-- Modal deletar sisu -->
         <div class="modal fade" id="modalStaticDeletarChamada_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #dc3545;">
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="modal-dialog">
+                    <div class="modal-content modalFundo p-3">
+                        <div class="col-md-12 tituloModal">Deletar chamada</div>
+                            <div class="pt-3 pb-2 textoModal">
+                                <form id="deletar-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.destroy', ['chamada' => $chamada])}}">
+                                    @csrf
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    Tem certeza que deseja deletar a chamada {{$chamada->nome}}?
+                                </form>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-chamada-form-{{$chamada->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <form id="deletar-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.destroy', ['chamada' => $chamada])}}">
-                            @csrf
-                            <input type="hidden" name="_method" value="DELETE">
-                            Tem certeza que deseja deletar a chamada da {{$chamada->nome}} edição {{$sisu->edicao}} do sisu?
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger" form="deletar-chamada-form-{{$chamada->id}}">Sim</button>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach ($chamadas as $chamada)
+        <!-- Modal editar chamada -->
+        <div class="modal fade" id="modalStaticEditarChamada_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content modalFundo p-3">
+                        <div class="col-md-12 tituloModal">Editar chamada</div>
+                            <div class="pt-3 pb-2 textoModal">
+                                <form method="POST" id="editar-chamada-form-{{$chamada->id}}" action="{{route('chamadas.update', $chamada->id)}}">
+                                    @csrf
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <div class="form-row">
+                                        <div class="col-md-6 form-group">
+                                            <label class="pb-2"  for="nome"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome') }}</label>
+                                            <input id="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" type="text" name="nome" value="{{old('nome')!=null ? old('nome') : $chamada->nome}}" required autofocus autocomplete="nome">
+
+                                            @error('nome')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12 form-group">
+                                            <label class="pb-2 pt-2" for="descricao"><span style="color: red; font-weight: bold;">* </span>{{ __('Descrição') }}</label>
+                                            <textarea id="descricao" class="form-control campoDeTexto @error('descricao') is-invalid @enderror" rows="3" type="text" name="descricao" required autofocus autocomplete="descricao">@if(old('descricao')!=null){{old('descricao')}}@else{{($chamada->descricao)}}@endif</textarea>
+
+                                            @error('descricao')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <label class="pb-2 pt-2"><span style="color: red; font-weight: bold;">*</span> Selecione se é uma chamada regular ou não:</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="regular_sim" name="regular" value="true" {{($tem_regular && !($chamada->regular)) ? 'disabled' : '' }} @if(!old('regular') || ($chamada->regular)) checked @endif>
+                                            <label class="form-check-label" for="regular_sim">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="regular_nao" name="regular" value="false" @if(old('regular') || !($chamada->regular)) checked @endif>
+                                            <label class="form-check-label" for="regular_nao">Não</label>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-chamada-form-{{$chamada->id}}"><span class="px-4">Editar</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

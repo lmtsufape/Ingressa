@@ -6,6 +6,7 @@
                     <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                         <span class="align-middle titulo">Candidatos por curso</span>
                         <div class="col-md-4" style="text-align: right">
+                            <a class="btn botao my-2 py-1" href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" > <span class="px-4">Voltar</span></a>
                             <a class="btn btn-primary" id="submeterFormBotao" href="{{route('chamadas.candidatos.aprovar', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}">Efetivar candidatos</a>
                         </div>
                     </div>

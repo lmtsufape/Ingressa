@@ -27,8 +27,11 @@
                                 <a class="nav-link mx-3 @if(request()->routeIs('cotas.*')) active @endif" href="{{route('cotas.index')}}">{{ __('Cotas') }}</a>
                             </li>
                         @elseif(auth()->user()->role == \App\Models\User::ROLE_ENUM['analista'])
+                            @php
+                                $sisu = \App\Models\Sisu::latest()->first();
+                            @endphp
                             <li class="nav-item">
-                                <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.index')}}">{{ __('SiSU') }}</a>
+                                <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.show', ['sisu' => $sisu->id])}}">{{ __('SiSU') }}</a>
                             </li>
                         @elseif(auth()->user()->role == \App\Models\User::ROLE_ENUM['candidato'])
                             <li class="nav-item">
@@ -45,7 +48,7 @@
                                 <li><!-- Authentication -->
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-        
+
                                         <button class="dropdown-item" href="{{ route('logout') }}"
                                                  onclick="event.preventDefault();
                                                         this.closest('form').submit();">
