@@ -18,7 +18,7 @@ class SisuController extends Controller
      */
     public function index()
     {
-        $this->authorize('isAdminOrAnalista', User::class);
+        $this->authorize('isAdmin', User::class);
         $sisus = Sisu::orderBy('edicao', 'DESC')->get();
         return view('sisu.index', compact('sisus'));
     }

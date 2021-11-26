@@ -48,7 +48,7 @@
                                 <td class="align-middle text-center">
                                     <a href="{{route('sisus.show', ['sisu' => $sisu->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
                                     <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
-                                    <a href="{{route('sisus.edit', ['sisu' => $sisu->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
+                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -61,7 +61,7 @@
 
   <!--CORPO-->
 
-  <!--MODAL-->
+  <!--MODAL CRIAR-->
 
     <div class="modal fade" id="adicionarEdicao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -73,7 +73,7 @@
                 @csrf
                 <div class="form-row">
                     <div class="col-md-12 form-group">
-                        <label class="pb-2" for="edicao">Nome da edição:</label>
+                        <label class="pb-2" for="edicao"><span style="color: red; font-weight: bold;">* </span>Nome da edição:</label>
                         <input type="name" class="form-control campoDeTexto @error('edicao') is-invalid @enderror" id="nomeEdicao" placeholder="Insira o nome da edição"  name="edicao" required autofocus autocomplete="edicao">
 
                         @error('edicao')
@@ -104,30 +104,76 @@
 
   <!--MODAL-->
 
+
     @foreach ($sisus as $sisu)
         <!-- Modal deletar sisu -->
         <div class="modal fade" id="modalStaticDeletarSisu_{{$sisu->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #dc3545;">
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Confirmação</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="modal-dialog">
+                    <div class="modal-content modalFundo p-3">
+                        <div class="col-md-12 tituloModal">Deletar edição</div>
+                            <div class="pt-3 pb-2 textoModal">
+                                <form id="deletar-sisu-form-{{$sisu->id}}" method="POST" action="{{route('sisus.destroy', ['sisu' => $sisu])}}">
+                                    @csrf
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    Tem certeza que deseja deletar a edição {{$sisu->edicao}}?
+                                </form>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-sisu-form-{{$sisu->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <form id="deletar-sisu-form-{{$sisu->id}}" method="POST" action="{{route('sisus.destroy', ['sisu' => $sisu])}}">
-                            @csrf
-                            <input type="hidden" name="_method" value="DELETE">
-                            Tem certeza que deseja deletar a edição {{$sisu->edicao}} do sisu?
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger" form="deletar-sisu-form-{{$sisu->id}}">Sim</button>
-                    </div>
+
                 </div>
             </div>
         </div>
     @endforeach
+
+    @foreach ($sisus as $sisu)
+        <!-- Modal editar sisu -->
+        <div class="modal fade" id="modalStaticEditarSisu_{{$sisu->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content modalFundo p-3">
+                        <div class="col-md-12 tituloModal">Editar edição</div>
+                            <div class="pt-3 pb-2 textoModal">
+                                <form method="POST" id="editar-sisu-form-{{$sisu->id}}" action="{{route('sisus.update', $sisu->id)}}">
+                                    @csrf
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <div class="form-row">
+                                        <div class="col-md-6 form-group">
+                                            <label class="pb-2" for="edicao"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome da edição:') }}</label>
+                                            <input id="edicao" class="form-control campoDeTexto @error('edicao') is-invalid @enderror" type="text" name="edicao" value="{{old('edicao')!=null ? old('edicao') : $sisu->edicao}}" required autofocus autocomplete="edicao">
+
+                                            @error('edicao')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-sisu-form-{{$sisu->id}}"><span class="px-4">Editar</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
 </x-app-layout>

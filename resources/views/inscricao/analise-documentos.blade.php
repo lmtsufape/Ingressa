@@ -1,5 +1,8 @@
 <x-app-layout>
     <div class="fundo2 px-5">
+        <div class="col-md-11 px-0" style="text-align: right">
+            <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}"> <span class="px-4">Voltar</span></a>
+        </div>
         <div class="container">
             <div class="row justify-content-between">
                 <div class="col-md-7">
@@ -247,7 +250,6 @@
                                     Qual o valor da sua renda total?
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -359,6 +361,7 @@
             data: {"inscricao_id": inscricao_id, "documento_nome": documento_nome},
             dataType:'json',
             success: function(documento) {
+                atualizarNome(documento_nome);
                 if(documento.id == null){
                     if($("#mensagemVazia").is(":hidden")){
                         $("#mensagemVazia").show();
@@ -370,7 +373,6 @@
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("comentarioTexto").value = documento.comentario;
-                    atualizarNome(documento_nome);
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     if(documento.avaliacao == "1"){
@@ -408,6 +410,7 @@
         atualizarNome("ficha");
         document.getElementById("documentoPDF").parentElement.parentElement.style.display = 'none';
         document.getElementById("corpoFicha").style.display = '';
+        $("#mensagemVazia").hide();
     }
 
     function atualizarNome($documento){
