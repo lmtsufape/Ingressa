@@ -287,36 +287,62 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="d-flex align-items-center justify-content-between pt-3">
-                                <div class="d-flex align-items-center">
+                            <div class="col-md-12">
+                                <div class="d-flex align-items-center justify-content-between pt-3">
                                     @if($inscricao->arquivos()->where('nome', $documento)->first() != null)
-                                        <a href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img src="{{asset('img/download2.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                        <div class="col-md-2">
+                                            <a href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img src="{{asset('img/download2.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                        </div>
                                     @else
-                                        <a target="_blank" style="cursor:pointer;"><img src="{{asset('img/download2.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                        <div class="col-md-2">
+                                            <a target="_blank" style="cursor:pointer;"><img src="{{asset('img/download3.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                        </div>
                                     @endif
 
                                     @if($documento == 'certificado_conclusao')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
+                                        </div>
                                     @elseif($documento == 'historico')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Histórico Escolar do Ensino Médio ou equivalente;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Histórico Escolar do Ensino Médio ou equivalente;</div>
+                                        </div>
                                     @elseif($documento == 'nascimento_ou_casamento')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Registro de Nascimento ou Certidão de Casamento;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Registro de Nascimento ou Certidão de Casamento;</div>
+                                        </div>
                                     @elseif($documento == 'cpf')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Cadastro de Pessoa Física (CPF) - pode estar no RG;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Cadastro de Pessoa Física (CPF) - pode estar no RG;</div>
+                                        </div>
                                     @elseif($documento == 'rg')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Carteira de Identidade (RG) - Frente e verso;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Carteira de Identidade (RG) - Frente e verso;</div>
+                                        </div>
                                     @elseif($documento == 'quitacao_eleitoral')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</div>
+                                        </div>
                                     @elseif($documento == 'quitacao_militar')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</div>
+                                        </div>
                                     @elseif($documento == 'foto')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Uma foto 3x4 atual;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Uma foto 3x4 atual;</div>
+                                        </div>
                                     @elseif($documento == 'autodeclaracao')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Autodeclaração de cor/etnia;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Autodeclaração de cor/etnia;</div>
+                                        </div>
                                     @elseif($documento == 'comprovante_renda')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</div>
+                                        </div>
                                     @elseif($documento == 'laudo_medico')
-                                        <span class="nomeDocumento ps-3" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Laudo médico;</span>
+                                        <div class="col-md-10">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Laudo médico;</div>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
