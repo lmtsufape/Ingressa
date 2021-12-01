@@ -22,6 +22,14 @@
                             </div>
                         </div>
                     @endif
+                    @if(session('nomeDoc'))
+                        <script>
+                            console.log();
+                            $(document).ready(function(){
+                                carregarDocumento({!! json_encode(session('inscricao'), JSON_HEX_TAG) !!}, {!! json_encode(session('nomeDoc'), JSON_HEX_TAG) !!}, {!! json_encode(session('indice'), JSON_HEX_TAG) !!});
+                            });
+                        </script>
+                    @endif
                     @error('error')
                         <div class="alert alert-danger" role="alert">
                             {{$message}}
@@ -37,7 +45,7 @@
 
                                     <label class="tituloTabelas ps-1" id="nomeDoc">Ficha Geral</label>
                                 </div>
-                                  <a><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
+                                    <a onclick="carregarProxDoc({{$inscricao->id}})" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
                               </div>
                             </div>
                         </div>
@@ -50,25 +58,17 @@
                             <div class="d-flex align-items-center my-2 pt-1 pb-3">
                                 <iframe width="100%" height="700" frameborder="0" allowtransparency="true" id="documentoPDF" src="" ></iframe>
                             </div>
-                            <form method="POST" id="analisar-documentos" action="{{route('inscricao.avaliar.documento', $inscricao->id)}}">
-                                @csrf
-                                <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
-                                <input type="hidden" name="documento_id" value="" id="documento_id">
-                                <input type="hidden" name="aprovar" id="inputAprovar" value="">
-                                <div id="avaliarDoc" style="display: none">
-                                    <div class="col-md-12 px-3 pt-5">
-                                        <div class="row justify-content-between">
-                                            <a id="textoComent" style="cursor:pointer; font-size: 12px; color: #1492E6">Deseja adicionar alguma observação?</a>
-                                            <button id="raprovarBotao" type="submit" class="btn botao my-2 py-1 col-md-3"  onclick="atualizarInputReprovar()">Recusar</button>
-                                            <button id="aprovarBotao" type="submit" class="btn botaoVerde my-2 py-1 col-md-3" onclick="atualizarInputAprovar()">Aprovar</button>
-                                        </div>
-                                        </div>
+                            
+                            <div id="avaliarDoc" style="display: none">
+                                <div class="col-md-12 px-3 pt-5">
+                                    <div class="row justify-content-between">
+                                        <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" class="btn botao my-2 py-1 col-md-3"  onclick="atualizarInputReprovar()">Recusar</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-3"  onclick="atualizarInputAprovar()">Aprovar</a>
                                     </div>
-                                    <div id="divComent" style="display: none">
-                                        <input type="text" name="comentario" id="comentarioTexto">
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            
                         </div>
 
                         <div class="corpo p-3" id="corpoFicha">
@@ -91,6 +91,9 @@
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
                                         Estado Civil:
+                                    </div>
+                                    <div class="tituloDocumento mx-3 pt-1">
+                                        CPF: {{$inscricao->candidato->nu_cpf_inscrito}}
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
                                         Identidade: {{$inscricao->nu_rg}}
@@ -259,9 +262,11 @@
                                 <div class="d-flex align-items-center">
                                 <span class="tituloTipoDoc">Documentação Geral</span>
                             </div>
-                              <a><img width="35" src="{{asset('img/download1.svg')}}"></a>
+                            <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
+                                <img width="35" src="{{asset('img/download1.svg')}}"></a>
+                            </a>
                         </div>
-                        @foreach ($documentos as $documento)
+                        @foreach ($documentos as $indice =>  $documento)
                             @if($documento == 'autodeclaracao')
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
@@ -300,48 +305,48 @@
                                     @endif
 
                                     @if($documento == 'certificado_conclusao')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
                                         </div>
                                     @elseif($documento == 'historico')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Histórico Escolar do Ensino Médio ou equivalente;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Histórico Escolar do Ensino Médio ou equivalente;</div>
                                         </div>
                                     @elseif($documento == 'nascimento_ou_casamento')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Registro de Nascimento ou Certidão de Casamento;</div>
+                                        <div class="col-md-10" style="cursor:pointer;" >
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro de Nascimento ou Certidão de Casamento;</div>
                                         </div>
                                     @elseif($documento == 'cpf')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Cadastro de Pessoa Física (CPF) - pode estar no RG;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Cadastro de Pessoa Física (CPF) - pode estar no RG;</div>
                                         </div>
                                     @elseif($documento == 'rg')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Carteira de Identidade (RG) - Frente e verso;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Carteira de Identidade (RG) - Frente e verso;</div>
                                         </div>
                                     @elseif($documento == 'quitacao_eleitoral')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</div>
                                         </div>
                                     @elseif($documento == 'quitacao_militar')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</div>
                                         </div>
                                     @elseif($documento == 'foto')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Uma foto 3x4 atual;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Uma foto 3x4 atual;</div>
                                         </div>
                                     @elseif($documento == 'autodeclaracao')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Autodeclaração de cor/etnia;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração de cor/etnia;</div>
                                         </div>
                                     @elseif($documento == 'comprovante_renda')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</div>
                                         </div>
                                     @elseif($documento == 'laudo_medico')
-                                        <div class="col-md-10">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" style="cursor:pointer;" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}')">Laudo médico;</div>
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico;</div>
                                         </div>
                                     @endif
                                 </div>
@@ -363,6 +368,50 @@
 
     <!--CORPO-->
 
+    <div class="modal fade" id="avaliar-documento-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modalFundo p-3">
+                <div id ="reprovarTituloForm" class="col-md-12 tituloModal">Reprovar documento</div>
+                <div id ="aprovarTituloForm" class="col-md-12 tituloModal">Aprovar documento</div>
+                <div class="pt-3 pb-2 textoModal">
+
+                    <form method="POST" id="avaliar-documentos" action="{{route('inscricao.avaliar.documento', $inscricao->id)}}">
+                        @csrf
+                        <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
+                        <input type="hidden" name="documento_id" value="" id="documento_id">
+                        <input type="hidden" value="-1" id="documento_indice">
+                        <input type="hidden" name="aprovar" id="inputAprovar" value="">
+                        <div id ="aprovarTextForm" class="pt-3">
+                            Tem certeza que deseja aprovar este documento?
+                        </div>
+                        <div id ="reprovarTextForm" class="form-row">
+                            <div class="col-md-12 pt-3 textoModal">
+                                <label class="pb-2" for="comentario">Motivo:</label>
+                                <input id="comentario" class="form-control campoDeTexto @error('comentario') is-invalid @enderror" type="text" name="comentario" value="{{old('comentario')}}" required autofocus autocomplete="comentario" placeholder="Insira o motivo para recusar o documento">
+                                
+                                @error('comentario')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
+                    </div>
+                    <div id ="reprovarButtonForm" class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Recusar</span></button>
+                    </div>
+                    <div id ="aprovarButtonForm" class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
 
 <script>
@@ -376,7 +425,7 @@
         btnAprovar.innerText  = "Aprovar";
     }
 
-    function carregarDocumento(inscricao_id, documento_nome) {
+    function carregarDocumento(inscricao_id, documento_nome, indice) {
         this.limparBotoes();
         $("#mensagemVazia").hide();
         $("#corpoFicha").hide();
@@ -388,6 +437,7 @@
             dataType:'json',
             success: function(documento) {
                 atualizarNome(documento_nome);
+                document.getElementById("documento_indice").value = indice;
                 if(documento.id == null){
                     if($("#mensagemVazia").is(":hidden")){
                         $("#mensagemVazia").show();
@@ -398,7 +448,7 @@
                     document.getElementById("documentoPDF").parentElement.parentElement.style.display = '';
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("documento_id").value = documento.id;
-                    document.getElementById("comentarioTexto").value = documento.comentario;
+                    document.getElementById("comentario").value = documento.comentario;
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     if(documento.avaliacao == "1"){
@@ -421,11 +471,29 @@
     }
 
     function atualizarInputAprovar(){
+        $('#comentario').attr('required', false);
+
         document.getElementById('inputAprovar').value = true;
+        $("#aprovarTituloForm").show();
+        $("#aprovarTextForm").show();
+        $("#aprovarButtonForm").show();
+
+        $('#reprovarTituloForm').hide();
+        $('#reprovarTextForm').hide();
+        $('#reprovarButtonForm').hide();
     }
 
     function atualizarInputReprovar(){
+        $('#comentario').attr('required', true);
+
         document.getElementById('inputAprovar').value = false;
+        $("#aprovarTituloForm").hide();
+        $("#aprovarTextForm").hide();
+        $("#aprovarButtonForm").hide();
+
+        $('#reprovarTituloForm').show();
+        $('#reprovarTextForm').show();
+        $('#reprovarButtonForm').show();
     }
 
     function atualizarInputEfetivar(valor){
@@ -434,9 +502,28 @@
 
     function carregarFicha(){
         atualizarNome("ficha");
+        document.getElementById("documento_indice").value = -1;
         document.getElementById("documentoPDF").parentElement.parentElement.style.display = 'none';
         document.getElementById("corpoFicha").style.display = '';
         $("#mensagemVazia").hide();
+    }
+
+    function carregarProxDoc(inscricao_id){
+        var documento_indice = parseInt(document.getElementById("documento_indice").value)+1;
+        document.getElementById("documento_indice").value = documento_indice;
+        $.ajax({
+            url:"{{route('inscricao.documento.proximo')}}",
+            type:"get",
+            data: {"inscricao_id": inscricao_id, "documento_indice": documento_indice},
+            dataType:'json',
+            success: function(documento) {
+                if(documento.nome == 'ficha'){
+                    carregarFicha();
+                }else{
+                    carregarDocumento(inscricao_id, documento.nome, documento_indice);
+                }
+            }
+        });
     }
 
     function atualizarNome($documento){
@@ -471,11 +558,4 @@
         }
     }
 
-    $("#textoComent").click(function() {
-        if($("#divComent").is(":hidden")){
-            $("#divComent").show();
-        }else{
-            $("#divComent").hide();
-        }
-    });
 </script>

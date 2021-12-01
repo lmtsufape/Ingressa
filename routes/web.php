@@ -79,6 +79,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     ->name('inscricao.show.analisar.documentos');
 
     Route::get('/inscricao/get-documento', [InscricaoController::class, 'inscricaoDocumentoAjax'])->name('inscricao.documento.ajax');
+    Route::get('/inscricao/get-prox-documento', [InscricaoController::class, 'inscricaoProxDocumentoAjax'])->name('inscricao.documento.proximo');
+    Route::get('/inscricao/download-documentos/inscricao/{inscricao_id}', [InscricaoController::class, 'downloadDocumentosCandidato'])->name('baixar.documentos.candidato');
 
     Route::get('cotas/{cota}/remanejamento', [CotaController::class, 'remanejamento'])->name('cotas.remanejamento');
 
