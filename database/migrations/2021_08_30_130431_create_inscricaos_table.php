@@ -24,6 +24,8 @@ class CreateInscricaosTable extends Migration
             $table->string('protocolo');
             $table->string('status');
             $table->string('cd_efetivado');
+            //justificativa para cadastro invalidado ou validado
+            $table->text('justificativa')->nullable();
             $table->integer('co_ies_curso');
             $table->string('co_ies');
             $table->string('ds_turno');
