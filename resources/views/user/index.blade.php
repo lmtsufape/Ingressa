@@ -53,7 +53,7 @@
                                     <td class="align-middle">{{$user->email}}</td>
                                     <td class="align-middle text-center">
                                         <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarUser_{{$user->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
-                                        <a onclick="editarAnalista({{$user->id}})" data-bs-toggle="modal" data-bs-target="#editar-user-modal" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1665.svg')}}"  alt="icone-busca"></a>
+                                        <a onclick="editarAnalista({{$user->id}}, {{$tipos}})" data-bs-toggle="modal" data-bs-target="#editar-user-modal" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1665.svg')}}"  alt="icone-busca"></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -98,10 +98,10 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="col-md-12 pt-2">
+                    <div class="col-md-12 pt-3 textoModal">
                         <div class="row justify-content-between">
                             <div class="col-md-6">
-                                <label class="pb-2" for="codigoCota">Senha:</label>
+                                <label class="pb-2 pt-2" for="codigoCota">Senha:</label>
                                 <input id="password" class="form-control campoDeTexto @error('password') is-invalid @enderror" type="password" name="password" required autofocus autocomplete="new-password">  
                             
                                 @error('password')
@@ -111,10 +111,31 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="pb-2" for="codigoCota">Confirme a senha:</label>
+                                <label class="pb-2 pt-2" for="codigoCota">Confirme a senha:</label>
                                 <input id="password_confirmation" class="form-control campoDeTexto" type="password" name="password_confirmation" required autocomplete="new-password">  
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12 pt-3 textoModal">
+                        <label class="pb-2 pt-2" for="tipo">{{__('Selecione o(s) cargo(s) do analista:')}}</label>
+                        <input type="hidden" class="checkbox_tipo @error('tipos_analista') is-invalid @enderror">
+                        @foreach ($tipos as $tipo)
+                            <div class="form-check">
+                                <input class="checkbox_tipo" type="checkbox" name="tipos_analista[]" value="{{$tipo->id}}" id="tipo_{{$tipo->id}}">
+                                <label class="form-check-label" for="tipo_{{$tipo->id}}">
+                                    @if($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['geral'])
+                                        Geral
+                                    @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['heteroidentificacao'])
+                                        Heteroidentificação
+                                    @endif
+                                </label>
+                            </div>
+                        @endforeach
+                        @error('tipos_analista')
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                 </form>
               
@@ -154,6 +175,28 @@
                             <input id="email-edit" class="form-control campoDeTexto @error('email') is-invalid @enderror" type="email" name="email" value="{{old('email')}}" required autofocus autocomplete="email" placeholder="Insira o e-mail de acesso do analista">
             
                             @error('email')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-12 pt-3 textoModal">
+                            <label class="pb-2 pt-2" for="tipo">{{__('Selecione o(s) cargo(s) do analista:')}}</label>
+                            <input type="hidden" class="checkbox_tipo @error('tipos_analista_edit') is-invalid @enderror">
+                            @foreach ($tipos as $tipo)
+                                <div class="form-check">
+                                    <input class="checkbox_tipo" type="checkbox" name="tipos_analista_edit[]" value="{{$tipo->id}}" id="tipo_edit_{{$tipo->id}}">
+                                    <label class="form-check-label" for="tipo_{{$tipo->id}}">
+                                        @if($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['geral'])
+                                            Geral
+                                        @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['heteroidentificacao'])
+                                            Heteroidentificação
+                                        @endif
+                                    </label>
+                                </div>
+                            @endforeach
+                            @error('tipos_analista_edit')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -218,8 +261,10 @@
 @endif
 
 <script>
-    function editarAnalista(id) {
-
+    function editarAnalista(id, tipos) {
+        for(var i = 0; i < tipos.length; i++){
+            $('#tipo_edit_'+tipos[i].id).attr('checked', false);
+        }
         $.ajax({
             url:"{{route('usuario.info.ajax')}}",
             type:"get",
@@ -229,6 +274,9 @@
                 document.getElementById('user-edit').value = user.id;
                 document.getElementById('name-edit').value = user.name;
                 document.getElementById('email-edit').value = user.email;
+                for(var i = 0; i < user.cargos.length; i++){
+                    $('#tipo_edit_'+user.cargos[i].id).attr('checked', true);
+                }
             }
         });
     }
