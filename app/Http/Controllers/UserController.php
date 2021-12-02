@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Requests\UserRequest;
+use App\Models\TipoAnalista;
 
 class UserController extends Controller
 {
@@ -20,7 +21,8 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $users = User::where('role', User::ROLE_ENUM['analista'])->paginate(15);
-        return view('user.index', compact('users'));
+        $tipos = TipoAnalista::all();
+        return view('user.index', compact('users', 'tipos'));
     }
 
     /**
@@ -50,7 +52,9 @@ class UserController extends Controller
         $user->email_verified_at = now();
         $user->primeiro_acesso = false;
         $user->save();
-
+        foreach($request->tipos_analista as $tipo_id){
+            $user->tipo_analista()->attach(TipoAnalista::find($tipo_id));
+        }
         return redirect(route('usuarios.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
     }
 
@@ -109,10 +113,23 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required','string','email','max:255','unique:users,email,'.$user->id,],
+            'tipos_analista_edit' => 'required',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+
+        foreach($request->tipos_analista_edit as $tipo_id){
+            $tipo = TipoAnalista::find($tipo_id);
+            if(!$user->tipo_analista->contains($tipo)){
+                $user->tipo_analista()->attach($tipo);
+            }
+        }
+        foreach($user->tipo_analista as $tipo){
+            if(!in_array($tipo->id, $request->tipos_analista_edit)){
+                $user->tipo_analista()->detach($tipo);
+            }
         }
 
         $user->name = $request->name;
@@ -130,6 +147,7 @@ class UserController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'cargos' => $user->tipo_analista,
         ];
 
         return response()->json($userInfo);
@@ -145,6 +163,9 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $user = User::find($id);
+        foreach($user->tipo_analista()->get() as $tipo){
+            $tipo->pivot->delete();
+        }
         $user->delete();
 
         return redirect(route('usuarios.index'))->with(['success' => 'Analista deletado com sucesso!']);
