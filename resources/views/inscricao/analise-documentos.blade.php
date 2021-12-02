@@ -31,8 +31,9 @@
                         </script>
                     @endif
                     @error('error')
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{$message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @enderror
                     <div style="border-radius: 0.5rem;" class="col-md-12 p-0 shadow">
@@ -352,14 +353,8 @@
                                 </div>
                             </div>
                         @endforeach
-                        <form method="post" action="{{route('inscricao.status.efetivado',['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
-                            @csrf
-                            <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
-                            <input type="hidden" name="curso" value="{{$inscricao->curso->id}}">
-                            <input type="hidden" name="efetivar" id="inputEfetivar" value="">
-                            <button id="efetivarBotao2" type="submit" class="btn botaoVerde mt-4 py-1 col-md-12"><span class="px-4" onclick="atualizarInputEfetivar(true)" {{$inscricao->cd_efetivado == true ? 'disabled' : '' }}>{{$inscricao->cd_efetivado == true ? 'Efetivato' : 'Efetivar' }}</button>
-                            <button id="efetivarBotao1" type="submit" class="btn botao mt-2 py-1 col-md-12"> <span class="px-4" onclick="atualizarInputEfetivar(false)" {{$inscricao->cd_efetivado == false ? 'disabled' : '' }}>{{$inscricao->cd_efetivado == true ? 'Desfazer efetivar' : 'Não efetivado' }}</button>
-                        </form>
+                        <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" {{$inscricao->cd_efetivado == true ? 'disabled' : '' }} onclick="atualizarInputEfetivar(true)" ><span class="px-4" >{{$inscricao->cd_efetivado == true ? 'Cadastro Validado' : 'Validar Cadastro' }}</button>
+                        <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" {{$inscricao->cd_efetivado == false ? 'disabled' : '' }} onclick="atualizarInputEfetivar(false)"> <span class="px-4" >{{$inscricao->cd_efetivado == true ? 'Desfazer Validação' : 'Cadastro Invalidado' }}</button>
                     </div>
                 </div>
             </div>
@@ -367,6 +362,52 @@
       </div>
 
     <!--CORPO-->
+
+    <div class="modal fade" id="aprovar-recusar-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modalFundo p-3">
+                <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Invalidar Cadastro</div>
+                <div id ="aprovarCandidatoForm" class="col-md-12 tituloModal">Validar Cadastro</div>
+                <div class="pt-3 pb-2 textoModal">
+                    <form method="post" id="aprovar-reprovar-candidato" action="{{route('inscricao.status.efetivado',['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
+                        @csrf
+                        <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
+                        <input type="hidden" name="curso" value="{{$inscricao->curso->id}}">
+                        <input type="hidden" name="efetivar" id="inputEfetivar" value="">
+                        <div id ="aprovarCandidatoTextForm" class="pt-3">
+                            Tem certeza que deseja validar o cadastro do candidato?
+                        </div>
+                        <div id ="reprovarCandidatoTextForm" class="pt-3">
+                            Tem certeza que deseja invalidar o cadastro do candidato?
+                        </div>
+                        <div id ="justificativaCadastroTextForm" class="form-row">
+                            <div class="col-md-12 pt-3 textoModal">
+                                <label class="pb-2" for="justificativa">Justificativa:</label>
+                                <textarea id="justificativa" class="form-control campoDeTexto @error('justificativa') is-invalid @enderror" type="text" name="justificativa" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{old('justificativa', $inscricao->justificativa)}}</textarea>
+                                
+                                @error('justificativa')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
+                    </div>
+                    <div id ="reprovarCandidatoButtonForm" class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
+                    </div>
+                    <div id ="aprovarCandidatoButtonForm" class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="avaliar-documento-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -387,7 +428,7 @@
                         <div id ="reprovarTextForm" class="form-row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="comentario">Motivo:</label>
-                                <input id="comentario" class="form-control campoDeTexto @error('comentario') is-invalid @enderror" type="text" name="comentario" value="{{old('comentario')}}" required autofocus autocomplete="comentario" placeholder="Insira o motivo para recusar o documento">
+                                <textarea id="comentario" class="form-control campoDeTexto @error('comentario') is-invalid @enderror" type="text" name="comentario" value="{{old('comentario')}}" required autofocus autocomplete="comentario" placeholder="Insira o motivo para recusar o documento"></textarea>
                                 
                                 @error('comentario')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -498,6 +539,27 @@
 
     function atualizarInputEfetivar(valor){
         document.getElementById('inputEfetivar').value = valor;
+        if(valor == true){
+            $("#aprovarCandidatoForm").show();
+            $("#aprovarCandidatoTextForm").show();
+            $("#aprovarCandidatoButtonForm").show();
+
+            $('#reprovarCandidatoForm').hide();
+            $('#reprovarCandidatoTextForm').hide();
+            $('#reprovarCandidatoButtonForm').hide();
+
+            $('#aprovar-recusar-candidato-modal').modal('toggle');
+        }else{
+            $("#aprovarCandidatoForm").hide();
+            $("#aprovarCandidatoTextForm").hide();
+            $("#aprovarCandidatoButtonForm").hide();
+
+            $('#reprovarCandidatoForm').show();
+            $('#reprovarCandidatoTextForm').show();
+            $('#reprovarCandidatoButtonForm').show();
+
+            $('#aprovar-recusar-candidato-modal').modal('toggle');
+        }
     }
 
     function carregarFicha(){

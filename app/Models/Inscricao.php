@@ -25,6 +25,7 @@ class Inscricao extends Model
         'protocolo',
         'status',
         'cd_efetivado',
+        'justificativa',
         'nu_etapa',
         'no_campus',
         'co_ies_curso',

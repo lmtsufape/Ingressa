@@ -11,6 +11,7 @@ use App\Models\Inscricao;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 use ZipArchive;
@@ -321,6 +322,18 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
+
+        if($request->justificativa != null){
+
+            $request->validate([
+                'justificativa' => ['string', 'max:500'],
+            ]);
+
+            $inscricao->justificativa = $request->justificativa;
+        }else{
+            $inscricao->justificativa = null;
+        }
+        
         $cotaRemanejamento = $inscricao->cotaRemanejada;
         if($cotaRemanejamento == null){
             $cota = $inscricao->cota;
@@ -332,14 +345,14 @@ class InscricaoController extends Controller
         if($inscricao->cd_efetivado==true){
             $cota_curso->vagas_ocupadas -= 1;
             $inscricao->cd_efetivado = false;
-            $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição não efetivada";
+            $message = "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
         }else {
             if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos']){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
             }
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = true;
-            $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição efetivada";
+            $message = "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
         }
         $inscricao->update();
         $cota_curso->update();
@@ -401,6 +414,9 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($id);
         $this->authorize('isAdminOrAnalista', User::class);
 
+        if(is_null($inscricao->arquivos->first())){
+            return redirect()->back()->withErrors(['error' => 'Não há documentos para download.']);
+        }
         $nomeCandidato = $inscricao->candidato->user->name;
 
         $filename = $nomeCandidato.'.zip';
