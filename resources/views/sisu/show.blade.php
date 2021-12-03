@@ -98,6 +98,7 @@
             <div class="col-md-12 pt-3 pb-2 textoModal">
                 <form method="POST" id="criar-chamada" action="{{route('chamadas.store')}}">
                     @csrf
+                    <input type="hidden" name="chamada_id" value="-1">
                     <input type="hidden" name="sisu" value="{{$sisu->id}}">
                     <div class="form-row">
                         <div class="col-md-12 form-group">
@@ -192,9 +193,10 @@
                             <div class="pt-3 pb-2 textoModal">
                                 <form method="POST" id="editar-chamada-form-{{$chamada->id}}" action="{{route('chamadas.update', $chamada->id)}}">
                                     @csrf
+                                    <input type="hidden" name="chamada_id" value="{{$chamada->id}}">
                                     <input type="hidden" name="_method" value="PUT">
                                     <div class="form-row">
-                                        <div class="col-md-6 form-group">
+                                        <div class="col-md-12 form-group">
                                             <label class="pb-2"  for="nome"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome') }}</label>
                                             <input id="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" type="text" name="nome" value="{{old('nome')!=null ? old('nome') : $chamada->nome}}" required autofocus autocomplete="nome">
 
@@ -338,5 +340,19 @@
     @endforeach
 </x-app-layout>
 
+@if(old('chamada_id') == -1)
 <script>
+    $(document).ready(function() {
+        $('#adicionarChamada').modal('show');
+    });
 </script>
+@endif
+
+@if(old('chamada_id') > 0)
+<script>
+    $(document).ready(function() {
+        $('#modalStaticEditarChamada_{{old('chamada_id')}}').modal('show');
+    });
+</script>
+@endif
+
