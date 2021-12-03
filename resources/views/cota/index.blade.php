@@ -69,7 +69,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modalFundo p-3">
                     <div class="col-md-12 tituloModal">Insira uma nova cota</div>
-        
+
                     <form id="criar-cota-form" method="POST" action="{{route('cotas.store')}}">
                         @csrf
                         <input type="hidden" name="cota" value="0">
@@ -77,8 +77,8 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label class="pb-2" for="codigoCota">{{__('Name')}}</label>
-                                    <input type="text" class="form-control campoDeTexto @error('nome') is-invalid @enderror" id="nome" name="nome" value="{{old('nome')}}" placeholder="Insira o código da cota">
-                                    
+                                    <input type="text" class="form-control campoDeTexto @error('nome') is-invalid @enderror" id="nome" name="nome" value="{{old('nome')}}" placeholder="Insira o nome da cota">
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -91,7 +91,7 @@
                                 <div class="col-sm-12">
                                     <label class="pb-2 pt-2" for="codigoCota">Código da cota:</label>
                                     <input type="text" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" id="codigo" name="codigo" value="{{old('codigo')}}" placeholder="Insira o código da cota">
-                                    
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -104,7 +104,7 @@
                                 <div class="col-sm-12">
                                     <label class="pb-2 pt-2" for="descricaoCota">Descrição da cota</label>
                                     <textarea class="form-control campoDeTexto @error('descrição') is-invalid @enderror" id="descrição" name="descrição" rows="3">{{old('descrição')}}</textarea>
-                                
+
                                     @error('descrição')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -112,9 +112,9 @@
                                     @enderror
                                 </div>
                             </div>
-            
+
                             <div class="pb-2 pt-2">Selecione o curso e digita a quantidade de vagas:</div>
-                            
+
                             @foreach ($cursos as $i => $curso)
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -122,8 +122,8 @@
                                         <input id="curso-{{$curso->id}}" type="checkbox" onclick="alocarValue(this, {{$curso->id}})" class="form-check-input" data-bs-toggle="collapse" href="#curso_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
                                         <label class="form-check-label" for="curso_{{$curso->id}}">
                                             {{$curso->nome}} (@switch($curso->turno)
-                                                @case($turnos['matutino']){{"Manhã"}}@break
-                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                @case($turnos['matutino']){{"Matutino"}}@break
+                                                @case($turnos['vespertino']){{"Vespertino"}}@break
                                                 @case($turnos['noturno']){{"Noturno"}}@break
                                                 @case($turnos['integral']){{"Integral"}}@break
                                             @endswitch)
@@ -147,7 +147,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-cota-form"><span class="px-4">Salvar</span></button>
-                                </div>       
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -170,7 +170,7 @@
                                 <div class="col-md-12">
                                     <label class="pb-2" for="nome">{{__('Name')}}</label>
                                     <input type="text" id="nome-edit" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-    
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -182,7 +182,7 @@
                                 <div class="col-md-12">
                                     <label class="pb-2 pt-2" for="codigo">{{__('Código da cota')}}</label>
                                     <input type="text" id="codigo-edit" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-    
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -194,7 +194,7 @@
                                 <div class="col-md-12">
                                     <label class="pb-2 pt-2" for="descrição">{{__('Descrição')}}</label>
                                     <textarea name="descrição" id="descrição-edit" cols="30" rows="3" class="form-control campoDeTexto @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
-    
+
                                     @error('descrição')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -209,8 +209,8 @@
                                         <input class="limpar form-check-input form-check-cursos" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValueEdit(this, {{$curso->id}})" data-bs-toggle="collapse" href="#curso_edit_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
                                         <label class="form-check-label" for="curso_{{$curso->id}}">
                                             {{$curso->nome}} (@switch($curso->turno)
-                                                @case($turnos['matutino']){{"Manhã"}}@break
-                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                @case($turnos['matutino']){{"Matutino"}}@break
+                                                @case($turnos['vespertino']){{"Vespertino"}}@break
                                                 @case($turnos['noturno']){{"Noturno"}}@break
                                                 @case($turnos['integral']){{"Integral"}}@break
                                             @endswitch)
@@ -235,7 +235,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="edit-cota-form"><span class="px-4">Salvar</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -249,7 +249,7 @@
             <div class="modal-dialog">
                 <div class="modal-dialog">
                     <div class="modal-content modalFundo p-3">
-                        <div class="col-md-12 tituloModal">Editar cota</div>
+                        <div class="col-md-12 tituloModal">Deletar cota</div>
                             <div class="pt-3 pb-2 textoModal">
                                 <form id="delete-cota-{{$cota->id}}-form" method="POST" action="{{route('cotas.destroy', ['cota' => $cota])}}">
                                     @csrf
@@ -267,7 +267,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -337,7 +337,7 @@
             for (var i = 0; i < inputs.length; i++) {
                 if (inputs[i].type == "hidden") {
                     inputs[i].value = "";
-                } 
+                }
             }
 
             for (var i = 0; i < collapses.length; i++) {
@@ -346,7 +346,7 @@
                         $("#"+check_collapse[i].id).click();
                     }
                     inputs_numbers[i].value = "";
-                   
+
                 }
             }
         }

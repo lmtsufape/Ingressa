@@ -79,16 +79,16 @@ class CotaSeeder extends Seeder
                             $quantidade = 20;
                             break;
                         case 1:
-                            $quantidade = 6;
+                            $quantidade = 2;
                             break;
                         case 2:
                             $quantidade = 6;
                             break;
                         case 3:
-                            $quantidade = 1;
+                            $quantidade = 2;
                             break;
                         case 4:
-                            $quantidade = 1;
+                            $quantidade = 6;
                             break;
                         case 5:
                             $quantidade = 1;
@@ -97,10 +97,10 @@ class CotaSeeder extends Seeder
                             $quantidade = 1;
                             break;
                         case 7:
-                            $quantidade = 2;
+                            $quantidade = 1;
                             break;
                         case 8:
-                            $quantidade = 2;
+                            $quantidade = 1;
                             break;
                         case 9:
                             $quantidade = 0;
@@ -112,16 +112,16 @@ class CotaSeeder extends Seeder
                             $quantidade = 40;
                             break;
                         case 1:
-                            $quantidade = 12;
+                            $quantidade = 6;
                             break;
                         case 2:
                             $quantidade = 12;
                             break;
                         case 3:
-                            $quantidade = 1;
+                            $quantidade = 6;
                             break;
                         case 4:
-                            $quantidade = 1;
+                            $quantidade = 12;
                             break;
                         case 5:
                             $quantidade = 1;
@@ -130,10 +130,10 @@ class CotaSeeder extends Seeder
                             $quantidade = 1;
                             break;
                         case 7:
-                            $quantidade = 6;
+                            $quantidade = 1;
                             break;
                         case 8:
-                            $quantidade = 6;
+                            $quantidade = 1;
                             break;
                         case 9:
                             $quantidade = 0;

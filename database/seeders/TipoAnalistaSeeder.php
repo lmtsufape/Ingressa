@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Sisu;
+use App\Models\TipoAnalista;
 use Illuminate\Database\Seeder;
 
-class SisuSeeder extends Seeder
+class TipoAnalistaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,15 @@ class SisuSeeder extends Seeder
      */
     public function run()
     {
-        $sisus = [
+        $tipos = [
             [
-                'edicao'           => '2021',
+                'tipo'  => 1,
+            ],
+            [
+                'tipo'  => 2,
             ],
         ];
 
-        Sisu::insert($sisus);
+        TipoAnalista::insert($tipos);
     }
 }

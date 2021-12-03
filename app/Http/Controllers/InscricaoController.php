@@ -10,8 +10,12 @@ use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use ZipArchive;
+
 
 class InscricaoController extends Controller
 {
@@ -211,8 +215,12 @@ class InscricaoController extends Controller
         }
         if($arquivo->avaliacao != null){
             $arquivoAvaliacao = $arquivo->avaliacao;
+            if($request->aprovar == 'true'){
+                $arquivoAvaliacao->comentario = null;
+            }else{
+                $arquivoAvaliacao->comentario = $request->comentario;
+            }
             $arquivoAvaliacao->avaliacao = $avaliacao;
-            $arquivoAvaliacao->comentario = $request->comentario;
             $arquivoAvaliacao->update();
         }else{
             Avaliacao::create([
@@ -223,9 +231,9 @@ class InscricaoController extends Controller
         }
 
         $documentosAceitos = true;
-        foreach($inscricao->arquivos as $arquivo){
-            if($arquivo->avaliacao != null){
-                if($arquivo->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
+        foreach($inscricao->arquivos as $arqui){
+            if($arqui->avaliacao != null){
+                if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
                     $documentosAceitos = false;
                     break;
                 }
@@ -241,7 +249,15 @@ class InscricaoController extends Controller
         }
         $inscricao->update();
 
-        return redirect()->back()->with(['success' => 'Documento avaliado com sucesso!']);
+        $documentosRequisitos = $this->documentosRequisitados($inscricao->id);
+
+        foreach($documentosRequisitos as $indice => $doc){
+            if($doc == $arquivo->nome){
+                break;
+            }
+        }
+
+        return redirect()->back()->with(['success' => 'Documento '. $this->getNome($arquivo->nome) .' avaliado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
     }
 
     public function analisarDocumentos(Request $request)
@@ -306,23 +322,37 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
-        $cota = $inscricao->cota;
-        if($cota == null){
-            return redirect()->back()->withErrors(['error' => 'Não encontramos a modalidade de concorrência "'.$inscricao->no_modalidade_concorrencia.'" do candidato nos vínculos de cota e curso.']);
+
+        if($request->justificativa != null){
+
+            $request->validate([
+                'justificativa' => ['string', 'max:500'],
+            ]);
+
+            $inscricao->justificativa = $request->justificativa;
+        }else{
+            $inscricao->justificativa = null;
+        }
+        
+        $cotaRemanejamento = $inscricao->cotaRemanejada;
+        if($cotaRemanejamento == null){
+            $cota = $inscricao->cota;
+        }else{
+            $cota = $cotaRemanejamento;
         }
         $curso = Curso::find($request->curso);
         $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
         if($inscricao->cd_efetivado==true){
             $cota_curso->vagas_ocupadas -= 1;
             $inscricao->cd_efetivado = false;
-            $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição não efetivada";
+            $message = "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
         }else {
             if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos']){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
             }
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = true;
-            $message = "Candidato {$inscricao->candidato->user->name} teve a inscrição efetivada";
+            $message = "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
         }
         $inscricao->update();
         $cota_curso->update();
@@ -359,5 +389,92 @@ class InscricaoController extends Controller
 
 
         return response()->json($documento);
+    }
+    public function inscricaoProxDocumentoAjax(Request $request)
+    {
+        $inscricao = Inscricao::find($request->inscricao_id);
+        $this->authorize('isAdminOrAnalista', User::class);
+        $documentos = $this->documentosRequisitados($inscricao->id);
+        $indiceProx = $request->documento_indice;
+
+        if($indiceProx >= 0 && $indiceProx < count($documentos)){
+            $documento = [
+                'nome' => $documentos[$indiceProx],
+            ];
+        }else{
+            $documento = [
+                'nome' => 'ficha',
+            ];
+        }
+        return response()->json($documento);
+    }
+
+    public function downloadDocumentosCandidato($id)
+    {
+        $inscricao = Inscricao::find($id);
+        $this->authorize('isAdminOrAnalista', User::class);
+
+        if(is_null($inscricao->arquivos->first())){
+            return redirect()->back()->withErrors(['error' => 'Não há documentos para download.']);
+        }
+        $nomeCandidato = $inscricao->candidato->user->name;
+
+        $filename = $nomeCandidato.'.zip';
+        $zip = new ZipArchive();
+        $zip->open(storage_path('app'. DIRECTORY_SEPARATOR . $filename), ZipArchive::CREATE);
+        $path = 'app'. DIRECTORY_SEPARATOR .'public' . DIRECTORY_SEPARATOR . 'documentos' . DIRECTORY_SEPARATOR . 'inscricaos' . DIRECTORY_SEPARATOR . $id;
+
+
+        $files = File::files(storage_path($path));
+        foreach($files as $file){
+            if (!$file->isDir()) {
+                $relativeName = basename($file);
+                $zip->addFile($file, $relativeName);
+            }
+        }
+        $zip->close();
+        //return response()->download(storage_path('app'. DIRECTORY_SEPARATOR . $filename));
+        header('Content-type: application/zip');
+        header('Content-Disposition: attachment; filename="'.basename(storage_path('app'. DIRECTORY_SEPARATOR . $filename)).'"');
+        header("Content-length: " . filesize(storage_path('app'. DIRECTORY_SEPARATOR . $filename)));
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        ob_clean();
+        flush();
+
+        readfile(storage_path('app'. DIRECTORY_SEPARATOR . $filename));
+
+        ignore_user_abort(true);
+        unlink(storage_path('app'. DIRECTORY_SEPARATOR . $filename));
+        exit();
+    }
+
+    private function getNome($documento){
+        if($documento == 'certificado_conclusao'){
+            return "Certificado de Conclusão do Ensino Médio";
+        }else if($documento == 'historico'){
+            return "Histórico Escolar do Ensino Médio ou equivalente";
+        }else if($documento == 'nascimento_ou_casamento'){
+            return "Registro de Nascimento ou Certidão de Casamento";
+        }else if($documento == 'cpf'){
+            return "Cadastro de Pessoa Física (CPF)";
+        }else if($documento == 'rg'){
+            return "Carteira de Identidade (RG)";
+        }else if($documento == 'quitacao_eleitoral'){
+            return "Comprovante de quitação com o Serviço Eleitoral";
+        }else if($documento == 'quitacao_militar'){
+            return "Comprovante de quitação com o Serviço Militar";
+        }else if($documento == 'foto'){
+            return "Foto 3x4";
+        }else if($documento == 'autodeclaracao'){
+            return "Autodeclaração de cor/etnia";
+        }else if($documento == 'comprovante_renda'){
+            return "Comprovante de renda";
+        }else if($documento == 'laudo_medico'){
+            return "Laudo médico";
+        }else if($documento == 'ficha'){
+            return "Ficha Geral";
+        }
     }
 }

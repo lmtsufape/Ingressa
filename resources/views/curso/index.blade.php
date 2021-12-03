@@ -4,8 +4,8 @@
             {{ __('Cursos') }}
         </h2>
     </x-slot> --}}
-    
-<div class="fundo px-5 py-5"> 
+
+<div class="fundo px-5 py-5">
     <div class="row justify-content-center">
         <div class="col-md-11 pt-0">
             <div class="row tituloBorda justify-content-between">
@@ -14,8 +14,8 @@
                     <span class="aling-middle">
                         <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Criar um novo curso"></a>
                         <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editarCurso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="icone-busca"> </a>
-                    </span> 
-                </div> 
+                    </span>
+                </div>
             </div>
             @if(session('success'))
                 <div class="row mt-3">
@@ -25,7 +25,7 @@
                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                             </symbol>
                         </svg>
-        
+
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -48,13 +48,13 @@
                         <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
                             @case($graus['bacharelado']){{"Bacharelado"}}@break
                             @case($graus['licenciatura']){{"Licenciatura"}}@break
-                            @case($graus['tecnologo']){{"Tecnólogo"}}@break 
-                        @endswitch - 
+                            @case($graus['tecnologo']){{"Tecnólogo"}}@break
+                        @endswitch -
                         @switch($cursos[$count]->turno)
-                            @case($turnos['matutino']){{"Manhã"}}@break
-                            @case($turnos['vespertino']){{"Tarde"}}@break
+                            @case($turnos['matutino']){{"Matutino"}}@break
+                            @case($turnos['vespertino']){{"Vespertino"}}@break
                             @case($turnos['noturno']){{"Noturno"}}@break
-                            @case($turnos['integral']){{"Integral"}}@break   
+                            @case($turnos['integral']){{"Integral"}}@break
                         @endswitch)
                         </div>
                     </div>
@@ -68,10 +68,10 @@
                             $controle = false;
                         @endphp
                     @endif
-                @endif   
+                @endif
                 @php
                     $count++;
-                @endphp 
+                @endphp
             @endwhile
         </div>
     </div>
@@ -90,7 +90,7 @@
                             <div class="col-md-12 mb-3">
                                 <label for="nome" class="form-label" >{{__('Name')}}</label>
                                 <input type="text" id="nome" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required placeholder="Insira o nome completo do analista">
-                            
+
                                 @error('nome')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -108,7 +108,7 @@
                                     <option @if(old('turno') == $turnos['noturno']) selected @endif value="{{$turnos['noturno']}}">Noturno</option>
                                     <option @if(old('turno') == $turnos['integral']) selected @endif value="{{$turnos['integral']}}">Integral</option>
                                 </select>
-                            
+
                                 @error('turno')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -123,7 +123,7 @@
                                     <option @if(old('grau_acadêmico') == $graus['licenciatura']) selected @endif value="{{$graus['licenciatura']}}">Licenciatura</option>
                                     <option @if(old('grau_acadêmico') == $graus['tecnologo']) selected @endif value="{{$graus['tecnologo']}}">Tecnólogo</option>
                                 </select>
-                            
+
                                 @error('grau_acadêmico')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -135,7 +135,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="codigo" class="form-label">{{__('Código do curso')}}</label>
                                 <input type="text" id="codigo" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-                            
+
                                 @error('codigo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -145,7 +145,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="vagas" class="form-label">{{__('Quantidade de vagas')}}</label>
                                 <input type="number" id="vagas" name="quantidade_de_vagas" class="form-control campoDeTexto @error('quantidade_de_vagas') is-invalid @enderror" value="{{old('quantidade_de_vagas')}}" required>
-                            
+
                                 @error('quantidade_de_vagas')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -157,7 +157,7 @@
                             <div class="col-md-8 mb-3">
                                 <label for="formFile" class="form-label">{{__('Icone do curso')}}</label>
                                 <input class="form-control campoDeTexto @error('icone') is-invalid @enderror" type="file" id="icone" name="icone" class="icone" accept=".png">
-                            
+
                                 @error('icone')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -167,7 +167,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="cor" class="form-label">{{__('Cor do curso')}}</label>
                                 <input type="color" class="form-control form-control-color campoDeTexto @error('cor') is-invalid @enderror" value="#000000" id="cor" name="cor" title="Escolha a cor padrão do curso" style="width: 100%;">
-                            
+
                                 @error('cor')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -183,7 +183,7 @@
                 </div>
                 <div class="col-md-4" style="text-align: right;">
                     <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-curso-form"><span class="px-4">Salvar</span></button>
-                </div>       
+                </div>
             </div>
         </div>
     </div>
@@ -209,10 +209,10 @@
                                                 <div class="">
                                                     <div class="tituloLista aling-middle">
                                                         {{$curso->nome}} - @switch($curso->turno)
-                                                                                @case($turnos['matutino']){{"Manhã"}}@break
-                                                                                @case($turnos['vespertino']){{"Tarde"}}@break
+                                                                                @case($turnos['matutino']){{"Matutino"}}@break
+                                                                                @case($turnos['vespertino']){{"Vespertino"}}@break
                                                                                 @case($turnos['noturno']){{"Noturno"}}@break
-                                                                                @case($turnos['integral']){{"Integral"}}@break   
+                                                                                @case($turnos['integral']){{"Integral"}}@break
                                                                            @endswitch
                                                     </div>
                                                     <div class="aling-middle datinha">
@@ -230,16 +230,16 @@
                             </table>
                         </div>
                     </li>
-                </ul> 
+                </ul>
             </div>
-            
+
             <div class="row justify-content-between mt-4">
                 <div class="col-md-3">
                     <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
                 </div>
                 <div class="col-md-4">
                     {{-- <button type="button" class="btn botaoVerde my-2 py-1"><span class="px-4">Publicar</span></button> --}}
-                </div>       
+                </div>
             </div>
         </div>
     </div>
@@ -259,7 +259,7 @@
                         <div class="col-md-12 mb-3">
                             <label for="nome-edit" class="form-label">{{__('Name')}}</label>
                             <input type="text" id="nome-edit" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required placeholder="Insira o nome completo do analista">
-                        
+
                             @error('nome')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -277,7 +277,7 @@
                                 <option @if(old('turno') == $turnos['noturno']) selected @endif value="{{$turnos['noturno']}}">Noturno</option>
                                 <option @if(old('turno') == $turnos['integral']) selected @endif value="{{$turnos['integral']}}">Integral</option>
                             </select>
-                        
+
                             @error('turno')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -292,7 +292,7 @@
                                 <option @if(old('grau_acadêmico') == $graus['licenciatura']) selected @endif value="{{$graus['licenciatura']}}">Licenciatura</option>
                                 <option @if(old('grau_acadêmico') == $graus['tecnologo']) selected @endif value="{{$graus['tecnologo']}}">Tecnólogo</option>
                             </select>
-                        
+
                             @error('grau_acadêmico')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -304,7 +304,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="codigo-edit" class="form-label">{{__('Código do curso')}}</label>
                             <input type="text" id="codigo-edit" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-                        
+
                             @error('codigo')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -314,7 +314,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="vagas-edit" class="form-label">{{__('Quantidade de vagas')}}</label>
                             <input type="number" id="vagas-edit" name="quantidade_de_vagas" class="form-control campoDeTexto @error('quantidade_de_vagas') is-invalid @enderror" value="{{old('quantidade_de_vagas')}}" required>
-                        
+
                             @error('quantidade_de_vagas')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -332,12 +332,12 @@
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>
-                            @enderror                                
+                            @enderror
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cor-edit" class="form-label">{{__('Cor do curso')}}</label>
                             <input type="color" class="form-control form-control-color campoDeTexto @error('cor') is-invalid @enderror" value="#000000" id="cor-edit" name="cor" title="Escolha a cor padrão do curso" style="width: 100%;">
-                        
+
                             @error('cor')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -353,7 +353,7 @@
                 </div>
                 <div class="col-md-4" style="text-align: right;">
                     <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-curso-form"><span class="px-4">Salvar</span></button>
-                </div>       
+                </div>
             </div>
         </div>
     </div>
@@ -365,7 +365,7 @@
         <div class="modal-dialog">
             <div class="modal-content modalFundo p-3">
                 <div class="col-md-12 tituloModal">Excluir curso</div>
-    
+
                 <div class="col-md-12 pt-3 pb-2 textoModal">
                     <form id="delete-curso-{{$curso->id}}-form" method="POST" action="{{route('cursos.destroy', ['curso' => $curso])}}">
                         @csrf
@@ -379,7 +379,7 @@
                         </div>
                         <div class="col-md-4" style="text-align: right;">
                             <button type="submit" class="btn botaoVerde my-2 py-1" form="delete-curso-{{$curso->id}}-form" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
-                        </div>       
+                        </div>
                     </div>
                 </div>
             </div>
@@ -428,7 +428,7 @@
 
     function limparValidacao() {
         var textos = document.getElementsByClassName('is-invalid');
-        
+
         for (var i = 0; i < textos.length; i++) {
             textos[i].className = "form-control";
         }

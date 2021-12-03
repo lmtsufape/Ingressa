@@ -36,7 +36,7 @@ class Curso extends Model
 
     public function cotas()
     {
-        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('vagas_ocupadas', 'quantidade_vagas');
+        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('id', 'vagas_ocupadas', 'quantidade_vagas')->orderByPivot('cota_id');
     }
 
     public function getTurno()

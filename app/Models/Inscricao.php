@@ -25,6 +25,7 @@ class Inscricao extends Model
         'protocolo',
         'status',
         'cd_efetivado',
+        'justificativa',
         'nu_etapa',
         'no_campus',
         'co_ies_curso',
@@ -99,6 +100,12 @@ class Inscricao extends Model
     {
         return $this->belongsTo(Cota::class, 'cota_id');
     }
+
+    public function cotaRemanejada()
+    {
+        return $this->belongsTo(Cota::class, 'cota_remanejamento_id');
+    }
+
 
     public function notaMedia()
     {

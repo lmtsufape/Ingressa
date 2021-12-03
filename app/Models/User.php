@@ -80,4 +80,46 @@ class User extends Authenticatable
     {
         return $this->hasOne(Candidato::class, 'user_id');
     }
+
+    public function tipo_analista()
+    {
+        return $this->belongsToMany(TipoAnalista::class, 'tipo_analista_user', 'user_id', 'tipo_analista_id');
+    }
+
+    public static function analistasGeral() 
+    {
+        $analistas = collect();
+        $users = User::where('role', User::ROLE_ENUM['analista'])->get();
+        
+        foreach ($users as $analista) {
+            if ($analista->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['geral'])->get()->count() > 0) {
+                $analistas->push($analista);
+            }
+        }
+
+        return $analistas;
+    }
+
+    public static function analistasHeteroidentificacao()
+    {
+        $heteroidentificacao = collect();
+        $analistas = User::where('role', User::ROLE_ENUM['analista'])->get();
+
+        foreach ($analistas as $analista) {
+            if ($analista->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['heteroidentificacao'])->get()->count() > 0) {
+                $heteroidentificacao->push($analista);
+            }
+        }
+
+        return $heteroidentificacao;
+    }
+
+    public function ehAnalistaGeral() 
+    {
+        if ($this->role == User::ROLE_ENUM['analista']) {
+            return $this->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['heteroidentificacao'])->get()->count()  > 0;
+        }
+
+        return false;
+    }
 }

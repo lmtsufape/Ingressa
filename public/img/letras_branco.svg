@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="76" height="76" viewBox="0 0 76 76">
+  <g id="Grupo_1676" data-name="Grupo 1676" transform="translate(-484 -222)">
+    <g id="Grupo_1675" data-name="Grupo 1675">
+      <g id="Grupo_1674" data-name="Grupo 1674">
+        <g id="Grupo_1673" data-name="Grupo 1673">
+          <g id="Grupo_1671" data-name="Grupo 1671">
+            <g id="Elipse_364" data-name="Elipse 364" transform="translate(484 222)" fill="none" stroke="#fff" stroke-width="3">
+              <circle cx="38" cy="38" r="38" stroke="none"/>
+              <circle cx="38" cy="38" r="36.5" fill="none"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <path id="Icon_metro-books" data-name="Icon metro-books" d="M12.147,8.571H3.939A1.372,1.372,0,0,0,2.571,9.939v30.1A1.372,1.372,0,0,0,3.939,41.4h8.208a1.372,1.372,0,0,0,1.368-1.368V9.939a1.372,1.372,0,0,0-1.368-1.368Zm-1.368,8.208H5.307V14.043h5.472v2.736ZM25.827,8.571H17.619a1.372,1.372,0,0,0-1.368,1.368v30.1A1.372,1.372,0,0,0,17.619,41.4h8.208a1.372,1.372,0,0,0,1.368-1.368V9.939a1.372,1.372,0,0,0-1.368-1.368Zm-1.368,8.208H18.987V14.043h5.472Zm10.819-6.093-7.33,3.693a1.372,1.372,0,0,0-.606,1.837L39.653,40.65a1.372,1.372,0,0,0,1.837.606l7.33-3.693a1.372,1.372,0,0,0,.606-1.837L37.115,11.293a1.372,1.372,0,0,0-1.837-.606Zm6.964,29.348a1.368,1.368,0,1,1-1.368-1.368A1.368,1.368,0,0,1,42.242,40.035Z" transform="translate(495.929 235.013)" fill="#fff"/>
+  </g>
+</svg>

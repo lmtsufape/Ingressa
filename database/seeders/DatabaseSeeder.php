@@ -14,12 +14,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            TipoAnalistaSeeder::class,
             UserSeeder::class,
             CursoSeeder::class,
             SisuSeeder::class,
             ChamadaSeeder::class,
             CandidatoSeeder::class,
             CotaSeeder::class,
+            RemanejamentoSeeder::class,
         ]);
     }
 }
