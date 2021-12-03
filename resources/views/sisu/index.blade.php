@@ -147,9 +147,9 @@
                                     @csrf
                                     <input type="hidden" name="_method" value="PUT">
                                     <div class="form-row">
-                                        <div class="col-md-6 form-group">
+                                        <div class="col-md-12 form-group">
                                             <label class="pb-2" for="edicao"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome da edição:') }}</label>
-                                            <input id="edicao" class="form-control campoDeTexto @error('edicao') is-invalid @enderror" type="text" name="edicao" value="{{old('edicao')!=null ? old('edicao') : $sisu->edicao}}" required autofocus autocomplete="edicao">
+                                            <input id="edicao" class="form-control campoDeTexto @error('edicao') is-invalid @enderror" type="text" name="edicao" value="{{old('edicao')!=null ? old('edicao') : $sisu->edicao}}" required placeholder="Insira o nome da edição" autocomplete="edicao">
 
                                             @error('edicao')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">

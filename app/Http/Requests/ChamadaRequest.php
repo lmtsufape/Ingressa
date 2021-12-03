@@ -25,6 +25,7 @@ class ChamadaRequest extends FormRequest
     public function rules()
     {
         return [
+            'chamada_id'                                    => 'nullable',
             'nome'                                          => 'required|max:100',
             'descricao'                                     => 'required|max:1000',
             'regular'                                       => 'required',

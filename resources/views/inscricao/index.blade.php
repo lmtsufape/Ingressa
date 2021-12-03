@@ -66,9 +66,24 @@
                                             <td>
                                                 @switch($inscricoes[$i]->status)
                                                     @case($situacoes['documentos_requeridos'])
-                                                        <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
-                                                            Enviar documentos
-                                                        </a>
+                                                        @can('dataEnvio', $inscricoes[$i]->chamada)
+                                                            <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
+                                                                Enviar documentos
+                                                            </a>
+                                                        @else 
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <button class="btn btn-primary" disabled>
+                                                                        Enviar documentos
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <small>Fora do periodo de envio</small>
+                                                                </div>
+                                                            </div>
+                                                        @endcan
                                                         @break
                                                     @case($situacoes['documentos_enviados'])
                                                         <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
