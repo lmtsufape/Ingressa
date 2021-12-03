@@ -106,6 +106,7 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $this->authorize('isCandidatoDono', $inscricao);
+        $this->authorize('dataEnvio', $inscricao->chamada);
         $documentos = $this->documentosRequisitados($id);
         return view('inscricao.envio-documentos', compact('inscricao', 'documentos'));
     }

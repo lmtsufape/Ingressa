@@ -19,18 +19,21 @@ class CandidatoController extends Controller
         )->first();
 
         if ($candidato == null){
-            return redirect('primeiroAcesso')
-                ->withErrors( 'Dados Incorretos')
+            return redirect(route('primeiro.acesso'))
+                ->withErrors('Dados Incorretos')
                 ->withInput();
         }
         else{
+            
             $user = User::where('id','=',$candidato->user_id)->first();
+            
             if ($user->primeiro_acesso == true){
+                
                 return view('candidato.acesso_edit', compact('user'));
             }
             else{
-                return redirect('primeiroAcesso')
-                    ->withErrors( 'Login já cadastrado')
+                return redirect(route('primeiro.acesso'))
+                    ->withErrors('Login já cadastrado')
                     ->withInput();
             }
 
