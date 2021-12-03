@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DataChamadaRequest;
 use App\Models\DataChamada;
+use App\Models\Chamada;
 use Illuminate\Http\Request;
 
 class DataChamadaController extends Controller
@@ -38,6 +39,12 @@ class DataChamadaController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $request->validated();
+
+        $resultado = $this->checar_tipo($request);
+        if ($resultado) {
+            return $resultado;
+        }
+
         $data = new DataChamada();
         $data->setAtributes($request);
 
@@ -101,5 +108,15 @@ class DataChamadaController extends Controller
         $dataChamada->delete();
 
         return redirect()->back()->with(['success_data' => 'Data deletada com sucesso.']);
+    }
+
+    private function checar_tipo(Request $request) 
+    {
+        $chamada = Chamada::find($request->chamada);
+        $data = $chamada->datasChamada()->where('tipo', $request->tipo)->first();
+        if ($data == null) {
+            return false;
+        }
+        return redirect()->back()->withErrors(['tipo' => 'Esse tipo de data já existe.'])->withInput($request->all());
     }
 }

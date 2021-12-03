@@ -192,6 +192,7 @@
                 <div class="col-md-12 pt-3 pb-2 textoModal">
                     <form id="criar-data-form" method="POST" action="{{route('datas.store')}}">
                         @csrf
+                        <input type="hidden" name="data_id" value="-1">
                         <input type="hidden" name="chamada" value="{{$chamada->id}}">
                         <div class="row">
                             <div class="col-sm-12 mb-3">
@@ -295,6 +296,7 @@
                     <div class="col-md-12 pt-3 pb-2 textoModal">
                         <form id="editar-data-form-{{$data->id}}" method="POST" action="{{route('datas.update', ['data' => $data])}}">
                             @csrf
+                            <input type="hidden" name="data_id" value="{{$data->id}}">
                             <input type="hidden" name="_method" value="PUT">
                             <div class="row">
                                 <div class="col-sm-12 mb-3">
@@ -574,3 +576,19 @@
     </div>
 </x-app-layout>
 <script src="{{ asset('js/checkbox_marcar_todos.js') }}" defer></script>
+
+@if(old('data_id') == -1) 
+<script>
+    $(document).ready(function(){
+        $('#modalStaticCriarData_{{old('chamada')}}').modal('show');
+    });
+</script>
+@endif
+
+@if(old('data_id') > 0)
+<script>
+    $(document).ready(function(){
+        $('#modalStaticEditarData_{{old('data_id')}}').modal('show');
+    });
+</script>
+@endif
