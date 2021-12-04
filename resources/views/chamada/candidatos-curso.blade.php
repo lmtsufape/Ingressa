@@ -90,8 +90,28 @@
                             @endforeach
                         </tbody>
                 </table>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-12">
+                        <strong>Legenda:</strong>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group">
+                            <li class="list-group-item"><img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato concluído"> Cadastro do candidato concluído</li>
+                            <li class="list-group-item"><img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato não concluído"> Cadastro do candidato não concluído</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group">
+                            <li class="list-group-item"><img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos"> Documentos aceitos</li>
+                            <li class="list-group-item"><img src="{{asset('img/icons-document-yellow.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados"> Documentos enviados pelos candidatos</li>
+                            <li class="list-group-item"><img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos requeridos"> Documentos requeridos</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+            
         </div>
+        
     </div>
 </x-app-layout>
 
