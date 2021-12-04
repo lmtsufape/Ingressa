@@ -9,7 +9,7 @@
                           alt="" width="40" class="img-flex">
                       <span class="tituloTabelas ps-1">Edições</span>
                   </div>
-                  <a data-bs-toggle="modal" data-bs-target="#adicionarEdicao"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
+                  <a data-bs-toggle="modal" data-bs-target="#adicionarEdicao" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
                 </div>
               </div>
             </div>

@@ -426,14 +426,14 @@
                                         <label for="curso">{{__('Selecione o(s) curso(s)')}}</label>
                                         <div class="col-sm-12">
                                             <div class="form-check">
-                                                <input type="checkbox" id="chk_marcar_desmarcar_todos_cursos" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_curso')">
+                                                <input type="checkbox" class="form-check-input form-check-cursos" id="chk_marcar_desmarcar_todos_cursos" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_curso')">
                                                 <label for="btn_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
                                             </div>
                                         </div>
                                         @foreach ($cursos as $curso)
                                             <div class="col-sm-12">
                                                 <div class="form-check">
-                                                    <input class="checkbox_curso" type="checkbox" name="cursos[]" value="{{$curso->id}}" id="curso_{{$curso->id}}">
+                                                    <input class="checkbox_curso form-check-input form-check-cursos" type="checkbox" name="cursos[]" value="{{$curso->id}}" id="curso_{{$curso->id}}">
                                                     <label class="form-check-label" for="curso_{{$curso->id}}">
                                                         {{$curso->nome}}
                                                     </label>
@@ -455,14 +455,14 @@
                                             <label for="cota">{{__('Selecione a(s) cota(s)')}}</label>
                                             <div class="col-sm-12 form-group">
                                                 <div class="form-check">
-                                                    <input type="checkbox" id="chk_marcar_desmarcar_todas_cotas" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_cota')">
+                                                    <input type="checkbox" class="form-check-input form-check-cursos" id="chk_marcar_desmarcar_todas_cotas" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_cota')">
                                                     <label for="btn_marcar_desmarcar_todas_cotas"><b>Selecionar todas</b></label>
                                                 </div>
                                             </div>
                                             @foreach ($cotas as $cota)
                                                 <div class="col-sm-12 form-group">
                                                     <div class="form-check">
-                                                        <input class="checkbox_cota" type="checkbox" name="cotas[]" value="{{$cota->id}}" id="cota_{{$cota->id}}">
+                                                        <input class="checkbox_cota form-check-input form-check-cursos" type="checkbox" name="cotas[]" value="{{$cota->id}}" id="cota_{{$cota->id}}">
                                                         <label class="form-check-label" for="cota_{{$cota->id}}">
                                                             {{$cota->nome}}
                                                         </label>

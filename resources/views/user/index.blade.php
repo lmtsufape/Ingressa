@@ -121,7 +121,7 @@
                         <input type="hidden" class="checkbox_tipo @error('tipos_analista') is-invalid @enderror">
                         @foreach ($tipos as $tipo)
                             <div class="form-check">
-                                <input class="checkbox_tipo" type="checkbox" name="tipos_analista[]" value="{{$tipo->id}}" id="tipo_{{$tipo->id}}">
+                                <input class="checkbox_tipo form-check-input form-check-cursos" type="checkbox" name="tipos_analista[]" value="{{$tipo->id}}" id="tipo_{{$tipo->id}}">
                                 <label class="form-check-label" for="tipo_{{$tipo->id}}">
                                     @if($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['geral'])
                                         Geral
@@ -186,7 +186,7 @@
                             <input type="hidden" class="checkbox_tipo @error('tipos_analista_edit') is-invalid @enderror">
                             @foreach ($tipos as $tipo)
                                 <div class="form-check">
-                                    <input class="checkbox_tipo" type="checkbox" name="tipos_analista_edit[]" value="{{$tipo->id}}" id="tipo_edit_{{$tipo->id}}">
+                                    <input class="form-check-input form-check-cursos" type="checkbox" name="tipos_analista_edit[]" value="{{$tipo->id}}" id="tipo_edit_{{$tipo->id}}">
                                     <label class="form-check-label" for="tipo_{{$tipo->id}}">
                                         @if($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['geral'])
                                             Geral
