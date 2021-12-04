@@ -535,20 +535,34 @@ class ChamadaController extends Controller
         return view('chamada.candidatos-chamada', compact('chamada', 'cursos', 'concluidos', 'chamados'))->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
-    public function candidatosCurso($sisu_id, $chamada_id, $curso_id)
+    public function candidatosCurso(Request $request, $sisu_id, $chamada_id, $curso_id)
     {
         $this->authorize('isAdminOrAnalista', User::class);
         $chamada = Chamada::find($chamada_id);
         $curso = Curso::find($curso_id);
-
+        $sisu = Sisu::find($sisu_id);
         $turno = $curso->getTurno();
-        $candidatos = Inscricao::select('inscricaos.*')->
+        $query = Inscricao::select('inscricaos.*')->
         where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
             ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-            ->join('users','users.id','=','candidatos.user_id')
-            ->orderBy('name')
-            ->get();
-        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno'));
+            ->join('users','users.id','=','candidatos.user_id');
+
+        switch ($request->ordem) {
+            case 'name':
+                $candidatos = $query->orderBy('users.name')->get();
+                break;
+            case 'cota':
+                $candidatos = $query->orderBy('inscricaos.no_modalidade_concorrencia')->get();
+                break;
+            case 'status':
+                $candidatos = $query->orderBy('inscricaos.status')->get();
+                break;
+            default:
+                $candidatos = $query->orderBy('name')->get();
+                break;
+        }
+        
+        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno', 'sisu'));
     }
 
     public function aprovarCandidatosChamada($sisu_id, $chamada_id)

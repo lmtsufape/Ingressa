@@ -44,9 +44,21 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Pessoa</th>
-                                <th scope="col">Cota</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">
+                                    Pessoa<a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}?ordem=name" style="cursor: pointer; text-decoration: none;">
+                                        <img class="icon_order_table" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}" alt="Ordenar por nome" style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
+                                    </a>
+                                </th>
+                                <th scope="col">
+                                    Cota<a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}?ordem=cota" style="cursor: pointer; text-decoration: none;">
+                                        <img class="icon_order_table" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}" alt="Ordenar por nome" style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
+                                    </a>
+                                </th>
+                                <th scope="col">
+                                    Status<a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}?ordem=status" style="cursor: pointer; text-decoration: none;">
+                                        <img class="icon_order_table" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}" alt="Ordenar por nome" style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
+                                    </a>
+                                </th>
                                 <th scope="col" class="text-center">Ação</th>
                             </tr>
                         </thead>
