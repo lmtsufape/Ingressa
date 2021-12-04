@@ -10,6 +10,8 @@ use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\DataChamadaController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ListagemController;
+use App\Models\Candidato;
+
 include "fortify.php";
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +79,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/inscricaos/{inscricao_id}/ver-documento/{documento_nome}', [InscricaoController::class, 'showDocumento'])->name('inscricao.arquivo');
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/inscricao/{inscricao_id}', [InscricaoController::class, 'showAnalisarDocumentos'])
     ->name('inscricao.show.analisar.documentos');
+    Route::post('/enviar/email/candidato', [CandidatoController::class, 'enviarEmail'])->name('enviar.email.candidato');
 
     Route::get('/inscricao/get-documento', [InscricaoController::class, 'inscricaoDocumentoAjax'])->name('inscricao.documento.ajax');
     Route::get('/inscricao/get-prox-documento', [InscricaoController::class, 'inscricaoProxDocumentoAjax'])->name('inscricao.documento.proximo');

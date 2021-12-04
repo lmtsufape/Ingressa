@@ -496,3 +496,19 @@ body, html{
     border-radius: 50px;
     transform: rotate(90deg);
 }
+
+.icon-email-candidato {
+    background-color: var(--terciaria);
+    padding-right: 10px;
+    padding-left: 10px;
+    border-radius: 00.5rem;
+    height: 35px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: 0.3s;
+}
+
+.icon-email-candidato:hover {
+    transition: 0.3s;
+    background-color: var(--secundaria);
+}

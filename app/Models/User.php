@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Inscricao;
 
 class User extends Authenticatable
 {
@@ -121,5 +122,12 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public static function gerar_user_inscricao(Inscricao $inscricao) 
+    {
+        $user = $inscricao->candidato->user;
+        $user->email = $inscricao->ds_email;
+        return $user;
     }
 }
