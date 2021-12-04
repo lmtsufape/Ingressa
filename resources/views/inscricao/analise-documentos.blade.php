@@ -1,9 +1,19 @@
 <x-app-layout>
     <div class="fundo2 px-5">
-        <div class="col-md-11 px-0" style="text-align: right">
-            <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}"> <span class="px-4">Voltar</span></a>
-        </div>
         <div class="container">
+            <div class="row">
+                <div class="col-sm-7"></div>
+                <div class="col-sm-5">
+                    <div class="row">
+                        <div class="col-md-10" style="text-align: right">
+                            <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}"> <span class="px-4">Voltar</span></a>
+                        </div>
+                        <div class="col-md-2" style="text-align: right">
+                            <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"><img class="icon-email-candidato" src="{{asset('img/Icon zocial-email-white.svg')}}" alt="Enviar e-mail" title="Enviar e-mail"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-between">
                 <div class="col-md-7">
                     @if(session('success'))
@@ -362,6 +372,53 @@
       </div>
 
     <!--CORPO-->
+
+    <div class="modal fade" id="enviar-email-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modalFundo p-3">
+                <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Enviar e-mail</div>
+                <div class="pt-3 pb-2 textoModal">
+                    <form method="post" id="enviar-email-candidato" action="{{route('enviar.email.candidato')}}">
+                        @csrf
+                        <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
+                        <input type="hidden" name="curso_id" value="{{$inscricao->curso->id}}">
+                        <div class="row">
+                            <div class="col-md-12 textoModal">
+                                <label class="pb-2" for="conteúdo">Assunto</label>
+                                <input class="form-control campoDeTexto @error('assunto') is-invalid @enderror" type="text" name="assunto" id="assunto" placeholder="Digite o assunto">
+                                
+                                @error('assunto')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 pt-3 textoModal">
+                                <label class="pb-2" for="conteúdo">Conteúdo</label>
+                                <textarea id="conteúdo" class="form-control campoDeTexto @error('conteúdo') is-invalid @enderror" type="text" name="conteúdo" autofocus placeholder="Insira o conteúdo do e-mail aqui...">{{old('conteúdo')}}</textarea>
+                                
+                                @error('conteúdo')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
+                    </div>
+                    <div id ="aprovarCandidatoButtonForm" class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="enviar-email-candidato"><span class="px-4" style="font-weight: bolder;" >Enviar</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="aprovar-recusar-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">

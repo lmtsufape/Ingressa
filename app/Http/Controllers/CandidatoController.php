@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidato;
 use App\Models\User;
+use App\Models\Inscricao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\EmailCandidatoNotification;
 
 class CandidatoController extends Controller
 {
@@ -46,8 +49,24 @@ class CandidatoController extends Controller
         return view('candidato.verificacao');
     }
 
-    public static function editarAcesso(User $user){
-
+    public static function editarAcesso(User $user)
+    {
         return view('candidato.acesso_edit', ['user' => $user]);
     }
+
+    public function enviarEmail(Request $request) 
+    {
+        $inscricao = Inscricao::find($request->inscricao_id);
+        
+        $user = $inscricao->candidato->user;
+        if ($user->email != null) {
+            Notification::send($user, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));
+        }
+
+        $user_inscricao = User::gerar_user_inscricao($inscricao);
+        Notification::send($user_inscricao, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));
+
+        return redirect(route('inscricao.show.analisar.documentos', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->candidato->id]))->with(['success' => 'E-mail enviado com sucesso!']);
+    }
+
 }
