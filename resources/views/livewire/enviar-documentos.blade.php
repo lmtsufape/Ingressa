@@ -1,0 +1,416 @@
+<div>
+    <div clss="mb-5">
+        <form id="enviar-documentos"
+            wire:submit.prevent="submit"
+            enctype="multipart/form-data">
+            <ul class="timeline">
+                <li class="px-1 align-middle">
+                    <div class="col-md-12">
+                        <div class="tituloEnvio"> Documentação básica </div>
+                        <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing and
+                            typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+                            ever
+                            since the 1500s, when an unknown printer took a galley of type and scrambled it
+                            to
+                            make a type specimen book. </div>
+                    </div>
+                    @if ($documentos->contains('declaracao_veracidade') && $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docDeclaracaoVeracidade">
+                                <input wire:model="arquivos.declaracao_veracidade"
+                                    id="docDeclaracaoVeracidade"
+                                    type="file"
+                                    class="d-none">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
+                                    Declaração de Veracidade;
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    @endif
+                    @if ($documentos->contains('certificado_conclusao') && $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docConclusaoMedio">
+                                <input wire:model="arquivos.certificado_conclusao"
+                                    id="docConclusaoMedio"
+                                    type="file"
+                                    class="d-none">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.certificado_conclusao') is-invalid text-danger @enderror">
+                                    Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou
+                                    Certificação de Ensino Médio através do ENEM ou documento equivalente (pode estar junto com
+                                    o Histórico Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos
+                                    dois campos);
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.certificado_conclusao'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    @endif
+                    @if($documentos->contains('historico') && $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docHistorico">
+                                <input wire:model="arquivos.historico"
+                                    type="file"
+                                    class="d-none"
+                                    id="docHistorico">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
+                                    Histórico Escolar do Ensino Médio ou Equivalente (pode estar junto com
+                                    o Certificado de Conclusão do Ensino Médio (escanear frente e verso da Ficha 19), neste caso anexar
+                                    o arquivo nos dois campos);
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                <label class="form-check-label subtexto3" for="checkHistorico">
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    primeira semana de aula.
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+                    @if($documentos->contains('nascimento_ou_casamento') &&
+                        $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docNascimento">
+                                <input wire:model="arquivos.nascimento_ou_casamento"
+                                    type="file"
+                                    class="d-none"
+                                    id="docNascimento">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
+                                    Certidão de Nascimento ou Certidão de Casamento;
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="declaracoes.nascimento_casamento " value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_casamento">
+                                <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    primeira semana de aula.
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+                    @if($documentos->contains('rg') && $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docRG">
+                                <input wire:model="arquivos.rg"
+                                    type="file"
+                                    class="d-none"
+                                    id="docRG">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.rg') is-invalid text-danger @enderror">
+                                    Carteira de Identidade válida e com foto recente (RG), frente e verso. Caso tenha perdido ou sido
+                                    roubado, anexar um Boletim de Ocorrência e algum outro documento com foto. A Carteira
+                                    Nacional de Habilitação pode ser utilizado como documento com foto, mas não será aceita em
+                                    substituição ao RG e ao CPF;
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.rg'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    @endif
+                    @if($documentos->contains('cpf') && $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docCPF">
+                                <input wire:model="arquivos.cpf"
+                                    type="file"
+                                    class="d-none"
+                                    id="docCPF">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.cpf') is-invalid text-danger @enderror">
+                                    Cadastro de Pessoa Física (CPF). Caso conste o número do CPF na identidade (RG),
+                                    anexar cópia da identidade, frente e verso. Caso tenha perdido ou sido
+                                    roubado, emitir Comprovante de Situação Cadastral no CPF, através do
+                                </span>
+                            </label>
+                            <a href="https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp" target="_blank" rel="noopener noreferrer">site da Receita Federal</a>;
+                            <div class="invalid-feedback" style="display: block">@error('arquivos.cpf'){{$message}}@enderror</div>
+                        </div>
+                    @endif
+                    @if($documentos->contains('quitacao_eleitoral') &&
+                        $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docEleitoral">
+                                <input wire:model="arquivos.quitacao_eleitoral"
+                                    type="file"
+                                    class="d-none"
+                                    id="docEleitoral">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
+                                    Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
+                                    quitação eleitoral.</span>
+                            </label>
+                            <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">Essa certidão poderá ser emitida no
+                            </span>
+                            <a href="https://www.tse.jus.br/eleitor/certidoes/certidao-de-quitacao-eleitoral" target="_blank" rel="noopener noreferrer">
+                                site do Tribunal Superior Eleitoral.
+                            </a>
+                            <label for="docEleitoral">
+                                <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
+                                    Caso a certidão de quitação eleitoral não possa ser emitida em função de
+                                    pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
+                                    tela) do relatório de quitação de débitos do eleitor (quitação de multas,
+                                    disponível no
+                                </span>
+                            </label>
+                            <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>
+                            <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
+                                );
+                            </span>
+                            <div class="invalid-feedback" style="display: block">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    primeira semana de aula.
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+                    @if($documentos->contains('quitacao_militar') &&
+                        $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docMilitar">
+                                <input wire:model="arquivos.quitacao_militar"
+                                    type="file"
+                                    class="d-none"
+                                    id="docMilitar">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.quitacao_militar') is-invalid text-danger @enderror">
+                                    Comprovante de quitação com o Serviço Militar, para candidatos
+                                    do sexo masculino que tenham de 18 a 45 anos - Frente e verso. Para os militares, apresentar cópia frente e verso da carteira de identidade
+                                    militar;
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
+                            </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    primeira semana de aula.
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+                    @if($documentos->contains('foto') && $inscricao->isDocumentosRequeridos())
+                        <div class="mt-2">
+                            <label for="docFoto">
+                                <input wire:model="arquivos.foto"
+                                    type="file"
+                                    class="d-none"
+                                    id="docFoto">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.foto') is-invalid text-danger @enderror">Uma foto 3x4 atual.
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.foto'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    @endif
+                </li>
+                @if ($documentos->contains('declaracao_cotista') && $inscricao->isDocumentosRequeridos())
+                    <li class="mt-4 px-1 align-middle">
+                        <div class="col-md-12">
+                            <div class="tituloEnvio"> Candidato inscrito em cota</div>
+                            <div class="subtexto2 my-1">
+                                Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                                text ever
+                                since the 1500s, when an unknown printer took a galley of type and scrambled
+                                it to
+                                make a type specimen book.
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="cotista">
+                                <input wire:model="arquivos.declaracao_cotista"
+                                    type="file"
+                                    class="d-none"
+                                    id="cotista">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.declaracao_cotista') is-invalid text-danger @enderror">
+                                    Autodeclaração como candidato participante de reserva de vaga
+                                    prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
+                                    devidamente assinada e preenchida, conforme a modalidade de
+                                    concorrência;
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    </li>
+                @endif
+                @if ($documentos->contains('heteroidentificacao') && $inscricao->isDocumentosRequeridos())
+                    <li class="mt-4 px-1 align-middle">
+                        <div class="col-md-12">
+                            <div class="tituloEnvio"> Comprovação da condição de beneficiário da reserva de
+                                vaga para candidato autodeclarado negro (preto ou
+                                pardo) </div>
+                            <div class="subtexto2 my-1">
+                                Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                                text ever
+                                since the 1500s, when an unknown printer took a galley of type and scrambled
+                                it to
+                                make a type specimen book.
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="docHeteroidentificacao">
+                                <input wire:model="arquivos.heteroidentificacao"
+                                    type="file"
+                                    class="d-none"
+                                    id="docHeteroidentificacao">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
+                                    Vídeo individual e recente para procedimento de heteroidentificação.
+                                    De acordo com as especificações e o roteiro descritos no edital do
+                                    processo de seleção SISU 2022 da UFAPE;</span>
+                                <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                        <div class="mt-2">
+                            <label for="docFotografia">
+                                <input wire:model="arquivos.fotografia"
+                                    type="file"
+                                    class="d-none"
+                                    id="docFotografia">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
+                                    Fotografia individual e recente para procedimento de
+                                    heteroidentificação. Conforme especificado no edital do processo de
+                                    seleção SISU 2022 da UFAPE;</span>
+                                <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    </li>
+                @endif
+                @if ($documentos->contains('comprovante_renda') && $inscricao->isDocumentosRequeridos())
+                    <li class="mt-4 px-1 align-middle">
+                        <div class="col-md-12">
+                            <div class="tituloEnvio">Comprovação da renda familiar bruta mensal per capita </div>
+                            <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing
+                                and
+                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                                text ever
+                                since the 1500s, when an unknown printer took a galley of type and scrambled
+                                it to
+                                make a type specimen book. </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="cotaRenda">
+                                <input wire:model="arquivos.comprovante_renda"
+                                    type="file"
+                                    class="d-none"
+                                    id="cotaRenda">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
+                                    Comprovante de renda, ou de que não possui renda, de cada membro
+                                    do grupo familiar, seja maior ou menor de idade
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.comprovante_renda'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    </li>
+                @endif
+                @if ($documentos->contains('rani') && $inscricao->isDocumentosRequeridos())
+                    <li class="mt-4 px-1 align-middle">
+                        <div class="col-md-12">
+                            <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
+                                vaga para candidato autodeclarado indígena</div>
+                            <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing
+                                and
+                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                                text ever
+                                since the 1500s, when an unknown printer took a galley of type and scrambled
+                                it to
+                                make a type specimen book. </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="rani">
+                                <input wire:model="arquivos.rani"
+                                    type="file"
+                                    class="d-none"
+                                    id="rani">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
+                                    Registro Administrativo de Nascimento de Indígena (RANI)
+                                    ou declaração de vínculo com comunidade indígena brasileira à qual
+                                    pertença emitida por liderança indígena reconhecida ou por ancião
+                                    indígena reconhecido ou por personalidade indígena de reputação
+                                    pública reconhecida ou outro documento emitido por órgãos
+                                    públicos que contenham informações pertinentes à sua condição de
+                                    indígena;
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.rani'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    </li>
+                @endif
+                @if ($documentos->contains('laudo_medico') && $inscricao->isDocumentosRequeridos())
+                    <li class="mt-4 px-1 align-middle">
+                        <div class="col-md-12">
+                            <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
+                                vaga para pessoas com deficiência
+                            </div>
+                            <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing
+                                and
+                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                                text ever
+                                since the 1500s, when an unknown printer took a galley of type and scrambled
+                                it to
+                                make a type specimen book. </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="cotaPCD">
+                                <input wire:model="arquivos.laudo_medico"
+                                    type="file"
+                                    class="d-none"
+                                    id="cotaPCD">
+                                <img src="{{ asset('img/Icon awesome-file.svg') }}"
+                                    width="15">
+                                <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
+                                    Laudo Médico e exames de comprovação da condição de
+                                    beneficiário da reserva de vaga para pessoas com deficiência
+                                </span>
+                                <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
+                            </label>
+                        </div>
+                    </li>
+                @endif
+            </ul>
+        </form>
+    </div>
+    <div class="row justify-content-between mt-5">
+        <div class="col-md-3">
+            <a href="{{url()->previous()}}"
+                class="btn botao my-2 py-1">
+                <span class="px-4">Voltar</span>
+            </a>
+        </div>
+        @if ($inscricao->isDocumentosRequeridos())
+            <div class="col-md-3">
+                <button type="submit"
+                    form="enviar-documentos"
+                    class="btn botaoVerde my-2 py-1">
+                    <span class="px-4">Enviar</span>
+                </button>
+            </div>
+        @endif
+    </div>
+</div>

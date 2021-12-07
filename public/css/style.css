@@ -512,3 +512,64 @@ body, html{
     transition: 0.3s;
     background-color: var(--secundaria);
 }
+
+*TELA DE ENVIO DE DOCUMENTOS*/
+
+.cabecalhoCurso{
+    background-color: var(--veterinaria); /*COR DO CURSO*/
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.tituloEnvio{
+    color: black;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.subtexto{
+    color: var(--textcolor);
+    font-size: 14px;
+    text-align: justify;
+}
+
+ul.timeline{
+    list-style-type: none;
+    position: relative;
+}
+
+ul.timeline:before{
+    content: ' ';
+    background: #d4d9df;
+    display: inline-block;
+    position: absolute;
+    left: 12px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+}
+
+ul.timeline > li:before{
+    content: ' ';
+    background: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid var(--secundaria);
+    left: 0px;
+    width: 25px;
+    height: 25px;
+    z-index: 400;
+}
+
+.subtexto2{
+    color: var(--textcolor2);
+    font-size: 13px;
+    text-align: justify;
+}
+
+.subtexto3{
+    color: var(--textcolor);
+    font-size: 15px;
+    text-align: justify;
+}
