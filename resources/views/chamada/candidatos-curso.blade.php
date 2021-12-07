@@ -85,7 +85,7 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="align-middle text-center"><a class="btn btn-success btn-cota" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Avaliar</a></td>
+                                    <td class="align-middle text-center"><a class="btn botaoVerde" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}">Avaliar</a></td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -552,7 +552,7 @@ class ChamadaController extends Controller
                 $candidatos = $query->orderBy('users.name')->get();
                 break;
             case 'cota':
-                $candidatos = $query->orderBy('inscricaos.no_modalidade_concorrencia')->get();
+                $candidatos = $query->orderBy('inscricaos.cota_id')->get();
                 break;
             case 'status':
                 $candidatos = $query->orderBy('inscricaos.status')->get();

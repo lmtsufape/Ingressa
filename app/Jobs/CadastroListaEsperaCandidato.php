@@ -69,7 +69,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_cpf_inscrito' => $data[10],
                     'dt_nascimento' => $data[11],
 
-                    'cd_efetivado' => false,
+                    //'cd_efetivado' => false,
                     'tp_sexo' => $data[12],
                     'nu_rg' => $data[13],
                     'no_mae' => $data[14],
@@ -269,7 +269,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'ds_formacao' => $inscrito['ds_formacao'],
                     'qt_vagas_concorrencia' => $inscrito['qt_vagas_concorrencia'],
                     'co_inscricao_enem' => $inscrito['co_inscricao_enem'],
-                    'cd_efetivado' => false,
+                    //'cd_efetivado' => false,
                     'no_social' => $inscrito['no_social'],
                     'tp_sexo' => $inscrito['tp_sexo'],
                     'nu_rg' => $inscrito['nu_rg'],

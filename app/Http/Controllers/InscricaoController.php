@@ -324,6 +324,14 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($request->inscricaoID);
 
+        if($request->justificativa == null && $inscricao->justificativa == $request->justificativa){
+            $message = "Nenhuma justificativa adicionada. ";
+        }else if($request->justificativa != null){
+            $message = "Justificativa adicionada. ";
+        }else if(is_null($request->justificativa) && $inscricao->justificativa != null ){
+            $message = "Justificativa antiga deletada. ";
+        }
+
         if($request->justificativa != null){
 
             $request->validate([
@@ -343,17 +351,17 @@ class InscricaoController extends Controller
         }
         $curso = Curso::find($request->curso);
         $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
-        if($inscricao->cd_efetivado==true){
+        if($inscricao->cd_efetivado == true && $request->efetivar == 'false'){
             $cota_curso->vagas_ocupadas -= 1;
             $inscricao->cd_efetivado = false;
-            $message = "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
-        }else {
+            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
+        }else if($inscricao->cd_efetivado == false && $request->efetivar == 'true') {
             if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos']){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
             }
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = true;
-            $message = "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
+            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
         }
         $inscricao->update();
         $cota_curso->update();
