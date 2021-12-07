@@ -71,7 +71,7 @@ class EnviarDocumentos extends Component
                     }
                     break;
                 case 'quitacao_eleitoral':
-                    $rules['arquivos.'.$documento] = 'required_without_all:declaracoes.quitacao_eleitoral,votoFacultativo';
+                    $rules['arquivos.'.$documento] = 'required_without_all:declaracoes.quitacao_eleitoral,declaracoes.votoFacultativo';
                     break;
             default:
                     break;

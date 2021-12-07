@@ -90,7 +90,7 @@
                                 <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             </label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.nascimento_casamento " value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_casamento">
+                                <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
                                 <label class="form-check-label subtexto3" for="checkNascimento_casamento">
                                     Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
                                     primeira semana de aula.
