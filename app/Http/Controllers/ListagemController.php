@@ -129,6 +129,9 @@ class ListagemController extends Controller
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('nome')->get();
         $inscricoes = collect();
+        $ordenacao = $this->get_ordenacao($request);
+        $ordem = $this->get_ordem($request);
+
         foreach ($cursos as $i => $curso) {
             $inscricoes_curso = collect();
             if($curso->turno == Curso::TURNO_ENUM['matutino']){
@@ -148,7 +151,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
 
@@ -156,7 +159,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla3);
 
@@ -165,7 +168,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla4);
 
@@ -179,7 +182,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     if($inscritosCota->count() > 0 ){
                         $inscricoes_curso->push($inscritosCota);
@@ -225,6 +228,9 @@ class ListagemController extends Controller
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('nome')->get();
         $inscricoes = collect();
+        $ordenacao = $this->get_ordenacao($request);
+        $ordem = $this->get_ordem($request);
+
         foreach ($cursos as $i => $curso) {
             $inscricoes_curso = collect();
             if($curso->turno == Curso::TURNO_ENUM['matutino']){
@@ -244,7 +250,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
 
@@ -252,7 +258,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla3);
 
@@ -261,7 +267,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla4);
 
@@ -275,7 +281,7 @@ class ListagemController extends Controller
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy('name')
+                        ->orderBy($ordenacao, $ordem)
                         ->get();
                     if($inscritosCota->count() > 0 ){
                         $inscricoes_curso->push($inscritosCota);
@@ -292,5 +298,45 @@ class ListagemController extends Controller
         $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
+    }
+
+    /**
+     * Pega a string de ordenação garantindo que a coluna certa de ordenação irá ser passada.
+     *
+     * @param  \App\Http\Requests\Request  $request
+     * @return string $coluna
+     */
+    private function get_ordenacao(Request $request) 
+    {   
+        $coluna = 'name';
+        switch ($request->ordenacao) {
+            case 'nome':
+                $coluna = 'name';
+                break;
+            case 'nota':
+                $coluna = 'inscricaos.nu_nota_candidato';
+                break;
+        }
+        return $coluna;
+    }
+
+    /**
+     * Pega a string de ordem da coluna : ASC ou DESC.
+     *
+     * @param  \App\Http\Requests\Request  $request
+     * @return string $ordem
+     */
+    private function get_ordem(Request $request)
+    {
+        $ordem = 'ASC';
+        switch ($request->ordenacao) {
+            case 'nome':
+                $ordem = 'ASC';
+                break;
+            case 'nota':
+                $ordem = 'DESC';
+                break;
+        }
+        return $ordem;
     }
 }
