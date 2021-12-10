@@ -36,6 +36,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @enderror
+            @can('isAdmin', \App\Models\User::class)
+                <div class="row">
+                    <div class="col-md-12">
+                        @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
+                            <div class="alert alert-warning fade show" role="alert">
+                                <strong>Atenção!</strong> O Candidato teve o cadastro invalidado! Confirme se o candidato realmente deve ter o cadastro invalidado.<br>
+                                <strong>Justificativa:</strong> {{$inscricao->justificativa}}<br>
+                                <form method="post" id="confirmar-invalidacao-candidato" action="{{route('inscricao.confirmar.invalidacao',['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
+                                    @csrf
+                                    <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
+                                    <input type="hidden" name="curso" value="{{$inscricao->curso->id}}">
+                                    <input type="hidden" name="confirmarInvalidacao" id="confirmarInvalidacao" value="">
+                                    <div class="row justify-content-between mt-4" style="text-align: center">
+                                        <div id ="negarInvalidacao" class="col-md-6 form-group">
+                                            <button type="submit" class="btn botaoVerde my-2 py-1" onclick="atualizarInputConfirmarInvalidacao(false)"><span class="px-4" style="font-weight: bolder;" >Desfazer invalidação</span></button>
+                                        </div>
+                                        <div id ="confirmarInvalidacao" class="col-md-6 form-group">
+                                            <button type="submit" class="btn botaoVerde my-2 py-1" style="background-color: #FC605F;" onclick="atualizarInputConfirmarInvalidacao(true)"><span class="px-4" style="font-weight: bolder;" >Confirmar invalidação</span></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endcan
             <div class="row justify-content-between">
                 <div class="col-md-7">
                     @if(session('nomeDoc'))
@@ -363,8 +389,8 @@
                                 </div>
                             </div>
                         @endforeach
-                        <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)" ><span class="px-4" >@if($inscricao->cd_efetivado != true)Validar Cadastro @else Cadastro Validado @endif</button>
-                        <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4" >@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == true)Invalidar Cadastro @else  Cadastro Invalidado @endif</button>
+                        <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)" ><span class="px-4" >@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</button>
+                        <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4" >@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</button>
                     </div>
                 </div>
             </div>
@@ -675,6 +701,10 @@
         }else if($documento == 'ficha'){
             return "Ficha Geral";
         }
+    }
+
+    function atualizarInputConfirmarInvalidacao(valor){
+        document.getElementById('confirmarInvalidacao').value = valor;
     }
 
 </script>

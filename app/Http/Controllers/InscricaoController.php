@@ -232,6 +232,7 @@ class InscricaoController extends Controller
         }
 
         $documentosAceitos = true;
+        $necessitaAvaliar = false;
         foreach($inscricao->arquivos as $arqui){
             if($arqui->avaliacao != null){
                 if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
@@ -240,13 +241,18 @@ class InscricaoController extends Controller
                 }
             }else{
                 $documentosAceitos = false;
+                $necessitaAvaliar = true;
                 break;
             }
         }
         if($documentosAceitos){
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
         }else{
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_requeridos'];
+            if($necessitaAvaliar == true && $documentosAceitos == false){
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+            }else{
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+            }
         }
         $inscricao->update();
 
@@ -309,9 +315,9 @@ class InscricaoController extends Controller
             }
         }
         if($documentosAceitos){
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
         }else{
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_requeridos'];
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_pendentes'];
         }
         $inscricao->update();
 
@@ -351,16 +357,19 @@ class InscricaoController extends Controller
         }
         $curso = Curso::find($request->curso);
         $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
-        if($inscricao->cd_efetivado == true && $request->efetivar == 'false'){
-            $cota_curso->vagas_ocupadas -= 1;
-            $inscricao->cd_efetivado = false;
-            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
-        }else if($inscricao->cd_efetivado == false && $request->efetivar == 'true') {
-            if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos']){
-                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
+        if(($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] && $request->efetivar == 'false') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'false')){
+            if($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']){
+                $cota_curso->vagas_ocupadas -= 1;
             }
+            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'];
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
+        }else if(($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'] && $request->efetivar == 'true') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'true')) {
+            /*if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']){
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+            }*/
             $cota_curso->vagas_ocupadas += 1;
-            $inscricao->cd_efetivado = true;
+            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
             $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
         }
         $inscricao->update();
@@ -485,5 +494,21 @@ class InscricaoController extends Controller
         }else if($documento == 'ficha'){
             return "Ficha Geral";
         }
+    }
+
+    public function confirmarInvalidacao(Request $request)
+    {
+        $this->authorize('isAdmin', User::class);
+        $inscricao = Inscricao::find($request->inscricaoID);
+        if($request->confirmarInvalidacao == 'false'){
+            $inscricao->cd_efetivado = null;
+            $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+            $message = 'O candidato teve a invalidação do cadastro desfeita. É necessário reavaliar os documentos invalidados.';
+        }else{
+            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'];
+            $message = 'O candidato teve a invalidação do cadastro confirmada.';
+        }
+        $inscricao->update();
+        return redirect()->back()->with(['success' => $message]);
     }
 }

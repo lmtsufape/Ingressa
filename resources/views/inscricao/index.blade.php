@@ -55,7 +55,7 @@
                                             </td>
                                             <td>
                                                 @switch($inscricoes[$i]->status)
-                                                    @case($situacoes['documentos_requeridos'])
+                                                    @case($situacoes['documentos_pendentes'])
                                                         {{__('Pendente')}}
                                                         @break
                                                     @case($situacoes['documentos_enviados'])
@@ -65,7 +65,7 @@
                                             </td>
                                             <td>
                                                 @switch($inscricoes[$i]->status)
-                                                    @case($situacoes['documentos_requeridos'])
+                                                    @case($situacoes['documentos_pendentes'])
                                                         @can('dataEnvio', $inscricoes[$i]->chamada)
                                                             <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
                                                                 Enviar documentos

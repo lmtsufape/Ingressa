@@ -205,7 +205,7 @@ class ChamadaController extends Controller
                 $primeira = false;
             }else{
                 $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
                     'protocolo' => Hash::make($data[8].$chamada->id),
                     'nu_etapa' => $data[0],
                     'no_campus' => $data[1],
@@ -315,7 +315,7 @@ class ChamadaController extends Controller
             }else{
                 //Armazenamos as informações de cada candidato
                 $inscricao = array(
-                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
                     'protocolo' => Hash::make($data[8].$chamada->id),
                     'nu_etapa' => $data[0],
                     'no_campus' => $data[1],
@@ -522,17 +522,29 @@ class ChamadaController extends Controller
         $chamada = Chamada::find($chamada_id);
         $this->authorize('isAdminOrAnalista', User::class);
         $concluidos = collect();
-        $chamados = collect();
+        $concluidosPendentes = collect();
+        $enviados = collect();
+        $naoEnviados = collect();
+        $invalidados = collect();
+
         $cursos = Curso::orderBy('nome')->get();
         foreach($cursos as $curso){
-            $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos']]])->get();
-            $candidatosChamados = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])->get();
+            $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']]])->get();
+            $candidatosConcluidosPendencia = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']]])->get();
+            $candidatosNaoEnviado = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_pendentes']]])->get();
+            $candidatosEnviado = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']]])->get();
+            $candidatosInvalidados = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']]])->get();
 
-            $chamados->push(count($candidatosChamados));
             $concluidos->push(count($candidatosConcluidos));
+            $concluidosPendentes->push(count($candidatosConcluidosPendencia));
+            $enviados->push(count($candidatosEnviado));
+            $naoEnviados->push(count($candidatosNaoEnviado));
+            $invalidados->push(count($candidatosInvalidados));
+
         }
 
-        return view('chamada.candidatos-chamada', compact('chamada', 'cursos', 'concluidos', 'chamados'))->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
+        return view('chamada.candidatos-chamada', compact('chamada', 'cursos', 'concluidos', 'concluidosPendentes', 'enviados', 'naoEnviados', 'invalidados'))
+        ->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
     public function candidatosCurso(Request $request, $sisu_id, $chamada_id, $curso_id)
@@ -572,8 +584,8 @@ class ChamadaController extends Controller
         $quantidade = $chamada->inscricoes()->get()->count();
         $candidatos = $chamada->inscricoes()->inRandomOrder()->limit((int)$quantidade/2)->get();
         foreach($candidatos as $candidato){
-            $candidato->status = Inscricao::STATUS_ENUM['documentos_aceitos'];
-            $candidato->cd_efetivado = true;
+            $candidato->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+            $candidato->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
 
             $cotaRemanejamento = $candidato->cotaRemanejada;
             if($cotaRemanejamento != null){

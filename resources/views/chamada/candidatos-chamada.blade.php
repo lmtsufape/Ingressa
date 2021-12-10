@@ -52,8 +52,11 @@
                             @endswitch)
                             </div>
                             <div class="subtitulo">
-                                {{"Pendentes: ".($chamados[$count]-$concluidos[$count])}}<br>
-                                {{"Concluídos: ".$concluidos[$count]}}
+                                {{"Concluídos: ".$concluidos[$count]}}<br>
+                                {{"Concluídos - Pendência: ".$concluidosPendentes[$count]}}<br>
+                                {{"Enviados: ".$enviados[$count]}}<br>
+                                {{"Não enviados: ".$naoEnviados[$count]}}<br>
+                                {{"Invalidados: ".$invalidados[$count]}}
                             </div>
                         </a>
                     @else

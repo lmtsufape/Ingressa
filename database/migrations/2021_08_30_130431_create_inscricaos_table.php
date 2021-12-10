@@ -23,7 +23,7 @@ class CreateInscricaosTable extends Migration
             $table->foreign('curso_id')->references('id')->on('cursos');
             $table->string('protocolo');
             $table->string('status');
-            $table->boolean('cd_efetivado')->nullable();
+            $table->integer('cd_efetivado')->nullable();
             //justificativa para cadastro invalidado ou validado
             $table->text('justificativa')->nullable();
             $table->integer('co_ies_curso');
