@@ -117,4 +117,40 @@ class Inscricao extends Model
     {
         return ($this->nu_nota_l + $this->nu_nota_ch + $this->nu_nota_cn + $this->nu_nota_m + $this->nu_nota_r) / 5;
     }
+
+    public function isArquivoEnviado($nome)
+    {
+        return $this->arquivo($nome) != null;
+    }
+
+    public function isArquivoNaoEnviado($nome)
+    {
+        return $this->arquivo($nome) == null;
+    }
+
+    public function isArquivoAvaliado($nome)
+    {
+        if ($this->isArquivoEnviado($nome)) {
+            return $this->arquivo($nome)->avaliacao != null;
+        }
+        return false;
+    }
+
+    public function isArquivoRecusado($nome)
+    {
+        if ($this->isArquivoAvaliado($nome)) {
+            return $this->arquivo($nome)->avaliacao->isRecusado();
+        }
+        return false;
+    }
+
+    public function arquivo($nome)
+    {
+        return $this->arquivos()->where('nome', $nome)->first();
+    }
+
+    public function isDocumentosRequeridos()
+    {
+        return $this->status == self::STATUS_ENUM['documentos_requeridos'];
+    }
 }
