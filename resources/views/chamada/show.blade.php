@@ -409,6 +409,29 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <label for="tipo">{{__('Ordenação')}}</label>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input id="radio-ordenacao-nome" class="form-check-input" type="radio" name="ordenacao" value="nome" @if(old('ordenacao') == 'nome') @else checked @endif>
+                                        <label for="radio-ordenacao-nome">{{__('Nome do candidato')}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input id="radio-ordenacao-nota" class="form-check-input" type="radio" name="ordenacao" value="nota" @if(old('ordenacao') == 'nota') checked @endif>
+                                        <label for="radio-ordenacao-nome">{{__('Nota do ENEM')}}</label>
+                                    </div>
+                                </div>
+
+                                @error('tipo')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
                         <br>
 
                         <div class="accordion" id="accordionExample">

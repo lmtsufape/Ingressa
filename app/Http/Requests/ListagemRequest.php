@@ -26,6 +26,7 @@ class ListagemRequest extends FormRequest
     {
         return [
             'titulo' => 'required|string|max:255',
+            'ordenacao' => 'required',
         ];
     }
 }

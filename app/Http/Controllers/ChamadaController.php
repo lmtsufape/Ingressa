@@ -542,12 +542,13 @@ class ChamadaController extends Controller
         $curso = Curso::find($curso_id);
         $sisu = Sisu::find($sisu_id);
         $turno = $curso->getTurno();
+        $ordem = $request->ordem;
         $query = Inscricao::select('inscricaos.*')->
         where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
             ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
             ->join('users','users.id','=','candidatos.user_id');
 
-        switch ($request->ordem) {
+        switch ($ordem) {
             case 'name':
                 $candidatos = $query->orderBy('users.name')->get();
                 break;
@@ -562,7 +563,7 @@ class ChamadaController extends Controller
                 break;
         }
         
-        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno', 'sisu'));
+        return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno', 'sisu', 'ordem'));
     }
 
     public function aprovarCandidatosChamada($sisu_id, $chamada_id)
