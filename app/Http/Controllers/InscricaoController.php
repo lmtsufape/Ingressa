@@ -121,52 +121,6 @@ class InscricaoController extends Controller
         return view('inscricao.analise-documentos', compact('inscricao', 'documentos', 'chamada', 'curso'));
     }
 
-    public function enviarDocumentos(Request $request)
-    {
-        $inscricao = Inscricao::find($request->inscricao_id);
-        $this->authorize('isCandidatoDono', $inscricao);
-        if ($request->documentos == null) {
-            return redirect()->back()->withErrors(['error' => 'Anexe os documentos que devem ser enviados.'])->withInput($request->all());
-        }
-
-        foreach($request->documentos as $documento){
-            if($request[$documento]!=null){
-                $arquivo = Arquivo::where([['inscricao_id', $inscricao->id], ['nome', $documento]])->first();
-                if($arquivo != null){
-                    if (Storage::disk()->exists('public/' . $arquivo->caminho)) {
-                        Storage::delete('public/' . $arquivo->caminho);
-                    }
-
-                    $novoArquivo = $request[$documento];
-                    $path = 'documentos/inscricaos/'. $inscricao->id .'/';
-                    $nome = $novoArquivo->getClientOriginalName();
-                    Storage::putFileAs('public/'.$path, $novoArquivo, $nome);
-
-                    $arquivo->caminho = $path . $nome;
-                    $arquivo->update();
-                    $arquivo->avaliacao->comentario = null;
-                    $arquivo->avaliacao->avaliacao = Avaliacao::AVALIACAO_ENUM['reenviado'];
-                    $arquivo->avaliacao->update();
-
-                }else{
-                    $novoArquivo = $request[$documento];
-                    $path = 'documentos/inscricaos/'. $inscricao->id .'/';
-                    $nome = $novoArquivo->getClientOriginalName();
-                    Storage::putFileAs('public/'.$path, $novoArquivo, $nome);
-
-                    Arquivo::create([
-                        'inscricao_id'  => $inscricao->id,
-                        'caminho'  => $path . $nome,
-                        'nome' => $documento,
-                    ]);
-                }
-            }
-        }
-        $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
-        $inscricao->update();
-        return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
-    }
-
     public function showDocumento($inscricao_id, $documento_nome)
     {
         $inscricao = Inscricao::find($inscricao_id);
@@ -179,6 +133,7 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
+        $documentos->push('declaracao_veracidade');
         $documentos->push('certificado_conclusao');
         $documentos->push('historico');
         $documentos->push('nascimento_ou_casamento');
@@ -189,14 +144,22 @@ class InscricaoController extends Controller
             $documentos->push('quitacao_militar');
         }
         $documentos->push('foto');
+        if($inscricao->st_lei_etnia_i == 'S'){
+            $documentos->push('rani');
+            $documentos->push('declaracao_cotista');
+        }
         if($inscricao->st_lei_etnia_p == 'S'){
-            $documentos->push('autodeclaracao');
+            $documentos->push('heteroidentificacao');
+            $documentos->push('fotografia');
+            $documentos->push('declaracao_cotista');
         }
         if($inscricao->st_lei_renda == 'S'){
             $documentos->push('comprovante_renda');
+            $documentos->push('declaracao_cotista');
         }
         if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
             $documentos->push('laudo_medico');
+            $documentos->push('declaracao_cotista');
         }
         return $documentos;
     }

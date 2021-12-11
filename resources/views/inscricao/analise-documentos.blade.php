@@ -95,7 +95,7 @@
                             <div class="d-flex align-items-center my-2 pt-1 pb-3">
                                 <iframe width="100%" height="700" frameborder="0" allowtransparency="true" id="documentoPDF" src="" ></iframe>
                             </div>
-                            
+
                             <div id="avaliarDoc" style="display: none">
                                 <div class="col-md-12 px-3 pt-5">
                                     <div class="row justify-content-between">
@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <div class="corpo p-3" id="corpoFicha">
@@ -297,18 +297,29 @@
                         <div class="col-md-12 caixa shadow p-3">
                             <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                 <div class="d-flex align-items-center">
-                                <span class="tituloTipoDoc">Documentação Geral</span>
+                                <span class="tituloTipoDoc">Documentação básica</span>
                             </div>
                             <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
                                 <img width="35" src="{{asset('img/download1.svg')}}"></a>
                             </a>
                         </div>
                         @foreach ($documentos as $indice =>  $documento)
-                            @if($documento == 'autodeclaracao')
+                            @if($documento == 'rani')
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Candidatos inscritos em cotas de cor/etnia</span>
+                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
+                                            vaga para candidato autodeclarado indígena</span>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($documento == 'heteroidentificacao')
+                                <div>
+                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div class="d-flex align-items-center">
+                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
+                                            vaga para candidato autodeclarado negro (preto ou
+                                            pardo)</span>
                                     </div>
                                 </div>
                             @endif
@@ -316,8 +327,7 @@
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Candidatos inscritos em cotas de candidatos com renda familiar bruta per
-                                            capita igual ou inferior a 1,5 salário mínimo</span>
+                                        <span class="tituloTipoDoc">Comprovação da renda familiar bruta mensal per capita</span>
                                     </div>
                                 </div>
                             @endif
@@ -325,7 +335,8 @@
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Candidatos inscritos em cotas de Pessoa Com Deficiência (PCD)</span>
+                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
+                                            vaga para pessoas com deficiência</span>
                                     </div>
                                 </div>
                             @endif
@@ -341,7 +352,11 @@
                                         </div>
                                     @endif
 
-                                    @if($documento == 'certificado_conclusao')
+                                    @if($documento == 'declaracao_veracidade')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Declaração de Veracidade;</div>
+                                        </div>
+                                    @elseif($documento == 'certificado_conclusao')
                                         <div class="col-md-10" style="cursor:pointer;">
                                             <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
                                         </div>
@@ -373,9 +388,21 @@
                                         <div class="col-md-10" style="cursor:pointer;">
                                             <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Uma foto 3x4 atual;</div>
                                         </div>
-                                    @elseif($documento == 'autodeclaracao')
+                                    @elseif($documento == 'rani')
                                         <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração de cor/etnia;</div>
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro Administrativo de Nascimento de Indígena ou equivalente;</div>
+                                        </div>
+                                    @elseif($documento == 'declaracao_cotista')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração como candidato participante de reserva de vaga;</div>
+                                        </div>
+                                    @elseif($documento == 'heteroidentificacao')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Vídeo individual e recente para procedimento de heteroidentificação;</div>
+                                        </div>
+                                    @elseif($documento == 'fotografia')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Fotografia individual e recente para procedimento de heteroidentificação;</div>
                                         </div>
                                     @elseif($documento == 'comprovante_renda')
                                         <div class="col-md-10" style="cursor:pointer;">
@@ -412,7 +439,7 @@
                             <div class="col-md-12 textoModal">
                                 <label class="pb-2" for="conteúdo">Assunto</label>
                                 <input class="form-control campoDeTexto @error('assunto') is-invalid @enderror" type="text" name="assunto" id="assunto" placeholder="Digite o assunto">
-                                
+
                                 @error('assunto')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -424,7 +451,7 @@
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="conteúdo">Conteúdo</label>
                                 <textarea id="conteúdo" class="form-control campoDeTexto @error('conteúdo') is-invalid @enderror" type="text" name="conteúdo" autofocus placeholder="Insira o conteúdo do e-mail aqui...">{{old('conteúdo')}}</textarea>
-                                
+
                                 @error('conteúdo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -467,7 +494,7 @@
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="justificativa">Justificativa:</label>
                                 <textarea id="justificativa" class="form-control campoDeTexto @error('justificativa') is-invalid @enderror" type="text" name="justificativa" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{old('justificativa', $inscricao->justificativa)}}</textarea>
-                                
+
                                 @error('justificativa')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -512,7 +539,7 @@
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="comentario">Motivo:</label>
                                 <textarea id="comentario" class="form-control campoDeTexto @error('comentario') is-invalid @enderror" type="text" name="comentario" value="{{old('comentario')}}" required autofocus autocomplete="comentario" placeholder="Insira o motivo para recusar o documento"></textarea>
-                                
+
                                 @error('comentario')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
