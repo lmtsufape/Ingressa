@@ -10,7 +10,7 @@
                       <span class="tituloTabelas ps-1">Chamadas da edição <span style="font-weight: 600;">{{$sisu->edicao}}</span></span>
                   </div>
                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                        <a data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
                     @endif
                 </div>
 

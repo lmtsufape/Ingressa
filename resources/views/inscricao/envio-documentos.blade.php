@@ -61,7 +61,7 @@
                                                     @endif
                                                     @if($inscricao->arquivos()->where('nome', $documento)->first() != null) <a href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank"><img src="{{asset('img/file-pdf-solid.svg')}}" alt="arquivo atual" style="width: 16px;"></a> @endif
 
-                                                    @if(($inscricao->arquivos()->where('nome', $documento)->first() == null || ($inscricao->arquivos()->where('nome', $documento)->first() != null && $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao != null && $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])) && $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_requeridos'])
+                                                    @if(($inscricao->arquivos()->where('nome', $documento)->first() == null || ($inscricao->arquivos()->where('nome', $documento)->first() != null && $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao != null && $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])) && $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
                                                         <input id="{{$documento}}" class="form-control @error('{{$documento}}') is-invalid @enderror" type="file" accept=".pdf"
                                                         name="{{$documento}}" value="{{$documento}}"  @if($documento != 'cpf')) required @endif autofocus autocomplete="{{$documento}}">
                                                         <input type="hidden" name="documentos[]" value="{{$documento}}">
@@ -110,7 +110,7 @@
                                 </tbody>
                             </table>
                         </form>
-                        @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_requeridos'])
+                        @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
                             <div class="card-footer">
                                 <div class="form-row justify-content-center">
                                     <div class="col-md-6"></div>

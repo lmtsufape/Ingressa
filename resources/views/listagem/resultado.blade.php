@@ -131,30 +131,31 @@
                             <thead>
                                 <tr class="esquerda">
                                     <th>Seq.</th>
-                                    <th>CPF</th>
-                                    <th>Nome do candidato</th>
-                                    <th>Nota</th>
                                     <th>AF</th>
-                                    <th>Efetivado</th>
+                                    <th>CPF</th>
+                                    <th>NOME</th>
+                                    <th>RESULTADO DA ANÁLISE DOCUMENTAL</th>
+                                    <th>JUSTIFICATIVA</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($inscricoes as $k =>  $inscricao)
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$k+1}}</th>
+                                        <th>{{$inscricao->cota->cod_cota}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
                                         <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
-                                        <th>{{$inscricao->nu_nota_candidato}}</th>
-                                        @if($inscricao->no_modalidade_concorrencia == "que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.")
-                                            <th>SIM</th>
+                                        @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
+                                            <th>CADASTRO VALIDADO</th>
                                         @else
-                                            @if($inscricao->st_bonus_perc == "SIM")
-                                                <th>SIM</th>
-                                            @else
-                                                <th></th>
-                                            @endif
+                                            <th>CADASTRO INVALIDADO</th>
                                         @endif
-                                        <th>{{$inscricao->cd_efetivado ? "Efetivado" : ""}}</th>
+                                        @if($inscricao->justificativa != null)
+                                            <th>{{$inscricao->justificativa}}</th>
+                                        @else
+                                            <th>-</th>
+                                        @endif
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>

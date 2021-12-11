@@ -46,7 +46,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 $primeira = false;
             }else{
                 $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
                     'protocolo' => Hash::make($data[8].$this->chamada->id),
                     'nu_etapa' => $data[0],
                     'no_campus' => $data[1],
@@ -56,7 +56,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'ds_formacao' => $data[5],
                     'qt_vagas_concorrencia' => $data[6],
                     'co_inscricao_enem' => $data[7],
-                    'cd_efetivado' => false,
+                    //'cd_efetivado' => false,
                     'tp_sexo' => $data[12],
                     'nu_rg' => $data[13],
                     'no_mae' => $data[14],

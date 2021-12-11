@@ -53,7 +53,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             }else{
                 //Armazenamos as informações de cada candidato
                 $inscricao = array(
-                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
                     'protocolo' => Hash::make($data[8].$this->chamada->id),
                     'nu_etapa' => $data[0],
                     'no_campus' => $data[1],
@@ -69,7 +69,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_cpf_inscrito' => $data[10],
                     'dt_nascimento' => $data[11],
 
-                    'cd_efetivado' => false,
+                    //'cd_efetivado' => false,
                     'tp_sexo' => $data[12],
                     'nu_rg' => $data[13],
                     'no_mae' => $data[14],
@@ -259,7 +259,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                 //agora podemos preparar o objeto de inscricao para o candidato
                 $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['documentos_requeridos'],
+                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
                     'protocolo' => Hash::make($inscrito['protocolo'].$this->chamada->id),
                     'nu_etapa' => $inscrito['nu_etapa'],
                     'no_campus' => $inscrito['no_campus'],
@@ -269,7 +269,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'ds_formacao' => $inscrito['ds_formacao'],
                     'qt_vagas_concorrencia' => $inscrito['qt_vagas_concorrencia'],
                     'co_inscricao_enem' => $inscrito['co_inscricao_enem'],
-                    'cd_efetivado' => false,
+                    //'cd_efetivado' => false,
                     'no_social' => $inscrito['no_social'],
                     'tp_sexo' => $inscrito['tp_sexo'],
                     'nu_rg' => $inscrito['nu_rg'],

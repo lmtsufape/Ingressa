@@ -93,11 +93,11 @@
                                                             <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato não concluído">
                                                         @endif
 
-                                                        @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos'])
+                                                        @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
                                                             <img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
                                                         @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
                                                             <img src="{{asset('img/icons-document-yellow.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
-                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_requeridos'])
+                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
                                                             <img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos requeridos">
                                                         @endif
                                                     </div>
@@ -154,7 +154,7 @@
                                 <div title="Documentos requeridos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                     <img class="aling-middle" width="33" src="{{asset('img/icons-document-red.png')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                        Documentos requeridos
+                                        Documentos pendentes
                                     </div>                    
                                 </div>
                             </li>

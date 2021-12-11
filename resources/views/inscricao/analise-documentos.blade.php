@@ -14,24 +14,56 @@
                     </div>
                 </div>
             </div>
+            @if(session('success'))
+                <div class="row mt-3" id="mensagemSucesso">
+                    <div class="col-md-12">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </symbol>
+                        </svg>
+
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @error('error')
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{$message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @enderror
+            @can('isAdmin', \App\Models\User::class)
+                <div class="row">
+                    <div class="col-md-12">
+                        @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
+                            <div class="alert alert-warning fade show" role="alert">
+                                <strong>Atenção!</strong> O Candidato teve o cadastro invalidado! Confirme se o candidato realmente deve ter o cadastro invalidado.<br>
+                                <strong>Justificativa:</strong> {{$inscricao->justificativa}}<br>
+                                <form method="post" id="confirmar-invalidacao-candidato" action="{{route('inscricao.confirmar.invalidacao',['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
+                                    @csrf
+                                    <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
+                                    <input type="hidden" name="curso" value="{{$inscricao->curso->id}}">
+                                    <input type="hidden" name="confirmarInvalidacao" id="confirmarInvalidacao" value="">
+                                    <div class="row justify-content-between mt-4" style="text-align: center">
+                                        <div id ="negarInvalidacao" class="col-md-6 form-group">
+                                            <button type="submit" class="btn botaoVerde my-2 py-1" onclick="atualizarInputConfirmarInvalidacao(false)"><span class="px-4" style="font-weight: bolder;" >Desfazer invalidação</span></button>
+                                        </div>
+                                        <div id ="confirmarInvalidacao" class="col-md-6 form-group">
+                                            <button type="submit" class="btn botaoVerde my-2 py-1" style="background-color: #FC605F;" onclick="atualizarInputConfirmarInvalidacao(true)"><span class="px-4" style="font-weight: bolder;" >Confirmar invalidação</span></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endcan
             <div class="row justify-content-between">
                 <div class="col-md-7">
-                    @if(session('success'))
-                        <div class="row mt-3" id="mensagemSucesso">
-                            <div class="col-md-12">
-                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                    </symbol>
-                                </svg>
-
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
                     @if(session('nomeDoc'))
                         <script>
                             console.log();
@@ -40,12 +72,6 @@
                             });
                         </script>
                     @endif
-                    @error('error')
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @enderror
                     <div style="border-radius: 0.5rem;" class="col-md-12 p-0 shadow">
                         <div class="cabecalhoAzul p-2 px-3 align-items-center">
                             <div class="row justify-content-between">
@@ -363,8 +389,8 @@
                                 </div>
                             </div>
                         @endforeach
-                        <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" {{$inscricao->cd_efetivado == true ? 'disabled' : '' }} onclick="atualizarInputEfetivar(true)" ><span class="px-4" >{{$inscricao->cd_efetivado == true ? 'Cadastro Validado' : 'Validar Cadastro' }}</button>
-                        <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" {{$inscricao->cd_efetivado == false ? 'disabled' : '' }} onclick="atualizarInputEfetivar(false)"> <span class="px-4" >{{$inscricao->cd_efetivado == true ? 'Desfazer Validação' : 'Cadastro Invalidado' }}</button>
+                        <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)" ><span class="px-4" >@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</button>
+                        <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4" >@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</button>
                     </div>
                 </div>
             </div>
@@ -376,7 +402,7 @@
     <div class="modal fade" id="enviar-email-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content modalFundo p-3">
-                <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Enviar e-mail</div>
+                <div id ="enviarEmailText" class="col-md-12 tituloModal">Enviar e-mail</div>
                 <div class="pt-3 pb-2 textoModal">
                     <form method="post" id="enviar-email-candidato" action="{{route('enviar.email.candidato')}}">
                         @csrf
@@ -412,7 +438,7 @@
                     <div class="col-md-3">
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
-                    <div id ="aprovarCandidatoButtonForm" class="col-md-4">
+                    <div id ="enviarEmailButton" class="col-md-4">
                         <button type="submit" class="btn botaoVerde my-2 py-1" form="enviar-email-candidato"><span class="px-4" style="font-weight: bolder;" >Enviar</span></button>
                     </div>
                 </div>
@@ -431,10 +457,10 @@
                         <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
                         <input type="hidden" name="curso" value="{{$inscricao->curso->id}}">
                         <input type="hidden" name="efetivar" id="inputEfetivar" value="">
-                        <div id ="aprovarCandidatoTextForm" class="pt-3">
+                        <div id="aprovarCandidatoTextForm" class="pt-3">
                             Tem certeza que deseja validar o cadastro do candidato?
                         </div>
-                        <div id ="reprovarCandidatoTextForm" class="pt-3">
+                        <div id="reprovarCandidatoTextForm" class="pt-3">
                             Tem certeza que deseja invalidar o cadastro do candidato?
                         </div>
                         <div id ="justificativaCadastroTextForm" class="form-row">
@@ -597,13 +623,13 @@
     function atualizarInputEfetivar(valor){
         document.getElementById('inputEfetivar').value = valor;
         if(valor == true){
-            $("#aprovarCandidatoForm").show();
-            $("#aprovarCandidatoTextForm").show();
-            $("#aprovarCandidatoButtonForm").show();
-
             $('#reprovarCandidatoForm').hide();
             $('#reprovarCandidatoTextForm').hide();
             $('#reprovarCandidatoButtonForm').hide();
+
+            $("#aprovarCandidatoForm").show();
+            $("#aprovarCandidatoTextForm").show();
+            $("#aprovarCandidatoButtonForm").show();
 
             $('#aprovar-recusar-candidato-modal').modal('toggle');
         }else{
@@ -675,6 +701,10 @@
         }else if($documento == 'ficha'){
             return "Ficha Geral";
         }
+    }
+
+    function atualizarInputConfirmarInvalidacao(valor){
+        document.getElementById('confirmarInvalidacao').value = valor;
     }
 
 </script>

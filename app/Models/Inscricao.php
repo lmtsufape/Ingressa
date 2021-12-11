@@ -10,11 +10,17 @@ class Inscricao extends Model
     use HasFactory;
 
     public const STATUS_ENUM = [
-        'documentos_requeridos' => 1,
+        'documentos_pendentes' => 1,
         'documentos_enviados' => 2,
-        'documentos_aceitos' => 3,
-        'matriculada' => 4,
-        'cancelada' => 5,
+        'documentos_aceitos_sem_pendencias' => 3,
+        'documentos_aceitos_com_pendencias' => 4,
+        'documentos_invalidados' => 5,
+    ];
+
+    public const STATUS_VALIDACAO_CANDIDATO = [
+        'cadastro_validado' => 1,
+        'cadastro_invalidado_confirmacao' => 2,
+        'cadastro_invalidado' => 3,
     ];
 
     protected $fillable = [

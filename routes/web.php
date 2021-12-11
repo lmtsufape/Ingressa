@@ -61,6 +61,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/efetivar', [InscricaoController::class , 'updateStatusEfetivado'])
         ->name('inscricao.status.efetivado');
 
+    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/confirmar-invalidacao', [InscricaoController::class , 'confirmarInvalidacao'])
+        ->name('inscricao.confirmar.invalidacao');
+
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada-aprovar', [ChamadaController::class, 'aprovarCandidatosChamada'])
     ->name('chamadas.candidatos.aprovar');
 
