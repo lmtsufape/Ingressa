@@ -1,6 +1,13 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-md-12" style="text-align: right">
+                        <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></a>
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-between">
                 <div class="col-md-9">
                     <div class="col-md-12 shadow-sm">
@@ -9,8 +16,8 @@
                               <div class="row justify-content-between">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                      <img src="{{asset('storage/'.$curso->icone)}}" 
-                                      alt="" width="40" class="img-flex">
+                                      <img style="border:2px solid white; border-radius: 50%;"  src="{{asset('storage/'.$curso->icone)}}"
+                                        alt="" width="45" class="img-flex">
                                       <div>
                                         <span class="tituloTabelas ps-1 mb-0 pb-0">{{$curso->nome}} - {{$turno}}</span>
                                         <div class="ps-1 mt-0 pt-0" style="font-size: 14px; color: white;">
@@ -107,7 +114,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></a>
                             </div>
                         </div>
                     </div>
