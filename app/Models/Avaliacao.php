@@ -26,4 +26,9 @@ class Avaliacao extends Model
     {
         return $this->belongsTo(Arquivo::class, 'arquivo_id');
     }
+
+    public function isRecusado()
+    {
+        return $this->avaliacao == self::AVALIACAO_ENUM['recusado'];
+    }
 }
