@@ -117,6 +117,11 @@ class EnviarDocumentos extends Component
         }
     }
 
+    public function baixar($documento)
+    {
+        return response()->download('storage/' . $this->inscricao->arquivo($documento)->caminho);
+    }
+
     protected function cleanupOldUploads()
     {
         if (FileUploadConfiguration::isUsingS3()) return;

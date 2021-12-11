@@ -151,6 +151,6 @@ class Inscricao extends Model
 
     public function isDocumentosRequeridos()
     {
-        return $this->status == self::STATUS_ENUM['documentos_requeridos'];
+        return $this->status == self::STATUS_ENUM['documentos_pendentes'];
     }
 }
