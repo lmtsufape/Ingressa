@@ -11,6 +11,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\DataChamada;
 use App\Models\Inscricao;
+use App\Models\Listagem;
 use App\Models\MultiplicadorVaga;
 use App\Models\Sisu;
 use App\Models\User;
@@ -83,7 +84,7 @@ class ChamadaController extends Controller
         $datas = $chamada->datasChamada;
         $listagens = $chamada->listagem;
 
-        return view('chamada.show', compact('chamada', 'datas', 'listagens'))->with(['tipos' => DataChamada::TIPO_ENUM, 'cursos' => Curso::all(), 'cotas' => Cota::all()]);;
+        return view('chamada.show', compact('chamada', 'datas', 'listagens'))->with(['tipos' => DataChamada::TIPO_ENUM, 'cursos' => Curso::all(), 'cotas' => Cota::all(), 'tiposListagem' => Listagem::TIPO_ENUM]);
     }
 
     /**

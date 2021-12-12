@@ -133,7 +133,7 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
-        if(auth()->user()->ehAnalistaGeral == true || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
+        if(auth()->user()->ehAnalistaGeral() == true || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
             $documentos->push('declaracao_veracidade');
             $documentos->push('certificado_conclusao');
             $documentos->push('historico');
@@ -168,7 +168,7 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
-        }else if(auth()->user()->ehAnalistaHeteroidentificacao == true){
+        }else if(auth()->user()->ehAnalistaHeteroidentificacao() == true){
             if($inscricao->st_lei_etnia_p == 'S'){
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');

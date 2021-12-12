@@ -57,6 +57,9 @@ class ListagemController extends Controller
             case Listagem::TIPO_ENUM['resultado']:
                 $listagem->caminho_listagem = $this->gerarListagemResultado($request, $listagem);
                 break;
+            case Listagem::TIPO_ENUM['final']:
+                $listagem->caminho_listagem = $this->gerarListagemFinal($request, $listagem);
+                break;
         }
         $listagem->update();
 
@@ -298,6 +301,15 @@ class ListagemController extends Controller
         $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
+    }
+
+    private function gerarListagemFinal(ListagemRequest $request, Listagem $listagem)
+    {
+        $chamada = Chamada::find($request->chamada);
+        $sisu = $chamada->sisu;
+        foreach($sisu->chamadas as $chamada){
+            $chamada->inscricoes
+        }
     }
 
     /**

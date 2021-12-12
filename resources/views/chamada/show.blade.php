@@ -156,6 +156,9 @@
                                                 @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
                                                     resultado
                                                     @break
+                                                @case(\App\Models\Listagem::TIPO_ENUM['final'])
+                                                    final
+                                                    @break
                                             @endswitch</span>
                                         </div>
                                         <div class="row px-1 link">
@@ -384,7 +387,7 @@
                         <div class="row">
                             <div class="col-sm-12 mb-3">
                                 <label for="titulo">{{__('Título da listagem')}}</label>
-                                <input type="text" id="titulo" name="titulo" class="form-control campoDeTexto @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required placeholder="Insira o titulo da cota">
+                                <input type="text" id="titulo" name="titulo" class="form-control campoDeTexto @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required placeholder="Insira o titulo da listagem">
 
                                 @error('titulo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -398,8 +401,9 @@
                                 <label for="tipo">{{__('Selecione o tipo')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
-                                    <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
-                                    <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tiposListagem['convocacao']) selected @endif value="{{$tiposListagem['convocacao']}}">Convocação</option>
+                                    <option @if(old('tipo') == $tiposListagem['resultado']) selected @endif value="{{$tiposListagem['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tiposListagem['final']) selected @endif value="{{$tiposListagem['final']}}">Final</option>
                                 </select>
 
                                 @error('tipo')
