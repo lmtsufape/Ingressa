@@ -90,7 +90,7 @@
                                                             Documentos em análise
                                                         </a>
                                                         @break
-                                                    @case($situacoes['documentos_aceitos'])
+                                                    @case($situacoes['documentos_aceitos_sem_pendencias'])
                                                         <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
                                                             Documentos aceitos
                                                         </a>

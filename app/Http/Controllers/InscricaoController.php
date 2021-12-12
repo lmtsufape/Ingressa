@@ -133,33 +133,49 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
-        $documentos->push('declaracao_veracidade');
-        $documentos->push('certificado_conclusao');
-        $documentos->push('historico');
-        $documentos->push('nascimento_ou_casamento');
-        $documentos->push('cpf');
-        $documentos->push('rg');
-        $documentos->push('quitacao_eleitoral');
-        if($inscricao->tp_sexo == 'M'){
-            $documentos->push('quitacao_militar');
-        }
-        $documentos->push('foto');
-        if($inscricao->st_lei_etnia_i == 'S'){
-            $documentos->push('rani');
-            $documentos->push('declaracao_cotista');
-        }
-        if($inscricao->st_lei_etnia_p == 'S'){
-            $documentos->push('heteroidentificacao');
-            $documentos->push('fotografia');
-            $documentos->push('declaracao_cotista');
-        }
-        if($inscricao->st_lei_renda == 'S'){
-            $documentos->push('comprovante_renda');
-            $documentos->push('declaracao_cotista');
-        }
-        if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
-            $documentos->push('laudo_medico');
-            $documentos->push('declaracao_cotista');
+        if(auth()->user()->ehAnalistaGeral == true || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
+            $documentos->push('declaracao_veracidade');
+            $documentos->push('certificado_conclusao');
+            $documentos->push('historico');
+            $documentos->push('nascimento_ou_casamento');
+            $documentos->push('cpf');
+            $documentos->push('rg');
+            $documentos->push('quitacao_eleitoral');
+            if($inscricao->tp_sexo == 'M'){
+                $documentos->push('quitacao_militar');
+            }
+            $documentos->push('foto');
+            if($inscricao->st_lei_etnia_i == 'S'){
+                $documentos->push('rani');
+                $documentos->push('declaracao_cotista');
+            }
+            if($inscricao->st_lei_etnia_p == 'S'){
+                $documentos->push('heteroidentificacao');
+                $documentos->push('fotografia');
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
+            if($inscricao->st_lei_renda == 'S'){
+                $documentos->push('comprovante_renda');
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
+            if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
+                $documentos->push('laudo_medico');
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
+        }else if(auth()->user()->ehAnalistaHeteroidentificacao == true){
+            if($inscricao->st_lei_etnia_p == 'S'){
+                $documentos->push('heteroidentificacao');
+                $documentos->push('fotografia');
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
         }
         return $documentos;
     }
@@ -334,6 +350,10 @@ class InscricaoController extends Controller
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
             $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
+        }else if($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'] && $request->efetivar == 'true'){
+            $cota_curso->vagas_ocupadas += 1;
+            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
+            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
         }
         $inscricao->update();
         $cota_curso->update();
@@ -454,6 +474,16 @@ class InscricaoController extends Controller
             return "Comprovante de renda";
         }else if($documento == 'laudo_medico'){
             return "Laudo médico";
+        }else if($documento == 'declaracao_veracidade'){
+            return "Declaração de Veracidade";
+        }else if($documento == 'rani'){
+            return "Declaração Indígena";
+        }else if($documento == 'heteroidentificacao'){
+            return "Vídeo de Heteroidentificação";
+        }else if($documento == 'fotografia'){
+            return "Foto de Heteroidentificação";
+        }else if($documento == 'declaracao_cotista'){
+            return "Declaração Cotista";
         }else if($documento == 'ficha'){
             return "Ficha Geral";
         }

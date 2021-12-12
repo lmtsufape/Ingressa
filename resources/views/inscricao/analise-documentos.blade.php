@@ -295,20 +295,22 @@
 
                     <div class="col-md-4">
                         <div class="col-md-12 caixa shadow p-3">
-                            <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
-                                <div class="d-flex align-items-center">
-                                <span class="tituloTipoDoc">Documentação básica</span>
-                            </div>
-                            <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
-                                <img width="35" src="{{asset('img/download1.svg')}}"></a>
-                            </a>
-                        </div>
+                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                                <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="tituloTipoDoc">Documentação básica</span>
+                                    </div>
+                                    <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
+                                        <img width="35" src="{{asset('img/download1.svg')}}"></a>
+                                    </a>
+                                </div>
+                            @endif
                         @foreach ($documentos as $indice =>  $documento)
                             @if($documento == 'rani')
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
+                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
                                             vaga para candidato autodeclarado indígena</span>
                                     </div>
                                 </div>
@@ -317,7 +319,7 @@
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
+                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
                                             vaga para candidato autodeclarado negro (preto ou
                                             pardo)</span>
                                     </div>
@@ -327,7 +329,7 @@
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da renda familiar bruta mensal per capita</span>
+                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da renda familiar bruta mensal per capita</span>
                                     </div>
                                 </div>
                             @endif
@@ -335,8 +337,16 @@
                                 <div>
                                     <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
+                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
                                             vaga para pessoas com deficiência</span>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($documento == 'declaracao_cotista')
+                                <div>
+                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div class="d-flex align-items-center">
+                                        <span class="tituloTipoDoc" style="font-size: 20px;">Autodeclaração como candidato participante de reserva de vaga</span>
                                     </div>
                                 </div>
                             @endif
@@ -416,8 +426,11 @@
                                 </div>
                             </div>
                         @endforeach
-                        <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)" ><span class="px-4" >@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</button>
-                        <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4" >@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</button>
+
+                        @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                            <button id="efetivarBotao2" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)" ><span class="px-4" >@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</button>
+                            <button id="efetivarBotao1" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4" >@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -725,6 +738,16 @@
             return "Comprovante de renda";
         }else if($documento == 'laudo_medico'){
             return "Laudo médico";
+        }else if($documento == 'declaracao_veracidade'){
+            return "Declaração de Veracidade";
+        }else if($documento == 'rani'){
+            return "Declaração Indígena";
+        }else if($documento == 'heteroidentificacao'){
+            return "Vídeo de Heteroidentificação";
+        }else if($documento == 'fotografia'){
+            return "Foto de Heteroidentificação";
+        }else if($documento == 'declaracao_cotista'){
+            return "Declaração Cotista";
         }else if($documento == 'ficha'){
             return "Ficha Geral";
         }
