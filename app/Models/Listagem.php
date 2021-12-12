@@ -11,7 +11,8 @@ class Listagem extends Model
 
     public const TIPO_ENUM = [
         'convocacao'      => 1,
-        'resultado'    => 3,
+        'pendencia'       => 2,
+        'resultado'       => 3,
     ];
 
     protected $fillable = [

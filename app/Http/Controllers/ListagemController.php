@@ -54,6 +54,9 @@ class ListagemController extends Controller
             case Listagem::TIPO_ENUM['convocacao']:
                 $listagem->caminho_listagem = $this->gerarListagemConvocacao($request, $listagem);
                 break;
+            case Listagem::TIPO_ENUM['pendencia']:
+                $listagem->caminho_listagem = $this->gerarListagemPendencia($request, $listagem);
+                break;
             case Listagem::TIPO_ENUM['resultado']:
                 $listagem->caminho_listagem = $this->gerarListagemResultado($request, $listagem);
                 break;
@@ -338,5 +341,95 @@ class ListagemController extends Controller
                 break;
         }
         return $ordem;
+    }
+
+    /**
+     * Gera o arquivo pdf da listagem de pendencia e retorna o caminho do arquivo.
+     *
+     * @param  \App\Http\Requests\ListagemRequest  $request
+     * @return string $caminho_do_arquivo
+     */
+    private function gerarListagemPendencia(ListagemRequest $request, Listagem $listagem)
+    {   
+        $chamada = Chamada::find($request->chamada);
+        $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
+        $cotas = Cota::whereIn('id', $request->cotas)->orderBy('nome')->get();
+        $ordenacao = $this->get_ordenacao($request);
+        $ordem = $this->get_ordem($request);
+
+        $inscricoes = collect();
+
+        foreach ($cursos as $i => $curso) {
+            $inscricoes_curso = collect();
+            if($curso->turno == Curso::TURNO_ENUM['matutino']){
+                $turno = 'Matutino';
+            }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+                $turno = 'Vespertino';
+            }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+                $turno = 'Noturno';
+            }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+                $turno = 'Integral';
+            }
+            $ampla = collect();
+            foreach ($cotas as $j => $cota) {
+                //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
+                if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
+                    $ampla2 = Inscricao::select('inscricaos.*')->
+                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                        ->join('users','users.id','=','candidatos.user_id')
+                        ->orderBy($ordenacao, $ordem)
+                        ->get();
+                    $ampla = $ampla->concat($ampla2);
+
+                    $ampla3 = Inscricao::select('inscricaos.*')->
+                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                        ->join('users','users.id','=','candidatos.user_id')
+                        ->orderBy($ordenacao, $ordem)
+                        ->get();
+                    $ampla = $ampla->concat($ampla3);
+
+
+                    $ampla4 = Inscricao::select('inscricaos.*')->
+                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                        ->join('users','users.id','=','candidatos.user_id')
+                        ->orderBy($ordenacao, $ordem)
+                        ->get();
+                    $ampla = $ampla->concat($ampla4);
+
+                    $ampla = $ampla->sortBy(function($inscrito){
+                        return $inscrito->candidato->user->name;
+                    });
+                }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
+                    //ignorar a de 10% visto que entra na mesma tabela que A0
+                }else{
+                    $inscritosCota = Inscricao::select('inscricaos.*')->
+                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                        ->join('users','users.id','=','candidatos.user_id')
+                        ->orderBy($ordenacao, $ordem)
+                        ->get();
+                    if($inscritosCota->count() > 0 ){
+                        $inscricoes_curso->push($inscritosCota);
+                    }
+                }
+            }
+            if($ampla->count() > 0){
+                $inscricoes_curso->prepend($ampla);
+            }
+            if ($inscricoes_curso->count() > 0) {
+                $inscricoes->push($inscricoes_curso);
+            }
+        }
+
+        $pdf = PDF::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
+
+        return $this->salvarListagem($listagem, $pdf->stream());
     }
 }

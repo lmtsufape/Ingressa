@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Expr\Cast\Object_;
+use App\Models\Listagem;
 
 class ChamadaController extends Controller
 {
@@ -83,7 +83,7 @@ class ChamadaController extends Controller
         $datas = $chamada->datasChamada;
         $listagens = $chamada->listagem;
 
-        return view('chamada.show', compact('chamada', 'datas', 'listagens'))->with(['tipos' => DataChamada::TIPO_ENUM, 'cursos' => Curso::all(), 'cotas' => Cota::all()]);;
+        return view('chamada.show', compact('chamada', 'datas', 'listagens'))->with(['tipos_data' => DataChamada::TIPO_ENUM, 'tipos_listagem' => Listagem::TIPO_ENUM, 'cursos' => Curso::all(), 'cotas' => Cota::all()]);;
     }
 
     /**
