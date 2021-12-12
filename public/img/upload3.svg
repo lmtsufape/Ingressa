@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="90.725"
+   height="90.725"
+   viewBox="0 0 90.725 90.725"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="upload3.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:lockguides="false"
+     inkscape:zoom="4"
+     inkscape:cx="46.375"
+     inkscape:cy="44.875"
+     inkscape:window-width="1366"
+     inkscape:window-height="694"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Grupo_1673" />
+  <g
+     id="Grupo_1673"
+     data-name="Grupo 1673"
+     transform="translate(-1240.241 -360)">
+    <circle
+       id="Elipse_325"
+       data-name="Elipse 325"
+       cx="45.363"
+       cy="45.363"
+       r="45.363"
+       style="fill: rgb(143, 143, 143);"
+       transform="translate(1240.241 360)" />
+    <path
+       style="fill-opacity:1;fill:#000000"
+       d="m 7.5,39.337 v 4.645 h 32.514 v -4.645 z"
+       transform="translate(1261.847,381.122)"
+       id="path2884" />
+    <path
+       style="fill:#000000;fill-opacity:1"
+       d="m 1269.347,401.879 h 9.29 v 13.935 h 13.934 v -13.935 h 9.29 l -16.257,-16.257 z"
+       id="path1014" />
+  </g>
+</svg>
