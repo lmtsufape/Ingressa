@@ -58,10 +58,10 @@ class EnviarDocumentos extends Component
     {
         $rules = [];
         foreach ($this->documentos as $documento) {
-            $rules['arquivos.'.$documento] = ['required', 'mimes:pdf', 'max:2048'];
+            $rules['arquivos.'.$documento] = ['required', 'mimes:pdf', 'max:65536'];
             switch ($documento) {
                 case 'heteroidentificacao':
-                    $rules['arquivos.'.$documento] = ['required', 'file',  'mimes:mp4', 'max:51200'];
+                    $rules['arquivos.'.$documento] = ['required', 'file',  'mimes:mp4', 'max:65536'];
                     break;
                 case 'historico':
                 case 'nascimento_ou_casamento':
