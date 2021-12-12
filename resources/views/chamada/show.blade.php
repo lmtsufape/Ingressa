@@ -25,11 +25,11 @@
                     @foreach ($datas as $data)
                         <li>
                             <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
-                                @if ($data->tipo == $tipos['convocacao'])
+                                @if ($data->tipo == $tipos_data['convocacao'])
                                     <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
-                                @elseif($data->tipo == $tipos['envio'])
+                                @elseif($data->tipo == $tipos_data['envio'])
                                     <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
-                                @elseif($data->tipo == $tipos['resultado'])
+                                @elseif($data->tipo == $tipos_data['resultado'])
                                     <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
                                 @endif
                                 <div class="">
@@ -110,6 +110,9 @@
                                                 {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
                                                     @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
                                                         convocação
+                                                        @break
+                                                    @case(\App\Models\Listagem::TIPO_ENUM['pendencia'])
+                                                        pendência
                                                         @break
                                                     @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
                                                         resultado
@@ -214,9 +217,9 @@
                                 <label for="tipo" class="form-label">{{__('Tipo da data')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da data --</option>
-                                    <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
-                                    <option @if(old('tipo') == $tipos['envio']) selected @endif value="{{$tipos['envio']}}">Envio de documentos</option>
-                                    <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
+                                    <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
+                                    <option @if(old('tipo') == $tipos_data['resultado']) selected @endif value="{{$tipos_data['resultado']}}">Resultado</option>
                                 </select>
 
                                 @error('tipo')
@@ -317,16 +320,16 @@
                                 <div class="col-sm-12 mb-3">
                                     <label for="tipo">{{__('Tipo da data')}}</label>
                                     <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
-                                        <option value="{{$data->id}}" selected >@if ($data->tipo == $tipos['convocacao']) Convocação @elseif($data->tipo == $tipos['envio']) Envio de documentos @elseif($data->tipo == $tipos['resultado']) Resultado @endif</option>
-                                        @if ($data->tipo != $tipos['convocacao'])
-                                            <option @if(old('tipo') == $tipos['convocacao']) selected @endif value="{{$tipos['convocacao']}}">Convocação</option>
+                                        <option value="{{$data->id}}" selected >@if ($data->tipo == $tipos_data['convocacao']) Convocação @elseif($data->tipo == $tipos_data['envio']) Envio de documentos @elseif($data->tipo == $tipos_data['resultado']) Resultado @endif</option>
+                                        @if ($data->tipo != $tipos_data['convocacao'])
+                                            <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
 
                                         @endif
-                                        @if ($data->tipo != $tipos['envio'])
-                                            <option @if(old('tipo') == $tipos['envio']) selected @endif value="{{$tipos['envio']}}">Envio de documentos</option>
+                                        @if ($data->tipo != $tipos_data['envio'])
+                                            <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
                                         @endif
-                                        @if ($data->tipo != $tipos['resultado'])
-                                            <option @if(old('tipo') == $tipos['resultado']) selected @endif value="{{$tipos['resultado']}}">Resultado</option>
+                                        @if ($data->tipo != $tipos_data['resultado'])
+                                            <option @if(old('tipo') == $tipos_data['resultado']) selected @endif value="{{$tipos_data['resultado']}}">Resultado</option>
                                         @endif
                                     </select>
 
@@ -387,7 +390,7 @@
                         <div class="row">
                             <div class="col-sm-12 mb-3">
                                 <label for="titulo">{{__('Título da listagem')}}</label>
-                                <input type="text" id="titulo" name="titulo" class="form-control campoDeTexto @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required placeholder="Insira o titulo da listagem">
+                                <input type="text" id="titulo" name="titulo" class="form-control campoDeTexto @error('titulo') is-invalid @enderror" value="{{old('titulo')}}" autofocus required placeholder="Insira o titulo da lista">
 
                                 @error('titulo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -403,6 +406,7 @@
                                     <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
                                     <option @if(old('tipo') == $tiposListagem['convocacao']) selected @endif value="{{$tiposListagem['convocacao']}}">Convocação</option>
                                     <option @if(old('tipo') == $tiposListagem['resultado']) selected @endif value="{{$tiposListagem['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Pendência</option>
                                     <option @if(old('tipo') == $tiposListagem['final']) selected @endif value="{{$tiposListagem['final']}}">Final</option>
                                 </select>
 
@@ -560,11 +564,11 @@
                                         @foreach ($datas as $data)
                                             <tr>
                                                 <th class="align-middle pe-0">
-                                                    @if ($data->tipo == $tipos['convocacao'])
+                                                    @if ($data->tipo == $tipos_data['convocacao'])
                                                         <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
-                                                    @elseif($data->tipo == $tipos['envio'])
+                                                    @elseif($data->tipo == $tipos_data['envio'])
                                                         <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
-                                                    @elseif($data->tipo == $tipos['resultado'])
+                                                    @elseif($data->tipo == $tipos_data['resultado'])
                                                         <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
                                                     @endif
                                                 </th>
