@@ -11,6 +11,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\DataChamada;
 use App\Models\Inscricao;
+use App\Models\Listagem;
 use App\Models\MultiplicadorVaga;
 use App\Models\Sisu;
 use App\Models\User;
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Listagem;
 
 class ChamadaController extends Controller
 {

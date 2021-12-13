@@ -159,6 +159,9 @@
                                                 @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
                                                     resultado
                                                     @break
+                                                @case(\App\Models\Listagem::TIPO_ENUM['final'])
+                                                    final
+                                                    @break
                                             @endswitch</span>
                                         </div>
                                         <div class="row px-1 link">
@@ -402,8 +405,9 @@
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
                                     <option @if(old('tipo') == $tipos_listagem['convocacao']) selected @endif value="{{$tipos_listagem['convocacao']}}">Convocação</option>
-                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Pendência</option>
                                     <option @if(old('tipo') == $tipos_listagem['resultado']) selected @endif value="{{$tipos_listagem['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Pendência</option>
+                                    <option @if(old('tipo') == $tipos_listagem['final']) selected @endif value="{{$tipos_listagem['final']}}">Final</option>
                                 </select>
 
                                 @error('tipo')

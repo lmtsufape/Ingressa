@@ -60,6 +60,9 @@ class ListagemController extends Controller
             case Listagem::TIPO_ENUM['resultado']:
                 $listagem->caminho_listagem = $this->gerarListagemResultado($request, $listagem);
                 break;
+            case Listagem::TIPO_ENUM['final']:
+                $listagem->caminho_listagem = $this->gerarListagemFinal($request, $listagem);
+                break;
         }
         $listagem->update();
 
@@ -301,6 +304,39 @@ class ListagemController extends Controller
         $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
+    }
+
+    private function gerarListagemFinal(ListagemRequest $request, Listagem $listagem)
+    {
+        $chamada = Chamada::find($request->chamada);
+        $sisu = $chamada->sisu;
+        $cursos = Curso::all();
+        $cotas = Cota::all();
+        $candidatosIngressantesCursos = collect();
+        $candidatosReservaCursos = collect();
+        dd($chamada);
+
+        foreach($cursos as $curso){
+            $candidatosIngressantesCurso = collect();
+            $candidatosReservaCurso = collect();
+
+            foreach($cotas as $cota){
+                $candidatosCotaCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
+                ['cota_vaga_ocupada_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+                $cota_curso_quantidade = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot->quantidade_vagas;
+
+                foreach($candidatosCotaCurso as $candidato){
+                    if($cota_curso_quantidade > 0){
+                        $candidatosIngressantesCurso->push($candidato);
+                        $cota_curso_quantidade -= 1;
+                    }else{
+                        $candidatosReservaCurso->push($candidato);
+                    }
+                }
+            }
+        }
+        
     }
 
     /**

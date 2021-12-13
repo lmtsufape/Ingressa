@@ -13,6 +13,7 @@ class Listagem extends Model
         'convocacao'      => 1,
         'pendencia'       => 2,
         'resultado'       => 3,
+        'final'    => 4,
     ];
 
     protected $fillable = [
