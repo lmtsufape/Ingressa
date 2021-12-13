@@ -1,108 +1,110 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Minhas Inscrições') }}
-        </h2>
-    </x-slot>
-    <div class="container" style="padding-top: 5rem; padding-bottom: 8rem;">
-        <div class="form-row justify-content-center">
-            <div class="col-md-10">
-                <div class="card" style="width: 100%;">
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="col-md-8">
-                                <h5 class="card-title">Minhas Inscrições do SiSU na UFAPE</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Cursos</h6>
-                            </div>
-                        </div>
-                        <div div class="form-row">
-                            @if(session('success'))
-                                <div class="col-md-12" style="margin-top: 5px;">
-                                    <div class="alert alert-success" role="alert">
-                                        <p>{{session('success')}}</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Turno</th>
-                                        <th scope="col">Situação</th>
-                                        <th scope="col">Opções</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($cursos as $i => $curso)
-                                        <tr>
-                                            <td>{{$curso->nome}}</td>
-                                            <td>
-                                                @switch($curso->turno)
-                                                    @case($turnos['matutino'])
-                                                        {{__('Matutino')}}
-                                                        @break
-                                                    @case($turnos['vespertino'])
-                                                        {{__('Vespertino')}}
-                                                        @break
-                                                    @case($turnos['noturno'])
-                                                        {{__('Noturno')}}
-                                                        @break
-                                                    @case($turnos['integral'])
-                                                        {{__('Integral')}}
-                                                        @break
-                                                @endswitch
-                                            </td>
-                                            <td>
-                                                @switch($inscricoes[$i]->status)
-                                                    @case($situacoes['documentos_pendentes'])
-                                                        {{__('Pendente')}}
-                                                        @break
-                                                    @case($situacoes['documentos_enviados'])
-                                                        {{__('Em análise')}}
-                                                        @break
-                                                @endswitch
-                                            </td>
-                                            <td>
-                                                @switch($inscricoes[$i]->status)
-                                                    @case($situacoes['documentos_pendentes'])
-                                                        @can('dataEnvio', $inscricoes[$i]->chamada)
-                                                            <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
-                                                                Enviar documentos
-                                                            </a>
-                                                        @else 
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <button class="btn btn-primary" disabled>
-                                                                        Enviar documentos
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <small>Fora do periodo de envio</small>
-                                                                </div>
-                                                            </div>
-                                                        @endcan
-                                                        @break
-                                                    @case($situacoes['documentos_enviados'])
-                                                        <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
-                                                            Documentos em análise
-                                                        </a>
-                                                        @break
-                                                    @case($situacoes['documentos_aceitos_sem_pendencias'])
-                                                        <a type="button" class="btn btn-primary" href="{{route('inscricao.documentacao', $inscricoes[$i]->id)}}">
-                                                            Documentos aceitos
-                                                        </a>
-                                                        @break
-                                                @endswitch
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                        </table>
+    <div class="fundo px-5 py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-11 pt-0">
+                <div class="row tituloBorda justify-content-between">
+                    <div class="d-flex align-items-center justify-content-between mx-0 px-0">
+                        <span class="align-middle titulo">Minhas inscrições</span>
                     </div>
                 </div>
+                @if(session('success'))
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </symbol>
+                            </svg>
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @php
+                    $count = 0;
+                    $controle = true;
+                @endphp
+                @while ($controle)
+                    @if(($count+1) % 4 == 1)
+                        <div class="row justify-content-between">
+                    @endif
+                    @if (array_key_exists($count, $cursos->toArray()))
+
+                        <a style="text-decoration: none"  @can('dataEnvio', $inscricoes[$count]->chamada) href="{{route('inscricao.documentacao', $inscricoes[$count]->id)}}" @endcan class="col-md-2 caixa mt-5 shadow p-3 py-3 text-center" >
+                            <h6 style="color: rgb(110, 110, 110)">
+                                <strong>SiSU {{$inscricoes[$count]->chamada->sisu->edicao}}</strong><br>
+                            </h6>
+                            <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
+                            <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
+                            <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
+                                @case($graus['bacharelado']){{"Bacharelado"}}@break
+                                @case($graus['licenciatura']){{"Licenciatura"}}@break
+                                @case($graus['tecnologo']){{"Tecnólogo"}}@break
+                            @endswitch -
+                            @switch($cursos[$count]->turno)
+                                @case($turnos['matutino']){{"Matutino"}}@break
+                                @case($turnos['vespertino']){{"Vespertino"}}@break
+                                @case($turnos['noturno']){{"Noturno"}}@break
+                                @case($turnos['integral']){{"Integral"}}@break
+                            @endswitch)
+                            </div>
+                            <div class="subtitulo" >
+                                Envio da documentação: 
+                                <span style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">
+                                    {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_inicio))}} - {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_fim))}}
+                                </span>
+                            </div>
+                            <div class="subtitulo" style="margin-top: 10px;">
+                                Status: 
+                                <span style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">
+                                    @switch($inscricoes[$count]->status)
+                                        @case($situacoes['documentos_pendentes'])
+                                            @can('dataEnvio', $inscricoes[$count]->chamada)
+                                                Documentos pendentes
+                                            @else 
+                                                Documentos pendentes
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <small> Fora do periodo de envio</small>
+                                                    </div>
+                                                </div>
+                                            @endcan
+                                            @break
+                                        @case($situacoes['documentos_enviados'])
+                                                Documentos em análise
+                                            @break
+                                        @case($situacoes['documentos_aceitos_sem_pendencias'])
+                                                Documentos aceitos
+                                            @break
+                                        @case($situacoes['documentos_aceitos_com_pendencias'])
+                                                Documentos aceitos com pendências
+                                            @break
+                                        @case($situacoes['documentos_invalidados'])
+                                                Documentos invalidados
+                                            @break
+                                    @endswitch
+                                </span>
+                            </div>
+
+                        </a>
+                    @else
+                        <div class="col-md-2  mt-4  p-3 text-center"></div>
+                    @endif
+                    @if(($count+1) % 4 == 0)
+                        </div>
+                        @if (!(array_key_exists($count, $cursos->toArray())))
+                            @php
+                                $controle = false;
+                            @endphp
+                        @endif
+                    @endif
+                    @php
+                        $count++;
+                    @endphp
+                @endwhile
             </div>
         </div>
     </div>
