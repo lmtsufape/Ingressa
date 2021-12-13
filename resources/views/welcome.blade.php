@@ -31,79 +31,126 @@
     </head>
     <body class="">
         @component('layouts.nav_bar')@endcomponent
-        <div class="fundo px-5 py-5">
-            <div class="container">
-                <div class="py-3 px-4 row ms-0 justify-content-between">
-                    <div class="col-md-7">
-                        <div class="text-center "style="font-size: 55px;">
-                            LOGO
-                        </div>
-                        <div class="mt-4 tituloEntrada">
-                            1- Envie seus documentos
-                        </div>
-                        <!--deixar o texto justificado-->
-                        <div class="textoEntrada mt-2 text-justify">
-                            O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão usado por estas indústrias desde o ano de 1500, quando uma misturou os caracteres de um texto para criar um espécime de livro. Este texto não só sobreviveu 5 séculos, mas também o salto para a tipografia electrónica, mantendo-se essencialmente inalterada. Foi popularizada nos anos 60 com a disponibilização das folhas de Letraset, que continham passagens com Lorem Ipsum, e mais recentemente com os programas de publicação como o Aldus PageMaker que incluem versões do Lorem Ipsum.
-                        </div>
-                    </div>
-                    <div class="col-md-3 caixa shadow p-3 bg-white">
-                        @if (session('success'))
-                            <div class="mb-4 font-medium text-sm text-green-600">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        <div class="data bordinha">
-                            Entrar
-                        </div>
-                        <div class="mt-2 subtexto">
-                            O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão 
-                        </div>
-                        <div class="row">
-                            <form id="login-form" class="my-4" method="POST" action="{{route('login')}}">
-                                @csrf
-                                <div class="form-group textoInput">
-                                    <label for="email">E-mail</label>
-                                    <input class="form-control form-control-sm caixaDeTexto @error('email') is-invalid @enderror" id="email" name="email" value="{{old('email')}}" type="text" placeholder="E-mail" required>
-                                
-                                    @error('email')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
+        <div class="container" style="margin-top: 50px; margin-bottom: 50px;">
+            <div class="card text-center">
+                <div class="card-header">
+                    <span class="titulo pt-0">Bem vindo ao {nome_do_sistema}!</span>
+                </div>
+                <div class="card-body" style="background-color: rgba(0, 0, 0, 0.03);">
+                    @if($edicao_atual != null)
+                        <h5 class="card-title titulo pt-0" style="font-size: 34px;">SISU {{$edicao_atual->edicao}}</h5>
+                        @foreach ($chamadas as $chamada)
+                            <div class="row pb-4">
+                                <div class="col-sm-12">
+                                    <div class="card" style="text-align: left">
+                                        <div class="card-body">
+                                            <h5 class="card-title titulo pt-0" style="font-size: 30px;">{{$chamada->nome}}</h5>
+                                            <div class=""> 
+                                                <div class="row ms-0 justify-content-between">
+                                                    <div class="col-md-4 shadow p-3 caixa">
+                                                        <div class="col-md-12 data" style="font-size: 25px;">
+                                                            Datas Importantes
+                                                        </div>
+                                                        @if ($chamada->datasChamada->count() > 0) 
+                                                            <ul class="list-group list-unstyled">
+                                                                @foreach ($chamada->datasChamada as $data)
+                                                                    <li>
+                                                                        <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                                                            @if ($data->tipo == $tipos_data['convocacao'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
+                                                                            @elseif($data->tipo == $tipos_data['envio'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
+                                                                            @elseif($data->tipo == $tipos_data['resultado'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
+                                                                            @endif
+                                                                            <div class="">
+                                                                                <div class="tituloLista aling-middle mx-3">
+                                                                                    {{$data->titulo}}
+                                                                                </div>
+                                                                                <div class="aling-middle mx-3 datinha">
+                                                                                    {{date('d/m/Y',strtotime($data->data_inicio))}} > {{date('d/m/Y',strtotime($data->data_fim))}}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else   
+                                                            <div class="col-md-12 text-center">
+                                                                <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
+                                                            </div>
+                                                            <div class="col-md-12 text-center legenda">
+                                                                Nenhuma data foi adicionada
+                                                                @can('isAdmin', \App\Models\User::class)
+                                                                    <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#adicionarData">clique aqui</a> <span class="legenda">para adicionar</span></p>
+                                                                @endcan
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                        
+                                                    <div class="col-md-8 pt-0">
+                                                        <div class="col-md-12 tituloBorda">
+                                                            <span class="titulo pt-0" style="font-size: 28px;">Listagens</span>
+                                                        </div>
+                                                        <div class="col-md-12 mt-4 p-2 caixa shadow text-center"> 
+                                                            @if($chamada->listagem->count() > 0)
+                                                                <ul class="list-group mx-2 list-unstyled">
+                                                                    @foreach ($chamada->listagem as $listagem)
+                                                                        <li>
+                                                                            <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                                                                <div class="">
+                                                                                    <div class="mx-2 tituloLista">
+                                                                                        {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
+                                                                                            @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
+                                                                                                convocação
+                                                                                                @break
+                                                                                            @case(\App\Models\Listagem::TIPO_ENUM['pendencia'])
+                                                                                                pendência
+                                                                                                @break
+                                                                                            @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
+                                                                                                resultado
+                                                                                                @break
+                                                                                        @endswitch</span>
+                                                                                    </div>
+                                                                                    <div class="row px-1 link" style="text-align: left;">
+                                                                                        <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @else
+                                                                <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1654.svg')}}">
+                                                                <div class="col-md-12 text-center legenda" style="margin-bottom: 20px;">
+                                                                    Nenhuma listagem foi adicionada
+                                                                    @can('isAdmin', \App\Models\User::class)
+                                                                        <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#adicionarListagem">clique aqui</a> <span class="legenda">para adicionar</span></p>
+                                                                    @endcan
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group mt-2 textoInput">
-                                    <label for="password">Senha</label>
-                                    <input class="form-control form-control-sm caixaDeTexto @error('password') is-invalid @enderror" type="password" id="password" name="password" value="{{old('password')}}" type="text" placeholder="Senha" required>
-                                
-                                    @error('password')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="mt-3">
-                                    <div class="form-check mb-0 pb-0 checkbox">
-                                    <input class="form-check-input" type="checkbox" id="remember_me" name="remember" @if(old('remember') != null) checked @endif>
-                                    <label class="form-check-label" for="defaultCheck1">
-                                        Lembre-se de mim
-                                    </label>
                                     </div>
-                                    <a href="{{route('password.request')}}" class="link">Esqueceu seu acesso?</a>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        @endforeach
+                    @else
                         <div class="row">
-                            <div class="col-md-12 text-center" style="margin-bottom: 10px;">
-                                <button type="submit" class="btn botaoEntrar col-md-10" form="login-form" style="width: 100%;">Entrar</button> 
+                            <div class="col-md-12">
+                                <div class="mt-4 tituloEntrada">
+                                    Fora do período de ingresso
+                                </div>
+                                <div class="textoEntrada mt-2 text-justify">
+                                    O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão usado por estas indústrias desde o ano de 1500, quando uma misturou os caracteres de um texto para criar um espécime de livro. Este texto não só sobreviveu 5 séculos, mas também o salto para a tipografia electrónica, mantendo-se essencialmente inalterada. Foi popularizada nos anos 60 com a disponibilização das folhas de Letraset, que continham passagens com Lorem Ipsum, e mais recentemente com os programas de publicação como o Aldus PageMaker que incluem versões do Lorem Ipsum.
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <a href="{{route('primeiro.acesso')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Primeiro acesso</a> 
-                            </div>
-                        </div>
-                    </div>
-                </div> 
+                    @endif
+                </div>
             </div>
         </div>
         @component('layouts.footer')@endcomponent
