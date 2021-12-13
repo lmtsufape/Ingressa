@@ -52,6 +52,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::post('/sisus/{sisu_id}/importar-candidatos/{chamada_id}', [ChamadaController::class, 'importarCandidatos'])
     ->name('chamadas.importar.candidatos');
 
+    Route::post('/sisus/{sisu_id}/importa-planilhas', [SisuController::class, 'importarPlanilhas'])
+    ->name('chamadas.importar.planilhas');
+
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada', [ChamadaController::class, 'candidatosChamada'])
     ->name('chamadas.candidatos');
 

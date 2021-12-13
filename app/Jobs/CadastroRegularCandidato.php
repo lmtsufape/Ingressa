@@ -39,7 +39,7 @@ class CadastroRegularCandidato implements ShouldQueue
      */
     public function handle()
     {
-        $dados = fopen(public_path('storage/'.$this->chamada->caminho_import_sisu_gestao), "r");
+        $dados = fopen(public_path('storage/'.$this->chamada->sisu->caminho_import_regular), "r");
         $primeira = true;
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
             if($primeira){

@@ -144,16 +144,7 @@ class ChamadaController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($chamada_id);
-        if($chamada->caminho_import_sisu_gestao != null){
-            if (Storage::disk()->exists('public/' . $chamada->caminho_import_sisu_gestao)) {
-                Storage::delete('public/' . $chamada->caminho_import_sisu_gestao);
-            }
-        }
-        $arquivo = $request->arquivo;
-        $path = 'sisu/'.$chamada->sisu->id.'/'.$chamada->id.'/';
-        $nome = $arquivo->getClientOriginalName();
-        Storage::putFileAs('public/'.$path, $arquivo, $nome);
-        $chamada->caminho_import_sisu_gestao = $path . $nome;
+        
         if($chamada->regular){
             //$this->cadastrarCandidatosRegular($chamada);
             $batch = Bus::batch([

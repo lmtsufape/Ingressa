@@ -40,7 +40,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
      */
     public function handle()
     {
-        $dados = fopen(public_path('storage/'.$this->chamada->caminho_import_sisu_gestao), "r");
+        $dados = fopen(public_path('storage/'.$this->chamada->sisu->caminho_import_espera), "r");
         $primeira = true;
         $candidatos = collect();
         $cont = 0;

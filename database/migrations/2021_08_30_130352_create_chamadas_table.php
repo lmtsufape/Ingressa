@@ -20,7 +20,6 @@ class CreateChamadasTable extends Migration
             $table->string('nome');
             $table->string('descricao');
             $table->boolean('regular');
-            $table->string('caminho_import_sisu_gestao')->nullable();
             $table->string('job_batch_id')->nullable();
             $table->timestamps();
         });
