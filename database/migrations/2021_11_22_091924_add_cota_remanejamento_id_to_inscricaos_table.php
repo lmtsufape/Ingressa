@@ -14,8 +14,8 @@ class AddCotaRemanejamentoIdToInscricaosTable extends Migration
     public function up()
     {
         Schema::table('inscricaos', function (Blueprint $table) {
-            $table->unsignedBigInteger('cota_remanejamento_id')->nullable();
-            $table->foreign('cota_remanejamento_id')->references('id')->on('cotas');
+            $table->unsignedBigInteger('cota_vaga_ocupada_id')->nullable();
+            $table->foreign('cota_vaga_ocupada_id')->references('id')->on('cotas');
         });
     }
 
@@ -27,7 +27,7 @@ class AddCotaRemanejamentoIdToInscricaosTable extends Migration
     public function down()
     {
         Schema::table('inscricaos', function (Blueprint $table) {
-            $table->dropColumn('cota_remanejamento_id');
+            $table->dropColumn('cota_vaga_ocupada_id');
         });
     }
 }

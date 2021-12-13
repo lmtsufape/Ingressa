@@ -146,8 +146,10 @@ class CadastroRegularCandidato implements ShouldQueue
                     $curs = Curso::where([['cod_curso', $inscricao->co_ies_curso], ['turno', $turno]])->first();
 
                     $inscricao->chamada_id = $this->chamada->id;
+                    $inscricao->sisu_id = $this->chamada->sisu->id;
                     $inscricao->candidato_id = $candidato->id;
                     $inscricao->cota_id = $cota->id;
+                    $inscricao->cota_vaga_ocupada_id = $cota->id;
                     $inscricao->curso_id = $curs->id;
                     $inscricao->save();
 

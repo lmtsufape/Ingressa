@@ -404,10 +404,10 @@
                                 <label for="tipo">{{__('Selecione o tipo')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
-                                    <option @if(old('tipo') == $tiposListagem['convocacao']) selected @endif value="{{$tiposListagem['convocacao']}}">Convocação</option>
-                                    <option @if(old('tipo') == $tiposListagem['resultado']) selected @endif value="{{$tiposListagem['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tipos_listagem['convocacao']) selected @endif value="{{$tipos_listagem['convocacao']}}">Convocação</option>
+                                    <option @if(old('tipo') == $tipos_listagem['resultado']) selected @endif value="{{$tipos_listagem['resultado']}}">Resultado</option>
                                     <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Pendência</option>
-                                    <option @if(old('tipo') == $tiposListagem['final']) selected @endif value="{{$tiposListagem['final']}}">Final</option>
+                                    <option @if(old('tipo') == $tipos_listagem['final']) selected @endif value="{{$tipos_listagem['final']}}">Final</option>
                                 </select>
 
                                 @error('tipo')

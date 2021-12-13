@@ -310,9 +310,33 @@ class ListagemController extends Controller
     {
         $chamada = Chamada::find($request->chamada);
         $sisu = $chamada->sisu;
-        foreach($sisu->chamadas as $chamada){
-            $chamada->inscricoes
+        $cursos = Curso::all();
+        $cotas = Cota::all();
+        $candidatosIngressantesCursos = collect();
+        $candidatosReservaCursos = collect();
+        dd($chamada);
+
+        foreach($cursos as $curso){
+            $candidatosIngressantesCurso = collect();
+            $candidatosReservaCurso = collect();
+
+            foreach($cotas as $cota){
+                $candidatosCotaCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
+                ['cota_vaga_ocupada_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+                $cota_curso_quantidade = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot->quantidade_vagas;
+
+                foreach($candidatosCotaCurso as $candidato){
+                    if($cota_curso_quantidade > 0){
+                        $candidatosIngressantesCurso->push($candidato);
+                        $cota_curso_quantidade -= 1;
+                    }else{
+                        $candidatosReservaCurso->push($candidato);
+                    }
+                }
+            }
         }
+        
     }
 
     /**

@@ -109,7 +109,7 @@ class Inscricao extends Model
 
     public function cotaRemanejada()
     {
-        return $this->belongsTo(Cota::class, 'cota_remanejamento_id');
+        return $this->belongsTo(Cota::class, 'cota_vaga_ocupada_id');
     }
 
 

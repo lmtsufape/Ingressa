@@ -345,13 +345,12 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     $candidato->save();
 
                     $inscricao->chamada_id = $this->chamada->id;
+                    $inscricao->sisu_id = $this->chamada->sisu->id;
                     $inscricao->candidato_id = $candidato->id;
-                    if($cotaRemanejamento != $cota){
-                        $inscricao->cota_id = $cotaRemanejamento->id;
-                        $inscricao->cota_remanejamento_id = $cota->id;
-                    }else{
-                        $inscricao->cota_id = $cota->id;
-                    }
+
+                    $inscricao->cota_id = $cota->id;
+                    $inscricao->cota_vaga_ocupada_id = $cotaRemanejamento->id;
+
                     $inscricao->curso_id = $curs->id;
                     $inscricao->save();
 
@@ -377,13 +376,12 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         $candidatoExistente->user->update();
 
                         $inscricao->chamada_id = $this->chamada->id;
+                        $inscricao->sisu_id = $this->chamada->sisu->id;
                         $inscricao->candidato_id = $candidatoExistente->id;
-                        if($cotaRemanejamento != $cota){
-                            $inscricao->cota_id = $cotaRemanejamento->id;
-                            $inscricao->cota_remanejamento_id = $cota->id;
-                        }else{
-                            $inscricao->cota_id = $cota->id;
-                        }
+
+                        $inscricao->cota_id = $cota->id;
+                        $inscricao->cota_vaga_ocupada_id = $cotaRemanejamento->id;
+
                         $inscricao->curso_id = $curs->id;
                         $inscricao->save();
                     }else{
