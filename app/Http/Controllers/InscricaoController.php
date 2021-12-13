@@ -27,14 +27,14 @@ class InscricaoController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $inscricoes = $user->candidato->inscricoes;
+        $inscricoes = $user->candidato->inscricoes()->orderBy('created_at', 'desc')->get();
         $cursos = collect();
 
         //dd($inscricoes);
         foreach($inscricoes as $inscricao){
             $cursos->push($inscricao->curso);
         }
-        return view('inscricao.index', compact('inscricoes', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM, 'situacoes' => Inscricao::STATUS_ENUM]);
+        return view('inscricao.index', compact('inscricoes', 'cursos'))->with(['turnos' => Curso::TURNO_ENUM, 'situacoes' => Inscricao::STATUS_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
     /**
