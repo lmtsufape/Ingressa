@@ -56,11 +56,11 @@
                                 @endif
                                 <td class="align-middle text-center">
                                     <div class="btn-group">
-                                        @if ($chamada->caminho_import_sisu_gestao == null)
+                                        @if ($batches[$i] == null)
                                             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                                                <a data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                                <a data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="icone-busca"></a>
                                             @else
-                                                <a style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                                <a style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="icone-busca"></a>
                                             @endif
                                         @else
                                             @if($batches[$i]->finished())
@@ -249,90 +249,80 @@
 
     @foreach ($chamadas as $chamada)
         <!-- Modal importar candidatos da chamada -->
-        <div class="modal fade bd-example-modal-lg" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #28a745;">
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: white;">Importar Candidatos</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
+        <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modalFundo p-3">
+                    <div class="col-md-12 tituloModal" id="staticBackdropLabel">Importar Candidatos</div>
+                    <div class="modal-body textoModal">
                         @if($chamada->regular)
                             <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
                                 @csrf
-                                <input type="file" name="arquivo" accept=".csv" required><br>
-                                Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
+                                Deseja importar os candidatos da chamada {{$chamada->nome}}?
                             </form>
                         @else
                             <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
                                 @csrf
-                                <input type="file" name="arquivo" accept=".csv" required><br>
-                                Anexe o arquivo .csv da chamada {{$chamada->nome}} da edição {{$sisu->edicao}}.
-                                <div class="accordion" id="accordionExample">
-                                    @foreach ($cursos as $i => $curso)
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="heading-{{$curso->id}}">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$curso->id}}" aria-expanded="false" aria-controls="collapse-{{$curso->id}}">
-                                                    {{$curso->nome}} - @switch($curso->turno)
-                                                    @case($turnos['matutino']){{"Matutino"}}@break
-                                                    @case($turnos['vespertino']){{"Vespertino"}}@break
-                                                    @case($turnos['noturno']){{"Noturno"}}@break
-                                                    @case($turnos['integral']){{"Integral"}}@break
-                                                    @endswitch
-                                                </button>
-                                            </h2>
-                                            <div id="collapse-{{$curso->id}}" class="collapse" aria-labelledby="heading-{{$curso->id}}" data-parent="#{{$curso->id}}-Heading">
-                                                <div class="card-body">
-                                                    @foreach ($curso->cotas as $cota)
-                                                        @if($cota->cod_cota != "B4342")
-                                                            <hr>
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <label><strong>{{$cota->cod_cota}}</strong></label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-sm-4">
-                                                                    <div class="" id="vagas{{$curso->id}}_{{$cota->id}}">
-                                                                        <label for="vagas-{{$curso->id}}-{{$cota->id}}">{{__('Número de vagas')}}</label>
-                                                                        <input type="number" id="vagas-curso-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->quantidade_vagas}}" disabled>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-4">
-                                                                    <div class="" id="efetivados{{$curso->id}}_{{$cota->id}}">
-                                                                        <label for="efetivados-{{$curso->id}}-{{$cota->id}}">{{__('Número de efetivados')}}</label>
-                                                                        <input type="number" id="candidatos-efetivados-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->vagas_ocupadas}}" disabled>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-4">
-                                                                    <div class="" id="multiplicador_{{$curso->id}}_{{$cota->id}}">
-                                                                        <label for="multiplicador-{{$curso->id}}-{{$cota->id}}">{{__('Multiplicador de vagas')}}</label>
-                                                                        <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
-                                                                        <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
-
-                                                                        @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
-                                                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                                                {{ $message }}
-                                                                            </div>
-                                                                        @enderror
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                </div>
-                                            </div>
+                                <div class="pb-2 pt-2">Selecione o curso:</div>
+                                @foreach ($cursos as $i => $curso)
+                                    <div class="form-check">
+                                        <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="radio" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
+                                        <div class="form-check-label" for="cota_{{$curso->id}}">
+                                            {{$curso->nome}} - @switch($curso->turno)
+                                            @case($turnos['matutino']){{"Matutino"}}@break
+                                            @case($turnos['vespertino']){{"Vespertino"}}@break
+                                            @case($turnos['noturno']){{"Noturno"}}@break
+                                            @case($turnos['integral']){{"Integral"}}@break
+                                            @endswitch
                                         </div>
-                                    @endforeach
-                                </div>
+                                        <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
+                                            @foreach ($curso->cotas as $cota)
+                                                @if($cota->cod_cota != "B4342")
+                                                    <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
+                                                        {{$cota->cod_cota}}
+                                                        <div class="row align-items-center">
+                                                            <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
+                                                                Número de vagas
+                                                            </div>
+                                                            <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
+                                                                Número de validados
+                                                            </div>
+                                                            <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
+                                                                Multiplicador de vagas
+                                                            </div>
+                                                        </div>
+                                                        <div class="row align-items-center">
+                                                            <div class="col-md-4">
+                                                                <input type="number" id="vagas-curso-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->quantidade_vagas}}" disabled>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="number" id="candidatos-efetivados-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->vagas_ocupadas}}" disabled>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
+                                                                <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
+                                                                @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
+                                                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                                                        {{ $message }}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
                             </form>
                         @endif
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao">Importar</button>
+                    <div class="row justify-content-between mt-4">
+                        <div class="col-md-3">
+                            <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao"><span class="px-4">Publicar</span></button>
+                        </div>
                     </div>
                 </div>
             </div>

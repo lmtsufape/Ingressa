@@ -46,7 +46,11 @@
                                 <th class="align-middle"> {{$i+1}}</th>
                                 <td class="align-middle">{{$sisu->edicao}}</td>
                                 <td class="align-middle text-center">
-                                    <a href="{{route('sisus.show', ['sisu' => $sisu->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
+                                    @if ($sisu->caminho_import_regular == null)
+                                        <a title ="Importar listas" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                    @else
+                                        <a href="{{route('sisus.show', ['sisu' => $sisu->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
+                                    @endif
                                     <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
                                     <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
                                 </td>
@@ -171,6 +175,45 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+
+    @foreach ($sisus as $sisu)
+        <!-- Modal importar candidatos da chamada -->
+        <div class="modal fade" id="modalStaticImportarCandidatos_{{$sisu->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modalFundo p-3">
+                    <div class="col-md-12 tituloModal" id="staticBackdropLabel">Importar planihas para as listas</div>
+                    <div class="modal-body textoModal">
+                        <form id="importar-candidatos-sisu-form-{{$sisu->id}}" method="POST" action="{{route('chamadas.importar.planilhas', ['sisu_id' =>$sisu->id])}}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <input type="file" name="arquivoRegular" accept=".csv" required><br>
+                                    <label class="pb-2">Anexe o arquivo .csv da <strong>chamada regular</strong> da edição {{$sisu->edicao}}.</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <input type="file" name="arquivoEspera" accept=".csv" required><br>
+                                    Anexe o arquivo .csv da <strong>lista de espera</strong> da edição {{$sisu->edicao}}.
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <div class="row justify-content-between mt-4">
+                        <div class="col-md-3">
+                            <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}" id="submeterFormBotao"><span class="px-4">Importar</span></button>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

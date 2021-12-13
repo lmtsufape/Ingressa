@@ -16,6 +16,8 @@ class CreateSisusTable extends Migration
         Schema::create('sisus', function (Blueprint $table) {
             $table->id();
             $table->string('edicao');
+            $table->string('caminho_import_regular')->nullable();
+            $table->string('caminho_import_espera')->nullable();
             $table->timestamps();
         });
     }
