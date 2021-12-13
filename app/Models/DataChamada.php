@@ -13,7 +13,11 @@ class DataChamada extends Model
     public const TIPO_ENUM = [
         'convocacao'      => 1,
         'envio'    => 2,
-        'resultado'    => 3,
+        'analise' => 3,
+        'resultado_parcial' => 4,
+        'reenvio' => 5,
+        'analise_reenvio' =>6,
+        'resultado_final'    => 7,
     ];
 
     protected $fillable = [

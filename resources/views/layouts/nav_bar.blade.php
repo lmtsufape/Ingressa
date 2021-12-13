@@ -15,7 +15,7 @@
                         </li>
                         @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                             <li class="nav-item">
-                                <a class="nav-link mx-3 @if(request()->routeIs('usuarios.*')) active @endif" href="{{route('usuarios.index')}}">{{ __('Usuários') }}</a>
+                                <a class="nav-link mx-3 @if(request()->routeIs('usuarios.*')) active @endif" href="{{route('usuarios.index')}}">{{ __('Analistas') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.index')}}">{{ __('SiSU') }}</a>

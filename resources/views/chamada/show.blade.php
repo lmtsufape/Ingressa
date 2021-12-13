@@ -6,7 +6,7 @@
                     <div class="d-flex align-items-center data justify-content-between mx-0 px-0">
                         <span class="aling-middle ">Datas Importantes</span>
                         <span class="aling-middle">
-                            <a data-bs-toggle="modal" data-bs-target="#editarData" style="float: right;"><img width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
+                            <a data-bs-toggle="modal" data-bs-target="#editarData" style="margin-right: 3px;"><img width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
                             <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right;"><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
                         </span>
                     </div> 
@@ -16,6 +16,7 @@
                         <div class="col-md-12" style="margin-top: 5px;">
                             <div class="alert alert-success" role="alert">
                                 <p>{{session('success_data')}}</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
                     @endif
@@ -29,9 +30,18 @@
                                     <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
                                 @elseif($data->tipo == $tipos_data['envio'])
                                     <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
-                                @elseif($data->tipo == $tipos_data['resultado'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
+                                @elseif($data->tipo == $tipos_data['analise'])
+                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                @elseif($data->tipo == $tipos_data['resultado_parcial'])
+                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                @elseif($data->tipo == $tipos_data['reenvio'])
+                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                @elseif($data->tipo == $tipos_data['analise_reenvio'])
+                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                @elseif($data->tipo == $tipos_data['resultado_final'])
+                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
                                 @endif
+
                                 <div class="">
                                     <div class="tituloLista aling-middle mx-3">
                                         {{$data->titulo}}
@@ -87,6 +97,7 @@
                     <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                         <span class="align-middle titulo">Listagens</span>
                         <span class="aling-middle">
+                            <a class="btn botao my-2 py-1" href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" > <span class="px-4">Voltar</span></a>
                             <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem"><img src="{{asset('img/Grupo 1666.svg')}}" class="m-1" alt="Inserir nova listagem" width="40px" style="cursor:pointer;"></a>
                             <a data-bs-toggle="modal" data-bs-target="#editarListagem"><img src="{{asset('img/Grupo 1667.svg')}}" class="m-1" alt="Editar listagem" width="40px" style="cursor:pointer;"></a>
                         </span>
@@ -97,6 +108,7 @@
                         <div class="col-md-12" style="margin-top: 5px;">
                             <div class="alert alert-success" role="alert">
                                 <p>{{session('success_listagem')}}</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
                     @endif
@@ -219,7 +231,11 @@
                                     <option value="" selected disabled>-- Selecione o tipo da data --</option>
                                     <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
                                     <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
-                                    <option @if(old('tipo') == $tipos_data['resultado']) selected @endif value="{{$tipos_data['resultado']}}">Resultado</option>
+                                    <option @if(old('tipo') == $tipos_data['analise']) selected @endif value="{{$tipos_data['analise']}}">Análise de documentos</option>
+                                    <option @if(old('tipo') == $tipos_data['resultado_parcial']) selected @endif value="{{$tipos_data['resultado_parcial']}}">Resultado parcial</option>
+                                    <option @if(old('tipo') == $tipos_data['reenvio']) selected @endif value="{{$tipos_data['reenvio']}}">Período de retificação</option>
+                                    <option @if(old('tipo') == $tipos_data['analise_reenvio']) selected @endif value="{{$tipos_data['analise_reenvio']}}">Análise do período de retificação</option>
+                                    <option @if(old('tipo') == $tipos_data['resultado_final']) selected @endif value="{{$tipos_data['resultado_final']}}">Resultado final</option>
                                 </select>
 
                                 @error('tipo')
@@ -320,16 +336,36 @@
                                 <div class="col-sm-12 mb-3">
                                     <label for="tipo">{{__('Tipo da data')}}</label>
                                     <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
-                                        <option value="{{$data->id}}" selected >@if ($data->tipo == $tipos_data['convocacao']) Convocação @elseif($data->tipo == $tipos_data['envio']) Envio de documentos @elseif($data->tipo == $tipos_data['resultado']) Resultado @endif</option>
+                                        <option value="{{$data->tipo}}" selected >
+                                            @if ($data->tipo == $tipos_data['convocacao']) Convocação 
+                                            @elseif($data->tipo == $tipos_data['envio']) Envio de documentos 
+                                            @elseif($data->tipo == $tipos_data['analise']) Análise de documentos
+                                            @elseif($data->tipo == $tipos_data['resultado_parcial']) Resultado parcial
+                                            @elseif($data->tipo == $tipos_data['reenvio']) Período de retificação
+                                            @elseif($data->tipo == $tipos_data['analise_reenvio']) Análise do período de retificação
+                                            @elseif($data->tipo == $tipos_data['resultado_final']) Resultado 
+                                            @endif
+                                        </option>
                                         @if ($data->tipo != $tipos_data['convocacao'])
                                             <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
-
                                         @endif
                                         @if ($data->tipo != $tipos_data['envio'])
                                             <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
                                         @endif
-                                        @if ($data->tipo != $tipos_data['resultado'])
-                                            <option @if(old('tipo') == $tipos_data['resultado']) selected @endif value="{{$tipos_data['resultado']}}">Resultado</option>
+                                        @if ($data->tipo != $tipos_data['analise'])
+                                            <option @if(old('tipo') == $tipos_data['analise']) selected @endif value="{{$tipos_data['analise']}}">Análise de documentos</option>
+                                        @endif
+                                        @if ($data->tipo != $tipos_data['resultado_parcial'])
+                                            <option @if(old('tipo') == $tipos_data['resultado_parcial']) selected @endif value="{{$tipos_data['resultado_parcial']}}">Resultado parcial</option>
+                                        @endif
+                                        @if ($data->tipo != $tipos_data['reenvio'])
+                                            <option @if(old('tipo') == $tipos_data['reenvio']) selected @endif value="{{$tipos_data['reenvio']}}">Período de retificação</option>
+                                        @endif
+                                        @if ($data->tipo != $tipos_data['analise_reenvio'])
+                                            <option @if(old('tipo') == $tipos_data['analise_reenvio']) selected @endif value="{{$tipos_data['analise_reenvio']}}">Análise do período de retificação</option>
+                                        @endif
+                                        @if ($data->tipo != $tipos_data['resultado_final'])
+                                            <option @if(old('tipo') == $tipos_data['resultado_final']) selected @endif value="{{$tipos_data['resultado_final']}}">Resultado final</option>
                                         @endif
                                     </select>
 
@@ -568,8 +604,16 @@
                                                         <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
                                                     @elseif($data->tipo == $tipos_data['envio'])
                                                         <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
-                                                    @elseif($data->tipo == $tipos_data['resultado'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
+                                                    @elseif($data->tipo == $tipos_data['analise'])
+                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                                    @elseif($data->tipo == $tipos_data['resultado_parcial'])
+                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                                    @elseif($data->tipo == $tipos_data['reenvio'])
+                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                                    @elseif($data->tipo == $tipos_data['analise_reenvio'])
+                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                                    @elseif($data->tipo == $tipos_data['resultado_final'])
+                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
                                                     @endif
                                                 </th>
                                                 <td class="align-middle p-0">
