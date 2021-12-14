@@ -7,7 +7,7 @@
                     <div class="row justify-content-between">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img src=" {{ asset('storage/' . $inscricao->curso->icone) }} "
+                                <img style="border:2px solid white; border-radius: 50%;" src=" {{ asset('storage/' . $inscricao->curso->icone) }} "
                                     alt=""
                                     width="40"
                                     class="img-flex me-1">

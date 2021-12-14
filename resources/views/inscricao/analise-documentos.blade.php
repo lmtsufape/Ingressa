@@ -1,6 +1,13 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-md-12" style="text-align: right">
+                        <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}"> <span class="px-4">Voltar</span></a>
+                    </div>
+                </div>
+            </div>
             @if(session('success'))
                 <div class="row mt-3" id="mensagemSucesso">
                     <div class="col-md-12">
@@ -87,11 +94,10 @@
                                 <div class="col-md-12 px-3 pt-5">
                                     <div class="row justify-content-between">
                                         <div class="col-md-6">
-                                            <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" type="button" class="btn botao my-2 py-1 col-md-5"><span class="px-4">Voltar</span></a>
+                                            <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #1492E6;;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></a>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row justify-content-end">
-                                                <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #1492E6;;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></a>
                                                 <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar()"><span class="px-3 text-center" >Aprovar</span></a>
                                             </div>
                                         </div>
@@ -284,9 +290,9 @@
                                     Qual o valor da sua renda total?
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{--<div class="col-md-6">
                                 <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>    
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
 
@@ -302,137 +308,139 @@
                                     </a>
                                 </div>
                             @endif
-                        @foreach ($documentos as $indice =>  $documento)
-                            @if($documento == 'rani')
-                                <div>
-                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
-                                        <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
-                                            vaga para candidato autodeclarado indígena</span>
-                                    </div>
-                                </div>
-                            @endif
-                            @if($documento == 'heteroidentificacao')
-                                <div>
-                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
-                                        <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
-                                            vaga para candidato autodeclarado negro (preto ou
-                                            pardo)</span>
-                                    </div>
-                                </div>
-                            @endif
-                            @if($documento == 'comprovante_renda')
-                                <div>
-                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
-                                        <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da renda familiar bruta mensal per capita</span>
-                                    </div>
-                                </div>
-                            @endif
-                            @if($documento == 'laudo_medico')
-                                <div>
-                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
-                                        <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
-                                            vaga para pessoas com deficiência</span>
-                                    </div>
-                                </div>
-                            @endif
-                            @if($documento == 'declaracao_cotista')
-                                <div>
-                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
-                                        <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc" style="font-size: 20px;">Autodeclaração como candidato participante de reserva de vaga</span>
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="col-md-12">
-                                <div class="d-flex align-items-center justify-content-between pt-3">
-                                    @if($inscricao->arquivos()->where('nome', $documento)->first() != null)
-                                        <div class="col-md-2">
-                                            <a href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img src="{{asset('img/download2.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                            @foreach ($documentos as $indice =>  $documento)
+                                @if($documento == 'rani')
+                                    <div>
+                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
+                                                    vaga para candidato autodeclarado indígena</span>
+                                            </div>
                                         </div>
-                                    @else
-                                        <div class="col-md-2">
-                                            <a target="_blank" style="cursor:pointer;"><img src="{{asset('img/download3.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                    </div>
+                                @elseif($documento == 'heteroidentificacao')
+                                    <div>
+                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
+                                                    vaga para candidato autodeclarado negro (preto ou
+                                                    pardo)</span>
+                                            </div>
                                         </div>
-                                    @endif
+                                    </div>
+                                @elseif($documento == 'comprovante_renda')
+                                    <div>
+                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da renda familiar bruta mensal per capita</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @elseif($documento == 'laudo_medico')
+                                    <div>
+                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
+                                                    vaga para pessoas com deficiência</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @elseif($documento == 'declaracao_cotista')
+                                    <div>
+                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="tituloTipoDoc" style="font-size: 20px;">Autodeclaração como candidato participante de reserva de vaga</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                <div class="col-md-12">
+                                    <div class="d-flex align-items-center justify-content-between pt-3">
+                                        @if($inscricao->arquivos()->where('nome', $documento)->first() != null)
+                                            <div class="col-md-2">
+                                                <a href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img src="{{asset('img/download2.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                            </div>
+                                        @else
+                                            <div class="col-md-2">
+                                                <a target="_blank" style="cursor:pointer;"><img src="{{asset('img/download3.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                            </div>
+                                        @endif
 
-                                    @if($documento == 'declaracao_veracidade')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Declaração de Veracidade;</div>
-                                        </div>
-                                    @elseif($documento == 'certificado_conclusao')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
-                                        </div>
-                                    @elseif($documento == 'historico')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Histórico Escolar do Ensino Médio ou equivalente;</div>
-                                        </div>
-                                    @elseif($documento == 'nascimento_ou_casamento')
-                                        <div class="col-md-10" style="cursor:pointer;" >
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro de Nascimento ou Certidão de Casamento;</div>
-                                        </div>
-                                    @elseif($documento == 'cpf')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Cadastro de Pessoa Física (CPF) - pode estar no RG;</div>
-                                        </div>
-                                    @elseif($documento == 'rg')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Carteira de Identidade (RG) - Frente e verso;</div>
-                                        </div>
-                                    @elseif($documento == 'quitacao_eleitoral')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</div>
-                                        </div>
-                                    @elseif($documento == 'quitacao_militar')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</div>
-                                        </div>
-                                    @elseif($documento == 'foto')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Uma foto 3x4 atual;</div>
-                                        </div>
-                                    @elseif($documento == 'rani')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro Administrativo de Nascimento de Indígena ou equivalente;</div>
-                                        </div>
-                                    @elseif($documento == 'declaracao_cotista')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração como candidato participante de reserva de vaga;</div>
-                                        </div>
-                                    @elseif($documento == 'heteroidentificacao')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Vídeo individual e recente para procedimento de heteroidentificação;</div>
-                                        </div>
-                                    @elseif($documento == 'fotografia')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Fotografia individual e recente para procedimento de heteroidentificação;</div>
-                                        </div>
-                                    @elseif($documento == 'comprovante_renda')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</div>
-                                        </div>
-                                    @elseif($documento == 'laudo_medico')
-                                        <div class="col-md-10" style="cursor:pointer;">
-                                            <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico;</div>
-                                        </div>
-                                    @endif
+                                        @if($documento == 'declaracao_veracidade')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Declaração de Veracidade;</div>
+                                            </div>
+                                        @elseif($documento == 'certificado_conclusao')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
+                                            </div>
+                                        @elseif($documento == 'historico')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Histórico Escolar do Ensino Médio ou equivalente;</div>
+                                            </div>
+                                        @elseif($documento == 'nascimento_ou_casamento')
+                                            <div class="col-md-10" style="cursor:pointer;" >
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro de Nascimento ou Certidão de Casamento;</div>
+                                            </div>
+                                        @elseif($documento == 'cpf')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Cadastro de Pessoa Física (CPF) - pode estar no RG;</div>
+                                            </div>
+                                        @elseif($documento == 'rg')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Carteira de Identidade (RG) - Frente e verso;</div>
+                                            </div>
+                                        @elseif($documento == 'quitacao_eleitoral')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</div>
+                                            </div>
+                                        @elseif($documento == 'quitacao_militar')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</div>
+                                            </div>
+                                        @elseif($documento == 'foto')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Uma foto 3x4 atual;</div>
+                                            </div>
+                                        @elseif($documento == 'rani')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro Administrativo de Nascimento de Indígena ou equivalente;</div>
+                                            </div>
+                                        @elseif($documento == 'declaracao_cotista')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração como candidato participante de reserva de vaga;</div>
+                                            </div>
+                                        @elseif($documento == 'heteroidentificacao')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Vídeo individual e recente para procedimento de heteroidentificação;</div>
+                                            </div>
+                                        @elseif($documento == 'fotografia')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Fotografia individual e recente para procedimento de heteroidentificação;</div>
+                                            </div>
+                                        @elseif($documento == 'comprovante_renda')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</div>
+                                            </div>
+                                        @elseif($documento == 'laudo_medico')
+                                            <div class="col-md-10" style="cursor:pointer;">
+                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico;</div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
+                        @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                            <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
+                            <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
+                        @endif
+                        <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" style="background-color: #1492E6;" class="btn botaoVerde mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></a>
                     </div>
-                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
-                        <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
-                        <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
-                    @endif
-                    <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" style="background-color: #1492E6;" class="btn botaoVerde mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></a>
                 </div>
             </div>
         </div>
-      </div>
+    </div>
 
     <!--CORPO-->
 

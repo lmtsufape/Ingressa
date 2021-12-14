@@ -95,17 +95,21 @@
                                                 <td class="align-middle text-center">
                                                     <div class="btn-group">
                                                         @if($candidato->candidato->user->email != null)
-                                                            <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato concluído">
+                                                            <img src="{{asset('img/icon_aprovado_verde.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Primeiro acesso do candidato realizado">
                                                         @else
-                                                            <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Cadastro do candidato não concluído">
+                                                            <img src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Primeiro acesso do candidato não realizado">
                                                         @endif
 
                                                         @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
-                                                            <img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                            <img src="{{asset('img/icons-document-green.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
+                                                            <img src="{{asset('img/icons-document-blue.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos com pendências">
+                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])
+                                                            <img src="{{asset('img/icons-document-orange.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
                                                         @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
                                                             <img src="{{asset('img/icons-document-yellow.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
                                                         @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
-                                                            <img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos requeridos">
+                                                            <img src="{{asset('img/icons-document-red.png')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
                                                         @endif
                                                     </div>
                                                 </td>
@@ -125,26 +129,34 @@
                         </div>
                         <ul class="list-group list-unstyled">
                             <li>
-                                <div title="Cadastro do candidato concluído" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Primeiro acesso do candidato realizado" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                     <img class="aling-middle" width="33" src="{{asset('img/icon_aprovado_verde.svg')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                        Cadastro do candidato concluído
+                                        Primeiro acesso do candidato realizado
                                     </div>                    
                                 </div>
                             </li>
                             <li>
-                                <div title="Cadastro do candidato não concluído" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Primeiro acesso do candidato não realizado" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                     <img class="aling-middle" width="33" src="{{asset('img/icon_reprovado_vermelho.svg')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                        Cadastro do candidato não concluído
+                                        Primeiro acesso do candidato não realizado
                                     </div>                    
                                 </div>
                             </li>
                             <li>
-                                <div title="Documentos aceitos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Documentos aceitos sem pêndencias" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <img class="aling-middle" width="33" src="{{asset('img/icons-document-green.png')}}" alt="icone-busca">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Documentos aceitos sem pêndencias
+                                    </div>                    
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Documentos aceitos com pêndencias" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                     <img class="aling-middle" width="33" src="{{asset('img/icons-document-blue.png')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                        Documentos aceitos
+                                        Documentos aceitos com pêndencias
                                     </div>                    
                                 </div>
                             </li>
@@ -157,10 +169,18 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Documentos requeridos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Documentos pendentes" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                     <img class="aling-middle" width="33" src="{{asset('img/icons-document-red.png')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Documentos pendentes
+                                    </div>                    
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Documentos invalidados" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <img class="aling-middle" width="33" src="{{asset('img/icons-document-orange.png')}}" alt="icone-busca">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Documentos invalidados
                                     </div>                    
                                 </div>
                             </li>

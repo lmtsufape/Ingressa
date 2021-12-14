@@ -51,11 +51,11 @@
                                 @case($turnos['integral']){{"Integral"}}@break
                             @endswitch)
                             </div>
-                            <div class="subtitulo">
+                            <div class="subtitulo" style="width: 100%">
                                 {{"Concluídos: ".$concluidos[$count]}}<br>
-                                {{"Concluídos - Pendência: ".$concluidosPendentes[$count]}}<br>
+                                {{"Concluídos(pendências): ".$concluidosPendentes[$count]}}<br>
                                 {{"Enviados: ".$enviados[$count]}}<br>
-                                {{"Não enviados: ".$naoEnviados[$count]}}<br>
+                                {{"Pendentes: ".$naoEnviados[$count]}}<br>
                                 {{"Invalidados: ".$invalidados[$count]}}
                             </div>
                         </a>
