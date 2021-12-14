@@ -262,6 +262,13 @@
                         @else
                             <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="chamada_id_espera" value="{{$chamada->id}}">
+                                @error('error_espera')
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="font-weight: normal;">
+                                        <span style="font-weight: bolder;">Arquivo de espera ausente</span>, envie a lista de espera e tente novamente.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @enderror
                                 <div class="pb-2 pt-2">Selecione o curso:</div>
                                 @foreach ($cursos as $i => $curso)
                                     <div class="form-check">
@@ -342,6 +349,14 @@
 <script>
     $(document).ready(function() {
         $('#modalStaticEditarChamada_{{old('chamada_id')}}').modal('show');
+    });
+</script>
+@endif
+
+@if(old('chamada_id_espera') > 0)
+<script>
+    $(document).ready(function() {
+        $('#modalStaticImportarCandidatos_{{old('chamada_id_espera')}}').modal('show');
     });
 </script>
 @endif
