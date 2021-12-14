@@ -225,7 +225,14 @@ class InscricaoController extends Controller
             }
         }
         if($documentosAceitos){
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+            $diferenca = array_diff($this->documentosRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
+            if(count($diferenca) == 2 && (in_array('heteroidentificacao', $diferenca) && in_array('fotografia', $diferenca))){
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+            }else if(count($diferenca) == 1 && in_array('rani', $diferenca)){
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+            }else{
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'];
+            }
         }else{
             if($necessitaAvaliar == true && $documentosAceitos == false){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
@@ -243,7 +250,8 @@ class InscricaoController extends Controller
             }
         }
 
-        return redirect()->back()->with(['success' => 'Documento '. $this->getNome($arquivo->nome) .' avaliado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
+        $nome = InscricaoController::getNome($arquivo->nome);
+        return redirect()->back()->with(['success' => 'Documento '. $nome .' avaliado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
     }
 
     public function analisarDocumentos(Request $request)
@@ -327,7 +335,7 @@ class InscricaoController extends Controller
         }else{
             $inscricao->justificativa = null;
         }
-        
+
         $cotaRemanejamento = $inscricao->cotaRemanejada;
         if($cotaRemanejamento == null){
             $cota = $inscricao->cota;
@@ -451,7 +459,7 @@ class InscricaoController extends Controller
         exit();
     }
 
-    private function getNome($documento){
+    public static function getNome($documento){
         if($documento == 'certificado_conclusao'){
             return "Certificado de Conclusão do Ensino Médio";
         }else if($documento == 'historico'){

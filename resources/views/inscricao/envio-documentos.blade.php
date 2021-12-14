@@ -7,7 +7,7 @@
                     <div class="row justify-content-between">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img src=" {{ asset('storage/' . $inscricao->curso->icone) }} "
+                                <img style="border:2px solid white; border-radius: 50%;" src=" {{ asset('storage/' . $inscricao->curso->icone) }} "
                                     alt=""
                                     width="40"
                                     class="img-flex me-1">
@@ -47,7 +47,7 @@
                         <div title="Envio de documento" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                             <img class="aling-middle" width="33" src="{{asset('img/upload2.svg')}}" alt="icone-upload2">
                             <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                Enviar de documento
+                                Enviar documento
                             </div>
                         </div>
                     </li>
@@ -61,7 +61,7 @@
                     </li>
                     <li>
                         <div title="Envio de documento" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
-                            <img class="aling-middle" width="33" src="{{asset('img/upload3.svg')}}" alt="icone-upload2">
+                            <img class="aling-middle" width="33" src="{{asset('img/download3.svg')}}" alt="icone-upload2">
                             <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                 Documento não enviado
                             </div>
