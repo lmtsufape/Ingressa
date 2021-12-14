@@ -12,16 +12,16 @@
                         Primeiro acesso
                     </div>
                     <div class="mt-2 subtexto">
-                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão 
+                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <form id="primeiro-acesso-form" class="my-4" method="POST" action="{{route('primeiroAcesso.verificacao')}}">
                                 @csrf
                                 <div class="form-group textoInput">
-                                    <label for="exampleInputEmail1">Data de Nascimento</label>
+                                    <label for="exampleInputEmail1">CPF:</label>
                                     <input id="cpf" class="form-control form-control-sm caixaDeTexto @error('cpf') is-invalid @enderror" type="text" placeholder="Insira seu CPF" name="cpf" value="{{old('cpf')}}" required>
-                                
+
                                     @error('cpf')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -38,17 +38,17 @@
                     <div class="row">
                         <div class="col-md-6" style="margin-bottom: 10px;">
                             <div class="text-center">
-                                <a href="{{route('index')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a> 
+                                <a href="{{route('index')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="text-center">
-                                <button type="submit" class="btn botaoEntrar col-md-10" form="primeiro-acesso-form" style="width: 100%;">Confirmar</button> 
+                                <button type="submit" class="btn botaoEntrar col-md-10" form="primeiro-acesso-form" style="width: 100%;">Confirmar</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </x-guest-layout>
