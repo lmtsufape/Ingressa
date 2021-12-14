@@ -104,7 +104,7 @@ class UserController extends Controller
         $user->primeiro_acesso = false;
         $user->update();
 
-        return view('welcome')->with(['success']);
+        return redirect(route('logar'));
     }
 
     public function updateAnalista(Request $request)

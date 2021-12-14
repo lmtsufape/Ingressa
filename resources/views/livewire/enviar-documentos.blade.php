@@ -639,7 +639,7 @@
     </div>
     <div class="row justify-content-between mt-5">
         <div class="col-md-3">
-            <a href="{{url()->previous()}}"
+            <a href="{{route('inscricaos.index')}}"
                 class="btn botao my-2 py-1">
                 <span class="px-4">Voltar</span>
             </a>
