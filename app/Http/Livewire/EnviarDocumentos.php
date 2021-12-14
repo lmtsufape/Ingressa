@@ -177,20 +177,18 @@ class EnviarDocumentos extends Component
 
     public function submit()
     {
-        // dd($this->rules());
-        // dd($this->arquivos);
-        // dd($this->declaracoes);
-        // dd($this->getErrorBag());
         $this->attributes();
         $this->withValidator(function (Validator $validator) {
             $validator->after(function ($validator) {
-                if ($this->declaracoes['preto_pardo'] == "true" && $this->declaracoes['indigena'] == "true") {
-                    $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
-                    $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
-                }
-                if ($this->declaracoes['preto_pardo'] != "true" && $this->declaracoes['indigena'] != "true") {
-                    $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
-                    $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
+                if(array_key_exists('preto_pardo', $this->declaracoes) && array_key_exists('indigena', $this->declaracoes)) {
+                    if ($this->declaracoes['preto_pardo'] == "true" && $this->declaracoes['indigena'] == "true") {
+                        $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
+                        $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
+                    }
+                    if ($this->declaracoes['preto_pardo'] != "true" && $this->declaracoes['indigena'] != "true") {
+                        $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
+                        $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
+                    }
                 }
             });
         })->validate();
