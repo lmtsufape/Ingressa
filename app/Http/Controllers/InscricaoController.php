@@ -250,7 +250,8 @@ class InscricaoController extends Controller
             }
         }
 
-        return redirect()->back()->with(['success' => 'Documento '. $this->getNome($arquivo->nome) .' avaliado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
+        $nome = InscricaoController::getNome($arquivo->nome);
+        return redirect()->back()->with(['success' => 'Documento '. $nome .' avaliado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
     }
 
     public function analisarDocumentos(Request $request)
@@ -334,7 +335,7 @@ class InscricaoController extends Controller
         }else{
             $inscricao->justificativa = null;
         }
-        
+
         $cotaRemanejamento = $inscricao->cotaRemanejada;
         if($cotaRemanejamento == null){
             $cota = $inscricao->cota;
@@ -458,7 +459,7 @@ class InscricaoController extends Controller
         exit();
     }
 
-    private function getNome($documento){
+    public static function getNome($documento){
         if($documento == 'certificado_conclusao'){
             return "Certificado de Conclusão do Ensino Médio";
         }else if($documento == 'historico'){

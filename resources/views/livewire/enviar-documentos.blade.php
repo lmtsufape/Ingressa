@@ -119,7 +119,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
                                 <label class="form-check-label subtexto3" for="checkHistorico">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
                                     primeira semana de aula.
                                 </label>
                             </div>
@@ -153,13 +153,13 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
-                                Certidão de Nascimento ou Certidão de Casamento;
+                                Regristro de Nascimento ou Certidão de Casamento;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
                                 <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
                                     primeira semana de aula.
                                 </label>
                             </div>
@@ -278,7 +278,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
                                 <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
                                     primeira semana de aula.
                                 </label>
                             </div>
@@ -320,7 +320,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
                                 <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE este documento, na
+                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
                                     primeira semana de aula.
                                 </label>
                             </div>
@@ -422,6 +422,14 @@
                                 make a type specimen book.
                             </div>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input @error('declaracoes.preto_pardo') is-invalid @enderror" type="checkbox" value="true" id="checkpreto_pardo" wire:model="declaracoes.preto_pardo">
+                            <label class="form-check-label subtexto3" for="checkpreto_pardo">
+                                Declaro que me candidatei às vagas destinadas aos candidatos autodeclarados pretos ou pardos.
+                            </label>
+                        </div>
+                        <div class="invalid-feedback" style="display: block">@error('declaracoes.preto_pardo'){{$message}}@enderror</div>
+
                         <div class="mt-2">
                             <label for="docHeteroidentificacao"
                                 title="Enviar documento"
@@ -547,6 +555,13 @@
                                 it to
                                 make a type specimen book. </div>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input @error('declaracoes.indigena') is-invalid @enderror" type="checkbox" value="true" id="checkindigena" wire:model="declaracoes.indigena">
+                            <label class="form-check-label subtexto3" for="checkindigena">
+                                Declaro que me candidatei às vagas destinadas aos candidatos autodeclarados indígenas.
+                            </label>
+                        </div>
+                        <div class="invalid-feedback" style="display: block">@error('declaracoes.indigena'){{$message}}@enderror</div>
                         <div class="mt-2">
                             <label for="rani"
                                 title="Enviar documento"
