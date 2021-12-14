@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Controllers\InscricaoController;
 use App\Models\Arquivo;
 use App\Models\Inscricao;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
@@ -17,23 +19,17 @@ class EnviarDocumentos extends Component
     public $declaracoes;
     public $arquivos;
     public $inscricao;
-    protected $validationAttributes = [
-        'arquivos.certificado_conclusao' => 'certificado de conclusão',
-        'arquivos.historico' => 'histórico escolar',
-        'arquivos.nascimento_ou_casamento' => 'registro de nascimento ou casamento',
-        'arquivos.cpf' => 'CPF',
-        'arquivos.rg' => 'RG',
-        'arquivos.quitacao_eleitoral' => 'comprovante de quitação eleitoral',
-        'arquivos.quitacao_militar' => 'comprovante de quitação militar',
-        'arquivos.foto' => 'foto',
-        'arquivos.fotografia' => 'fotografia',
-        'arquivos.rani' => 'RANI',
-        'arquivos.heteroidentificacao' => 'vídeo para heteroidentificação',
-        'arquivos.declaracao_veracidade' => 'declaração de veracidade',
-        'arquivos.declaracao_cotista' => 'autodeclaração',
-        'arquivos.comprovante_renda' => 'comprovante de renda',
-        'arquivos.laudo_medico' => 'laudo médico',
+    protected $validationAttributes = [];
+    protected $messages = [
+        'arquivos.heteroidentificacao.required_if' => 'O campo :attribute é obrigatório quando o(a) candidato(a) se autodeclarar preto(a) ou pardo(a).',
+        'arquivos.fotografia.required_if' => 'O campo :attribute é obrigatório quando o(a) candidato(a) se autodeclarar preto(a) ou pardo(a).',
+        'arquivos.rani.required_if' => 'O campo :attribute é obrigatório quando o(a) candidato(a) se autodeclarar indígena.',
+        'arquivos.historico.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
+        'arquivos.nascimento_ou_casamento.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
+        'arquivos.quitacao_militar.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
+        'arquivos.quitacao_eleitoral.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
     ];
+
     public function mount($documentos)
     {
         foreach ($documentos as $documento) {
@@ -44,9 +40,11 @@ class EnviarDocumentos extends Component
                 case 'quitacao_militar':
                     $this->declaracoes[$documento] = null;
                     break;
+                case 'heteroidentificacao':
+                    $this->declaracoes['preto_pardo'] = false;
+                    $this->declaracoes['indigena'] = false;
                 case 'quitacao_eleitoral':
                     $this->declaracoes[$documento] = null;
-                    $this->declaracoes['votoFacultativo'] = null;
                     break;
             default:
                     break;
@@ -54,27 +52,119 @@ class EnviarDocumentos extends Component
         }
     }
 
+    public function attributes()
+    {
+        foreach ($this->documentos as $documento) {
+            $this->validationAttributes['arquivos.'.$documento] = InscricaoController::getNome($documento);
+        }
+    }
+
+    public function rulePdf($documento)
+    {
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+        } else {
+            return ['required', 'file', 'mimes:pdf', 'max:2048'];
+        }
+    }
+
+    public function rulePdfWithoutAll($documento, $all)
+    {
+        $nomes = implode(',', $all);
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'mimes:pdf', 'max:2048'];
+        } else {
+            return ['required_without_all:'.$nomes, 'nullable', 'file', 'mimes:pdf', 'max:2048'];
+        }
+    }
+
+    public function rulePdfIf($documento, $nome)
+    {
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+        } else {
+            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:pdf', 'max:2048'];
+        }
+    }
+
+    public function ruleVideoIf($documento, $nome)
+    {
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
+        } else {
+            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4', 'max:65536'];
+        }
+    }
+
+    public function ruleImage($documento)
+    {
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'image', 'max:10240'];
+        } else {
+            return ['required', 'image', 'max:10240'];
+        }
+    }
+
+    public function ruleImageWithoutAll($documento, $all)
+    {
+        $nomes = implode(',', $all);
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'image', 'max:10240'];
+        } else {
+            return ['required_without_all:'.$nomes, 'image', 'max:10240'];
+        }
+    }
+
+    public function ruleImageIf($documento, $nome)
+    {
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'image', 'max:10240'];
+        } else {
+            return ['required_if:'.$nome.',true', 'nullable', 'image', 'max:10240'];
+        }
+    }
+
     public function rules()
     {
         $rules = [];
         foreach ($this->documentos as $documento) {
-            $rules['arquivos.'.$documento] = ['required', 'mimes:pdf', 'max:65536'];
-            switch ($documento) {
-                case 'heteroidentificacao':
-                    $rules['arquivos.'.$documento] = ['required', 'file',  'mimes:mp4', 'max:65536'];
-                    break;
-                case 'historico':
-                case 'nascimento_ou_casamento':
-                case 'quitacao_militar':
-                    if($this->declaracoes[$documento]) {
-                        $rules['arquivos.'.$documento] = 'required_unless:declaracoes.'.$documento.',true';
-                    }
-                    break;
-                case 'quitacao_eleitoral':
-                    $rules['arquivos.'.$documento] = 'required_without_all:declaracoes.quitacao_eleitoral,declaracoes.votoFacultativo';
-                    break;
-            default:
-                    break;
+            if($documento == 'certificado_conclusao') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
+            } elseif($documento == 'historico') {
+                $all = ['declaracoes.historico'];
+                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
+            } elseif($documento == 'nascimento_ou_casamento') {
+                $all = ['declaracoes.nascimento_ou_casamento'];
+                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
+            } elseif($documento == 'cpf') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
+            } elseif($documento == 'rg') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
+            } elseif($documento == 'quitacao_eleitoral') {
+                $all = ['declaracoes.quitacao_eleitoral'];
+                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
+            } elseif($documento == 'quitacao_militar') {
+                $all = ['declaracoes.quitacao_militar'];
+                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
+            } elseif($documento == 'foto') {
+                $rules['arquivos.'.$documento] = $this->ruleImage($documento);
+            } elseif($documento == 'comprovante_renda') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
+            } elseif($documento == 'laudo_medico') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
+            } elseif($documento == 'declaracao_veracidade') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
+            } elseif($documento == 'rani') {
+                $nome = 'declaracoes.indigena';
+                $rules['arquivos.'.$documento] = $this->rulePdfIf($documento, $nome);
+            } elseif($documento == 'heteroidentificacao') {
+                $nome = 'declaracoes.preto_pardo';
+                $rules['arquivos.'.$documento] = $this->ruleVideoIf($documento, $nome);
+            } elseif($documento == 'fotografia') {
+                $nome = 'declaracoes.preto_pardo';
+                $rules['arquivos.'.$documento] = $this->ruleImageIf($documento, $nome);
+            } elseif($documento == 'declaracao_cotista') {
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
             }
         }
         return $rules;
@@ -87,7 +177,23 @@ class EnviarDocumentos extends Component
 
     public function submit()
     {
-        $this->validate();
+        // dd($this->rules());
+        // dd($this->arquivos);
+        // dd($this->declaracoes);
+        // dd($this->getErrorBag());
+        $this->attributes();
+        $this->withValidator(function (Validator $validator) {
+            $validator->after(function ($validator) {
+                if ($this->declaracoes['preto_pardo'] == "true" && $this->declaracoes['indigena'] == "true") {
+                    $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
+                    $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
+                }
+                if ($this->declaracoes['preto_pardo'] != "true" && $this->declaracoes['indigena'] != "true") {
+                    $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
+                    $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
+                }
+            });
+        })->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
         return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
