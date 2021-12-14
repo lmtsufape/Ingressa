@@ -8,7 +8,6 @@ use App\Models\Curso;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Storage;
 
 class SisuController extends Controller
 {
@@ -123,32 +122,24 @@ class SisuController extends Controller
 
         return redirect(route('sisus.index'))->with(['success' => 'Edição deletada com sucesso!']);
     }
-    public function importarPlanilhas(Request $request, $sisu_id)
+    
+    public function importarPlanilhasRegular(Request $request, $sisu_id)
     {
         $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($sisu_id);
-        if($sisu->caminho_import_regular != null){
-            if (Storage::disk()->exists('public/' . $sisu->caminho_import_regular)) {
-                Storage::delete('public/' . $sisu->caminho_import_regular);
-            }
-            if (Storage::disk()->exists('public/' . $sisu->caminho_import_espera)) {
-                Storage::delete('public/' . $sisu->caminho_import_espera);
-            }
-        }
-        $path = 'sisu/'.$sisu->id.'/';
 
-        $arquivoRegular = $request->arquivoRegular;
-        $nomeRegular = $arquivoRegular->getClientOriginalName();
-        Storage::putFileAs('public/'.$path, $arquivoRegular, $nomeRegular);
-        $sisu->caminho_import_regular = $path . $nomeRegular;
+        $sisu->salvar_import_regular($request->arquivoRegular);
+        
+        return redirect(route('sisus.index'))->with(['success' => 'Arquivo da lista regular importado com sucesso!']);
+    }
 
-        $arquivoEspera = $request->arquivoEspera;
-        $nomeEspera = $arquivoEspera->getClientOriginalName();
-        Storage::putFileAs('public/'.$path, $arquivoEspera, $nomeEspera);
-        $sisu->caminho_import_espera = $path . $nomeEspera;
+    public function importarPlanilhasEspera(Request $request, $sisu_id)
+    {
+        $this->authorize('isAdmin', User::class);
+        $sisu = Sisu::find($sisu_id);
 
-        $sisu->update();
-        return redirect(route('sisus.index'))->with(['success' => 'Planilhas importadas com sucesso!']);
+        $sisu->salvar_import_espera($request->arquivoEspera);
 
+        return redirect(route('sisus.index'))->with(['success' => 'Arquivo das listas de espera importado com sucesso!']);
     }
 }
