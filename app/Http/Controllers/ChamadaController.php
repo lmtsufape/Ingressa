@@ -152,6 +152,12 @@ class ChamadaController extends Controller
             ])->name('Importar Chamada Regular '.$chamada->id)->dispatch();
             $chamada->job_batch_id = $batch->id;
         }else{
+
+            $sisu = $chamada->sisu;
+            if ($sisu->caminho_import_espera == null) {
+                return redirect()->back()->withErrors(['error_espera' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
+            }
+
             $this->salvarMultiplicadores($chamada, $request);
             //$this->cadastrarCandidatosEspera($chamada);
 
