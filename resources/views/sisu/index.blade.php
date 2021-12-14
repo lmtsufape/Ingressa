@@ -191,7 +191,7 @@
                 <div class="modal-content modalFundo p-3">
                     <div class="col-md-12 tituloModal" id="staticBackdropLabel">Importar lista regular</div>
                     <div class="modal-body textoModal">
-                        <form id="importar-candidatos-sisu-form-{{$sisu->id}}" method="POST" action="{{route('chamadas.importar.planilhas.regular', ['sisu_id' =>$sisu->id])}}" enctype="multipart/form-data">
+                        <form id="importar-candidatos-sisu-form-{{$sisu->id}}-espera" method="POST" action="{{route('chamadas.importar.planilhas.regular', ['sisu_id' =>$sisu->id])}}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-row">
                                 <div class="col-md-12">
@@ -206,7 +206,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}" id="submeterFormBotao"><span class="px-4">Importar</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}-espera" id="submeterFormBotao"><span class="px-4">Importar</span></button>
                         </div>
                     </div>
                     
