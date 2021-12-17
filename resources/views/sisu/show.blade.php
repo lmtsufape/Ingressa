@@ -197,8 +197,8 @@
                                     <input type="hidden" name="_method" value="PUT">
                                     <div class="form-row">
                                         <div class="col-md-12 form-group">
-                                            <label class="pb-2"  for="nome"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome') }}</label>
-                                            <input id="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" type="text" name="nome" value="{{old('nome')!=null ? old('nome') : $chamada->nome}}" required autofocus autocomplete="nome">
+                                            <label class="pb-2"  for="nome-edit"><span style="color: red; font-weight: bold;">* </span>{{ __('Nome') }}</label>
+                                            <input id="nome-edit" class="form-control campoDeTexto @error('nome') is-invalid @enderror" type="text" name="nome" value="{{old('nome')!=null ? old('nome') : $chamada->nome}}" required autofocus autocomplete="nome">
 
                                             @error('nome')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
@@ -209,8 +209,8 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="col-md-12 form-group">
-                                            <label class="pb-2 pt-2" for="descricao"><span style="color: red; font-weight: bold;">* </span>{{ __('Descrição') }}</label>
-                                            <textarea id="descricao" class="form-control campoDeTexto @error('descricao') is-invalid @enderror" rows="3" type="text" name="descricao" required autofocus autocomplete="descricao">@if(old('descricao')!=null){{old('descricao')}}@else{{($chamada->descricao)}}@endif</textarea>
+                                            <label class="pb-2 pt-2" for="descricao-edit"><span style="color: red; font-weight: bold;">* </span>{{ __('Descrição') }}</label>
+                                            <textarea id="descricao-edit" class="form-control campoDeTexto @error('descricao') is-invalid @enderror" rows="3" type="text" name="descricao" required autofocus autocomplete="descricao">@if(old('descricao')!=null){{old('descricao')}}@else{{($chamada->descricao)}}@endif</textarea>
 
                                             @error('descricao')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
@@ -222,12 +222,12 @@
                                     <label class="pb-2 pt-2"><span style="color: red; font-weight: bold;">*</span> Selecione se é uma chamada regular ou não:</label>
                                     <div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="regular_sim" name="regular" value="true" {{($tem_regular && !($chamada->regular)) ? 'disabled' : '' }} @if(!old('regular') || ($chamada->regular)) checked @endif>
-                                            <label class="form-check-label" for="regular_sim">Sim</label>
+                                            <input class="form-check-input" type="radio" id="regular_sim-edit" name="regular" value="true" {{($tem_regular && !($chamada->regular)) ? 'disabled' : '' }} @if(!old('regular') || ($chamada->regular)) checked @endif>
+                                            <label class="form-check-label" for="regular_sim-edit">Sim</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="regular_nao" name="regular" value="false" @if(old('regular') || !($chamada->regular)) checked @endif>
-                                            <label class="form-check-label" for="regular_nao">Não</label>
+                                            <input class="form-check-input" type="radio" id="regular_nao-edit" name="regular" value="false" @if(old('regular') || !($chamada->regular)) checked @endif>
+                                            <label class="form-check-label" for="regular_nao-edit">Não</label>
                                         </div>
                                     </div>
                                 </form>

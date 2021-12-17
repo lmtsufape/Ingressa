@@ -60,7 +60,7 @@
                         </tbody>
                     </table>
                     {{$users->links()}}
-                @else 
+                @else
                     <div class="pt-3 pb-3">
                         Nenhum analista cadastrado no sistema.
                     </div>
@@ -81,7 +81,7 @@
                     <div class="col-md-12 pt-3 textoModal">
                         <label class="pb-2" for="name">Nome completo:</label>
                         <input id="name" class="form-control apenas_letras campoDeTexto @error('name') is-invalid @enderror" type="text" name="name" value="{{old('name')}}" required autofocus autocomplete="name" placeholder="Insira o nome completo do analista">
-                        
+
                         @error('name')
                             <div id="validationServer03Feedback" class="invalid-feedback">
                                 {{ $message }}
@@ -91,7 +91,7 @@
                     <div class="col-md-12 pt-3 textoModal">
                         <label class="pb-2 pt-2" for="email">E-mail:</label>
                         <input id="email" class="form-control campoDeTexto @error('email') is-invalid @enderror" type="email" name="email" value="{{old('email')}}" required autofocus autocomplete="email" placeholder="Insira o e-mail de acesso do analista">
-        
+
                         @error('email')
                             <div id="validationServer03Feedback" class="invalid-feedback">
                                 {{ $message }}
@@ -101,9 +101,9 @@
                     <div class="col-md-12 pt-3 textoModal">
                         <div class="row justify-content-between">
                             <div class="col-md-6">
-                                <label class="pb-2 pt-2" for="codigoCota">Senha:</label>
-                                <input id="password" class="form-control campoDeTexto @error('password') is-invalid @enderror" type="password" name="password" required autofocus autocomplete="new-password">  
-                            
+                                <label class="pb-2 pt-2" for="password">Senha:</label>
+                                <input id="password" class="form-control campoDeTexto @error('password') is-invalid @enderror" type="password" name="password" required autofocus autocomplete="new-password">
+
                                 @error('password')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
@@ -111,8 +111,8 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="pb-2 pt-2" for="codigoCota">Confirme a senha:</label>
-                                <input id="password_confirmation" class="form-control campoDeTexto" type="password" name="password_confirmation" required autocomplete="new-password">  
+                                <label class="pb-2 pt-2" for="password_confirmation">Confirme a senha:</label>
+                                <input id="password_confirmation" class="form-control campoDeTexto" type="password" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
                     </div>
@@ -138,15 +138,15 @@
                         @enderror
                     </div>
                 </form>
-              
+
                 <div class="row justify-content-between mt-4">
                     <div class="col-md-3">
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-analista"><span class="px-4" style="font-weight: bolder;">Salvar</span></button>
-                    </div>       
-                </div>              
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -161,9 +161,9 @@
                     <input type="hidden" id="user-edit" name="user_id" value="">
                     <div class="form-row">
                         <div class="col-md-12 pt-3 textoModal">
-                            <label class="pb-2" for="name">Nome completo:</label>
+                            <label class="pb-2" for="name-edit">Nome completo:</label>
                             <input id="name-edit" class="form-control apenas_letras campoDeTexto @error('name') is-invalid @enderror" type="text" name="name" value="{{old('name')}}" required autofocus autocomplete="name" placeholder="Insira o nome completo do analista">
-                            
+
                             @error('name')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
@@ -171,23 +171,23 @@
                             @enderror
                         </div>
                         <div class="col-md-12 pt-3 textoModal">
-                            <label class="pb-2 pt-2" for="email">E-mail:</label>
+                            <label class="pb-2 pt-2" for="email-edit">E-mail:</label>
                             <input id="email-edit" class="form-control campoDeTexto @error('email') is-invalid @enderror" type="email" name="email" value="{{old('email')}}" required autofocus autocomplete="email" placeholder="Insira o e-mail de acesso do analista">
-            
+
                             @error('email')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>
                             @enderror
                         </div>
-                        
+
                         <div class="col-md-12 pt-3 textoModal">
                             <label class="pb-2 pt-2" for="tipo">{{__('Selecione o(s) cargo(s) do analista:')}}</label>
                             <input type="hidden" class="checkbox_tipo @error('tipos_analista_edit') is-invalid @enderror">
                             @foreach ($tipos as $tipo)
                                 <div class="form-check">
                                     <input class="form-check-input form-check-cursos" type="checkbox" name="tipos_analista_edit[]" value="{{$tipo->id}}" id="tipo_edit_{{$tipo->id}}">
-                                    <label class="form-check-label" for="tipo_{{$tipo->id}}">
+                                    <label class="form-check-label" for="tipo_edit_{{$tipo->id}}">
                                         @if($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['geral'])
                                             Geral
                                         @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['heteroidentificacao'])
@@ -210,7 +210,7 @@
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-analista"><span class="px-4" style="font-weight: bolder;" >Salvar</span></button>
-                    </div>       
+                    </div>
                 </div>
             </div>
         </div>
@@ -222,7 +222,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modalFundo p-3">
                     <div class="col-md-12 tituloModal">Excluir analista</div>
-                    
+
                     <form id="deletar-user-form-{{$user->id}}" method="POST" action="{{route('usuarios.destroy', ['usuario' => $user])}}">
                         @csrf
                         <div class="pt-3">
@@ -236,7 +236,7 @@
                         </div>
                         <div class="col-md-4">
                             <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-user-form-{{$user->id}}" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
-                        </div>       
+                        </div>
                     </div>
                 </div>
             </div>
