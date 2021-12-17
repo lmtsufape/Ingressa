@@ -133,7 +133,7 @@
                                         CPF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->nu_cpf_inscrito}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Identidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_rg}}</p>
+                                        RG: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_rg}}</p>
                                     </div>
                                     {{--<div class="tituloDocumento mx-3 pt-1">
                                         Data de Expedição
@@ -161,7 +161,7 @@
                                         País:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-5 tituloDocumento">
-                                        Cidade onde Nasceu:<p class="nomeDocumento" style="display: inline"></p>
+                                        Naturalidade:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
@@ -262,14 +262,24 @@
                                         Modalidade:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-12 tituloDocumento">
+                                        Concluiu o Ensino Médio na rede pública?<p class="nomeDocumento" style="display: inline"></p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
-                                <div class="row pt-2">
-                                    <div class="col-md-8 tituloDocumento">
+                                <div class="row">
+                                    <div class="col-md-12 tituloDocumento">
                                         Necessidades Especiais:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
+                                </div>
+                                <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
                                         Cor/Raça:<p class="nomeDocumento" style="display: inline"></p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Etnia:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                             </div>
