@@ -57,7 +57,7 @@
                 </div>
             @endcan
             <div class="row justify-content-between">
-                <div class="col-md-7">
+                <div class="col-md-8">
                     @if(session('nomeDoc'))
                         <script>
                             console.log();
@@ -445,7 +445,7 @@
     <!--CORPO-->
 
     <div class="modal fade" id="enviar-email-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog  modal-lg">
             <div class="modal-content modalFundo p-3">
                 <div id ="enviarEmailText" class="col-md-12 tituloModal">Enviar e-mail</div>
                 <div class="pt-3 pb-2 textoModal">
@@ -468,7 +468,7 @@
                         <div class="row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="conteúdo">Conteúdo</label>
-                                <textarea id="conteúdo" class="form-control campoDeTexto @error('conteúdo') is-invalid @enderror" type="text" name="conteúdo" autofocus placeholder="Insira o conteúdo do e-mail aqui...">{{old('conteúdo')}}</textarea>
+                                <textarea id="conteúdo" class="form-control campoDeTexto ckeditor-editor @error('conteúdo') is-invalid @enderror" type="text" name="conteúdo" autofocus placeholder="Insira o conteúdo do e-mail aqui...">{{old('conteúdo')}}</textarea>
 
                                 @error('conteúdo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -484,7 +484,7 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
                     <div id ="enviarEmailButton" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="enviar-email-candidato"><span class="px-4" style="font-weight: bolder;" >Enviar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="enviar-email-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Enviar</span></button>
                     </div>
                 </div>
             </div>
@@ -492,7 +492,7 @@
     </div>
 
     <div class="modal fade" id="aprovar-recusar-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content modalFundo p-3">
                 <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Invalidar Cadastro</div>
                 <div id ="aprovarCandidatoForm" class="col-md-12 tituloModal">Validar Cadastro</div>
@@ -511,7 +511,7 @@
                         <div id ="justificativaCadastroTextForm" class="form-row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="justificativa">Justificativa:</label>
-                                <textarea id="justificativa" class="form-control campoDeTexto @error('justificativa') is-invalid @enderror" type="text" name="justificativa" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{old('justificativa', $inscricao->justificativa)}}</textarea>
+                                <textarea id="justificativa" class="form-control campoDeTexto ckeditor-editor @error('justificativa') is-invalid @enderror" type="text" name="justificativa" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{old('justificativa', $inscricao->justificativa)}}</textarea>
 
                                 @error('justificativa')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -527,10 +527,10 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
                     <div id ="reprovarCandidatoButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
                     </div>
                     <div id ="aprovarCandidatoButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
                     </div>
                 </div>
             </div>
@@ -538,7 +538,7 @@
     </div>
 
     <div class="modal fade" id="avaliar-documento-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content modalFundo p-3">
                 <div id ="reprovarTituloForm" class="col-md-12 tituloModal">Reprovar documento</div>
                 <div id ="aprovarTituloForm" class="col-md-12 tituloModal">Aprovar documento</div>
@@ -556,7 +556,7 @@
                         <div id ="reprovarTextForm" class="form-row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="comentario">Motivo:</label>
-                                <textarea id="comentario" class="form-control campoDeTexto @error('comentario') is-invalid @enderror" type="text" name="comentario" value="{{old('comentario')}}" required autofocus autocomplete="comentario" placeholder="Insira o motivo para recusar o documento"></textarea>
+                                <textarea id="comentario" class="form-control campoDeTexto ckeditor-editor @error('comentario') is-invalid @enderror" name="comentario" required placeholder="Insira o motivo para recusar o documento">{{old('comentario')}}</textarea>
 
                                 @error('comentario')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -568,14 +568,14 @@
                     </form>
                 </div>
                 <div class="row justify-content-between mt-4">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
-                    <div id ="reprovarButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Recusar</span></button>
+                    <div id ="reprovarButtonForm" class="col-md-6" >
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Recusar</span></button>
                     </div>
-                    <div id ="aprovarButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
+                    <div id ="aprovarButtonForm" class="col-md-6" >
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
                     </div>
                 </div>
             </div>
@@ -584,6 +584,14 @@
 </x-app-layout>
 
 <script>
+    $(document).ready(function(){
+        var inputs = document.getElementsByClassName('ckeditor-editor');
+        
+        for(var i = 0; i < inputs.length; i++) {
+            CKEDITOR.replace(inputs[i].id);
+        }
+    });
+
     function limparBotoes(){
         $("#avaliarDoc").hide();
         btnAprovar = document.getElementById("aprovarBotao");
@@ -598,7 +606,7 @@
         this.limparBotoes();
         $("#mensagemVazia").hide();
         $("#corpoFicha").hide();
-        var $iFrame = $('iframe');
+        var iFrame = $('#documentoPDF');
         $.ajax({
             url:"{{route('inscricao.documento.ajax')}}",
             type:"get",
@@ -611,11 +619,10 @@
                     if($("#mensagemVazia").is(":hidden")){
                         $("#mensagemVazia").show();
                     }
-                    $iFrame.hide();
+                    iFrame.hide();
                 }else{
-                    $iFrame.attr('src', documento.caminho);
+                    iFrame.attr('src', documento.caminho);
                     document.getElementById("documentoPDF").parentElement.parentElement.style.display = '';
-                    document.getElementById("documento_id").value = documento.id;
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("comentario").value = documento.comentario;
                     btnAprovar = document.getElementById("aprovarBotao");
@@ -631,8 +638,8 @@
                         $("#avaliarDoc").show();
                     });
 
-                    if($iFrame.is(":hidden")){
-                        $iFrame.show();
+                    if(iFrame.is(":hidden")){
+                        iFrame.show();
                     }
                 }
             }
