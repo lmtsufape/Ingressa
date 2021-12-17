@@ -68,15 +68,15 @@
                     <div style="border-radius: 0.5rem;" class="col-md-12 p-0 shadow">
                         <div class="cabecalhoAzul p-2 px-3 align-items-center">
                             <div class="row align-items-center justify-content-between">
-                                <div class="col-md-11">
+                                <div class="col-md-10">
                                     <a onclick="carregarFicha()" style="cursor:pointer;"><img src="{{asset('img/Grupo 1662.svg')}}"
                                         alt="" width="40" class="img-flex"></a>
 
                                     <label class="tituloTabelas ps-1" id="nomeDoc">Ficha Geral</label>
                                 </div>
-                                <div class="col-md-1" style="text-align: right">
-                                    <a title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
+                                <div class="col-md-2" style="text-align: right">
                                     <a title="Documento anterior" onclick="carregarProxDoc({{$inscricao->id}}, -1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropleft-circle.svg')}}"></a>
+                                    <a title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
                                 </div>
                             </div>
                         </div>
