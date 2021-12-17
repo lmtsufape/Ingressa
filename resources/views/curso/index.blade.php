@@ -155,7 +155,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-8 mb-3">
-                                <label for="formFile" class="form-label">{{__('Icone do curso')}}</label>
+                                <label for="icone" class="form-label">{{__('Icone do curso')}}</label>
                                 <input class="form-control campoDeTexto @error('icone') is-invalid @enderror" type="file" id="icone" name="icone" class="icone" accept=".png">
 
                                 @error('icone')
@@ -324,7 +324,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label for="formFile" class="form-label">{{__('Icone do curso')}}</label>
+                            <label for="icone" class="form-label">{{__('Icone do curso')}}</label>
                             <input class="form-control campoDeTexto @error('icone') is-invalid @enderror" type="file" id="icone" name="icone" class="icone" accept=".png">
                             <small id="aviso-icone" style="display: none;">Para trocar o icone basta enviar o novo</small>
 
