@@ -502,7 +502,7 @@
                                                 <div class="form-check">
                                                     <input class="checkbox_curso form-check-input form-check-cursos" type="checkbox" name="cursos[]" value="{{$curso->id}}" id="curso_{{$curso->id}}">
                                                     <label class="form-check-label" for="curso_{{$curso->id}}">
-                                                        {{$curso->nome}}
+                                                        {{$curso->nome}} - {{$curso->getTurno()}}
                                                     </label>
                                                 </div>
                                             </div>
