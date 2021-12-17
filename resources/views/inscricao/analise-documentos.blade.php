@@ -60,7 +60,6 @@
                 <div class="col-md-8">
                     @if(session('nomeDoc'))
                         <script>
-                            console.log();
                             $(document).ready(function(){
                                 carregarDocumento({!! json_encode(session('inscricao'), JSON_HEX_TAG) !!}, {!! json_encode(session('nomeDoc'), JSON_HEX_TAG) !!}, {!! json_encode(session('indice'), JSON_HEX_TAG) !!});
                             });
@@ -68,16 +67,17 @@
                     @endif
                     <div style="border-radius: 0.5rem;" class="col-md-12 p-0 shadow">
                         <div class="cabecalhoAzul p-2 px-3 align-items-center">
-                            <div class="row justify-content-between">
-                              <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-md-11">
                                     <a onclick="carregarFicha()" style="cursor:pointer;"><img src="{{asset('img/Grupo 1662.svg')}}"
                                         alt="" width="40" class="img-flex"></a>
 
                                     <label class="tituloTabelas ps-1" id="nomeDoc">Ficha Geral</label>
                                 </div>
-                                    <a onclick="carregarProxDoc({{$inscricao->id}})" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
-                              </div>
+                                <div class="col-md-1" style="text-align: right">
+                                    <a title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
+                                    <a title="Documento anterior" onclick="carregarProxDoc({{$inscricao->id}}, -1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropleft-circle.svg')}}"></a>
+                                </div>
                             </div>
                         </div>
                         <div id="mensagemVazia" class="text-center" style="display: none;" >
@@ -675,6 +675,8 @@
     function atualizarInputEfetivar(valor){
         document.getElementById('inputEfetivar').value = valor;
         if(valor == true){
+            $('#justificativa').attr('required', false);
+
             $('#reprovarCandidatoForm').hide();
             $('#reprovarCandidatoTextForm').hide();
             $('#reprovarCandidatoButtonForm').hide();
@@ -685,6 +687,8 @@
 
             $('#aprovar-recusar-candidato-modal').modal('toggle');
         }else{
+            $('#justificativa').attr('required', true);
+
             $("#aprovarCandidatoForm").hide();
             $("#aprovarCandidatoTextForm").hide();
             $("#aprovarCandidatoButtonForm").hide();
@@ -705,19 +709,22 @@
         $("#mensagemVazia").hide();
     }
 
-    function carregarProxDoc(inscricao_id){
-        var documento_indice = parseInt(document.getElementById("documento_indice").value)+1;
-        document.getElementById("documento_indice").value = documento_indice;
+    function carregarProxDoc(inscricao_id, valor){
+        var indice = document.getElementById("documento_indice")
+        var documento_indice = parseInt(document.getElementById("documento_indice").value)+valor;
+        indice.value = documento_indice;
         $.ajax({
             url:"{{route('inscricao.documento.proximo')}}",
             type:"get",
             data: {"inscricao_id": inscricao_id, "documento_indice": documento_indice},
             dataType:'json',
             success: function(documento) {
+                indice.value = documento.indice;
+                console.log(indice.value);
                 if(documento.nome == 'ficha'){
                     carregarFicha();
                 }else{
-                    carregarDocumento(inscricao_id, documento.nome, documento_indice);
+                    carregarDocumento(inscricao_id, documento.nome, documento.indice);
                 }
             }
         });
