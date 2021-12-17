@@ -308,7 +308,7 @@
 
                     <div class="col-md-4">
                         <div class="col-md-12 caixa shadow p-3">
-                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                            @can('isAdmin', \App\Models\User::class)
                                 <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                     <div class="d-flex align-items-center">
                                         <span class="tituloTipoDoc">Documentação básica</span>
@@ -317,7 +317,18 @@
                                         <img width="35" src="{{asset('img/download1.svg')}}"></a>
                                     </a>
                                 </div>
-                            @endif
+                            @else
+                                @can('ehAnalistaGeral', \App\Models\User::class)
+                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Documentação básica</span>
+                                        </div>
+                                        <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
+                                            <img width="35" src="{{asset('img/download1.svg')}}"></a>
+                                        </a>
+                                    </div>
+                                @endcan
+                            @endcan
                             @foreach ($documentos as $indice =>  $documento)
                                 @if($documento == 'rani')
                                     <div>
@@ -441,10 +452,15 @@
                                 </div>
                             @endforeach
                         </div>
-                        @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                        @can('isAdmin', \App\Models\User::class)
                             <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
                             <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
-                        @endif
+                        @else
+                            @can('ehAnalistaGeral', \App\Models\User::class)
+                                <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
+                                <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
+                            @endcan
+                        @endcan
                         <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" style="background-color: #1492E6;" class="btn botaoVerde mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></a>
                     </div>
                 </div>

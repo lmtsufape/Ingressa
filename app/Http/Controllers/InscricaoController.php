@@ -9,6 +9,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -133,7 +134,8 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
-        if(auth()->user()->ehAnalistaGeral() == true || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
+        $userPolicy = new UserPolicy();
+        if($userPolicy->ehAnalistaGeral(auth()->user()) || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
             $documentos->push('declaracao_veracidade');
             $documentos->push('certificado_conclusao');
             $documentos->push('historico');
@@ -168,10 +170,17 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
-        }else if(auth()->user()->ehAnalistaHeteroidentificacao() == true){
+        }else if($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())){
             if($inscricao->st_lei_etnia_p == 'S'){
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
+        }else if($userPolicy->ehAnalistaMedico(auth()->user())){
+            if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
+                $documentos->push('laudo_medico');
                 if(!$documentos->contains('declaracao_cotista')){
                     $documentos->push('declaracao_cotista');
                 }
