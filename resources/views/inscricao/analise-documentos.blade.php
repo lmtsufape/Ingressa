@@ -115,28 +115,28 @@
                                 </div>
                                 <div class="">
                                     <div class="tituloDocumento mx-3">
-                                        Nome: {{$inscricao->candidato->user->name}}
+                                        Nome: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->user->name}}</p>
                                     </div>
                                     {{--<div class="tituloDocumento mx-3 pt-1">
                                         CEP: {{$inscricao->nu_cep}}
                                     </div>--}}
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Data de Nascimento: {{date('d/m/Y',strtotime($inscricao->candidato->dt_nascimento))}}
+                                        Data de Nascimento: <p class="nomeDocumento" style="display: inline">{{date('d/m/Y',strtotime($inscricao->candidato->dt_nascimento))}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Sexo: {{$inscricao->tp_sexo}}
+                                        Sexo: <p class="nomeDocumento" style="display: inline">{{$inscricao->tp_sexo}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Estado Civil:
+                                        Estado Civil:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        CPF: {{$inscricao->candidato->nu_cpf_inscrito}}
+                                        CPF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->nu_cpf_inscrito}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Identidade: {{$inscricao->nu_rg}}
+                                        Identidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_rg}}</p>
                                     </div>
                                     {{--<div class="tituloDocumento mx-3 pt-1">
-                                        Data de Expedição:
+                                        Data de Expedição
                                     </div>--}}
                                 </div>
                             </div>
@@ -144,155 +144,155 @@
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
                                     <div class="col-md-4 tituloDocumento">
-                                        Título Eleitoral:
+                                        Título Eleitoral:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        Zona:
+                                        Zona:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        Seção:
+                                        Seção:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        UF:
+                                        UF:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        País:
+                                        País:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-5 tituloDocumento">
-                                        Cidade onde Nasceu:
+                                        Cidade onde Nasceu:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Nome da Mãe: {{$inscricao->no_mae}}
+                                    Nome da Mãe: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_mae}}</p>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Nome do Pai:
+                                    Nome do Pai:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
                                     <div class="col-md-4 tituloDocumento">
-                                        Unidade: {{$inscricao->no_campus}}
+                                        Unidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_campus}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Formação: {{$inscricao->ds_formacao}}
+                                        Formação: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_formacao}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Turno: {{$inscricao->ds_turno}}
-                                    </div>
-                                </div>
-                                <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
-                                        Forma de Ingresso: SiSU
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        Modalidade: {{$inscricao->no_modalidade_concorrencia}}
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        Ano de Ingresso: {{date('Y',strtotime($inscricao->dt_operacao))}}
+                                        Turno: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_turno}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Curso: {{$inscricao->no_curso}}
+                                        Forma de Ingresso: <p class="nomeDocumento" style="display: inline">SiSU</p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_modalidade_concorrencia}}</p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Ano de Ingresso: <p class="nomeDocumento" style="display: inline">{{date('Y',strtotime($inscricao->dt_operacao))}}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-4 tituloDocumento">
+                                        Curso: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_curso}}</p>
                                     </div>
                                     {{--<div class="col-md-4 tituloDocumento">
                                         Semestre:
                                     </div>--}}
                                     <div class="col-md-4 tituloDocumento">
-                                        Nota: {{$inscricao->nu_nota_candidato}}
+                                        Nota: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_nota_candidato}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Cota de Classificação:
+                                    Cota de Classificação:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="col-md-12 tituloDocumento">
-                                    Endereço: {{$inscricao->ds_logradouro}}
+                                    Endereço: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_logradouro}}</p>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Número: {{$inscricao->nu_endereco}}
+                                        Número: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_endereco}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        CEP: {{$inscricao->nu_cep}}
+                                        CEP: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_cep}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Complemento: {{$inscricao->ds_complemento}}
-                                    </div>
-                                </div>
-                                <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
-                                        Cidade: {{$inscricao->no_municipio}}
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        Bairro: {{$inscricao->no_bairro}}
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        UF: {{$inscricao->sg_uf_inscrito}}
+                                        Complemento: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_complemento}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Telefone:
+                                        Cidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_municipio}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Celular: {{$inscricao->nu_fone1}}
+                                        Bairro: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_bairro}}</p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->sg_uf_inscrito}}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-4 tituloDocumento">
+                                        Telefone:<p class="nomeDocumento" style="display: inline"></p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone1}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Email: @if($inscricao->candidato->user->primeiro_acesso == true){{$inscricao->ds_email}}@else{{$inscricao->candidato->user->email}}@endif
+                                    Email: <p class="nomeDocumento" style="display: inline">@if($inscricao->candidato->user->primeiro_acesso == true){{$inscricao->ds_email}}@else{{$inscricao->candidato->user->email}}@endif</p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="col-md-12 tituloDocumento">
-                                    Estabelecimento que concluiu o Ensino Médio:
+                                    Estabelecimento que concluiu o Ensino Médio:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-2 tituloDocumento">
-                                        UF:
+                                        UF:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Ano de Conclusão:
+                                        Ano de Conclusão:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-6 tituloDocumento">
-                                        Modalidade:
+                                        Modalidade:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row pt-2">
                                     <div class="col-md-8 tituloDocumento">
-                                        Necessidades Especiais:
+                                        Necessidades Especiais:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Cor/Raça:
+                                        Cor/Raça:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3">
                                 <div class="tituloDocumento">
-                                    Qual a Cidade/Estado onde você reside atualmente?
+                                    Qual a Cidade/Estado onde você reside atualmente?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Seu local de moradia atual se encontra em:
+                                    Seu local de moradia atual se encontra em:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Você trabalha?
+                                    Você trabalha?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Quantas pessoas fazem parte do seu grupo familiar?
+                                    Quantas pessoas fazem parte do seu grupo familiar?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Qual o valor da sua renda total?
+                                    Qual o valor da sua renda total?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                             </div>
-                            {{--<div class="col-md-6">
-                                <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>    
-                            </div>--}}
+                            <div class="col-md-6">
+                                <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                            </div>
                         </div>
                     </div>
 
