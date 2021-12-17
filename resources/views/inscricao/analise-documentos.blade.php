@@ -36,7 +36,7 @@
                         @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
                             <div class="alert alert-warning fade show" role="alert">
                                 <strong>Atenção!</strong> O Candidato teve o cadastro invalidado! Confirme se o candidato realmente deve ter o cadastro invalidado.<br>
-                                <strong>Justificativa:</strong> {{$inscricao->justificativa}}<br>
+                                <strong>Justificativa:</strong> {!!$inscricao->justificativa!!}<br>
                                 <form method="post" id="confirmar-invalidacao-candidato" action="{{route('inscricao.confirmar.invalidacao',['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
                                     @csrf
                                     <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
@@ -57,7 +57,7 @@
                 </div>
             @endcan
             <div class="row justify-content-between">
-                <div class="col-md-7">
+                <div class="col-md-8">
                     @if(session('nomeDoc'))
                         <script>
                             $(document).ready(function(){
@@ -68,15 +68,15 @@
                     <div style="border-radius: 0.5rem;" class="col-md-12 p-0 shadow">
                         <div class="cabecalhoAzul p-2 px-3 align-items-center">
                             <div class="row align-items-center justify-content-between">
-                                <div class="col-md-11">
+                                <div class="col-md-10">
                                     <a onclick="carregarFicha()" style="cursor:pointer;"><img src="{{asset('img/Grupo 1662.svg')}}"
                                         alt="" width="40" class="img-flex"></a>
 
                                     <label class="tituloTabelas ps-1" id="nomeDoc">Ficha Geral</label>
                                 </div>
-                                <div class="col-md-1" style="text-align: right">
-                                    <a title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
+                                <div class="col-md-2" style="text-align: right">
                                     <a title="Documento anterior" onclick="carregarProxDoc({{$inscricao->id}}, -1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropleft-circle.svg')}}"></a>
+                                    <a title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
                                 </div>
                             </div>
                         </div>
@@ -115,28 +115,28 @@
                                 </div>
                                 <div class="">
                                     <div class="tituloDocumento mx-3">
-                                        Nome: {{$inscricao->candidato->user->name}}
+                                        Nome: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->user->name}}</p>
                                     </div>
                                     {{--<div class="tituloDocumento mx-3 pt-1">
                                         CEP: {{$inscricao->nu_cep}}
                                     </div>--}}
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Data de Nascimento: {{date('d/m/Y',strtotime($inscricao->candidato->dt_nascimento))}}
+                                        Data de Nascimento: <p class="nomeDocumento" style="display: inline">{{date('d/m/Y',strtotime($inscricao->candidato->dt_nascimento))}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Sexo: {{$inscricao->tp_sexo}}
+                                        Sexo: <p class="nomeDocumento" style="display: inline">{{$inscricao->tp_sexo}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Estado Civil:
+                                        Estado Civil:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        CPF: {{$inscricao->candidato->nu_cpf_inscrito}}
+                                        CPF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->nu_cpf_inscrito}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Identidade: {{$inscricao->nu_rg}}
+                                        RG: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_rg}}</p>
                                     </div>
                                     {{--<div class="tituloDocumento mx-3 pt-1">
-                                        Data de Expedição:
+                                        Data de Expedição
                                     </div>--}}
                                 </div>
                             </div>
@@ -144,155 +144,165 @@
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
                                     <div class="col-md-4 tituloDocumento">
-                                        Título Eleitoral:
+                                        Título Eleitoral:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        Zona:
+                                        Zona:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        Seção:
+                                        Seção:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        UF:
+                                        UF:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        País:
+                                        País:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-5 tituloDocumento">
-                                        Cidade onde Nasceu:
+                                        Naturalidade:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Nome da Mãe: {{$inscricao->no_mae}}
+                                    Nome da Mãe: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_mae}}</p>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Nome do Pai:
+                                    Nome do Pai:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
                                     <div class="col-md-4 tituloDocumento">
-                                        Unidade: {{$inscricao->no_campus}}
+                                        Unidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_campus}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Formação: {{$inscricao->ds_formacao}}
+                                        Formação: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_formacao}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Turno: {{$inscricao->ds_turno}}
-                                    </div>
-                                </div>
-                                <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
-                                        Forma de Ingresso: SiSU
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        Modalidade: {{$inscricao->no_modalidade_concorrencia}}
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        Ano de Ingresso: {{date('Y',strtotime($inscricao->dt_operacao))}}
+                                        Turno: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_turno}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Curso: {{$inscricao->no_curso}}
+                                        Forma de Ingresso: <p class="nomeDocumento" style="display: inline">SiSU</p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_modalidade_concorrencia}}</p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Ano de Ingresso: <p class="nomeDocumento" style="display: inline">{{date('Y',strtotime($inscricao->dt_operacao))}}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-4 tituloDocumento">
+                                        Curso: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_curso}}</p>
                                     </div>
                                     {{--<div class="col-md-4 tituloDocumento">
                                         Semestre:
                                     </div>--}}
                                     <div class="col-md-4 tituloDocumento">
-                                        Nota: {{$inscricao->nu_nota_candidato}}
+                                        Nota: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_nota_candidato}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Cota de Classificação:
+                                    Cota de Classificação:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="col-md-12 tituloDocumento">
-                                    Endereço: {{$inscricao->ds_logradouro}}
+                                    Endereço: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_logradouro}}</p>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Número: {{$inscricao->nu_endereco}}
+                                        Número: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_endereco}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        CEP: {{$inscricao->nu_cep}}
+                                        CEP: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_cep}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Complemento: {{$inscricao->ds_complemento}}
-                                    </div>
-                                </div>
-                                <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
-                                        Cidade: {{$inscricao->no_municipio}}
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        Bairro: {{$inscricao->no_bairro}}
-                                    </div>
-                                    <div class="col-md-4 tituloDocumento">
-                                        UF: {{$inscricao->sg_uf_inscrito}}
+                                        Complemento: <p class="nomeDocumento" style="display: inline">{{$inscricao->ds_complemento}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Telefone:
+                                        Cidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_municipio}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Celular: {{$inscricao->nu_fone1}}
+                                        Bairro: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_bairro}}</p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->sg_uf_inscrito}}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-4 tituloDocumento">
+                                        Telefone:<p class="nomeDocumento" style="display: inline"></p>
+                                    </div>
+                                    <div class="col-md-4 tituloDocumento">
+                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone1}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Email: @if($inscricao->candidato->user->primeiro_acesso == true){{$inscricao->ds_email}}@else{{$inscricao->candidato->user->email}}@endif
+                                    Email: <p class="nomeDocumento" style="display: inline">@if($inscricao->candidato->user->primeiro_acesso == true){{$inscricao->ds_email}}@else{{$inscricao->candidato->user->email}}@endif</p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="col-md-12 tituloDocumento">
-                                    Estabelecimento que concluiu o Ensino Médio:
+                                    Estabelecimento que concluiu o Ensino Médio:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-2 tituloDocumento">
-                                        UF:
+                                        UF:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Ano de Conclusão:
+                                        Ano de Conclusão:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-6 tituloDocumento">
-                                        Modalidade:
+                                        Modalidade:<p class="nomeDocumento" style="display: inline"></p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-md-12 tituloDocumento">
+                                        Concluiu o Ensino Médio na rede pública?<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
+                                <div class="row">
+                                    <div class="col-md-12 tituloDocumento">
+                                        Necessidades Especiais:<p class="nomeDocumento" style="display: inline"></p>
+                                    </div>
+                                </div>
                                 <div class="row pt-2">
-                                    <div class="col-md-8 tituloDocumento">
-                                        Necessidades Especiais:
+                                    <div class="col-md-4 tituloDocumento">
+                                        Cor/Raça:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Cor/Raça:
+                                        Etnia:<p class="nomeDocumento" style="display: inline"></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3">
                                 <div class="tituloDocumento">
-                                    Qual a Cidade/Estado onde você reside atualmente?
+                                    Qual a Cidade/Estado onde você reside atualmente?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Seu local de moradia atual se encontra em:
+                                    Seu local de moradia atual se encontra em:<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Você trabalha?
+                                    Você trabalha?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Quantas pessoas fazem parte do seu grupo familiar?
+                                    Quantas pessoas fazem parte do seu grupo familiar?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Qual o valor da sua renda total?
+                                    Qual o valor da sua renda total?<p class="nomeDocumento" style="display: inline"></p>
                                 </div>
                             </div>
-                            {{--<div class="col-md-6">
-                                <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>    
-                            </div>--}}
+                            <div class="col-md-6">
+                                <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                            </div>
                         </div>
                     </div>
 
@@ -461,12 +471,13 @@
     <!--CORPO-->
 
     <div class="modal fade" id="enviar-email-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog  modal-lg">
             <div class="modal-content modalFundo p-3">
                 <div id ="enviarEmailText" class="col-md-12 tituloModal">Enviar e-mail</div>
                 <div class="pt-3 pb-2 textoModal">
                     <form method="post" id="enviar-email-candidato" action="{{route('enviar.email.candidato')}}">
                         @csrf
+                        <input type="hidden" name="enviar_email" value="-1">
                         <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
                         <input type="hidden" name="curso_id" value="{{$inscricao->curso->id}}">
                         <div class="row">
@@ -484,7 +495,7 @@
                         <div class="row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="conteúdo">Conteúdo</label>
-                                <textarea id="conteúdo" class="form-control campoDeTexto @error('conteúdo') is-invalid @enderror" type="text" name="conteúdo" autofocus placeholder="Insira o conteúdo do e-mail aqui...">{{old('conteúdo')}}</textarea>
+                                <textarea id="conteúdo" class="form-control campoDeTexto ckeditor-editor @error('conteúdo') is-invalid @enderror" type="text" name="conteúdo" autofocus placeholder="Insira o conteúdo do e-mail aqui...">{{old('conteúdo')}}</textarea>
 
                                 @error('conteúdo')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -500,7 +511,7 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
                     <div id ="enviarEmailButton" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="enviar-email-candidato"><span class="px-4" style="font-weight: bolder;" >Enviar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="enviar-email-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Enviar</span></button>
                     </div>
                 </div>
             </div>
@@ -508,7 +519,7 @@
     </div>
 
     <div class="modal fade" id="aprovar-recusar-candidato-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content modalFundo p-3">
                 <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Invalidar Cadastro</div>
                 <div id ="aprovarCandidatoForm" class="col-md-12 tituloModal">Validar Cadastro</div>
@@ -527,7 +538,7 @@
                         <div id ="justificativaCadastroTextForm" class="form-row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="justificativa">Justificativa:</label>
-                                <textarea id="justificativa" class="form-control campoDeTexto @error('justificativa') is-invalid @enderror" type="text" name="justificativa" required autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{old('justificativa', $inscricao->justificativa)}}</textarea>
+                                <textarea id="justificativa" class="form-control campoDeTexto ckeditor-editor @error('justificativa') is-invalid @enderror" type="text" name="justificativa" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{old('justificativa', $inscricao->justificativa)}}</textarea>
 
                                 @error('justificativa')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -543,10 +554,10 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
                     <div id ="reprovarCandidatoButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
                     </div>
                     <div id ="aprovarCandidatoButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
                     </div>
                 </div>
             </div>
@@ -554,7 +565,7 @@
     </div>
 
     <div class="modal fade" id="avaliar-documento-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content modalFundo p-3">
                 <div id ="reprovarTituloForm" class="col-md-12 tituloModal">Reprovar documento</div>
                 <div id ="aprovarTituloForm" class="col-md-12 tituloModal">Aprovar documento</div>
@@ -562,9 +573,11 @@
 
                     <form method="POST" id="avaliar-documentos" action="{{route('inscricao.avaliar.documento', $inscricao->id)}}">
                         @csrf
+                        <input type="hidden" name="reprovar_documento" value="{{$inscricao->id}}">
                         <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
                         <input type="hidden" name="documento_id" value="" id="documento_id">
-                        <input type="hidden" value="-1" id="documento_indice">
+                        <input type="hidden" name="documento_nome" value="" id="documento_nome">
+                        <input type="hidden" name="documento_indice" value="-1" id="documento_indice">
                         <input type="hidden" name="aprovar" id="inputAprovar" value="">
                         <div id ="aprovarTextForm" class="pt-3">
                             Tem certeza que deseja aprovar este documento?
@@ -572,7 +585,7 @@
                         <div id ="reprovarTextForm" class="form-row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="comentario">Motivo:</label>
-                                <textarea id="comentario" class="form-control campoDeTexto @error('comentario') is-invalid @enderror" type="text" name="comentario" value="{{old('comentario')}}" required autofocus autocomplete="comentario" placeholder="Insira o motivo para recusar o documento"></textarea>
+                                <textarea id="comentario" class="form-control campoDeTexto ckeditor-editor @error('comentario') is-invalid @enderror" name="comentario" placeholder="Insira o motivo para recusar o documento">{{old('comentario')}}</textarea>
 
                                 @error('comentario')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -584,14 +597,14 @@
                     </form>
                 </div>
                 <div class="row justify-content-between mt-4">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
-                    <div id ="reprovarButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Recusar</span></button>
+                    <div id ="reprovarButtonForm" class="col-md-6" >
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Recusar</span></button>
                     </div>
-                    <div id ="aprovarButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
+                    <div id ="aprovarButtonForm" class="col-md-6" >
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
                     </div>
                 </div>
             </div>
@@ -600,6 +613,14 @@
 </x-app-layout>
 
 <script>
+    $(document).ready(function(){
+        var inputs = document.getElementsByClassName('ckeditor-editor');
+        
+        for(var i = 0; i < inputs.length; i++) {
+            CKEDITOR.replace(inputs[i].id);
+        }
+    });
+
     function limparBotoes(){
         $("#avaliarDoc").hide();
         btnAprovar = document.getElementById("aprovarBotao");
@@ -614,7 +635,7 @@
         this.limparBotoes();
         $("#mensagemVazia").hide();
         $("#corpoFicha").hide();
-        var $iFrame = $('iframe');
+        var iFrame = $('#documentoPDF');
         $.ajax({
             url:"{{route('inscricao.documento.ajax')}}",
             type:"get",
@@ -627,13 +648,13 @@
                     if($("#mensagemVazia").is(":hidden")){
                         $("#mensagemVazia").show();
                     }
-                    $iFrame.hide();
+                    iFrame.hide();
                 }else{
-                    $iFrame.attr('src', documento.caminho);
+                    iFrame.attr('src', documento.caminho);
                     document.getElementById("documentoPDF").parentElement.parentElement.style.display = '';
                     document.getElementById("documento_id").value = documento.id;
-                    document.getElementById("documento_id").value = documento.id;
                     document.getElementById("comentario").value = documento.comentario;
+                    document.getElementById("documento_nome").value = documento_nome;
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     if(documento.avaliacao == "1"){
@@ -647,8 +668,8 @@
                         $("#avaliarDoc").show();
                     });
 
-                    if($iFrame.is(":hidden")){
-                        $iFrame.show();
+                    if(iFrame.is(":hidden")){
+                        iFrame.show();
                     }
                 }
             }
@@ -669,7 +690,7 @@
     }
 
     function atualizarInputReprovar(){
-        $('#comentario').attr('required', true);
+        $('#comentario').attr('required', false);
 
         document.getElementById('inputAprovar').value = false;
         $("#aprovarTituloForm").hide();
@@ -683,9 +704,8 @@
 
     function atualizarInputEfetivar(valor){
         document.getElementById('inputEfetivar').value = valor;
+        $('#justificativa').attr('required', false);
         if(valor == true){
-            $('#justificativa').attr('required', false);
-
             $('#reprovarCandidatoForm').hide();
             $('#reprovarCandidatoTextForm').hide();
             $('#reprovarCandidatoButtonForm').hide();
@@ -696,8 +716,6 @@
 
             $('#aprovar-recusar-candidato-modal').modal('toggle');
         }else{
-            $('#justificativa').attr('required', true);
-
             $("#aprovarCandidatoForm").hide();
             $("#aprovarCandidatoTextForm").hide();
             $("#aprovarCandidatoButtonForm").hide();
@@ -786,3 +804,30 @@
     }
 
 </script>
+
+@if(old('reprovar_documento') != null)
+    <script>
+        $(document).ready(function() {
+            carregarDocumento("{{old('reprovar_documento')}}", "{{old('documento_nome')}}", "{{old('documento_indice')}}");
+            atualizarInputReprovar();
+            $('#avaliar-documento-modal').modal('show');
+        });
+    </script>
+@endif
+
+@if (old('inscricaoID') != null)
+    <script>
+        $(document).ready(function() {
+            atualizarInputEfetivar(false);
+            $('#aprovar-recusar-candidato-modal').modal('show');
+        });
+    </script>
+@endif
+
+@if (old('enviar_email') == -1)
+    <script>
+        $(document).ready(function(){
+            $('#enviar-email-candidato-modal').modal('show');
+        });
+    </script>
+@endif

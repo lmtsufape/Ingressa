@@ -80,7 +80,7 @@
                 @csrf
                 <div class="form-row">
                     <div class="col-md-12 form-group">
-                        <label class="pb-2" for="edicao"><span style="color: red; font-weight: bold;">* </span>Nome da edição:</label>
+                        <label class="pb-2" for="nomeEdicao"><span style="color: red; font-weight: bold;">* </span>Nome da edição:</label>
                         <input type="name" class="form-control campoDeTexto @error('edicao') is-invalid @enderror" id="nomeEdicao" placeholder="Insira o nome da edição"  name="edicao" required autofocus autocomplete="edicao">
 
                         @error('edicao')
@@ -191,14 +191,14 @@
                 <div class="modal-content modalFundo p-3">
                     <div class="col-md-12 tituloModal" id="staticBackdropLabel">Importar lista regular</div>
                     <div class="modal-body textoModal">
-                        <form id="importar-candidatos-sisu-form-{{$sisu->id}}" method="POST" action="{{route('chamadas.importar.planilhas.regular', ['sisu_id' =>$sisu->id])}}" enctype="multipart/form-data">
+                        <form id="importar-candidatos-sisu-form-{{$sisu->id}}-espera" method="POST" action="{{route('chamadas.importar.planilhas.regular', ['sisu_id' =>$sisu->id])}}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label for="arquivoRegular" class="form-label">Anexe o arquivo .csv da <strong>chamada regular</strong> da edição {{$sisu->edicao}}</label>
                                     <input id="arquivoRegular" type="file" class="form-control" name="arquivoRegular" accept=".csv" required><br>
                                 </div>
-                            </div>                            
+                            </div>
                         </form>
                     </div>
                     <div class="row justify-content-between mt-4">
@@ -206,10 +206,10 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}" id="submeterFormBotao"><span class="px-4">Importar</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}-espera" id="submeterFormBotao"><span class="px-4">Importar</span></button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -227,7 +227,7 @@
                                     <input id="arquivoEspera" type="file" class="form-control" name="arquivoEspera" accept=".csv" required>
                                 </div>
                             </div>
-                            
+
                         </form>
                     </div>
                     <div class="row justify-content-between mt-4">

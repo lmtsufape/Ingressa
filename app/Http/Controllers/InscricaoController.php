@@ -196,7 +196,7 @@ class InscricaoController extends Controller
             return redirect()->back()->withErrors(['error' => 'Envie a avaliação do documento que deseja avaliar.'])->withInput($request->all());
         }
         if($request->comentario == null && $request->aprovar == 'false') {
-            return redirect()->back()->withErrors(['error' => 'Informe o motivo para recusar este documento.'])->withInput($request->all());
+            return redirect()->back()->withErrors(['comentario' => 'Informe o motivo para recusar este documento.'])->withInput($request->all());
         }
         $inscricao = Inscricao::find($request->inscricao_id);
         $arquivo = Arquivo::find($request->documento_id);
@@ -330,7 +330,7 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($request->inscricaoID);
 
         if($request->justificativa == null && $request->efetivar == 'false'){
-            return redirect()->back()->withErrors(['error' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
+            return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
         }
 
         if($request->justificativa == null && $inscricao->justificativa == $request->justificativa){
