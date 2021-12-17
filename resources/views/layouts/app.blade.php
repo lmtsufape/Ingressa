@@ -29,6 +29,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.2/umd/popper.min.js"></script>
 
         <script src="{{asset('js/jquery-3.6.0.min.js')}}"></script>
+
+        <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
