@@ -127,6 +127,8 @@
                                         Geral
                                     @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['heteroidentificacao'])
                                         Heteroidentificação
+                                    @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['medico'])
+                                        Seção médica
                                     @endif
                                 </label>
                             </div>
@@ -192,6 +194,8 @@
                                             Geral
                                         @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['heteroidentificacao'])
                                             Heteroidentificação
+                                        @elseif($tipo->tipo == \App\Models\TipoAnalista::TIPO_ENUM['medico'])
+                                            Seção médica
                                         @endif
                                     </label>
                                 </div>

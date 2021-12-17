@@ -12,6 +12,7 @@ class TipoAnalista extends Model
     public const TIPO_ENUM = [
         'geral' => 1,
         'heteroidentificacao' => 2,
+        'medico' => 3,
     ];
 
     public function users()
@@ -27,6 +28,9 @@ class TipoAnalista extends Model
                 break;
             case $this::TIPO_ENUM['heteroidentificacao']:
                 return "Heteroidentificação";
+                break;
+            case $this::TIPO_ENUM['medico']:
+                return "Seção médica";
                 break;
         }
     }
