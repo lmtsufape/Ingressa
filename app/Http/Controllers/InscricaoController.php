@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Arquivo;
 use App\Models\Avaliacao;
+use App\Models\Candidato;
 use App\Models\Chamada;
 use App\Models\Cota;
 use App\Models\Curso;
@@ -145,11 +146,11 @@ class InscricaoController extends Controller
                 $documentos->push('quitacao_militar');
             }
             $documentos->push('foto');
-            if($inscricao->st_lei_etnia_i == 'S'){
+            if($inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->cor_raca == 5){
                 $documentos->push('rani');
                 $documentos->push('declaracao_cotista');
             }
-            if($inscricao->st_lei_etnia_p == 'S'){
+            if($inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->cor_raca, [2, 3])){
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
                 if(!$documentos->contains('declaracao_cotista')){

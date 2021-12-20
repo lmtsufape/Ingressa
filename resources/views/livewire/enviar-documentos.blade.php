@@ -422,13 +422,6 @@
                                 make a type specimen book.
                             </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input @error('declaracoes.preto_pardo') is-invalid @enderror" type="checkbox" value="true" id="checkpreto_pardo" wire:model="declaracoes.preto_pardo">
-                            <label class="form-check-label subtexto3" for="checkpreto_pardo">
-                                Declaro que me candidatei às vagas destinadas aos candidatos autodeclarados pretos ou pardos.
-                            </label>
-                        </div>
-                        <div class="invalid-feedback" style="display: block">@error('declaracoes.preto_pardo'){{$message}}@enderror</div>
 
                         <div class="mt-2">
                             <label for="docHeteroidentificacao"
@@ -555,13 +548,6 @@
                                 it to
                                 make a type specimen book. </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input @error('declaracoes.indigena') is-invalid @enderror" type="checkbox" value="true" id="checkindigena" wire:model="declaracoes.indigena">
-                            <label class="form-check-label subtexto3" for="checkindigena">
-                                Declaro que me candidatei às vagas destinadas aos candidatos autodeclarados indígenas.
-                            </label>
-                        </div>
-                        <div class="invalid-feedback" style="display: block">@error('declaracoes.indigena'){{$message}}@enderror</div>
                         <div class="mt-2">
                             <label for="rani"
                                 title="Enviar documento"

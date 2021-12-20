@@ -21,9 +21,6 @@ class EnviarDocumentos extends Component
     public $inscricao;
     protected $validationAttributes = [];
     protected $messages = [
-        'arquivos.heteroidentificacao.required_if' => 'O campo :attribute é obrigatório quando o(a) candidato(a) se autodeclarar preto(a) ou pardo(a).',
-        'arquivos.fotografia.required_if' => 'O campo :attribute é obrigatório quando o(a) candidato(a) se autodeclarar preto(a) ou pardo(a).',
-        'arquivos.rani.required_if' => 'O campo :attribute é obrigatório quando o(a) candidato(a) se autodeclarar indígena.',
         'arquivos.historico.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
         'arquivos.nascimento_ou_casamento.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
         'arquivos.quitacao_militar.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
@@ -40,9 +37,6 @@ class EnviarDocumentos extends Component
                 case 'quitacao_militar':
                     $this->declaracoes[$documento] = null;
                     break;
-                case 'heteroidentificacao':
-                    $this->declaracoes['preto_pardo'] = false;
-                    $this->declaracoes['indigena'] = false;
                 case 'quitacao_eleitoral':
                     $this->declaracoes[$documento] = null;
                     break;
@@ -84,6 +78,15 @@ class EnviarDocumentos extends Component
             return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:pdf', 'max:2048'];
+        }
+    }
+
+    public function ruleVideo($documento)
+    {
+        if($this->inscricao->arquivo($documento)) {
+            return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
+        } else {
+            return ['required', 'file', 'mimes:mp4', 'max:65536'];
         }
     }
 
@@ -155,14 +158,11 @@ class EnviarDocumentos extends Component
             } elseif($documento == 'declaracao_veracidade') {
                 $rules['arquivos.'.$documento] = $this->rulePdf($documento);
             } elseif($documento == 'rani') {
-                $nome = 'declaracoes.indigena';
-                $rules['arquivos.'.$documento] = $this->rulePdfIf($documento, $nome);
+                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
             } elseif($documento == 'heteroidentificacao') {
-                $nome = 'declaracoes.preto_pardo';
-                $rules['arquivos.'.$documento] = $this->ruleVideoIf($documento, $nome);
+                $rules['arquivos.'.$documento] = $this->ruleVideo($documento);
             } elseif($documento == 'fotografia') {
-                $nome = 'declaracoes.preto_pardo';
-                $rules['arquivos.'.$documento] = $this->ruleImageIf($documento, $nome);
+                $rules['arquivos.'.$documento] = $this->ruleImage($documento);
             } elseif($documento == 'declaracao_cotista') {
                 $rules['arquivos.'.$documento] = $this->rulePdf($documento);
             }
