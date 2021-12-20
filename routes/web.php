@@ -32,11 +32,14 @@ Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('
 Route::get('/editar', [CandidatoController::class , 'editarAcesso'])->name('primeiroAcesso.editar');
 Route::post('/atualizar', [UserController::class , 'update'])->name('primeiroAcesso.atualizar');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+Route::put('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'update'])->name('candidato.atualizar');
+Route::get('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'edit'])->name('candidato.edit');
+Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function() {
+
     Route::resource('usuarios', UserController::class);
     Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])
         ->name('usuarios.update.analista');

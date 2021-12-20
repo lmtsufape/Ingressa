@@ -366,13 +366,14 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         }
                     }
                     if(!$chamado){
+                        $candidatoExistente->atualizar_dados = true;
                         if($inscrito['no_social'] != null){
                             $candidatoExistente->no_social = $inscrito['no_social'];
-                            $candidatoExistente->update();
                             $candidatoExistente->user->name = $inscrito['no_social'];
                         }else{
                             $candidatoExistente->user->name = $inscrito['no_inscrito'];
                         }
+                        $candidatoExistente->update();
                         $candidatoExistente->user->update();
 
                         $inscricao->chamada_id = $this->chamada->id;

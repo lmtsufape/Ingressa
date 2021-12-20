@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'asset_url' => '/gestao-matriculas-sisu/public',
+    'asset_url' => env('ASSET_LIVEWIRE', null),
 
     /*
     |--------------------------------------------------------------------------

@@ -124,10 +124,10 @@
                                         Data de Nascimento: <p class="nomeDocumento" style="display: inline">{{date('d/m/Y',strtotime($inscricao->candidato->dt_nascimento))}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Sexo: <p class="nomeDocumento" style="display: inline">{{$inscricao->tp_sexo}}</p>
+                                        Sexo: <p class="nomeDocumento" style="display: inline">{{$inscricao->tp_sexo == "M" ? 'Masculino' : 'Feminino'}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Estado Civil:<p class="nomeDocumento" style="display: inline"></p>
+                                        Estado Civil: @isset($inscricao->candidato->estado_civil)<p class="nomeDocumento" style="display: inline">{{\App\Models\Candidato::ESTADO_CIVIL[$inscricao->candidato->estado_civil]}}</p>@endisset
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
                                         CPF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->nu_cpf_inscrito}}</p>
@@ -143,32 +143,43 @@
 
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
+                                    <div class="col-md-5 tituloDocumento">
+                                        Orgão expedidor: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->orgao_expedidor}}</p>
+                                    </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->uf_rg}}</p>
+                                    </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Título Eleitoral:<p class="nomeDocumento" style="display: inline"></p>
-                                    </div>
-                                    <div class="col-md-3 tituloDocumento">
-                                        Zona:<p class="nomeDocumento" style="display: inline"></p>
-                                    </div>
-                                    <div class="col-md-3 tituloDocumento">
-                                        Seção:<p class="nomeDocumento" style="display: inline"></p>
+                                        Expedição: <p class="nomeDocumento" style="display: inline">{{date('d/m/Y', strtotime($inscricao->candidato->data_expedicao))}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
-                                        UF:<p class="nomeDocumento" style="display: inline"></p>
+                                    <div class="col-md-5 tituloDocumento">
+                                        Título Eleitoral: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->titulo}}</p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        País:<p class="nomeDocumento" style="display: inline"></p>
+                                        Zona: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->zona_eleitoral}}</p>
                                     </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        Seção: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->secao_eleitoral}}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
                                     <div class="col-md-5 tituloDocumento">
-                                        Naturalidade:<p class="nomeDocumento" style="display: inline"></p>
+                                        Naturalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->cidade_natal}}</p>
+                                    </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->uf_natural}}</p>
+                                    </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        País: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->pais_natural}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
                                     Nome da Mãe: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_mae}}</p>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Nome do Pai:<p class="nomeDocumento" style="display: inline"></p>
+                                    Nome do Pai: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->pai}}</p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
@@ -237,10 +248,10 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Telefone:<p class="nomeDocumento" style="display: inline"></p>
+                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone1}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone1}}</p>
+                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone2}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
@@ -249,55 +260,63 @@
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="col-md-12 tituloDocumento">
-                                    Estabelecimento que concluiu o Ensino Médio:<p class="nomeDocumento" style="display: inline"></p>
+                                    Estabelecimento que concluiu o Ensino Médio: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->escola_ens_med}}</p>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-2 tituloDocumento">
-                                        UF:<p class="nomeDocumento" style="display: inline"></p>
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->uf_escola}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Ano de Conclusão:<p class="nomeDocumento" style="display: inline"></p>
+                                        Ano de Conclusão: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->ano_conclusao}}</p>
                                     </div>
                                     <div class="col-md-6 tituloDocumento">
-                                        Modalidade:<p class="nomeDocumento" style="display: inline"></p>
+                                        Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->modalidade}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-12 tituloDocumento">
-                                        Concluiu o Ensino Médio na rede pública?<p class="nomeDocumento" style="display: inline"></p>
+                                        Concluiu o Ensino Médio na rede pública?
+                                        @isset($inscricao->candidato->concluiu_publica)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->concluiu_publica ? 'Sim' : 'Não'}}</p>@endisset
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
                                     <div class="col-md-12 tituloDocumento">
-                                        Necessidades Especiais:<p class="nomeDocumento" style="display: inline"></p>
+                                        Necessidades Especiais:
+                                        @isset($inscricao->candidato->necessidades)
+                                        <p class="nomeDocumento" style="display: inline">
+                                            @foreach (explode(',', $inscricao->candidato->necessidades) as $necessidade)
+                                                {{\App\Models\Candidato::NECESSIDADES[$necessidade]}}@if(!$loop->last),@endif
+                                            @endforeach
+                                        </p>
+                                        @endisset
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Cor/Raça:<p class="nomeDocumento" style="display: inline"></p>
+                                        Cor/Raça: @isset($inscricao->candidato->cor_raca)<p class="nomeDocumento" style="display: inline">{{\App\Models\Candidato::COR_RACA[$inscricao->candidato->cor_raca]}}</p>@endisset
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Etnia:<p class="nomeDocumento" style="display: inline"></p>
+                                        Etnia: @isset($inscricao->candidato->etnia)<p class="nomeDocumento" style="display: inline">{{\App\Models\Candidato::ETNIA[$inscricao->candidato->etnia]}}</p>@endisset
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3">
                                 <div class="tituloDocumento">
-                                    Qual a Cidade/Estado onde você reside atualmente?<p class="nomeDocumento" style="display: inline"></p>
+                                    Qual a Cidade/Estado onde você reside atualmente? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->reside}}</p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Seu local de moradia atual se encontra em:<p class="nomeDocumento" style="display: inline"></p>
+                                    Seu local de moradia atual se encontra em: @isset($inscricao->candidato->localidade)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->localidade == "zona_urbana" ? 'Zona urbana' : "Zona rural"}}</p>@endisset
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Você trabalha?<p class="nomeDocumento" style="display: inline"></p>
+                                    Você trabalha? @isset($inscricao->candidato->trabalha)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->trabalha ? 'Sim' : 'Não'}}</p>@endisset
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Quantas pessoas fazem parte do seu grupo familiar?<p class="nomeDocumento" style="display: inline"></p>
+                                    Quantas pessoas fazem parte do seu grupo familiar? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->grupo_familiar}}</p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Qual o valor da sua renda total?<p class="nomeDocumento" style="display: inline"></p>
+                                    Qual o valor da sua renda total? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->valor_renda}}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -615,7 +634,7 @@
 <script>
     $(document).ready(function(){
         var inputs = document.getElementsByClassName('ckeditor-editor');
-        
+
         for(var i = 0; i < inputs.length; i++) {
             CKEDITOR.replace(inputs[i].id);
         }
