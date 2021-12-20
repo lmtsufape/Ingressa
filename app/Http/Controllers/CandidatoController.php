@@ -59,6 +59,11 @@ class CandidatoController extends Controller
     {
         $inscricao = Inscricao::find($request->inscricao_id);
 
+        $request->validate([
+            'assunto' => 'nullable',
+            'conteúdo' => 'required|max:5000',
+        ]);
+
         $user = $inscricao->candidato->user;
         if ($user->email != null) {
             Notification::send($user, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));

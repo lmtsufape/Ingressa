@@ -10,6 +10,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -134,7 +135,8 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
-        if(auth()->user()->ehAnalistaGeral() == true || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
+        $userPolicy = new UserPolicy();
+        if($userPolicy->ehAnalistaGeral(auth()->user()) || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
             $documentos->push('declaracao_veracidade');
             $documentos->push('certificado_conclusao');
             $documentos->push('historico');
@@ -169,10 +171,17 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
-        }else if(auth()->user()->ehAnalistaHeteroidentificacao() == true){
+        }else if($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())){
             if($inscricao->st_lei_etnia_p == 'S'){
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
+        }else if($userPolicy->ehAnalistaMedico(auth()->user())){
+            if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
+                $documentos->push('laudo_medico');
                 if(!$documentos->contains('declaracao_cotista')){
                     $documentos->push('declaracao_cotista');
                 }
@@ -188,7 +197,7 @@ class InscricaoController extends Controller
             return redirect()->back()->withErrors(['error' => 'Envie a avaliação do documento que deseja avaliar.'])->withInput($request->all());
         }
         if($request->comentario == null && $request->aprovar == 'false') {
-            return redirect()->back()->withErrors(['error' => 'Informe o motivo para recusar este documento.'])->withInput($request->all());
+            return redirect()->back()->withErrors(['comentario' => 'Informe o motivo para recusar este documento.'])->withInput($request->all());
         }
         $inscricao = Inscricao::find($request->inscricao_id);
         $arquivo = Arquivo::find($request->documento_id);
@@ -322,7 +331,7 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($request->inscricaoID);
 
         if($request->justificativa == null && $request->efetivar == 'false'){
-            return redirect()->back()->withErrors(['error' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
+            return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
         }
 
         if($request->justificativa == null && $inscricao->justificativa == $request->justificativa){

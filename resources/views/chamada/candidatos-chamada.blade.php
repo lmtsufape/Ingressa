@@ -52,11 +52,15 @@
                             @endswitch)
                             </div>
                             <div class="subtitulo" style="width: 100%">
-                                {{"Concluídos: ".$concluidos[$count]}}<br>
-                                {{"Concluídos(pendências): ".$concluidosPendentes[$count]}}<br>
+                                @can('isAdminOrAnalistaGeral', \App\Models\User::class)
+                                    {{"Concluídos: ".$concluidos[$count]}}<br>
+                                    {{"Concluídos(pendências): ".$concluidosPendentes[$count]}}<br>
+                                @endcan
                                 {{"Enviados: ".$enviados[$count]}}<br>
                                 {{"Pendentes: ".$naoEnviados[$count]}}<br>
-                                {{"Invalidados: ".$invalidados[$count]}}
+                                @can('isAdminOrAnalistaGeral', \App\Models\User::class)
+                                    {{"Invalidados: ".$invalidados[$count]}}
+                                @endcan
                             </div>
                         </a>
                     @else

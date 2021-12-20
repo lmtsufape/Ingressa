@@ -36,7 +36,7 @@
                         @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
                             <div class="alert alert-warning fade show" role="alert">
                                 <strong>Atenção!</strong> O Candidato teve o cadastro invalidado! Confirme se o candidato realmente deve ter o cadastro invalidado.<br>
-                                <strong>Justificativa:</strong> {{$inscricao->justificativa}}<br>
+                                <strong>Justificativa:</strong> {!!$inscricao->justificativa!!}<br>
                                 <form method="post" id="confirmar-invalidacao-candidato" action="{{route('inscricao.confirmar.invalidacao',['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
                                     @csrf
                                     <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
@@ -327,7 +327,7 @@
 
                     <div class="col-md-4">
                         <div class="col-md-12 caixa shadow p-3">
-                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                            @can('isAdmin', \App\Models\User::class)
                                 <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                     <div class="d-flex align-items-center">
                                         <span class="tituloTipoDoc">Documentação básica</span>
@@ -336,7 +336,18 @@
                                         <img width="35" src="{{asset('img/download1.svg')}}"></a>
                                     </a>
                                 </div>
-                            @endif
+                            @else
+                                @can('ehAnalistaGeral', \App\Models\User::class)
+                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Documentação básica</span>
+                                        </div>
+                                        <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
+                                            <img width="35" src="{{asset('img/download1.svg')}}"></a>
+                                        </a>
+                                    </div>
+                                @endcan
+                            @endcan
                             @foreach ($documentos as $indice =>  $documento)
                                 @if($documento == 'rani')
                                     <div>
@@ -460,10 +471,15 @@
                                 </div>
                             @endforeach
                         </div>
-                        @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                        @can('isAdmin', \App\Models\User::class)
                             <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
                             <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
-                        @endif
+                        @else
+                            @can('ehAnalistaGeral', \App\Models\User::class)
+                                <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
+                                <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
+                            @endcan
+                        @endcan
                         <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" style="background-color: #1492E6;" class="btn botaoVerde mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></a>
                     </div>
                 </div>
@@ -480,6 +496,7 @@
                 <div class="pt-3 pb-2 textoModal">
                     <form method="post" id="enviar-email-candidato" action="{{route('enviar.email.candidato')}}">
                         @csrf
+                        <input type="hidden" name="enviar_email" value="-1">
                         <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
                         <input type="hidden" name="curso_id" value="{{$inscricao->curso->id}}">
                         <div class="row">
@@ -575,9 +592,11 @@
 
                     <form method="POST" id="avaliar-documentos" action="{{route('inscricao.avaliar.documento', $inscricao->id)}}">
                         @csrf
+                        <input type="hidden" name="reprovar_documento" value="{{$inscricao->id}}">
                         <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
                         <input type="hidden" name="documento_id" value="" id="documento_id">
-                        <input type="hidden" value="-1" id="documento_indice">
+                        <input type="hidden" name="documento_nome" value="" id="documento_nome">
+                        <input type="hidden" name="documento_indice" value="-1" id="documento_indice">
                         <input type="hidden" name="aprovar" id="inputAprovar" value="">
                         <div id ="aprovarTextForm" class="pt-3">
                             Tem certeza que deseja aprovar este documento?
@@ -585,7 +604,7 @@
                         <div id ="reprovarTextForm" class="form-row">
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="comentario">Motivo:</label>
-                                <textarea id="comentario" class="form-control campoDeTexto ckeditor-editor @error('comentario') is-invalid @enderror" name="comentario" required placeholder="Insira o motivo para recusar o documento">{{old('comentario')}}</textarea>
+                                <textarea id="comentario" class="form-control campoDeTexto ckeditor-editor @error('comentario') is-invalid @enderror" name="comentario" placeholder="Insira o motivo para recusar o documento">{{old('comentario')}}</textarea>
 
                                 @error('comentario')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
@@ -654,6 +673,7 @@
                     document.getElementById("documentoPDF").parentElement.parentElement.style.display = '';
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("comentario").value = documento.comentario;
+                    document.getElementById("documento_nome").value = documento_nome;
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     if(documento.avaliacao == "1"){
@@ -689,7 +709,7 @@
     }
 
     function atualizarInputReprovar(){
-        $('#comentario').attr('required', true);
+        $('#comentario').attr('required', false);
 
         document.getElementById('inputAprovar').value = false;
         $("#aprovarTituloForm").hide();
@@ -703,9 +723,8 @@
 
     function atualizarInputEfetivar(valor){
         document.getElementById('inputEfetivar').value = valor;
+        $('#justificativa').attr('required', false);
         if(valor == true){
-            $('#justificativa').attr('required', false);
-
             $('#reprovarCandidatoForm').hide();
             $('#reprovarCandidatoTextForm').hide();
             $('#reprovarCandidatoButtonForm').hide();
@@ -716,8 +735,6 @@
 
             $('#aprovar-recusar-candidato-modal').modal('toggle');
         }else{
-            $('#justificativa').attr('required', true);
-
             $("#aprovarCandidatoForm").hide();
             $("#aprovarCandidatoTextForm").hide();
             $("#aprovarCandidatoButtonForm").hide();
@@ -806,3 +823,30 @@
     }
 
 </script>
+
+@if(old('reprovar_documento') != null)
+    <script>
+        $(document).ready(function() {
+            carregarDocumento("{{old('reprovar_documento')}}", "{{old('documento_nome')}}", "{{old('documento_indice')}}");
+            atualizarInputReprovar();
+            $('#avaliar-documento-modal').modal('show');
+        });
+    </script>
+@endif
+
+@if (old('inscricaoID') != null)
+    <script>
+        $(document).ready(function() {
+            atualizarInputEfetivar(false);
+            $('#aprovar-recusar-candidato-modal').modal('show');
+        });
+    </script>
+@endif
+
+@if (old('enviar_email') == -1)
+    <script>
+        $(document).ready(function(){
+            $('#enviar-email-candidato-modal').modal('show');
+        });
+    </script>
+@endif

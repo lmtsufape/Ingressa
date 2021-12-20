@@ -149,7 +149,26 @@
                                                     Cadastro validado com pendênciais
                                                     @break
                                                 @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
-                                                    {{$inscricao->justificativa}}
+                                                    @php
+                                                        $arquivos_invalidos = 0;
+                                                        foreach ($inscricao->arquivos as $arquivo) {
+                                                            if ($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) {
+                                                                $arquivos_invalidos++;
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    <div style="font-weight: normal;">
+                                                        {!!str_replace(['<p>', '</p>'], "",$inscricao->justificativa)!!};
+                                                        @foreach ($inscricao->arquivos as $i => $arquivo)
+                                                            @if($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
+                                                                @if($i == $arquivos_invalidos)
+                                                                    {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!}.
+                                                                @else 
+                                                                    {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!};
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                     @break
                                                 @default
                                                     Sem pendências
