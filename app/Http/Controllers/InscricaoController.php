@@ -226,7 +226,7 @@ class InscricaoController extends Controller
         $documentosAceitos = true;
         $necessitaAvaliar = false;
         foreach($inscricao->arquivos as $arqui){
-            if($arqui->avaliacao != null){
+            if(is_null($arqui->avaliacao)){
                 if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
                     $documentosAceitos = false;
                     break;
@@ -250,7 +250,11 @@ class InscricaoController extends Controller
             if($necessitaAvaliar == true && $documentosAceitos == false){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
             }else{
-                $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                if($necessitaAvaliar == true){
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+                }else{
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                }
             }
         }
         $inscricao->update();
