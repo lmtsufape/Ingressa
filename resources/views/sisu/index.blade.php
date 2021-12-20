@@ -51,8 +51,10 @@
                                     @else
                                         <a href="{{route('sisus.show', ['sisu' => $sisu->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
                                     @endif
-                                    @if($sisu->caminho_import_espera == null)
-                                        <a title ="Importar lista de espera" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$sisu->id}}_espera" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                    @if ($sisu->caminho_import_regular != null)
+                                        @if($sisu->caminho_import_espera == null)
+                                            <a title ="Importar lista de espera" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$sisu->id}}_espera" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="icone-busca"></a>
+                                        @endif
                                     @endif
                                     <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
                                     <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>

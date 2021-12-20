@@ -1,13 +1,13 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
-            <div class="row">
+            {{--<div class="row">
                 <div class="col-sm-12">
                     <div class="col-md-12" style="text-align: right">
                         <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}"> <span class="px-4">Voltar</span></a>
                     </div>
                 </div>
-            </div>
+            </div>--}}
             @if(session('success'))
                 <div class="row mt-3" id="mensagemSucesso">
                     <div class="col-md-12">
@@ -80,9 +80,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="mensagemVazia" class="text-center" style="display: none;" >
-                            <div class="col-md-12 text-center legenda" style="font-weight: bolder; font-size: 20px;">
+                        <div class="corpo" id="mensagemVazia" class="text-center" style="display: none;" >
+                            <div class="col-md-12 text-center legenda" style="font-weight: bolder; font-size: 20px; padding-top: 10px;">
                                 Documento não enviado pelo candidato
+                            </div>
+                            <div class="col-md-12 px-3 pt-5">
+                                <div class="row justify-content-between">
+                                    <div class="col-md-6">
+                                        <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" type="button" class="btn botao my-2 py-1 col-md-5"><span class="px-4">Voltar</span></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="corpo p-3" style="display: none;">
@@ -94,10 +101,11 @@
                                 <div class="col-md-12 px-3 pt-5">
                                     <div class="row justify-content-between">
                                         <div class="col-md-6">
-                                            <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #1492E6;;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></a>
+                                            <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" type="button" class="btn botao my-2 py-1 col-md-5"><span class="px-4">Voltar</span></a>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row justify-content-end">
+                                                <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #1492E6;;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></a>
                                                 <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar()"><span class="px-3 text-center" >Aprovar</span></a>
                                             </div>
                                         </div>
@@ -471,14 +479,9 @@
                                 </div>
                             @endforeach
                         </div>
-                        @can('isAdmin', \App\Models\User::class)
+                        @can('isAdminOrAnalistaGeral', \App\Models\User::class)
                             <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
                             <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
-                        @else
-                            @can('ehAnalistaGeral', \App\Models\User::class)
-                                <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
-                                <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
-                            @endcan
                         @endcan
                         <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" style="background-color: #1492E6;" class="btn botaoVerde mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></a>
                     </div>

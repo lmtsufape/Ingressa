@@ -252,12 +252,12 @@
         <div class="modal fade" id="modalStaticImportarCandidatos_{{$chamada->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content modalFundo p-3">
-                    <div class="col-md-12 tituloModal" id="staticBackdropLabel">Importar Candidatos</div>
+                    <div class="col-md-12 tituloModal" id="staticBackdropLabel">Cadastrar Candidatos</div>
                     <div class="modal-body textoModal">
                         @if($chamada->regular)
                             <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
                                 @csrf
-                                Deseja importar os candidatos da chamada {{$chamada->nome}}?
+                                Deseja fazer o cadastro dos candidatos da {{$chamada->nome}}?
                             </form>
                         @else
                             <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
@@ -328,7 +328,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao"><span class="px-4">Publicar</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao"><span class="px-4">Cadastrar</span></button>
                         </div>
                     </div>
                 </div>
