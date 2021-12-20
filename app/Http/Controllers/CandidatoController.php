@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateCandidatoRequest;
 use App\Models\Candidato;
 use App\Models\User;
 use App\Models\Inscricao;
@@ -27,11 +28,11 @@ class CandidatoController extends Controller
                 ->withInput();
         }
         else{
-            
+
             $user = User::where('id','=',$candidato->user_id)->first();
-            
+
             if ($user->primeiro_acesso == true){
-                
+
                 return view('candidato.acesso_edit', compact('user'));
             }
             else{
@@ -54,10 +55,10 @@ class CandidatoController extends Controller
         return view('candidato.acesso_edit', ['user' => $user]);
     }
 
-    public function enviarEmail(Request $request) 
+    public function enviarEmail(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricao_id);
-        
+
         $user = $inscricao->candidato->user;
         if ($user->email != null) {
             Notification::send($user, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));
@@ -67,6 +68,24 @@ class CandidatoController extends Controller
         Notification::send($user_inscricao, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));
 
         return redirect(route('inscricao.show.analisar.documentos', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->candidato->id]))->with(['success' => 'E-mail enviado com sucesso!']);
+    }
+
+    public function update(Candidato $candidato, Inscricao $inscricao, UpdateCandidatoRequest $request)
+    {
+        $validated = $request->validated();
+        $validated['necessidades'] = implode(',', $validated['necessidades']);
+        $candidato->fill($validated);
+        $candidato->atualizar_dados = false;
+        $inscricao->fill($validated);
+        $candidato->save();
+        $inscricao->save();
+        return view('dashboard');
+    }
+
+    public function edit(Candidato $candidato, Inscricao $inscricao)
+    {
+        $this->authorize('isCandidatoDono', $inscricao);
+        return view('candidato.atualizar_dados', compact('candidato', 'inscricao'));
     }
 
 }
