@@ -6,8 +6,8 @@
                     <div class="d-flex align-items-center data justify-content-between mx-0 px-0">
                         <span class="aling-middle ">Datas Importantes</span>
                         <span class="aling-middle">
-                            <a data-bs-toggle="modal" data-bs-target="#editarData" style="margin-right: 3px;"><img width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
-                            <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right;"><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
+                            <button title="Editar data" data-bs-toggle="modal" data-bs-target="#editarData" style="margin-right: 3px;"><img width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar data" style="cursor:pointer;"></button>
+                            <button title="Adicionar data" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right;"><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="Icone de criar data" style="cursor:pointer;"></button>
                         </span>
                     </div> 
                 </div>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
                         Nenhuma data foi adicionada
-                        <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="cursor: pointer; font-weight: bolder;">clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
+                        <p><button class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="cursor: pointer; font-weight: bolder;">clique aqui</button> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
                     </div>
                 @endif
             </div>
@@ -98,8 +98,8 @@
                         <span class="align-middle titulo">Listagens</span>
                         <span class="aling-middle">
                             <a class="btn botao my-2 py-1" href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" > <span class="px-4">Voltar</span></a>
-                            <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem"><img src="{{asset('img/Grupo 1666.svg')}}" class="m-1" alt="Inserir nova listagem" width="40px" style="cursor:pointer;"></a>
-                            <a data-bs-toggle="modal" data-bs-target="#editarListagem"><img src="{{asset('img/Grupo 1667.svg')}}" class="m-1" alt="Editar listagem" width="40px" style="cursor:pointer;"></a>
+                            <button title="Criar listagem" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem"><img src="{{asset('img/Grupo 1666.svg')}}" class="m-1" alt="Inserir nova listagem" width="40px" style="cursor:pointer;"></button>
+                            <button title="Editar listagem" data-bs-toggle="modal" data-bs-target="#editarListagem"><img src="{{asset('img/Grupo 1667.svg')}}" class="m-1" alt="Editar listagem" width="40px" style="cursor:pointer;"></button>
                         </span>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                             <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1654.svg')}}">
                             <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
                                     Nenhuma listagem foi adicionada
-                                <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="cursor: pointer; font-weight: bolder;" >clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
+                                <p><button class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="cursor: pointer; font-weight: bolder;" >clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></button>
                             </div>
                         </div>
                     @endif
@@ -181,7 +181,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarListagem_{{$listagem->id}}"><img class="m-1 " width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="icone-busca" style="cursor: pointer;"></a>
+                                        <button title="Deletar listagem" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarListagem_{{$listagem->id}}"><img class="m-1 " width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar listagem" style="cursor: pointer;"></button>
                                     </div>
                                 </div>
                             </li>
@@ -627,8 +627,8 @@
                                                     </div>
                                                 </td>
                                                 <td style="text-align: right;" class="align-middle">
-                                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir data" style="cursor: pointer;"></a>
-                                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar data" style="cursor: pointer;"></a>
+                                                    <button title="Deletar data" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir data" style="cursor: pointer;"></button>
+                                                    <button title="Editar data" data-bs-toggle="modal" data-bs-target="#modalStaticEditarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar data" style="cursor: pointer;"></button>
                                                 </td>
                                             </tr>
                                         @endforeach

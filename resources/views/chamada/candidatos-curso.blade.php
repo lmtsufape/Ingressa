@@ -41,9 +41,9 @@
                                       </div>
                                     </div>
                                     <div>
-                                      <a class="" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img width="35" src="{{asset('img/Subtração 2.svg')}}">
-                                      </a>
+                                      <button title="Ordenar candidatos" class="" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img width="35" src="{{asset('img/Subtração 2.svg')}}" alt="Icone de ordenação de candidatos">
+                                      </button>
                                       <ul class="dropdown-menu px-2" aria-labelledby="dropdownMenu2">
                                         <div class="form-check link-ordenacao">
                                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" @if($ordem == null || $ordem == 'name') checked @endif>

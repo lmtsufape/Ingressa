@@ -36,7 +36,7 @@
                         <div class="row justify-content-between">
                     @endif
                     @if (array_key_exists($count, $cursos->toArray()))
-                        <a style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center" >
+                        <a title="Listar candidatos do curso {{$cursos[$count]->nome}}" style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center" >
                             <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
                             <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
                             <div class="subtitulo">(@switch($cursos[$count]->grau_academico)

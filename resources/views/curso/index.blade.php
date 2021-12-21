@@ -12,8 +12,8 @@
                 <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                     <span class="align-middle titulo">Cursos</span>
                     <span class="aling-middle">
-                        <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Criar um novo curso"></a>
-                        <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editarCurso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="icone-busca"> </a>
+                        <button title="Adicionar novo curso" onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Icone de adicionar um novo curso"></button>
+                        <button title="Editar um curso existente" onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editarCurso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="Icone de editar curso"> </button>
                     </span>
                 </div>
             </div>
@@ -221,8 +221,8 @@
                                                 </div>
                                             </td>
                                             <td style="text-align: right;" class="aling-middle">
-                                                <button data-bs-toggle="modal" data-bs-target="#delete-curso-{{$curso->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir" style="cursor: pointer;"></button>
-                                                <button data-bs-toggle="modal" data-bs-target="#editar-curso" onclick="carregarInformacoes({{$curso->id}})"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar" style="cursor: pointer;"></button>
+                                                <button title="Deletar curso" data-bs-toggle="modal" data-bs-target="#delete-curso-{{$curso->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir" style="cursor: pointer;"></button>
+                                                <button title="Editar curso" data-bs-toggle="modal" data-bs-target="#editar-curso" onclick="carregarInformacoes({{$curso->id}})"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar" style="cursor: pointer;"></button>
                                             </td>
                                         </tr>
                                     @endforeach
