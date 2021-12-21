@@ -10,7 +10,7 @@
                             <span class="tituloTabelas ps-1">Analistas</span>
                         </div>
                         <div class="col-md-4" style="text-align: right">
-                            <a id="criar-user-btn" data-bs-toggle="modal" data-bs-target="#criar-user" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}"></a>
+                            <button title="Criar analista" id="criar-user-btn" data-bs-toggle="modal" data-bs-target="#criar-user" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}" alt="Icone de adicionar analista"></button>
                         </div>
                     </div>
                 </div>
@@ -52,8 +52,8 @@
                                     <td class="align-middle">{{$user->name}}</td>
                                     <td class="align-middle">{{$user->email}}</td>
                                     <td class="align-middle text-center">
-                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarUser_{{$user->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
-                                        <a onclick="editarAnalista({{$user->id}}, {{$tipos}})" data-bs-toggle="modal" data-bs-target="#editar-user-modal" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1665.svg')}}"  alt="icone-busca"></a>
+                                        <button title="Deletar analista" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarUser_{{$user->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar analista"></button>
+                                        <button title="Editar analista" onclick="editarAnalista({{$user->id}}, {{$tipos}})" data-bs-toggle="modal" data-bs-target="#editar-user-modal" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1665.svg')}}"  alt="Icone de editar analista"></button>
                                     </td>
                                 </tr>
                             @endforeach

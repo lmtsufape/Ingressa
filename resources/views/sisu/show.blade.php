@@ -10,7 +10,7 @@
                       <span class="tituloTabelas ps-1">Chamadas da edição <span style="font-weight: 600;">{{$sisu->edicao}}</span></span>
                   </div>
                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}"></a>
+                        <button title="Adicionar chamada" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}" alt="Icone de adiconar nova chamada"></button>
                     @endif
                 </div>
 
@@ -58,22 +58,22 @@
                                     <div class="btn-group">
                                         @if ($batches[$i] == null)
                                             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                                                <a data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="icone-busca"></a>
+                                                <button title="Cadastrar candidatos" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
                                             @else
-                                                <a style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="icone-busca"></a>
+                                                <button title="Cadastrar candidatos (apenas o administrador pode fazer isso)" style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
                                             @endif
                                         @else
                                             @if($batches[$i]->finished())
-                                                <a href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="icone-busca"></a>
+                                                <a title="Listar candidatos da chamada" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos"></a>
                                             @else
-                                                <a><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
+                                                <a title="Cadastrando candidatos"><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
                                             @endif
                                         @endif
                                     </div>
                                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                                        <a href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="icone-busca"></a>
-                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="icone-busca"></a>
-                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="icone-busca"></a>
+                                        <a title="Datas e listagens da chamada" href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="Icone de exibir datas e listagens"></a>
+                                        <button title="Editar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar chamada"></button>
+                                        <button title="Deletar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar chamada"></button>
                                     @endif
                                 </td>
                         @endforeach
