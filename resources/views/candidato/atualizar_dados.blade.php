@@ -22,17 +22,10 @@
                                     <div class="form-group col-md-3 textoInput">
                                         <label for="nu_rg">{{ __('RG') }}</label>
                                         <input id="nu_rg"
-                                            class="form-control form-control-sm caixaDeTexto @error('nu_rg') is-invalid @enderror"
+                                            disabled
+                                            class="form-control form-control-sm caixaDeTexto"
                                             type="text"
-                                            placeholder="Insira o número do RG"
-                                            name="nu_rg"
-                                            value="{{old('nu_rg', $inscricao->nu_rg)}}">
-                                        @error('nu_rg')
-                                            <div id="validationServer03Feedback"
-                                                class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                            value="{{$inscricao->nu_rg}}">
                                     </div>
                                     <div class="form-group col-md-3 textoInput">
                                         <label for="orgao_expedidor">{{ __('Orgão expedidor') }}</label>
@@ -246,11 +239,10 @@
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="tp_sexo">{{ __('Sexo') }}</label>
                                         <select id="tp_sexo"
-                                            class="form-control form-control-sm caixaDeTexto @error('tp_sexo') is-invalid @enderror"
-                                            name="tp_sexo">
-                                            <option value="" disabled selected>-- Selecione --</option>
-                                            <option value="M" @if(old('tp_sexo', $inscricao->tp_sexo) == "M") selected @endif>Masculino</option>
-                                            <option value="F" @if(old('tp_sexo', $inscricao->tp_sexo) == "F") selected @endif>Feminino</option>
+                                            disabled
+                                            class="form-control form-control-sm caixaDeTexto">
+                                            <option value="M" @if($inscricao->tp_sexo == "M") selected @endif>Masculino</option>
+                                            <option value="F" @if($inscricao->tp_sexo == "F") selected @endif>Feminino</option>
                                         </select>
                                         @error('tp_sexo')
                                             <div id="validationServer03Feedback"
@@ -722,9 +714,4 @@
             </div>
         </div>
     </div>
-    <script>
-        $('select').on('change', function() {
-            console.log( this.value );
-        });
-    </script>
 </x-app-layout>
