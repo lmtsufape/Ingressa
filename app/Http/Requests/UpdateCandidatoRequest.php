@@ -7,6 +7,17 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateCandidatoRequest extends FormRequest
 {
 
+    protected function getValidatorInstance(){
+        $validator = parent::getValidatorInstance();
+
+        $validator->sometimes('necessidades', 'required|array|max:1', function($input)
+        {
+            return in_array('nenhuma', $input->necessidades);
+        });
+
+        return $validator;
+    }
+
     /**
      * Determine if the Candidato is authorized to make this request.
      *
@@ -61,6 +72,13 @@ class UpdateCandidatoRequest extends FormRequest
             'sg_uf_inscrito' => ['required', 'string'],
             'nu_fone1' => ['required', 'string'],
             'nu_fone2' => ['nullable', 'string'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'necessidades.max' => 'Não é permitido selecionar a opção "Nenhuma" e outra.'
         ];
     }
 }
