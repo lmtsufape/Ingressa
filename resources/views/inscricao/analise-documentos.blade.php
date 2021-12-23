@@ -100,8 +100,19 @@
                             </div>
                         </div>
                         <div class="corpo" id="mensagemVazia" class="text-center" style="display: none;" >
-                            <div class="col-md-12 text-center legenda" style="font-weight: bolder; font-size: 20px; padding-top: 10px;">
-                                Documento não enviado pelo candidato
+                            <div class="row justify-content-center">
+                                <div class="col-md-10">
+                                    <p id="aguardandoTexto" style="font-weight: bolder; font-size: 18px; padding-top: 10px;">O candidato informou que:</p>
+                                </div>
+                            </div>
+                            <div id="rowCheckboxCaixa" class="row justify-content-center">
+                                <div class="col-md-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked disabled id="checkboxCaixa">
+                                        <label class="form-check-label" id="caixaTexto" style="font-weight: bolder; font-size: 18px;" for="checkboxCaixa">
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12 px-3 pt-5">
                                 <div class="row justify-content-between">
@@ -499,8 +510,8 @@
                             @endforeach
                         </div>
                         @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                            <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
-                            <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
+                            <button @if($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']) disabled @endif id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
+                            <button @if($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
                         @endcan
                         <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></button>
                     </div>
@@ -693,6 +704,14 @@
                 document.getElementById("documento_indice").value = indice;
                 if(documento.id == null){
                     if($("#mensagemVazia").is(":hidden")){
+                        if(documento.nome == "Aguardando o envio do documento."){
+                            $("#rowCheckboxCaixa").hide();
+                            document.getElementById("aguardandoTexto").innerHTML = documento.nome;
+                        }else{
+                            document.getElementById("aguardandoTexto").innerHTML = "O candidato informou que:";
+                            document.getElementById("caixaTexto").innerHTML = documento.nome;
+                            $("#rowCheckboxCaixa").show();
+                        }
                         $("#mensagemVazia").show();
                     }
                     iFrame.hide();
