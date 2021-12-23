@@ -226,7 +226,7 @@ class InscricaoController extends Controller
         $documentosAceitos = true;
         $necessitaAvaliar = false;
         foreach($inscricao->arquivos as $arqui){
-            if(is_null($arqui->avaliacao)){
+            if(!is_null($arqui->avaliacao)){
                 if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
                     $documentosAceitos = false;
                     break;
@@ -414,6 +414,7 @@ class InscricaoController extends Controller
         }else{
             $documento = [
                 'id' => null,
+                'nome' => $this->getCaixaTexto($inscricao, $request->documento_nome),
             ];
         }
 
@@ -485,6 +486,27 @@ class InscricaoController extends Controller
         ignore_user_abort(true);
         unlink(storage_path('app'. DIRECTORY_SEPARATOR . $filename));
         exit();
+    }
+
+    private static function getCaixaTexto($inscricao, $documento){
+        if($inscricao->status != Inscricao::STATUS_ENUM['documentos_pendentes']){
+            switch($documento){
+                case 'historico':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                    primeira semana de aula.";
+                case 'nascimento_ou_casamento':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                    primeira semana de aula.";
+                case 'quitacao_eleitoral':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                    primeira semana de aula.";
+                case 'quitacao_militar':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                    primeira semana de aula.";
+            }
+        }else{
+            return "Aguardando o envio do documento.";
+        }
     }
 
     public static function getNome($documento){
