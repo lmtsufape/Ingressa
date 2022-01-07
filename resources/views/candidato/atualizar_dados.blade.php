@@ -28,7 +28,7 @@
                                             value="{{$inscricao->nu_rg}}">
                                     </div>
                                     <div class="form-group col-md-3 textoInput">
-                                        <label for="orgao_expedidor">{{ __('Orgão expedidor') }}</label>
+                                        <label for="orgao_expedidor"><span style="color: red; font-weight: bold;">*</span> {{ __('Orgão expedidor') }}</label>
                                         <input id="orgao_expedidor"
                                             class="form-control form-control-sm caixaDeTexto @error('orgao_expedidor') is-invalid @enderror"
                                             type="text"
@@ -43,7 +43,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-3 textoInput">
-                                        <label for="uf_rg">{{ __('UF do orgão expedidor') }}</label>
+                                        <label for="uf_rg"><span style="color: red; font-weight: bold;">*</span> {{ __('UF do orgão expedidor') }}</label>
                                         <select id="uf_rg"
                                             class="form-control form-control-sm caixaDeTexto @error('uf_rg') is-invalid @enderror"
                                             name="uf_rg">
@@ -84,7 +84,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-3 textoInput">
-                                        <label for="data_expedicao">{{ __('Data da expedição') }}</label>
+                                        <label for="data_expedicao"><span style="color: red; font-weight: bold;">*</span> {{ __('Data da expedição') }}</label>
                                         <input id="data_expedicao"
                                             class="form-control form-control-sm caixaDeTexto @error('data_expedicao') is-invalid @enderror"
                                             type="date"
@@ -147,7 +147,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="cidade_natal">{{ __('Cidade natal') }}</label>
+                                        <label for="cidade_natal"><span style="color: red; font-weight: bold;">*</span> {{ __('Cidade natal') }}</label>
                                         <input id="cidade_natal"
                                             class="form-control form-control-sm caixaDeTexto @error('cidade_natal') is-invalid @enderror"
                                             type="text"
@@ -162,7 +162,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="uf_natural">{{ __('UF') }}</label>
+                                        <label for="uf_natural"><span style="color: red; font-weight: bold;">*</span> {{ __('UF') }}</label>
                                         <select id="uf_natural"
                                             class="form-control form-control-sm caixaDeTexto @error('uf_natural') is-invalid @enderror"
                                             name="uf_natural">
@@ -203,7 +203,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="pais_natural">{{ __('Nacionalidade') }}</label>
+                                        <label for="pais_natural"><span style="color: red; font-weight: bold;">*</span> {{ __('Nacionalidade') }}</label>
                                         <input id="pais_natural"
                                             class="form-control form-control-sm caixaDeTexto @error('pais_natural') is-invalid @enderror"
                                             type="text"
@@ -220,7 +220,7 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="estado_civil">{{ __('Estado civil') }}</label>
+                                        <label for="estado_civil"><span style="color: red; font-weight: bold;">*</span> {{ __('Estado civil') }}</label>
                                         <select id="estado_civil"
                                             class="form-control form-control-sm caixaDeTexto @error('estado_civil') is-invalid @enderror"
                                             name="estado_civil">
@@ -253,7 +253,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group mt-2 textoInput">
-                                    <label for="no_mae">{{ __('Nome da mãe') }}</label>
+                                    <label for="no_mae"><span style="color: red; font-weight: bold;">*</span> {{ __('Nome da mãe') }}</label>
                                     <input id="no_mae"
                                         class="form-control form-control-sm caixaDeTexto @error('no_mae') is-invalid @enderror"
                                         type="text"
@@ -283,7 +283,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mt-2 textoInput">
-                                    <label for="ds_logradouro">{{ __('Endereço') }}</label>
+                                    <label for="ds_logradouro"><span style="color: red; font-weight: bold;">*</span> {{ __('Endereço') }}</label>
                                     <input id="ds_logradouro"
                                         class="form-control form-control-sm caixaDeTexto @error('ds_logradouro') is-invalid @enderror"
                                         type="text"
@@ -299,7 +299,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="nu_endereco">{{ __('Número') }}</label>
+                                        <label for="nu_endereco"><span style="color: red; font-weight: bold;">*</span> {{ __('Número') }}</label>
                                         <input id="nu_endereco"
                                             class="form-control form-control-sm caixaDeTexto @error('nu_endereco') is-invalid @enderror"
                                             type="text"
@@ -314,7 +314,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="nu_cep">{{ __('CEP') }}</label>
+                                        <label for="nu_cep"><span style="color: red; font-weight: bold;">*</span> {{ __('CEP') }}</label>
                                         <input id="nu_cep"
                                             class="form-control form-control-sm caixaDeTexto @error('nu_cep') is-invalid @enderror"
                                             type="text"
@@ -346,7 +346,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="no_bairro">{{ __('Bairro') }}</label>
+                                        <label for="no_bairro"><span style="color: red; font-weight: bold;">*</span> {{ __('Bairro') }}</label>
                                         <input id="no_bairro"
                                             class="form-control form-control-sm caixaDeTexto @error('no_bairro') is-invalid @enderror"
                                             type="text"
@@ -361,7 +361,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="no_municipio">{{ __('Cidade') }}</label>
+                                        <label for="no_municipio"><span style="color: red; font-weight: bold;">*</span> {{ __('Cidade') }}</label>
                                         <input id="no_municipio"
                                             class="form-control form-control-sm caixaDeTexto @error('no_municipio') is-invalid @enderror"
                                             type="text"
@@ -376,7 +376,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="sg_uf_inscrito">{{ __('UF') }}</label>
+                                        <label for="sg_uf_inscrito"><span style="color: red; font-weight: bold;">*</span> {{ __('UF') }}</label>
                                         <select id="sg_uf_inscrito"
                                             class="form-control form-control-sm caixaDeTexto @error('sg_uf_inscrito') is-invalid @enderror"
                                             name="sg_uf_inscrito">
@@ -419,7 +419,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-6 textoInput">
-                                        <label for="reside">{{ __('Qual a Cidade/Estado onde você reside atualmente?') }}</label>
+                                        <label for="reside"><span style="color: red; font-weight: bold;">*</span> {{ __('Qual a Cidade/Estado onde você reside atualmente?') }}</label>
                                         <input id="reside"
                                             class="form-control form-control-sm caixaDeTexto @error('reside') is-invalid @enderror"
                                             type="text"
@@ -434,7 +434,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6 textoInput">
-                                        <label for="localidade">{{ __('Seu local de moradia atual se encontra em:') }}</label>
+                                        <label for="localidade"><span style="color: red; font-weight: bold;">*</span> {{ __('Seu local de moradia atual se encontra em:') }}</label>
                                         <select id="localidade"
                                             class="form-control form-control-sm caixaDeTexto @error('localidade') is-invalid @enderror"
                                             name="localidade">
@@ -451,7 +451,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group mt-2 textoInput">
-                                    <label for="escola_ens_med">{{ __('Estabelecimento que concluiu o Ensino Médio:') }}</label>
+                                    <label for="escola_ens_med"><span style="color: red; font-weight: bold;">*</span> {{ __('Estabelecimento que concluiu o Ensino Médio:') }}</label>
                                     <input id="escola_ens_med"
                                         class="form-control form-control-sm caixaDeTexto @error('escola_ens_med') is-invalid @enderror"
                                         type="text"
@@ -467,7 +467,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="uf_escola">{{ __('UF') }}</label>
+                                        <label for="uf_escola"><span style="color: red; font-weight: bold;">*</span> {{ __('UF') }}</label>
                                         <select id="uf_escola"
                                             class="form-control form-control-sm caixaDeTexto @error('uf_escola') is-invalid @enderror"
                                             name="uf_escola">
@@ -508,7 +508,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="ano_conclusao">{{ __('Ano de Conclusão') }}</label>
+                                        <label for="ano_conclusao"><span style="color: red; font-weight: bold;">*</span> {{ __('Ano de Conclusão') }}</label>
                                         <input id="ano_conclusao"
                                             class="form-control form-control-sm caixaDeTexto @error('ano_conclusao') is-invalid @enderror"
                                             type="text"
@@ -523,7 +523,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="modalidade">{{ __('Modalidade') }}</label>
+                                        <label for="modalidade"><span style="color: red; font-weight: bold;">*</span> {{ __('Modalidade') }}</label>
                                         <input id="modalidade"
                                             class="form-control form-control-sm caixaDeTexto @error('modalidade') is-invalid @enderror"
                                             type="text"
@@ -540,7 +540,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="concluiu_publica">{{ __('Concluiu o Ensino Médio na rede pública') }}</label>
+                                        <label for="concluiu_publica"><span style="color: red; font-weight: bold;">*</span> {{ __('Concluiu o Ensino Médio na rede pública') }}</label>
                                         <select id="concluiu_publica"
                                             class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
                                             name="concluiu_publica">
@@ -556,7 +556,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-8">
-                                        <label for="necessidades">{{ __('Necessidades Especiais') }}</label>
+                                        <label for="necessidades"><span style="color: red; font-weight: bold;">*</span> {{ __('Necessidades Especiais') }}</label>
                                         <select id="necessidades"
                                             class="form-control form-control-sm caixaDeTexto selectpicker @error('necessidades') is-invalid @enderror"
                                             name="necessidades[]"
@@ -576,7 +576,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="nu_fone1">{{ __('Celular') }}</label>
+                                        <label for="nu_fone1"><span style="color: red; font-weight: bold;">*</span> {{ __('Celular') }}</label>
                                         <input id="nu_fone1"
                                             class="form-control form-control-sm caixaDeTexto @error('nu_fone1') is-invalid @enderror"
                                             type="text"
@@ -606,7 +606,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="cor_raca">{{ __('Cor/Raça') }}</label>
+                                        <label for="cor_raca"><span style="color: red; font-weight: bold;">*</span> {{ __('Cor/Raça') }}</label>
                                         <select id="cor_raca"
                                             class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
                                             name="cor_raca">
@@ -623,7 +623,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="etnia">{{ __('Etnia') }}</label>
+                                        <label for="etnia"><span style="color: red; font-weight: bold;">*</span> {{ __('Etnia') }}</label>
                                         <select id="etnia"
                                             class="form-control form-control-sm caixaDeTexto @error('etnia') is-invalid @enderror"
                                             name="etnia">
@@ -642,7 +642,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-6 textoInput">
-                                        <label for="trabalha">{{ __('Você trabalha?') }}</label>
+                                        <label for="trabalha"><span style="color: red; font-weight: bold;">*</span> {{ __('Você trabalha?') }}</label>
                                         <select id="trabalha"
                                             class="form-control form-control-sm caixaDeTexto @error('trabalha') is-invalid @enderror"
                                             name="trabalha">
@@ -658,7 +658,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6 textoInput">
-                                        <label for="grupo_familiar">{{ __('Quantas pessoas fazem parte do seu grupo familiar?') }}</label>
+                                        <label for="grupo_familiar"><span style="color: red; font-weight: bold;">*</span> {{ __('Quantas pessoas fazem parte do seu grupo familiar?') }}</label>
                                         <input id="grupo_familiar"
                                             class="form-control form-control-sm caixaDeTexto @error('grupo_familiar') is-invalid @enderror"
                                             type="number"
@@ -673,7 +673,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group mt-2 textoInput">
-                                    <label for="valor_renda">{{ __('Qual o valor da renda total (renda bruta) do seu grupo familiar? (Soma dos rendimentos de todo o grupo familiar, incluindo você) (Ex.: 1250,00)') }}</label>
+                                    <label for="valor_renda"><span style="color: red; font-weight: bold;">*</span> {{ __('Qual o valor da renda total (renda bruta) do seu grupo familiar? (Soma dos rendimentos de todo o grupo familiar, incluindo você) (Ex.: 1250,00)') }}</label>
                                     <input id="valor_renda"
                                         class="form-control form-control-sm caixaDeTexto @error('valor_renda') is-invalid @enderror"
                                         type="number"
