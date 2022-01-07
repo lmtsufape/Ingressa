@@ -145,7 +145,7 @@ class ChamadaController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($chamada_id);
-        
+
         if($chamada->regular){
             //$this->cadastrarCandidatosRegular($chamada);
             $batch = Bus::batch([
@@ -534,45 +534,55 @@ class ChamadaController extends Controller
                 $L6 = Cota::where('cod_cota', 'L6')->first();
                 $L10 = Cota::where('cod_cota', 'L10')->first();
                 $L14 = Cota::where('cod_cota', 'L14')->first();
-                $candidatosConcluidos = Inscricao::select('inscricaos.*')->
-                where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']], ['cota_id', $L2->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']], ['cota_id', $L10->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']], ['cota_id', $L6->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']], ['cota_id', $L14->id]])
+                $candidatosConcluidos = Inscricao::select('inscricaos.*')
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']]])
+                    ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                    ->join('users','users.id','=','candidatos.user_id')->get();
-                
-                $candidatosConcluidosPendencia = Inscricao::select('inscricaos.*')->
-                where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']], ['cota_id', $L2->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']], ['cota_id', $L10->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']], ['cota_id', $L6->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']], ['cota_id', $L14->id]])
-                    ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                    ->join('users','users.id','=','candidatos.user_id')->get();
+                    ->join('users','users.id','=','candidatos.user_id')
+                    ->where(function($qry){
+                        $qry->whereIn('candidatos.cor_raca', [2, 3])
+                            ->orWhereNull('candidatos.cor_raca');
+                    })->get();
 
-                $candidatosNaoEnviado = Inscricao::select('inscricaos.*')->
-                where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_pendentes']], ['cota_id', $L2->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_pendentes']], ['cota_id', $L10->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_pendentes']], ['cota_id', $L6->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_pendentes']], ['cota_id', $L14->id]])
+                $candidatosConcluidosPendencia = Inscricao::select('inscricaos.*')
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']]])
+                    ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                    ->join('users','users.id','=','candidatos.user_id')->get();
+                    ->join('users','users.id','=','candidatos.user_id')
+                    ->where(function($qry){
+                        $qry->whereIn('candidatos.cor_raca', [2, 3])
+                            ->orWhereNull('candidatos.cor_raca');
+                    })->get();
 
-                $candidatosEnviado = Inscricao::select('inscricaos.*')->
-                where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']], ['cota_id', $L2->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']], ['cota_id', $L10->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']], ['cota_id', $L6->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']], ['cota_id', $L14->id]])
+                $candidatosNaoEnviado = Inscricao::select('inscricaos.*')
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_pendentes']]])
+                    ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                    ->join('users','users.id','=','candidatos.user_id')->get();
+                    ->join('users','users.id','=','candidatos.user_id')
+                    ->where(function($qry){
+                        $qry->whereIn('candidatos.cor_raca', [2, 3])
+                            ->orWhereNull('candidatos.cor_raca');
+                    })->get();
 
-                $candidatosInvalidados = Inscricao::select('inscricaos.*')->
-                where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']], ['cota_id', $L2->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']], ['cota_id', $L10->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']], ['cota_id', $L6->id]])
-                    ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']], ['cota_id', $L14->id]])
+                $candidatosEnviado = Inscricao::select('inscricaos.*')
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']]])
+                    ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                    ->join('users','users.id','=','candidatos.user_id')->get();
+                    ->join('users','users.id','=','candidatos.user_id')
+                    ->where(function($qry){
+                        $qry->whereIn('candidatos.cor_raca', [2, 3])
+                            ->orWhereNull('candidatos.cor_raca');
+                    })->get();
+
+                $candidatosInvalidados = Inscricao::select('inscricaos.*')
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']]])
+                    ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
+                    ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
+                    ->join('users','users.id','=','candidatos.user_id')
+                    ->where(function($qry){
+                        $qry->whereIn('candidatos.cor_raca', [2, 3])
+                            ->orWhereNull('candidatos.cor_raca');
+                    })->get();
             }elseif($userPolicy->ehAnalistaMedico(auth()->user())){
                 $L9 = Cota::where('cod_cota', 'L9')->first();
                 $L10 = Cota::where('cod_cota', 'L10')->first();
@@ -585,7 +595,7 @@ class ChamadaController extends Controller
                     ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']], ['cota_id', $L14->id]])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                     ->join('users','users.id','=','candidatos.user_id')->get();
-                
+
                 $candidatosConcluidosPendencia = Inscricao::select('inscricaos.*')->
                 where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']], ['cota_id', $L9->id]])
                     ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']], ['cota_id', $L10->id]])
@@ -652,13 +662,15 @@ class ChamadaController extends Controller
             $L6 = Cota::where('cod_cota', 'L6')->first();
             $L10 = Cota::where('cod_cota', 'L10')->first();
             $L14 = Cota::where('cod_cota', 'L14')->first();
-            $query = Inscricao::select('inscricaos.*')->
-            where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['cota_id', $L2->id]])
-                ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['cota_id', $L6->id]])
-                ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['cota_id', $L10->id]])
-                ->orWhere([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['cota_id', $L14->id]])
+            $query = Inscricao::select('inscricaos.*')
                 ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                ->join('users','users.id','=','candidatos.user_id');
+                ->join('users','users.id','=','candidatos.user_id')
+                ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
+                ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
+                ->where(function($qry){
+                    $qry->whereIn('candidatos.cor_raca', [2, 3])
+                        ->orWhereNull('candidatos.cor_raca');
+                });
         }elseif($userPolicy->ehAnalistaMedico(auth()->user())){
             $L9 = Cota::where('cod_cota', 'L9')->first();
             $L10 = Cota::where('cod_cota', 'L10')->first();
@@ -677,7 +689,7 @@ class ChamadaController extends Controller
                 ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                 ->join('users','users.id','=','candidatos.user_id');
         }
-        
+
         switch ($ordem) {
             case 'name':
                 $candidatos = $query->orderBy('users.name')->get();
@@ -692,7 +704,7 @@ class ChamadaController extends Controller
                 $candidatos = $query->orderBy('name')->get();
                 break;
         }
-        
+
         return view('chamada.candidatos-curso', compact('chamada', 'curso', 'candidatos', 'turno', 'sisu', 'ordem'));
     }
 
