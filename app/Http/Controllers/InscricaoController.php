@@ -239,9 +239,7 @@ class InscricaoController extends Controller
         }
         if($documentosAceitos){
             $diferenca = array_diff($this->documentosRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
-            if(count($diferenca) == 2 && (in_array('heteroidentificacao', $diferenca) && in_array('fotografia', $diferenca))){
-                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
-            }else if(count($diferenca) == 1 && in_array('rani', $diferenca)){
+            if(count($diferenca) == 0){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
             }else{
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'];
