@@ -820,7 +820,6 @@
             dataType:'json',
             success: function(documento) {
                 indice.value = documento.indice;
-                console.log(indice.value);
                 if(documento.nome == 'ficha'){
                     carregarFicha();
                 }else{

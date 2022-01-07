@@ -11,6 +11,7 @@ use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ListagemController extends Controller
 {
@@ -314,29 +315,103 @@ class ListagemController extends Controller
         $cotas = Cota::all();
         $candidatosIngressantesCursos = collect();
         $candidatosReservaCursos = collect();
-        dd($chamada);
 
         foreach($cursos as $curso){
             $candidatosIngressantesCurso = collect();
-            $candidatosReservaCurso = collect();
 
             foreach($cotas as $cota){
                 $candidatosCotaCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
-                ['cota_vaga_ocupada_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+                ['cota_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+                $candidatosCotaCurso = $candidatosCotaCurso->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
+                });
 
                 $cota_curso_quantidade = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot->quantidade_vagas;
 
                 foreach($candidatosCotaCurso as $candidato){
                     if($cota_curso_quantidade > 0){
-                        $candidatosIngressantesCurso->push($candidato);
-                        $cota_curso_quantidade -= 1;
-                    }else{
-                        $candidatosReservaCurso->push($candidato);
+                        if(!$candidatosIngressantesCurso->contains($candidato)){
+                            $candidatosIngressantesCurso->push($candidato);
+                            $cota_curso_quantidade -= 1;
+                        }
+                    }
+                }
+
+                while($cota_curso_quantidade > 0){
+                    foreach($cota->remanejamentos as $remanejamento){
+                        $cotaRemanejamento = $remanejamento->proximaCota;
+                        $candidatosCotaCursoRemanejamento = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
+                        ['cota_id', $cotaRemanejamento->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+                        $candidatosCotaCursoRemanejamento = $candidatosCotaCursoRemanejamento->sortByDesc(function($candidato){
+                            return $candidato['nu_nota_candidato'];
+                        });
+
+                        $continua = false;
+
+                        foreach($candidatosCotaCursoRemanejamento as $candidato){
+                            if($cota_curso_quantidade > 0){
+                                if(!$candidatosIngressantesCurso->contains($candidato)){
+                                    $candidatosIngressantesCurso->push($candidato);
+                                    $cota_curso_quantidade -= 1;
+                                }
+                            }else{
+                                $continua = true;
+                                break;
+                            }
+                        }
+                        if($continua){
+                            break;
+                        }
+                        
                     }
                 }
             }
-        }
+            $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortByDesc(function($candidato){
+                return $candidato['nu_nota_candidato'];
+            });
+
+            if($candidatosIngressantesCurso->count() > 40){
+                $metade = ceil($candidatosIngressantesCurso->count() / 2);
+                $divisoes = $candidatosIngressantesCurso->chunk($metade);
+                foreach($divisoes as $divisao){
+                    if($request->ordenacao == "nome"){
+                        $divisao = $divisao->sortBy(function($candidato){
+                            return $candidato->candidato->user->name;
+                        });
+                    }
+
+                    $candidatosIngressantesCursos->push($divisao);
+                }
+            }
+
+            if($request->ordenacao == "nome"){
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortBy(function($candidato){
+                    return $candidato->candidato->user->name;
+                });
+            }
         
+            $candidatosIngressantesCursos->push($candidatosIngressantesCurso);
+            $candidatosCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
+            ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+            $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso);
+            if($request->ordenacao == "nome"){
+                $candidatosReservaCurso = $candidatosReservaCurso->sortBy(function($candidato){
+                    return $candidato->candidato->user->name;
+                });
+            }else{
+                $candidatosReservaCurso = $candidatosReservaCurso->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
+                });
+            }
+            $candidatosReservaCursos->push($candidatosReservaCurso);
+        }
+
+        $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $candidatosIngressantesCursos, 'candidatosReservaCursos' => $candidatosReservaCursos,'chamada' => $chamada]);
+
+        return $this->salvarListagem($listagem, $pdf->stream());
     }
 
     /**
