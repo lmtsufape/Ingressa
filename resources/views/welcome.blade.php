@@ -19,14 +19,14 @@
                 font-family: 'Nunito', sans-serif;
             }
         </style> --}}
-        
+
         @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>
 
-        <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">   
+        <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/main.css')}}">
     </head>
     <body class="">
@@ -45,13 +45,13 @@
                                     <div class="card" style="text-align: left">
                                         <div class="card-body">
                                             <h5 class="card-title titulo pt-0" style="font-size: 30px;">{{$chamada->nome}}</h5>
-                                            <div class=""> 
+                                            <div class="">
                                                 <div class="row ms-0 justify-content-between">
                                                     <div class="col-md-4 shadow p-3 caixa">
                                                         <div class="col-md-12 data" style="font-size: 25px;">
                                                             Datas Importantes
                                                         </div>
-                                                        @if ($chamada->datasChamada->count() > 0) 
+                                                        @if ($chamada->datasChamada->count() > 0)
                                                             <ul class="list-group list-unstyled">
                                                                 @foreach ($chamada->datasChamada as $data)
                                                                     <li>
@@ -60,7 +60,15 @@
                                                                                 <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
                                                                             @elseif($data->tipo == $tipos_data['envio'])
                                                                                 <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
-                                                                            @elseif($data->tipo == $tipos_data['resultado'])
+                                                                            @elseif($data->tipo == $tipos_data['analise'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de envio" width="45">
+                                                                            @elseif($data->tipo == $tipos_data['resultado_parcial'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
+                                                                            @elseif($data->tipo == $tipos_data['reenvio'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultados" width="45">
+                                                                            @elseif($data->tipo == $tipos_data['analise_reenvio'])
+                                                                                <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultados" width="45">
+                                                                            @elseif($data->tipo == $tipos_data['resultado_final'])
                                                                                 <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultados" width="45">
                                                                             @endif
                                                                             <div class="">
@@ -75,7 +83,7 @@
                                                                     </li>
                                                                 @endforeach
                                                             </ul>
-                                                        @else   
+                                                        @else
                                                             <div class="col-md-12 text-center">
                                                                 <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
                                                             </div>
@@ -87,12 +95,12 @@
                                                             </div>
                                                         @endif
                                                     </div>
-                                        
+
                                                     <div class="col-md-8 pt-0">
                                                         <div class="col-md-12 tituloBorda">
                                                             <span class="titulo pt-0" style="font-size: 28px;">Listagens</span>
                                                         </div>
-                                                        <div class="col-md-12 mt-4 p-2 caixa shadow text-center"> 
+                                                        <div class="col-md-12 mt-4 p-2 caixa shadow text-center">
                                                             @if($chamada->listagem->count() > 0)
                                                                 <ul class="list-group mx-2 list-unstyled">
                                                                     @foreach ($chamada->listagem as $listagem)
