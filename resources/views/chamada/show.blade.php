@@ -4,10 +4,10 @@
             <div class="col-md-3 shadow p-3 caixa">
                 <div class="row mx-1 justify-content-between lis">
                     <div class="d-flex align-items-center data justify-content-between mx-0 px-0">
-                        <span class="aling-middle ">Datas Importantes</span>
+                        <span class="aling-middle " style="font-size: 22px;">Datas Importantes</span>
                         <span class="aling-middle">
-                            <button title="Editar data" data-bs-toggle="modal" data-bs-target="#editarData" style="margin-right: 3px;"><img width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar data" style="cursor:pointer;"></button>
-                            <button title="Adicionar data" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right;"><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="Icone de criar data" style="cursor:pointer;"></button>
+                            <button title="Adicionar data" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" ><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="Icone de criar data" style="cursor:pointer;"></button>
+                            <button title="Editar data" data-bs-toggle="modal" data-bs-target="#editarData" ><img width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar data" style="cursor:pointer;"></button>
                         </span>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                     <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                         <span class="align-middle titulo">Listagens</span>
                         <span class="aling-middle">
-                            <a class="btn botao my-2 py-1" href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" > <span class="px-4">Voltar</span></a>
+                            <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                             <button title="Criar listagem" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem"><img src="{{asset('img/Grupo 1666.svg')}}" class="m-1" alt="Inserir nova listagem" width="40px" style="cursor:pointer;"></button>
                             <button title="Editar listagem" data-bs-toggle="modal" data-bs-target="#editarListagem"><img src="{{asset('img/Grupo 1667.svg')}}" class="m-1" alt="Editar listagem" width="40px" style="cursor:pointer;"></button>
                         </span>

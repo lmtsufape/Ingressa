@@ -91,7 +91,7 @@ class CursoSeeder extends Seeder
                 'nome' => 'Letras - Inglês e Português',
                 'turno' => Curso::TURNO_ENUM['noturno'],
                 'cod_curso' => 118470,
-                'cor_padrao' => "#FC9BEF",
+                'cor_padrao' => "#FF8FC0;",
                 'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
                 'vagas' => 80,
                 'icone' => 'img-seeder/letras.svg',
