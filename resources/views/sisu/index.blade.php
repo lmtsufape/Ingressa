@@ -63,7 +63,7 @@
                         @endforeach
                     </tbody>
                 </table>
-              <button class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></button>
+              <a href="{{route('dashboard')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
             </div>
         </div>
     </div>

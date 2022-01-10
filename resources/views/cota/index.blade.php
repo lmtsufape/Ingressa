@@ -53,12 +53,13 @@
                             <td class="align-middle">{{$cota->cod_cota}}</td>
                             <td class="align-middle text-center">
                             <button title="Deletar cota" id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota"></button>
-                            <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar cota"></button>
+                            <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar cota"></button>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+            <a href="{{route('dashboard')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
               {{-- <button class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></button> --}}
             </div>
         </div>
