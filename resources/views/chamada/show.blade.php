@@ -9,7 +9,7 @@
                             <button title="Adicionar data" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" ><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="Icone de criar data" style="cursor:pointer;"></button>
                             <button title="Editar data" data-bs-toggle="modal" data-bs-target="#editarData" ><img width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar data" style="cursor:pointer;"></button>
                         </span>
-                    </div> 
+                    </div>
                 </div>
                 <div div class="form-row">
                     @if(session('success_data'))
@@ -186,9 +186,9 @@
                                 </div>
                             </li>
                         @endforeach
-                    </ul> 
+                    </ul>
                 </div>
-                
+
                 <div class="row justify-content-between mt-4">
                     <div class="col-md-3">
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
@@ -206,7 +206,7 @@
         <div class="modal-dialog">
             <div class="modal-content modalFundo p-3">
                 <div class="col-md-12 tituloModal">Insira uma nova data</div>
-    
+
                 <div class="col-md-12 pt-3 pb-2 textoModal">
                     <form id="criar-data-form" method="POST" action="{{route('datas.store')}}">
                         @csrf
@@ -275,10 +275,10 @@
                         </div>
                         <div class="col-md-4">
                             <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-data-form"><span class="px-4" >Publicar</span></button>
-                        </div>       
+                        </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -289,7 +289,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modalFundo p-3">
                     <div class="col-md-12 tituloModal">Excluir data</div>
-        
+
                     <div class="col-md-12 pt-3 pb-2 textoModal">
                         <form id="deletar-data-form-{{$data->id}}" method="POST" action="{{route('datas.destroy', ['data' => $data])}}">
                             @csrf
@@ -303,7 +303,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-data-form-{{$data->id}}" style="background-color: #FC605F;"><span class="px-4" >Excluir</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -337,13 +337,13 @@
                                     <label for="tipo">{{__('Tipo da data')}}</label>
                                     <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
                                         <option value="{{$data->tipo}}" selected >
-                                            @if ($data->tipo == $tipos_data['convocacao']) Convocação 
-                                            @elseif($data->tipo == $tipos_data['envio']) Envio de documentos 
+                                            @if ($data->tipo == $tipos_data['convocacao']) Convocação
+                                            @elseif($data->tipo == $tipos_data['envio']) Envio de documentos
                                             @elseif($data->tipo == $tipos_data['analise']) Análise de documentos
                                             @elseif($data->tipo == $tipos_data['resultado_parcial']) Resultado parcial
                                             @elseif($data->tipo == $tipos_data['reenvio']) Período de retificação
                                             @elseif($data->tipo == $tipos_data['analise_reenvio']) Análise do período de retificação
-                                            @elseif($data->tipo == $tipos_data['resultado_final']) Resultado 
+                                            @elseif($data->tipo == $tipos_data['resultado_final']) Resultado
                                             @endif
                                         </option>
                                         @if ($data->tipo != $tipos_data['convocacao'])
@@ -405,7 +405,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-data-form-{{$data->id}}"><span class="px-4">Salvar</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -465,7 +465,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <input id="radio-ordenacao-nota" class="form-check-input" type="radio" name="ordenacao" value="nota" @if(old('ordenacao') == 'nota') checked @endif>
-                                        <label for="radio-ordenacao-nome">{{__('Nota do ENEM')}}</label>
+                                        <label for="radio-ordenacao-nota">{{__('Nota do ENEM')}}</label>
                                     </div>
                                 </div>
 
@@ -494,7 +494,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input form-check-cursos" id="chk_marcar_desmarcar_todos_cursos" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_curso')">
-                                                <label for="btn_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
+                                                <label for="chk_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
                                             </div>
                                         </div>
                                         @foreach ($cursos as $curso)
@@ -523,7 +523,7 @@
                                             <div class="col-sm-12 form-group">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input form-check-cursos" id="chk_marcar_desmarcar_todas_cotas" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_cota')">
-                                                    <label for="btn_marcar_desmarcar_todas_cotas"><b>Selecionar todas</b></label>
+                                                    <label for="chk_marcar_desmarcar_todas_cotas"><b>Selecionar todas</b></label>
                                                 </div>
                                             </div>
                                             @foreach ($cotas as $cota)
@@ -549,7 +549,7 @@
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-listagem-form"><span class="px-4">Publicar</span></button>
-                    </div>       
+                    </div>
                 </div>
                 {{-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
@@ -564,7 +564,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modalFundo pt-3 px-3 pb-1">
                   <div class="col-md-12 tituloModal">Listagens</div>
-      
+
                     <div class="col-md-12 pt-1 textoModal">
                         <form id="deletar-listagem-form-{{$listagem->id}}" method="POST" action="{{route('listagems.destroy', ['listagem' => $listagem])}}">
                             @csrf
@@ -578,10 +578,10 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-listagem-form-{{$listagem->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -636,7 +636,7 @@
                                 </table>
                             </div>
                         </li>
-                    </ul> 
+                    </ul>
                 </div>
                 <div class="row justify-content-between mt-4">
                     <div class="col-md-3">
@@ -644,7 +644,7 @@
                     </div>
                     <div class="col-md-4">
                         {{-- <button type="button" class="btn botaoVerde my-2 py-1"><span class="px-4">Publicar</span></button> --}}
-                    </div>       
+                    </div>
                 </div>
             </div>
         </div>
@@ -652,7 +652,7 @@
 </x-app-layout>
 <script src="{{ asset('js/checkbox_marcar_todos.js') }}" defer></script>
 
-@if(old('data_id') == -1) 
+@if(old('data_id') == -1)
 <script>
     $(document).ready(function(){
         $('#modalStaticCriarData_{{old('chamada')}}').modal('show');

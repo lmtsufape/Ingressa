@@ -7,6 +7,17 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateCandidatoRequest extends FormRequest
 {
 
+    protected function getValidatorInstance(){
+        $validator = parent::getValidatorInstance();
+
+        $validator->sometimes('necessidades', 'required|array|max:1', function($input)
+        {
+            return in_array('nenhuma', $input->necessidades);
+        });
+
+        return $validator;
+    }
+
     /**
      * Determine if the Candidato is authorized to make this request.
      *
@@ -28,9 +39,9 @@ class UpdateCandidatoRequest extends FormRequest
             'orgao_expedidor' => ['required', 'string'],
             'uf_rg' => ['required', 'string'],
             'data_expedicao' => ['required', 'date'],
-            'titulo' => ['required', 'titulo_eleitor'],
-            'zona_eleitoral' => ['required', 'string'],
-            'secao_eleitoral' => ['required', 'string'],
+            'titulo' => ['nullable', 'titulo_eleitor'],
+            'zona_eleitoral' => ['nullable', 'string'],
+            'secao_eleitoral' => ['nullable', 'string'],
             'cidade_natal' => ['required', 'string'],
             'uf_natural' => ['required', 'string'],
             'pais_natural' => ['required', 'string'],
@@ -49,8 +60,6 @@ class UpdateCandidatoRequest extends FormRequest
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],
             'valor_renda' => ['required', 'numeric'],
-            'nu_rg' => ['required', 'string'],
-            'tp_sexo' => ['required', 'string'],
             'no_mae' => ['required', 'string'],
             'ds_logradouro' => ['required', 'string'],
             'nu_endereco' => ['required', 'string'],
@@ -61,6 +70,13 @@ class UpdateCandidatoRequest extends FormRequest
             'sg_uf_inscrito' => ['required', 'string'],
             'nu_fone1' => ['required', 'string'],
             'nu_fone2' => ['nullable', 'string'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'necessidades.max' => 'Não é permitido selecionar a opção "Nenhuma" e outra.'
         ];
     }
 }

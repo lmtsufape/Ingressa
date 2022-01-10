@@ -116,13 +116,15 @@
                                 o arquivo nos dois campos);
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
-                                <label class="form-check-label subtexto3" for="checkHistorico">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                    <label class="form-check-label subtexto3" for="checkHistorico">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('nascimento_ou_casamento'))
@@ -156,13 +158,15 @@
                                 Regristro de Nascimento ou Certidão de Casamento;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
-                                <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                    <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('rg'))
@@ -275,13 +279,15 @@
                                 <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
-                                <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                    <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('quitacao_militar'))
@@ -317,13 +323,15 @@
                                 militar;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
-                                <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                    <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('foto'))
