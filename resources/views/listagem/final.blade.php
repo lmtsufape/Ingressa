@@ -100,6 +100,9 @@
         </span>
     </div>
     <div id="body">
+        @php
+            $semestre = "indefinido";
+        @endphp
         @foreach ($candidatosIngressantesCursos as $curso)
             @if($curso->count() <= 40)
                 @php
@@ -119,7 +122,26 @@
                         @case(App\Models\Curso::TURNO_ENUM['integral'])
                             Integral
                             @break
-                        @endswitch</h3>
+                        @endswitch @if(!is_null($curso->first()->curso->semestre))
+                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/{{$curso->first()->curso->semestre}})
+                                        </span>
+                                        @php
+                                            $semestre = "indefinido";
+                                        @endphp
+                                    @elseif($semestre == "indefinido")
+                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/1)
+                                        </span>
+                                        @php
+                                            $semestre = "1";
+                                        @endphp
+                                    @elseif($semestre == "1")
+                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/2)
+                                        </span>
+                                        @php
+                                            $semestre = "indefinido";
+                                        @endphp
+                                    @endif</h3>
+                    
                     @php
                         $exibirNomeCurso = false;
                     @endphp
