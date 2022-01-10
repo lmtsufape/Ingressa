@@ -153,34 +153,21 @@ class ListagemController extends Controller
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
-                    $ampla2 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    $ampla2 = Inscricao::select('inscricaos.*')
+                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->whereIn(
+                            'no_modalidade_concorrencia',
+                            [
+                                'Ampla concorrência',
+                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+                                'AMPLA CONCORRÊNCIA'
+                            ]
+                        )
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
-
-                    $ampla3 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla3);
-
-
-                    $ampla4 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla4);
-
-                    $ampla = $ampla->sortBy(function($inscrito){
-                        return $inscrito->candidato->user->name;
-                    });
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
@@ -252,34 +239,21 @@ class ListagemController extends Controller
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
-                    $ampla2 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    $ampla2 = Inscricao::select('inscricaos.*')
+                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->whereIn(
+                            'no_modalidade_concorrencia',
+                            [
+                                'Ampla concorrência',
+                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+                                'AMPLA CONCORRÊNCIA'
+                            ]
+                        )
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
-
-                    $ampla3 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla3);
-
-
-                    $ampla4 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla4);
-
-                    $ampla = $ampla->sortBy(function($inscrito){
-                        return $inscrito->candidato->user->name;
-                    });
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
@@ -336,7 +310,7 @@ class ListagemController extends Controller
                 }
             }
         }
-        
+
     }
 
     /**
@@ -345,8 +319,8 @@ class ListagemController extends Controller
      * @param  \App\Http\Requests\Request  $request
      * @return string $coluna
      */
-    private function get_ordenacao(Request $request) 
-    {   
+    private function get_ordenacao(Request $request)
+    {
         $coluna = 'name';
         switch ($request->ordenacao) {
             case 'nome':
@@ -386,7 +360,7 @@ class ListagemController extends Controller
      * @return string $caminho_do_arquivo
      */
     private function gerarListagemPendencia(ListagemRequest $request, Listagem $listagem)
-    {   
+    {
         $chamada = Chamada::find($request->chamada);
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('nome')->get();
@@ -410,43 +384,26 @@ class ListagemController extends Controller
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
-                    $ampla2 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    $ampla2 = Inscricao::select('inscricaos.*')
+                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->whereIn(
+                            'no_modalidade_concorrencia',
+                            [
+                                'Ampla concorrência',
+                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+                                'AMPLA CONCORRÊNCIA'
+                            ]
+                        )
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
-
-                    $ampla3 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla3);
-
-
-                    $ampla4 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla4);
-
-                    $ampla = $ampla->sortBy(function($inscrito){
-                        return $inscrito->candidato->user->name;
-                    });
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
                     $inscritosCota = Inscricao::select('inscricaos.*')->
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
