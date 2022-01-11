@@ -608,7 +608,7 @@ class ChamadaController extends Controller
                                     ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                                     ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                                     ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
-                                    ->whereIn('avaliacaos.avaliacao', [1])
+                                    ->whereIn('avaliacaos.avaliacao', [2])
                                     ->groupBy('inscricaos.id')
                                     ->get();
                             })
@@ -679,7 +679,7 @@ class ChamadaController extends Controller
                                     ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                                     ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                                     ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
-                                    ->whereIn('avaliacaos.avaliacao', [1])
+                                    ->whereIn('avaliacaos.avaliacao', [2])
                                     ->groupBy('inscricaos.id')
                                     ->get();
                             })
