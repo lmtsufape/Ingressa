@@ -584,7 +584,19 @@ class ChamadaController extends Controller
                     ->where(function($qry){
                         $qry->whereIn('candidatos.cor_raca', [2, 3])
                             ->orWhereNull('candidatos.cor_raca');
-                    })->get();
+                    })
+                    ->whereNotIn('inscricaos.id', function($qry) {
+                        $qry->select('inscricaos.id')
+                            ->from('inscricaos')
+                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                            ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
+                            ->whereIn('avaliacaos.avaliacao', [1, 2])
+                            ->groupBy('inscricaos.id')
+                            ->havingRaw('COUNT(*) = ?', [3])
+                            ->get();
+                    })
+                    ->get();
 
                 $candidatosInvalidados = Inscricao::select('inscricaos.*')
                     ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
@@ -659,6 +671,17 @@ class ChamadaController extends Controller
                     ->whereIn('cota_id', [$L9->id, $L10->id, $L13->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                     ->join('users','users.id','=','candidatos.user_id')
+                    ->whereNotIn('inscricaos.id', function($qry) {
+                        $qry->select('inscricaos.id')
+                            ->from('inscricaos')
+                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                            ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
+                            ->whereIn('avaliacaos.avaliacao', [1, 2])
+                            ->groupBy('inscricaos.id')
+                            ->havingRaw('COUNT(*) = ?', [2])
+                            ->get();
+                    })
                     ->get();
 
                 $candidatosInvalidados = Inscricao::select('inscricaos.*')
