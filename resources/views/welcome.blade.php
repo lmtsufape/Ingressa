@@ -38,7 +38,7 @@
                         <div class="row mx-1 justify-content-between lis">
                             <div class="d-flex align-items-center data justify-content-between mx-0 px-0">
                                 <span class="aling-middle " style="font-size: 22px;">Datas Importantes</span>
-                            </div> 
+                            </div>
                         </div>
                         @if(is_null($chamadas))
                             <div class="col-md-12 text-center">
@@ -72,21 +72,21 @@
                                                 <li>
                                                     <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                                         @if ($data->tipo == $tipos_data['convocacao'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-chamada.svg')}}" alt="Icone de convocação" width="45">
                                                         @elseif($data->tipo == $tipos_data['envio'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de envio" width="45">
                                                         @elseif($data->tipo == $tipos_data['analise'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-analiseDoc (2).svg')}}" alt="Icone de analise" width="45">
                                                         @elseif($data->tipo == $tipos_data['resultado_parcial'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-resultadoParcial.svg')}}" alt="Icone de resultado parcial" width="45">
                                                         @elseif($data->tipo == $tipos_data['reenvio'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de reenvio" width="45">
                                                         @elseif($data->tipo == $tipos_data['analise_reenvio'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-analiseRetificacao.svg')}}" alt="Icone de analise do reenvio" width="45">
                                                         @elseif($data->tipo == $tipos_data['resultado_final'])
-                                                            <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
+                                                            <img class="img-card-data" src="{{asset('img/icon-resultadoFinal.svg')}}" alt="Icone de resultado final" width="45">
                                                         @endif
-                        
+
                                                         <div class="">
                                                             <div class="tituloLista aling-middle mx-3">
                                                                 {{$data->titulo}}
@@ -104,7 +104,7 @@
                             @endif
                         @endif
                     </div>
-        
+
                     <div class="col-md-8 pt-0">
                         <div class="col-md-12 tituloBorda">
                             <div class="d-flex align-items-center justify-content-between mx-0 px-0">
