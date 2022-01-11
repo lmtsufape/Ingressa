@@ -99,7 +99,7 @@
                                                         @else
                                                             <img src="{{asset('img/Icon ionic-ios-person.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Primeiro acesso do candidato não realizado">
                                                         @endif
-                                                        @can('ehAnalistaGeral', auth()->user())
+                                                        @can('isAdminOrAnalistaGeral', auth()->user())
                                                             @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
                                                                 <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
                                                             @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
@@ -176,7 +176,7 @@
                                     </div>
                                 </div>
                             </li>
-                            @can('ehAnalistaGeral', auth()->user())
+                            @can('isAdminOrAnalistaGeral', auth()->user())
                             <li>
                                 <div title="Documentos aceitos com pêndencias" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1193.svg')}}" alt="icone-busca">
