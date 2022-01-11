@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Http\Controllers\InscricaoController;
 use App\Models\Arquivo;
+use App\Models\Avaliacao;
 use App\Models\Inscricao;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;
@@ -178,20 +179,6 @@ class EnviarDocumentos extends Component
     public function submit()
     {
         $this->attributes();
-        $this->withValidator(function (Validator $validator) {
-            $validator->after(function ($validator) {
-                if(array_key_exists('preto_pardo', $this->declaracoes) && array_key_exists('indigena', $this->declaracoes)) {
-                    if ($this->declaracoes['preto_pardo'] == "true" && $this->declaracoes['indigena'] == "true") {
-                        $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
-                        $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) não pode se declarar preto(a) ou pardo(a) e indígena.');
-                    }
-                    if ($this->declaracoes['preto_pardo'] != "true" && $this->declaracoes['indigena'] != "true") {
-                        $validator->errors()->add('declaracoes.preto_pardo', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
-                        $validator->errors()->add('declaracoes.indigena', 'O(A) candidato(a) precisa se declarar preto(a), pardo(a) ou indígena.');
-                    }
-                }
-            });
-        })->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
         return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
@@ -199,7 +186,7 @@ class EnviarDocumentos extends Component
 
     public function updated($documento, $value)
     {
-        if (explode('.', $documento)[0] == 'arquivos' && $this->inscricao->isDocumentosRequeridos()) {
+        if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isDocumentosInvalidados())) {
             $this->validateOnly($documento);
             $documento = explode('.', $documento)[1];
             $path = 'documentos/inscricaos/'. $this->inscricao->id . '/';
@@ -210,6 +197,12 @@ class EnviarDocumentos extends Component
                     Storage::delete($arquivo->caminho);
                 }
                 $value->storeAs('public/'.$path, $nome);
+                if($arquivo->avaliacao != null)
+                {
+                    $avaliacao = $arquivo->avaliacao;
+                    $avaliacao->avaliacao = Avaliacao::AVALIACAO_ENUM['reenviado'];
+                    $avaliacao->save();
+                }
             }else{
                 $value->storeAs('public/'.$path, $nome);
                 Arquivo::create([

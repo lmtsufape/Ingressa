@@ -23,7 +23,7 @@
                                     id="docDeclaracaoVeracidade"
                                     type="file"
                                     class="d-none">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('declaracao_veracidade'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -56,7 +56,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docConclusaoMedio">
-                                    @if ($inscricao->isDocumentosRequeridos())
+                                    @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('certificado_conclusao'))
                                         <img src="{{ asset('img/upload2.svg') }}"
                                             width="30">
                                     @endif
@@ -92,7 +92,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docHistorico">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('historico'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -136,7 +136,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docNascimento">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('nascimento_ou_casamento'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -178,7 +178,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docRG">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('rg'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -214,7 +214,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docCPF">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('cpf'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -250,7 +250,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docEleitoral">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('quitacao_eleitoral'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -299,7 +299,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docMilitar">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('quitacao_militar'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -343,7 +343,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docFoto">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('foto'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -387,7 +387,7 @@
                                     type="file"
                                     class="d-none"
                                     id="cotista">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('declaracao_cotista'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -439,7 +439,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docHeteroidentificacao">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('heteroidentificacao'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -471,7 +471,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docFotografia">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('fotografia'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -517,7 +517,7 @@
                                     type="file"
                                     class="d-none"
                                     id="cotaRenda">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('comprovante_renda'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -564,7 +564,7 @@
                                     type="file"
                                     class="d-none"
                                     id="rani">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('rani'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -617,7 +617,7 @@
                                     type="file"
                                     class="d-none"
                                     id="cotaPCD">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('laudo_medico'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -653,7 +653,7 @@
                 <span class="px-4">Voltar</span>
             </a>
         </div>
-        @if ($inscricao->isDocumentosRequeridos())
+        @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
             <div class="col-md-3">
                 <button type="submit"
                     form="enviar-documentos"
