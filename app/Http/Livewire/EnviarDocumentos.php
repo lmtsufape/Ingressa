@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Http\Controllers\InscricaoController;
 use App\Models\Arquivo;
+use App\Models\Avaliacao;
 use App\Models\Inscricao;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;
@@ -196,6 +197,12 @@ class EnviarDocumentos extends Component
                     Storage::delete($arquivo->caminho);
                 }
                 $value->storeAs('public/'.$path, $nome);
+                if($arquivo->avaliacao != null)
+                {
+                    $avaliacao = $arquivo->avaliacao;
+                    $avaliacao->avaliacao = Avaliacao::AVALIACAO_ENUM['reenviado'];
+                    $avaliacao->save();
+                }
             }else{
                 $value->storeAs('public/'.$path, $nome);
                 Arquivo::create([
