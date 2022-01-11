@@ -535,14 +535,26 @@ class ChamadaController extends Controller
                 $L10 = Cota::where('cod_cota', 'L10')->first();
                 $L14 = Cota::where('cod_cota', 'L14')->first();
                 $candidatosConcluidos = Inscricao::select('inscricaos.*')
-                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']]])
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                     ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                     ->join('users','users.id','=','candidatos.user_id')
                     ->where(function($qry){
                         $qry->whereIn('candidatos.cor_raca', [2, 3])
                             ->orWhereNull('candidatos.cor_raca');
-                    })->get();
+                    })
+                    ->whereIn('inscricaos.id', function($qry) {
+                        $qry->select('inscricaos.id')
+                            ->from('inscricaos')
+                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                            ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
+                            ->whereIn('avaliacaos.avaliacao', [1])
+                            ->groupBy('inscricaos.id')
+                            ->havingRaw('COUNT(*) = ?', [3])
+                            ->get();
+                    })
+                    ->get();
 
                 $candidatosConcluidosPendencia = Inscricao::select('inscricaos.*')
                     ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']]])
@@ -575,24 +587,57 @@ class ChamadaController extends Controller
                     })->get();
 
                 $candidatosInvalidados = Inscricao::select('inscricaos.*')
-                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']]])
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                     ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                     ->join('users','users.id','=','candidatos.user_id')
                     ->where(function($qry){
                         $qry->whereIn('candidatos.cor_raca', [2, 3])
                             ->orWhereNull('candidatos.cor_raca');
-                    })->get();
+                    })
+                    ->whereIn('inscricaos.id', function($qry) {
+                        $qry->select('inscricaos.id')
+                            ->from('inscricaos')
+                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                            ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
+                            ->whereIn('avaliacaos.avaliacao', [1, 2])
+                            ->whereIn('inscricaos.id', function($sub){
+                                $sub->select('inscricaos.id')
+                                    ->from('inscricaos')
+                                    ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                                    ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                                    ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
+                                    ->whereIn('avaliacaos.avaliacao', [1])
+                                    ->groupBy('inscricaos.id')
+                                    ->get();
+                            })
+                            ->groupBy('inscricaos.id')
+                            ->havingRaw('COUNT(*) = ?', [3])
+                            ->get();
+                    })
+                    ->get();
             }elseif($userPolicy->ehAnalistaMedico(auth()->user())){
                 $L9 = Cota::where('cod_cota', 'L9')->first();
                 $L10 = Cota::where('cod_cota', 'L10')->first();
                 $L13 = Cota::where('cod_cota', 'L13')->first();
                 $L14 = Cota::where('cod_cota', 'L14')->first();
                 $candidatosConcluidos = Inscricao::select('inscricaos.*')
-                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']]])
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                     ->whereIn('cota_id', [$L9->id, $L10->id, $L13->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                     ->join('users','users.id','=','candidatos.user_id')
+                    ->whereIn('inscricaos.id', function($qry) {
+                        $qry->select('inscricaos.id')
+                            ->from('inscricaos')
+                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                            ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
+                            ->whereIn('avaliacaos.avaliacao', [1])
+                            ->groupBy('inscricaos.id')
+                            ->havingRaw('COUNT(*) = ?', [3])
+                            ->get();
+                    })
                     ->get();
 
                 $candidatosConcluidosPendencia = Inscricao::select('inscricaos.*')
@@ -617,10 +662,31 @@ class ChamadaController extends Controller
                     ->get();
 
                 $candidatosInvalidados = Inscricao::select('inscricaos.*')
-                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']]])
+                    ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                     ->whereIn('cota_id', [$L9->id, $L10->id, $L13->id, $L14->id])
                     ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                     ->join('users','users.id','=','candidatos.user_id')
+                    ->whereIn('inscricaos.id', function($qry) {
+                        $qry->select('inscricaos.id')
+                            ->from('inscricaos')
+                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                            ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
+                            ->whereIn('avaliacaos.avaliacao', [1, 2])
+                            ->whereIn('inscricaos.id', function($sub){
+                                $sub->select('inscricaos.id')
+                                    ->from('inscricaos')
+                                    ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
+                                    ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
+                                    ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
+                                    ->whereIn('avaliacaos.avaliacao', [1])
+                                    ->groupBy('inscricaos.id')
+                                    ->get();
+                            })
+                            ->groupBy('inscricaos.id')
+                            ->havingRaw('COUNT(*) = ?', [3])
+                            ->get();
+                    })
                     ->get();
             }else{
                 $candidatosConcluidos = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']]])->get();
