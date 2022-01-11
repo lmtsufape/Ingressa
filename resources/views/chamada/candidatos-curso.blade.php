@@ -12,7 +12,7 @@
                 <div class="col-md-9">
                     <div class="col-md-12 shadow-sm">
                         <div class="row justify-content-center">
-                            <div class="col-md-12 cabecalhoCurso p-2 px-3 align-items-center" style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}"> 
+                            <div class="col-md-12 cabecalhoCurso p-2 px-3 align-items-center" style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
                               <div class="row justify-content-between">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
@@ -36,7 +36,7 @@
                                                         Nome do candidato
                                                         @break
                                                 @endswitch
-                                            </span> 
+                                            </span>
                                         </div>
                                       </div>
                                     </div>
@@ -69,13 +69,13 @@
                                       </ul>
                                     </div>
                                 </div>
-                                
+
                               </div>
                             </div>
                         </div>
-    
+
                         <div class="row justify-content-center">
-                            <div class="col-md-12 corpo p-2 px-3"> 
+                            <div class="col-md-12 corpo p-2 px-3">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -99,18 +99,41 @@
                                                         @else
                                                             <img src="{{asset('img/Icon ionic-ios-person.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Primeiro acesso do candidato não realizado">
                                                         @endif
-
-                                                        @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
-                                                            <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
-                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
-                                                            <img src="{{asset('img/g1193.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos com pendências">
-                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])
-                                                            <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
-                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
-                                                            <img src="{{asset('img/g1949.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
-                                                        @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
-                                                            <img src="{{asset('img/g2201.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
-                                                        @endif
+                                                        @can('ehAnalistaGeral', auth()->user())
+                                                            @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
+                                                                <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
+                                                                <img src="{{asset('img/g1193.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos com pendências">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])
+                                                                <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                                <img src="{{asset('img/g1949.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                                <img src="{{asset('img/g2201.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
+                                                            @endif
+                                                        @endcan
+                                                        @can('ehAnalistaHeteroidentificacao', auth()->user())
+                                                            @if($concluidos->contains($candidato->id))
+                                                                <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                            @elseif($invalidados->contains($candidato->id))
+                                                                <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                                <img src="{{asset('img/g1949.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                                <img src="{{asset('img/g2201.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
+                                                            @endif
+                                                        @endcan
+                                                        @can('ehAnalistaMedico', auth()->user())
+                                                            @if($concluidos->contains($candidato->id))
+                                                                <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                            @elseif($invalidados->contains($candidato->id))
+                                                                <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                                <img src="{{asset('img/g1949.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                                            @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                                <img src="{{asset('img/g2201.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
+                                                            @endif
+                                                        @endcan
                                                     </div>
                                                 </td>
                                                 <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
@@ -134,7 +157,7 @@
                                     <img class="aling-middle" width="30" src="{{asset('img/g830.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Primeiro acesso do candidato realizado
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
                             <li>
@@ -142,7 +165,7 @@
                                     <img class="aling-middle" width="30" src="{{asset('img/Icon ionic-ios-person.svg')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Primeiro acesso do candidato não realizado
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
                             <li>
@@ -150,23 +173,25 @@
                                     <img class="aling-middle" width="30" src="{{asset('img/g1365.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos aceitos sem pêndencias
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
+                            @can('ehAnalistaGeral', auth()->user())
                             <li>
                                 <div title="Documentos aceitos com pêndencias" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1193.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos aceitos com pêndencias
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
+                            @endcan
                             <li>
                                 <div title="Documentos enviados" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1949.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos enviados
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
                             <li>
@@ -174,7 +199,7 @@
                                     <img class="aling-middle" width="30" src="{{asset('img/g2201.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos pendentes
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
                             <li>
@@ -182,10 +207,10 @@
                                     <img class="aling-middle" width="30" src="{{asset('img/g1697.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos invalidados
-                                    </div>                    
+                                    </div>
                                 </div>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </div>
