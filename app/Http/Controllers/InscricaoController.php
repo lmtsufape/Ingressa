@@ -171,19 +171,22 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
-        }else if($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())){
-            if($inscricao->st_lei_etnia_p == 'S'){
-                $documentos->push('heteroidentificacao');
-                $documentos->push('fotografia');
-                if(!$documentos->contains('declaracao_cotista')){
-                    $documentos->push('declaracao_cotista');
+        } else {
+            if($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())){
+                if($inscricao->st_lei_etnia_p == 'S'){
+                    $documentos->push('heteroidentificacao');
+                    $documentos->push('fotografia');
+                    if(!$documentos->contains('declaracao_cotista')){
+                        $documentos->push('declaracao_cotista');
+                    }
                 }
             }
-        }else if($userPolicy->ehAnalistaMedico(auth()->user())){
-            if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
-                $documentos->push('laudo_medico');
-                if(!$documentos->contains('declaracao_cotista')){
-                    $documentos->push('declaracao_cotista');
+            if($userPolicy->ehAnalistaMedico(auth()->user())){
+                if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
+                    $documentos->push('laudo_medico');
+                    if(!$documentos->contains('declaracao_cotista')){
+                        $documentos->push('declaracao_cotista');
+                    }
                 }
             }
         }
