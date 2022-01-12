@@ -16,7 +16,7 @@ class SisuSeeder extends Seeder
     {
         $sisus = [
             [
-                'edicao'           => '2022.1',
+                'edicao'           => '2022',
                 'created_at'       => now(),
             ],
         ];

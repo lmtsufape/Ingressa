@@ -229,7 +229,7 @@
                                 <label for="tipo" class="form-label">{{__('Tipo da data')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da data --</option>
-                                    <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
+                                    <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Publicação da lista de convocados</option>
                                     <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
                                     <option @if(old('tipo') == $tipos_data['analise']) selected @endif value="{{$tipos_data['analise']}}">Análise de documentos</option>
                                     <option @if(old('tipo') == $tipos_data['resultado_parcial']) selected @endif value="{{$tipos_data['resultado_parcial']}}">Resultado parcial</option>
@@ -337,7 +337,7 @@
                                     <label for="tipo">{{__('Tipo da data')}}</label>
                                     <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
                                         <option value="{{$data->tipo}}" selected >
-                                            @if ($data->tipo == $tipos_data['convocacao']) Convocação
+                                            @if ($data->tipo == $tipos_data['convocacao']) Publicação da lista de convocados
                                             @elseif($data->tipo == $tipos_data['envio']) Envio de documentos
                                             @elseif($data->tipo == $tipos_data['analise']) Análise de documentos
                                             @elseif($data->tipo == $tipos_data['resultado_parcial']) Resultado parcial
@@ -347,7 +347,7 @@
                                             @endif
                                         </option>
                                         @if ($data->tipo != $tipos_data['convocacao'])
-                                            <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
+                                            <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Publicação da lista de convocados</option>
                                         @endif
                                         @if ($data->tipo != $tipos_data['envio'])
                                             <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
@@ -440,10 +440,10 @@
                                 <label for="tipo">{{__('Selecione o tipo')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
-                                    <option @if(old('tipo') == $tipos_listagem['convocacao']) selected @endif value="{{$tipos_listagem['convocacao']}}">Convocação</option>
-                                    <option @if(old('tipo') == $tipos_listagem['resultado']) selected @endif value="{{$tipos_listagem['resultado']}}">Resultado</option>
-                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Pendência</option>
-                                    <option @if(old('tipo') == $tipos_listagem['final']) selected @endif value="{{$tipos_listagem['final']}}">Final</option>
+                                    <option @if(old('tipo') == $tipos_listagem['convocacao']) selected @endif value="{{$tipos_listagem['convocacao']}}">Convocados</option>
+                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Parcial/Pendências documentais</option>
+                                    <option @if(old('tipo') == $tipos_listagem['resultado']) selected @endif value="{{$tipos_listagem['resultado']}}">Validados e invalidados</option>
+                                    <option @if(old('tipo') == $tipos_listagem['final']) selected @endif value="{{$tipos_listagem['final']}}">Final/Ingressantes e reservas</option>
                                 </select>
 
                                 @error('tipo')

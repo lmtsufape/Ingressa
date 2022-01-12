@@ -342,27 +342,52 @@ class ListagemController extends Controller
                     }
                 }
             }
-            $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortByDesc(function($candidato){
-                return $candidato['nu_nota_candidato'];
-            });
-
             if($candidatosIngressantesCurso->count() > 40){
-                $metade = ceil($candidatosIngressantesCurso->count() / 2);
-                $divisoes = $candidatosIngressantesCurso->chunk($metade);
-                foreach($divisoes as $divisao){
-                    if($request->ordenacao == "nome"){
-                        $divisao = $divisao->sortBy(function($candidato){
-                            return $candidato->candidato->user->name;
-                        });
-                    }
+                $primeiroSemestre = collect();
+                $segundoSemestre = collect();
 
-                    $candidatosIngressantesCursos->push($divisao);
+                $cotasL9L13 = Cota::whereIn('cod_cota', ['L9', 'L13'])->get();
+                $retorno = $this->divirPorSemestre($cotasL9L13, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, true);
+                $primeiroSemestre = $retorno[0];
+                $segundoSemestre = $retorno[1];
+
+                $cotasL10L14 = Cota::whereIn('cod_cota', ['L10', 'L14'])->get();
+                $retorno = $this->divirPorSemestre($cotasL10L14, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, true);
+                $primeiroSemestre = $retorno[0];
+                $segundoSemestre = $retorno[1];
+
+                $cotasNaoDeficientes = Cota::whereIn('cod_cota', ['A0', 'L1', 'L2', 'L5', 'L6'])->get();
+                $retorno = $this->divirPorSemestre($cotasNaoDeficientes, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, false);
+                $primeiroSemestre = $retorno[0];
+                $segundoSemestre = $retorno[1];
+                
+
+                if($request->ordenacao == "nome"){
+                    $primeiroSemestre = $primeiroSemestre->sortBy(function($candidato){
+                        return $candidato->candidato->user->name;
+                    });
+                    $segundoSemestre = $segundoSemestre->sortBy(function($candidato){
+                        return $candidato->candidato->user->name;
+                    });
+                }else{
+                    $primeiroSemestre = $primeiroSemestre->sortByDesc(function($candidato){
+                        return $candidato['nu_nota_candidato'];
+                    });
+                    $segundoSemestre = $segundoSemestre->sortByDesc(function($candidato){
+                        return $candidato['nu_nota_candidato'];
+                    });
                 }
+                $candidatosIngressantesCursos->push($primeiroSemestre);
+                $candidatosIngressantesCursos->push($segundoSemestre);
             }
 
             if($request->ordenacao == "nome"){
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortBy(function($candidato){
                     return $candidato->candidato->user->name;
+                });
+            }else{
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
                 });
             }
         
@@ -386,6 +411,61 @@ class ListagemController extends Controller
         $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $candidatosIngressantesCursos, 'candidatosReservaCursos' => $candidatosReservaCursos,'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
+    }
+
+    private function divirPorSemestre($cotas, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, $deficiente)
+    {
+        foreach($cotas as $cota){
+            $porCota = $candidatosIngressantesCurso->where('cota_id', $cota->id)->sortByDesc(function($candidato){
+                return $candidato['nu_nota_candidato'];
+            });
+            if($deficiente){
+                if($cotas->first()->cod_cota == 'L9'){
+                    $primeiroSemestre = $primeiroSemestre->concat($porCota);
+                    $second = collect();
+                    $segundoSemestre = $segundoSemestre->concat($second);
+                }elseif($cotas->first()->cod_cota == 'L10'){
+                    $first = collect();
+                    $primeiroSemestre = $primeiroSemestre->concat($first);
+                    $segundoSemestre = $segundoSemestre->concat($porCota);
+                }
+            }else{
+                $metade = ceil($porCota->count()/2);
+                $divisoes = $porCota->chunk($metade);
+    
+                if($divisoes->count()>0){
+                    $first = $divisoes[0];
+                }else{
+                    $first = collect();
+                }
+                if($divisoes->count()>1){
+                    $second = $divisoes[1];
+                }else{
+                    $second = collect();
+                }
+    
+                if($first->count()!=$second->count()){
+                    if($primeiroSemestre->count()<$segundoSemestre->count()){
+                        $primeiroSemestre = $primeiroSemestre->concat($first);
+                        $segundoSemestre = $segundoSemestre->concat($second);
+                    }elseif($primeiroSemestre->count()>$segundoSemestre->count()){
+                        $ultimoElemento = $first->slice($first->count()-1, 1)->first();
+                        $first = $first->slice(0, -1);
+                        $second->push($ultimoElemento);
+    
+                        $primeiroSemestre = $primeiroSemestre->concat($first);
+                        $segundoSemestre = $segundoSemestre->concat($second);
+                    }else{
+                        $primeiroSemestre = $primeiroSemestre->concat($first);
+                        $segundoSemestre = $segundoSemestre->concat($second);
+                    }
+                }else{
+                    $primeiroSemestre = $primeiroSemestre->concat($first);
+                    $segundoSemestre = $segundoSemestre->concat($second);
+                }
+            }
+        }
+        return array($primeiroSemestre, $segundoSemestre);
     }
 
     /**
