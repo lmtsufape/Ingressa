@@ -232,7 +232,6 @@ class InscricaoController extends Controller
             if(!is_null($arqui->avaliacao)){
                 if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
                     $documentosAceitos = false;
-                    break;
                 }
             }else{
                 $documentosAceitos = false;
