@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="fundo2 px-5">
-        
+
         <div class="container">
             {{--<div class="row">
                 <div class="col-sm-12">
@@ -237,25 +237,25 @@
                                         Forma de Ingresso: <p class="nomeDocumento" style="display: inline">SiSU</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_modalidade_concorrencia}}</p>
+                                        Ano de Ingresso: <p class="nomeDocumento" style="display: inline">{{date('Y',strtotime($inscricao->dt_operacao))}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Ano de Ingresso: <p class="nomeDocumento" style="display: inline">{{date('Y',strtotime($inscricao->dt_operacao))}}</p>
+                                        Nota: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_nota_candidato}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
+                                    <div class="col-md-8 tituloDocumento">
                                         Curso: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_curso}}</p>
                                     </div>
                                     {{--<div class="col-md-4 tituloDocumento">
                                         Semestre:
                                     </div>--}}
-                                    <div class="col-md-4 tituloDocumento">
-                                        Nota: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_nota_candidato}}</p>
-                                    </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
                                     Cota de Classificação:<p class="nomeDocumento" style="display: inline"></p>
+                                </div>
+                                <div class="col-md-12 pt-2 tituloDocumento">
+                                    Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_modalidade_concorrencia}}</p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
@@ -721,7 +721,7 @@
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("comentario").value = documento.comentario;
                     document.getElementById("documento_nome").value = documento_nome;
-                    
+
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     if(documento.avaliacao == "1"){

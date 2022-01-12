@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoAnalista;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -39,5 +41,9 @@ class UserSeeder extends Seeder
         ];
 
         User::insert($users);
+        DB::table('tipo_analista_user')->insert([
+            'user_id' => 2,
+            'tipo_analista_id' => 1,
+        ]);
     }
 }

@@ -27,19 +27,19 @@
                         <li>
                             <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                 @if ($data->tipo == $tipos_data['convocacao'])
-                                    <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-chamada.svg')}}" alt="Icone de convocação" width="45">
                                 @elseif($data->tipo == $tipos_data['envio'])
-                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de envio" width="45">
                                 @elseif($data->tipo == $tipos_data['analise'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-analiseDoc (2).svg')}}" alt="Icone de analise" width="45">
                                 @elseif($data->tipo == $tipos_data['resultado_parcial'])
-                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-resultadoParcial.svg')}}" alt="Icone de resultado parcial" width="45">
                                 @elseif($data->tipo == $tipos_data['reenvio'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de reenvio" width="45">
                                 @elseif($data->tipo == $tipos_data['analise_reenvio'])
-                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-analiseRetificacao.svg')}}" alt="Icone de analise do reenvio" width="45">
                                 @elseif($data->tipo == $tipos_data['resultado_final'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-resultadoFinal.svg')}}" alt="Icone de resultado final" width="45">
                                 @endif
 
                                 <div class="">
@@ -601,19 +601,19 @@
                                             <tr>
                                                 <th class="align-middle pe-0">
                                                     @if ($data->tipo == $tipos_data['convocacao'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-chamada.svg')}}" alt="Icone de convocação" width="45">
                                                     @elseif($data->tipo == $tipos_data['envio'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de envio" width="45">
                                                     @elseif($data->tipo == $tipos_data['analise'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-analiseDoc (2).svg')}}" alt="Icone de analise" width="45">
                                                     @elseif($data->tipo == $tipos_data['resultado_parcial'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-resultadoParcial.svg')}}" alt="Icone de resultado parcial" width="45">
                                                     @elseif($data->tipo == $tipos_data['reenvio'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de reenvio" width="45">
                                                     @elseif($data->tipo == $tipos_data['analise_reenvio'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-analiseRetificacao.svg')}}" alt="Icone de analise do reenvio" width="45">
                                                     @elseif($data->tipo == $tipos_data['resultado_final'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-resultadoFinal.svg')}}" alt="Icone de resultado final" width="45">
                                                     @endif
                                                 </th>
                                                 <td class="align-middle p-0">
