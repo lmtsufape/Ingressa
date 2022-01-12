@@ -48,7 +48,7 @@
                                 Nenhuma chamada criada
                             </div>
                         @else
-                            @if ($chamadas->first()->datasChamada->count() == 0)
+                            @if ($chamadas->first()->datasChamada->count() != 0)
                                 <div class="col-md-12 text-center">
                                     <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
                                 </div>
