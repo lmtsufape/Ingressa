@@ -12,8 +12,9 @@
                 <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                     <span class="align-middle titulo">Cursos</span>
                     <span class="aling-middle">
-                        <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Criar um novo curso"></a>
-                        <a onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editarCurso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="icone-busca"> </a>
+                        <a href="{{route('dashboard')}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
+                        <button title="Adicionar novo curso" onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Icone de adicionar um novo curso"></button>
+                        <button title="Editar um curso existente" onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editarCurso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="Icone de editar curso"> </button>
                     </span>
                 </div>
             </div>
@@ -87,11 +88,26 @@
                     @csrf
                         <input type="hidden" id="curso" name="curso" value="0">
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="nome" class="form-label" >{{__('Name')}}</label>
-                                <input type="text" id="nome" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required placeholder="Insira o nome completo do analista">
+                                <input type="text" id="nome" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required placeholder="Insira o nome do curso">
 
                                 @error('nome')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="grau_acadêmico" class="form-label">{{__('Grau acadêmico')}}</label>
+                                <select name="grau_acadêmico" id="grau_acadêmico" class="form-control campoDeTexto @error('grau_acadêmico') is-invalid @enderror" required>
+                                    <option value="" selected disabled>-- Selecione o grau do curso --</option>
+                                    <option @if(old('grau_acadêmico') == $graus['bacharelado']) selected @endif value="{{$graus['bacharelado']}}">Bacharelado</option>
+                                    <option @if(old('grau_acadêmico') == $graus['licenciatura']) selected @endif value="{{$graus['licenciatura']}}">Licenciatura</option>
+                                    <option @if(old('grau_acadêmico') == $graus['tecnologo']) selected @endif value="{{$graus['tecnologo']}}">Tecnólogo</option>
+                                </select>
+
+                                @error('grau_acadêmico')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -116,15 +132,14 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="grau_acadêmico" class="form-label">{{__('Grau acadêmico')}}</label>
-                                <select name="grau_acadêmico" id="grau_acadêmico" class="form-control campoDeTexto @error('grau_acadêmico') is-invalid @enderror" required>
-                                    <option value="" selected disabled>-- Selecione o grau do curso --</option>
-                                    <option @if(old('grau_acadêmico') == $graus['bacharelado']) selected @endif value="{{$graus['bacharelado']}}">Bacharelado</option>
-                                    <option @if(old('grau_acadêmico') == $graus['licenciatura']) selected @endif value="{{$graus['licenciatura']}}">Licenciatura</option>
-                                    <option @if(old('grau_acadêmico') == $graus['tecnologo']) selected @endif value="{{$graus['tecnologo']}}">Tecnólogo</option>
+                                <label for="semestre" class="form-label">{{__('Semestre de entrada')}}</label>
+                                <select name="semestre" id="semestre" class="form-control campoDeTexto @error('semestre') is-invalid @enderror">
+                                    <option value="" selected disabled>-- Selecione o semestre de entrada --</option>
+                                    <option @if(old('semestre') == 1) selected @endif value=1>1º</option>
+                                    <option @if(old('semestre') == 2) selected @endif value=2>2º</option>
                                 </select>
 
-                                @error('grau_acadêmico')
+                                @error('semestre')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -221,8 +236,8 @@
                                                 </div>
                                             </td>
                                             <td style="text-align: right;" class="aling-middle">
-                                                <button data-bs-toggle="modal" data-bs-target="#delete-curso-{{$curso->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir" style="cursor: pointer;"></button>
-                                                <button data-bs-toggle="modal" data-bs-target="#editar-curso" onclick="carregarInformacoes({{$curso->id}})"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar" style="cursor: pointer;"></button>
+                                                <button title="Deletar curso" data-bs-toggle="modal" data-bs-target="#delete-curso-{{$curso->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir" style="cursor: pointer;"></button>
+                                                <button title="Editar curso" data-bs-toggle="modal" data-bs-target="#editar-curso" onclick="carregarInformacoes({{$curso->id}})"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar" style="cursor: pointer;"></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -256,11 +271,26 @@
                     <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" id="curso-edit" name="curso" value="">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="nome-edit" class="form-label">{{__('Name')}}</label>
                             <input type="text" id="nome-edit" name="nome" class="form-control campoDeTexto @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required placeholder="Insira o nome completo do analista">
 
                             @error('nome')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="grau_acadêmico-edit" class="form-label">{{__('Grau acadêmico')}}</label>
+                            <select name="grau_acadêmico" id="grau_acadêmico-edit" class="form-control campoDeTexto @error('grau_acadêmico') is-invalid @enderror" required>
+                                <option value="" selected disabled>-- Selecione o grau do curso --</option>
+                                <option @if(old('grau_acadêmico') == $graus['bacharelado']) selected @endif value="{{$graus['bacharelado']}}">Bacharelado</option>
+                                <option @if(old('grau_acadêmico') == $graus['licenciatura']) selected @endif value="{{$graus['licenciatura']}}">Licenciatura</option>
+                                <option @if(old('grau_acadêmico') == $graus['tecnologo']) selected @endif value="{{$graus['tecnologo']}}">Tecnólogo</option>
+                            </select>
+
+                            @error('grau_acadêmico')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -285,15 +315,14 @@
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="grau_acadêmico-edit" class="form-label">{{__('Grau acadêmico')}}</label>
-                            <select name="grau_acadêmico" id="grau_acadêmico-edit" class="form-control campoDeTexto @error('grau_acadêmico') is-invalid @enderror" required>
-                                <option value="" selected disabled>-- Selecione o grau do curso --</option>
-                                <option @if(old('grau_acadêmico') == $graus['bacharelado']) selected @endif value="{{$graus['bacharelado']}}">Bacharelado</option>
-                                <option @if(old('grau_acadêmico') == $graus['licenciatura']) selected @endif value="{{$graus['licenciatura']}}">Licenciatura</option>
-                                <option @if(old('grau_acadêmico') == $graus['tecnologo']) selected @endif value="{{$graus['tecnologo']}}">Tecnólogo</option>
+                            <label for="semestre" class="form-label">{{__('Semestre de entrada')}}</label>
+                            <select name="semestre" id="semestre-edit" class="form-control campoDeTexto @error('semestre') is-invalid @enderror" >
+                                <option value="" selected disabled>-- Selecione o semestre de entrada --</option>
+                                <option @if(old('semestre') == 1) selected @endif value=1>1º</option>
+                                <option @if(old('semestre') == 2) selected @endif value=2>2º</option>
                             </select>
 
-                            @error('grau_acadêmico')
+                            @error('semestre')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -416,6 +445,7 @@
                 document.getElementById('codigo-edit').value = curso.cod_curso;
                 document.getElementById('vagas-edit').value = curso.vagas;
                 document.getElementById('cor-edit').value = curso.cor_padrao;
+                document.getElementById('semestre-edit').value = curso.semestre;
 
                 if (curso.icone != null) {
                     document.getElementById('aviso-icone').style.display = "block";

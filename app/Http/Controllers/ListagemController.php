@@ -11,6 +11,7 @@ use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ListagemController extends Controller
 {
@@ -153,34 +154,21 @@ class ListagemController extends Controller
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
-                    $ampla2 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    $ampla2 = Inscricao::select('inscricaos.*')
+                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->whereIn(
+                            'no_modalidade_concorrencia',
+                            [
+                                'Ampla concorrência',
+                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+                                'AMPLA CONCORRÊNCIA'
+                            ]
+                        )
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
-
-                    $ampla3 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla3);
-
-
-                    $ampla4 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla4);
-
-                    $ampla = $ampla->sortBy(function($inscrito){
-                        return $inscrito->candidato->user->name;
-                    });
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
@@ -252,34 +240,21 @@ class ListagemController extends Controller
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
-                    $ampla2 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    $ampla2 = Inscricao::select('inscricaos.*')
+                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->whereIn(
+                            'no_modalidade_concorrencia',
+                            [
+                                'Ampla concorrência',
+                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+                                'AMPLA CONCORRÊNCIA'
+                            ]
+                        )
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
-
-                    $ampla3 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla3);
-
-
-                    $ampla4 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla4);
-
-                    $ampla = $ampla->sortBy(function($inscrito){
-                        return $inscrito->candidato->user->name;
-                    });
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
@@ -314,29 +289,183 @@ class ListagemController extends Controller
         $cotas = Cota::all();
         $candidatosIngressantesCursos = collect();
         $candidatosReservaCursos = collect();
-        dd($chamada);
 
         foreach($cursos as $curso){
             $candidatosIngressantesCurso = collect();
-            $candidatosReservaCurso = collect();
 
             foreach($cotas as $cota){
                 $candidatosCotaCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
-                ['cota_vaga_ocupada_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+                ['cota_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+                $candidatosCotaCurso = $candidatosCotaCurso->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
+                });
 
                 $cota_curso_quantidade = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot->quantidade_vagas;
 
                 foreach($candidatosCotaCurso as $candidato){
                     if($cota_curso_quantidade > 0){
-                        $candidatosIngressantesCurso->push($candidato);
-                        $cota_curso_quantidade -= 1;
-                    }else{
-                        $candidatosReservaCurso->push($candidato);
+                        if(!$candidatosIngressantesCurso->contains($candidato)){
+                            $candidatosIngressantesCurso->push($candidato);
+                            $cota_curso_quantidade -= 1;
+                        }
+                    }
+                }
+
+                while($cota_curso_quantidade > 0){
+                    foreach($cota->remanejamentos as $remanejamento){
+                        $cotaRemanejamento = $remanejamento->proximaCota;
+                        $candidatosCotaCursoRemanejamento = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
+                        ['cota_id', $cotaRemanejamento->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+                        $candidatosCotaCursoRemanejamento = $candidatosCotaCursoRemanejamento->sortByDesc(function($candidato){
+                            return $candidato['nu_nota_candidato'];
+                        });
+
+                        $continua = false;
+
+                        foreach($candidatosCotaCursoRemanejamento as $candidato){
+                            if($cota_curso_quantidade > 0){
+                                if(!$candidatosIngressantesCurso->contains($candidato)){
+                                    $candidatosIngressantesCurso->push($candidato);
+                                    $cota_curso_quantidade -= 1;
+                                }
+                            }else{
+                                $continua = true;
+                                break;
+                            }
+                        }
+                        if($continua){
+                            break;
+                        }
+                        
                     }
                 }
             }
-        }
+            if($candidatosIngressantesCurso->count() > 40){
+                $primeiroSemestre = collect();
+                $segundoSemestre = collect();
+
+                $cotasL9L13 = Cota::whereIn('cod_cota', ['L9', 'L13'])->get();
+                $retorno = $this->divirPorSemestre($cotasL9L13, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, true);
+                $primeiroSemestre = $retorno[0];
+                $segundoSemestre = $retorno[1];
+
+                $cotasL10L14 = Cota::whereIn('cod_cota', ['L10', 'L14'])->get();
+                $retorno = $this->divirPorSemestre($cotasL10L14, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, true);
+                $primeiroSemestre = $retorno[0];
+                $segundoSemestre = $retorno[1];
+
+                $cotasNaoDeficientes = Cota::whereIn('cod_cota', ['A0', 'L1', 'L2', 'L5', 'L6'])->get();
+                $retorno = $this->divirPorSemestre($cotasNaoDeficientes, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, false);
+                $primeiroSemestre = $retorno[0];
+                $segundoSemestre = $retorno[1];
+                
+
+                if($request->ordenacao == "nome"){
+                    $primeiroSemestre = $primeiroSemestre->sortBy(function($candidato){
+                        return $candidato->candidato->user->name;
+                    });
+                    $segundoSemestre = $segundoSemestre->sortBy(function($candidato){
+                        return $candidato->candidato->user->name;
+                    });
+                }else{
+                    $primeiroSemestre = $primeiroSemestre->sortByDesc(function($candidato){
+                        return $candidato['nu_nota_candidato'];
+                    });
+                    $segundoSemestre = $segundoSemestre->sortByDesc(function($candidato){
+                        return $candidato['nu_nota_candidato'];
+                    });
+                }
+                $candidatosIngressantesCursos->push($primeiroSemestre);
+                $candidatosIngressantesCursos->push($segundoSemestre);
+            }
+
+            if($request->ordenacao == "nome"){
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortBy(function($candidato){
+                    return $candidato->candidato->user->name;
+                });
+            }else{
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
+                });
+            }
         
+            $candidatosIngressantesCursos->push($candidatosIngressantesCurso);
+            $candidatosCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
+            ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+
+            $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso);
+            if($request->ordenacao == "nome"){
+                $candidatosReservaCurso = $candidatosReservaCurso->sortBy(function($candidato){
+                    return $candidato->candidato->user->name;
+                });
+            }else{
+                $candidatosReservaCurso = $candidatosReservaCurso->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
+                });
+            }
+            $candidatosReservaCursos->push($candidatosReservaCurso);
+        }
+
+        $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $candidatosIngressantesCursos, 'candidatosReservaCursos' => $candidatosReservaCursos,'chamada' => $chamada]);
+
+        return $this->salvarListagem($listagem, $pdf->stream());
+    }
+
+    private function divirPorSemestre($cotas, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, $deficiente)
+    {
+        foreach($cotas as $cota){
+            $porCota = $candidatosIngressantesCurso->where('cota_id', $cota->id)->sortByDesc(function($candidato){
+                return $candidato['nu_nota_candidato'];
+            });
+            if($deficiente){
+                if($cotas->first()->cod_cota == 'L9'){
+                    $primeiroSemestre = $primeiroSemestre->concat($porCota);
+                    $second = collect();
+                    $segundoSemestre = $segundoSemestre->concat($second);
+                }elseif($cotas->first()->cod_cota == 'L10'){
+                    $first = collect();
+                    $primeiroSemestre = $primeiroSemestre->concat($first);
+                    $segundoSemestre = $segundoSemestre->concat($porCota);
+                }
+            }else{
+                $metade = ceil($porCota->count()/2);
+                $divisoes = $porCota->chunk($metade);
+    
+                if($divisoes->count()>0){
+                    $first = $divisoes[0];
+                }else{
+                    $first = collect();
+                }
+                if($divisoes->count()>1){
+                    $second = $divisoes[1];
+                }else{
+                    $second = collect();
+                }
+    
+                if($first->count()!=$second->count()){
+                    if($primeiroSemestre->count()<$segundoSemestre->count()){
+                        $primeiroSemestre = $primeiroSemestre->concat($first);
+                        $segundoSemestre = $segundoSemestre->concat($second);
+                    }elseif($primeiroSemestre->count()>$segundoSemestre->count()){
+                        $ultimoElemento = $first->slice($first->count()-1, 1)->first();
+                        $first = $first->slice(0, -1);
+                        $second->push($ultimoElemento);
+    
+                        $primeiroSemestre = $primeiroSemestre->concat($first);
+                        $segundoSemestre = $segundoSemestre->concat($second);
+                    }else{
+                        $primeiroSemestre = $primeiroSemestre->concat($first);
+                        $segundoSemestre = $segundoSemestre->concat($second);
+                    }
+                }else{
+                    $primeiroSemestre = $primeiroSemestre->concat($first);
+                    $segundoSemestre = $segundoSemestre->concat($second);
+                }
+            }
+        }
+        return array($primeiroSemestre, $segundoSemestre);
     }
 
     /**
@@ -345,8 +474,8 @@ class ListagemController extends Controller
      * @param  \App\Http\Requests\Request  $request
      * @return string $coluna
      */
-    private function get_ordenacao(Request $request) 
-    {   
+    private function get_ordenacao(Request $request)
+    {
         $coluna = 'name';
         switch ($request->ordenacao) {
             case 'nome':
@@ -386,7 +515,7 @@ class ListagemController extends Controller
      * @return string $caminho_do_arquivo
      */
     private function gerarListagemPendencia(ListagemRequest $request, Listagem $listagem)
-    {   
+    {
         $chamada = Chamada::find($request->chamada);
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('nome')->get();
@@ -410,43 +539,26 @@ class ListagemController extends Controller
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
-                    $ampla2 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'Ampla concorrência'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    $ampla2 = Inscricao::select('inscricaos.*')
+                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->whereIn(
+                            'no_modalidade_concorrencia',
+                            [
+                                'Ampla concorrência',
+                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+                                'AMPLA CONCORRÊNCIA'
+                            ]
+                        )
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla = $ampla->concat($ampla2);
-
-                    $ampla3 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla3);
-
-
-                    $ampla4 = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', 'AMPLA CONCORRÊNCIA'], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla = $ampla->concat($ampla4);
-
-                    $ampla = $ampla->sortBy(function($inscrito){
-                        return $inscrito->candidato->user->name;
-                    });
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
                     $inscritosCota = Inscricao::select('inscricaos.*')->
                     where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
-                    ->orWhere([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)

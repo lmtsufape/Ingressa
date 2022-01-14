@@ -19,6 +19,7 @@ class CreateCursosTable extends Migration
             $table->integer('turno');
             $table->integer('cod_curso');
             $table->integer('vagas');
+            $table->integer('semestre')->nullable();
             $table->string('icone')->nullable();
             $table->string('cor_padrao')->nullable();
             $table->integer('grau_academico');

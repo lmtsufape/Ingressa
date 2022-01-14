@@ -18,7 +18,7 @@ class CotaController extends Controller
     public function index()
     {
         $this->authorize('isAdmin', User::class);
-        $cotas = Cota::orderBy('nome')->get();
+        $cotas = Cota::orderBy('id')->get();
         $cursos = Curso::orderBy('nome')->get();
         $turnos = Curso::TURNO_ENUM;
         return view('cota.index', compact('cotas', 'cursos', 'turnos'));

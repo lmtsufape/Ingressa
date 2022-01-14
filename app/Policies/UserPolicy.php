@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\TipoAnalista;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -37,6 +38,66 @@ class UserPolicy
     public function isAdminOrAnalista(User $user)
     {
         return $this->isAnalista($user) || $this->isAdmin($user);
+    }
+
+    public function isAdminOrAnalistaGeral(User $user)
+    {
+        return $this->ehAnalistaGeral($user) || $this->isAdmin($user);
+    }
+
+    public function ehAnalistaGeral(User $user)
+    {
+        if ($user->role == User::ROLE_ENUM['analista']) {
+            return $user->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['geral'])->get()->count()  > 0;
+        }
+
+        return false;
+    }
+
+    public function ehAnalistaHeteroidentificacao(User $user)
+    {
+        if ($user->role == User::ROLE_ENUM['analista']) {
+            return $user->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['heteroidentificacao'])->get()->count()  > 0;
+        }
+
+        return false;
+    }
+
+    public function soEhAnalistaHeteroidentificacao(User $user)
+    {
+        if ($user->role == User::ROLE_ENUM['analista']
+            && $user->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['heteroidentificacao'])->get()->count()) {
+                return $user->tipo_analista()->count() == 1;
+        }
+        return false;
+    }
+
+    public function ehAnalistaMedico(User $user)
+    {
+        if ($user->role == User::ROLE_ENUM['analista']) {
+            return $user->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['medico'])->get()->count()  > 0;
+        }
+
+        return false;
+    }
+
+    public function soEhAnalistaMedico(User $user)
+    {
+        if ($user->role == User::ROLE_ENUM['analista']
+            && $user->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['medico'])->get()->count()){
+            return $user->tipo_analista()->count() == 1;
+        }
+        return false;
+    }
+
+    public function ehAnalistaHeteroidentificacaoOuMedico(User $user)
+    {
+        return $this->ehAnalistaHeteroidentificacao($user) || $this->ehAnalistaMedico($user);
+    }
+
+    public function ehAnalistaHeteroidentificacaoEMedico(User $user)
+    {
+        return $this->ehAnalistaHeteroidentificacao($user) && $this->ehAnalistaMedico($user);
     }
 
 }

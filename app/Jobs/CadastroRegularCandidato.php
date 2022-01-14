@@ -154,13 +154,14 @@ class CadastroRegularCandidato implements ShouldQueue
                     $inscricao->save();
 
                 }else{
+                    $candidatoExistente->atualizar_dados = true;
                     if($data[9] != null){
                         $candidatoExistente->no_social = $data[9];
-                        $candidatoExistente->update();
                         $candidatoExistente->user->name = $data[9];
                     }else{
                         $candidatoExistente->user->name = $data[8];
                     }
+                    $candidatoExistente->update();
                     $candidatoExistente->user->update();
 
                     $inscricao->chamada_id = $this->chamada->id;

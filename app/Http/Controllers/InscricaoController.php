@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Arquivo;
 use App\Models\Avaliacao;
+use App\Models\Candidato;
 use App\Models\Chamada;
 use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -133,7 +135,8 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
-        if(auth()->user()->ehAnalistaGeral() == true || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
+        $userPolicy = new UserPolicy();
+        if($userPolicy->ehAnalistaGeral(auth()->user()) || auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->role == User::ROLE_ENUM['candidato']){
             $documentos->push('declaracao_veracidade');
             $documentos->push('certificado_conclusao');
             $documentos->push('historico');
@@ -145,11 +148,11 @@ class InscricaoController extends Controller
                 $documentos->push('quitacao_militar');
             }
             $documentos->push('foto');
-            if($inscricao->st_lei_etnia_i == 'S'){
+            if($inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->cor_raca == 5){
                 $documentos->push('rani');
                 $documentos->push('declaracao_cotista');
             }
-            if($inscricao->st_lei_etnia_p == 'S'){
+            if($inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->cor_raca, [2, 3])){
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
                 if(!$documentos->contains('declaracao_cotista')){
@@ -168,12 +171,22 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
-        }else if(auth()->user()->ehAnalistaHeteroidentificacao() == true){
-            if($inscricao->st_lei_etnia_p == 'S'){
-                $documentos->push('heteroidentificacao');
-                $documentos->push('fotografia');
-                if(!$documentos->contains('declaracao_cotista')){
-                    $documentos->push('declaracao_cotista');
+        } else {
+            if($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())){
+                if($inscricao->st_lei_etnia_p == 'S'){
+                    $documentos->push('heteroidentificacao');
+                    $documentos->push('fotografia');
+                    if(!$documentos->contains('declaracao_cotista')){
+                        $documentos->push('declaracao_cotista');
+                    }
+                }
+            }
+            if($userPolicy->ehAnalistaMedico(auth()->user())){
+                if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
+                    $documentos->push('laudo_medico');
+                    if(!$documentos->contains('declaracao_cotista')){
+                        $documentos->push('declaracao_cotista');
+                    }
                 }
             }
         }
@@ -216,7 +229,7 @@ class InscricaoController extends Controller
         $documentosAceitos = true;
         $necessitaAvaliar = false;
         foreach($inscricao->arquivos as $arqui){
-            if($arqui->avaliacao != null){
+            if(!is_null($arqui->avaliacao)){
                 if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
                     $documentosAceitos = false;
                     break;
@@ -229,9 +242,7 @@ class InscricaoController extends Controller
         }
         if($documentosAceitos){
             $diferenca = array_diff($this->documentosRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
-            if(count($diferenca) == 2 && (in_array('heteroidentificacao', $diferenca) && in_array('fotografia', $diferenca))){
-                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
-            }else if(count($diferenca) == 1 && in_array('rani', $diferenca)){
+            if(count($diferenca) == 0){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
             }else{
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'];
@@ -240,7 +251,11 @@ class InscricaoController extends Controller
             if($necessitaAvaliar == true && $documentosAceitos == false){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
             }else{
-                $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                if($necessitaAvaliar == true){
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+                }else{
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                }
             }
         }
         $inscricao->update();
@@ -400,6 +415,7 @@ class InscricaoController extends Controller
         }else{
             $documento = [
                 'id' => null,
+                'nome' => $this->getCaixaTexto($inscricao, $request->documento_nome),
             ];
         }
 
@@ -471,6 +487,27 @@ class InscricaoController extends Controller
         ignore_user_abort(true);
         unlink(storage_path('app'. DIRECTORY_SEPARATOR . $filename));
         exit();
+    }
+
+    private static function getCaixaTexto($inscricao, $documento){
+        if($inscricao->status != Inscricao::STATUS_ENUM['documentos_pendentes']){
+            switch($documento){
+                case 'historico':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                    primeira semana de aula.";
+                case 'nascimento_ou_casamento':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                    primeira semana de aula.";
+                case 'quitacao_eleitoral':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                    primeira semana de aula.";
+                case 'quitacao_militar':
+                    return "Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                    primeira semana de aula.";
+            }
+        }else{
+            return "Aguardando o envio do documento.";
+        }
     }
 
     public static function getNome($documento){

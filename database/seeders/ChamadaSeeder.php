@@ -21,6 +21,7 @@ class ChamadaSeeder extends Seeder
                 'nome'           => 'Chamada Regular',
                 'descricao' => 'Chamada Regular',
                 'regular' => true,
+                'created_at'       => now(),
             ],
         ];
 

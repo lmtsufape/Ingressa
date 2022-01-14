@@ -6,7 +6,7 @@
                     <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                         <span class="align-middle titulo">Candidatos por curso</span>
                         <div class="col-md-4" style="text-align: right">
-                            <a class="btn botao my-2 py-1" href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" > <span class="px-4">Voltar</span></a>
+                            <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                             <a class="btn btn-primary" id="submeterFormBotao" href="{{route('chamadas.candidatos.aprovar', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}">Efetivar candidatos</a>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <div class="row justify-content-between">
                     @endif
                     @if (array_key_exists($count, $cursos->toArray()))
-                        <a style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center" >
+                        <a title="Listar candidatos do curso {{$cursos[$count]->nome}}" style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center" >
                             <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
                             <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
                             <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
@@ -53,7 +53,9 @@
                             </div>
                             <div class="subtitulo" style="width: 100%">
                                 {{"Concluídos: ".$concluidos[$count]}}<br>
-                                {{"Concluídos(pendências): ".$concluidosPendentes[$count]}}<br>
+                                @can('isAdminOrAnalistaGeral', \App\Models\User::class)
+                                    {{"Concluídos(pendências): ".$concluidosPendentes[$count]}}<br>
+                                @endcan
                                 {{"Enviados: ".$enviados[$count]}}<br>
                                 {{"Pendentes: ".$naoEnviados[$count]}}<br>
                                 {{"Invalidados: ".$invalidados[$count]}}

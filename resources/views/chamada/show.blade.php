@@ -4,12 +4,12 @@
             <div class="col-md-3 shadow p-3 caixa">
                 <div class="row mx-1 justify-content-between lis">
                     <div class="d-flex align-items-center data justify-content-between mx-0 px-0">
-                        <span class="aling-middle ">Datas Importantes</span>
+                        <span class="aling-middle " style="font-size: 22px;">Datas Importantes</span>
                         <span class="aling-middle">
-                            <a data-bs-toggle="modal" data-bs-target="#editarData" style="margin-right: 3px;"><img width="30" src="{{asset('img/Grupo 1665.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
-                            <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="float: right;"><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="icone-busca" style="cursor:pointer;"></a>
+                            <button title="Adicionar data" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" ><img width="30" src="{{asset('img/Grupo 1668.svg')}}" alt="Icone de criar data" style="cursor:pointer;"></button>
+                            <button title="Editar data" data-bs-toggle="modal" data-bs-target="#editarData" ><img width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar data" style="cursor:pointer;"></button>
                         </span>
-                    </div> 
+                    </div>
                 </div>
                 <div div class="form-row">
                     @if(session('success_data'))
@@ -27,19 +27,19 @@
                         <li>
                             <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                 @if ($data->tipo == $tipos_data['convocacao'])
-                                    <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-chamada.svg')}}" alt="Icone de convocação" width="45">
                                 @elseif($data->tipo == $tipos_data['envio'])
-                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de envio" width="45">
                                 @elseif($data->tipo == $tipos_data['analise'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-analiseDoc (2).svg')}}" alt="Icone de analise" width="45">
                                 @elseif($data->tipo == $tipos_data['resultado_parcial'])
-                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-resultadoParcial.svg')}}" alt="Icone de resultado parcial" width="45">
                                 @elseif($data->tipo == $tipos_data['reenvio'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de reenvio" width="45">
                                 @elseif($data->tipo == $tipos_data['analise_reenvio'])
-                                    <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-analiseRetificacao.svg')}}" alt="Icone de analise do reenvio" width="45">
                                 @elseif($data->tipo == $tipos_data['resultado_final'])
-                                    <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
+                                    <img class="img-card-data" src="{{asset('img/icon-resultadoFinal.svg')}}" alt="Icone de resultado final" width="45">
                                 @endif
 
                                 <div class="">
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
                         Nenhuma data foi adicionada
-                        <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="cursor: pointer; font-weight: bolder;">clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
+                        <p><button class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarData_{{$chamada->id}}" style="cursor: pointer; font-weight: bolder;">clique aqui</button> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
                     </div>
                 @endif
             </div>
@@ -97,9 +97,9 @@
                     <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                         <span class="align-middle titulo">Listagens</span>
                         <span class="aling-middle">
-                            <a class="btn botao my-2 py-1" href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" > <span class="px-4">Voltar</span></a>
-                            <a data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem"><img src="{{asset('img/Grupo 1666.svg')}}" class="m-1" alt="Inserir nova listagem" width="40px" style="cursor:pointer;"></a>
-                            <a data-bs-toggle="modal" data-bs-target="#editarListagem"><img src="{{asset('img/Grupo 1667.svg')}}" class="m-1" alt="Editar listagem" width="40px" style="cursor:pointer;"></a>
+                            <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
+                            <button title="Criar listagem" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem"><img src="{{asset('img/Grupo 1666.svg')}}" class="m-1" alt="Inserir nova listagem" width="40px" style="cursor:pointer;"></button>
+                            <button title="Editar listagem" data-bs-toggle="modal" data-bs-target="#editarListagem"><img src="{{asset('img/Grupo 1667.svg')}}" class="m-1" alt="Editar listagem" width="40px" style="cursor:pointer;"></button>
                         </span>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                             <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1654.svg')}}">
                             <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
                                     Nenhuma listagem foi adicionada
-                                <p><a class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="cursor: pointer; font-weight: bolder;" >clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></p>
+                                <p><button class="redirecionamento" data-bs-toggle="modal" data-bs-target="#modalStaticCriarListagem" style="cursor: pointer; font-weight: bolder;" >clique aqui</a> <span class="legenda" style="font-weight: bolder;">para adicionar</span></button>
                             </div>
                         </div>
                     @endif
@@ -181,14 +181,14 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarListagem_{{$listagem->id}}"><img class="m-1 " width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="icone-busca" style="cursor: pointer;"></a>
+                                        <button title="Deletar listagem" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarListagem_{{$listagem->id}}"><img class="m-1 " width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar listagem" style="cursor: pointer;"></button>
                                     </div>
                                 </div>
                             </li>
                         @endforeach
-                    </ul> 
+                    </ul>
                 </div>
-                
+
                 <div class="row justify-content-between mt-4">
                     <div class="col-md-3">
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
@@ -206,7 +206,7 @@
         <div class="modal-dialog">
             <div class="modal-content modalFundo p-3">
                 <div class="col-md-12 tituloModal">Insira uma nova data</div>
-    
+
                 <div class="col-md-12 pt-3 pb-2 textoModal">
                     <form id="criar-data-form" method="POST" action="{{route('datas.store')}}">
                         @csrf
@@ -229,7 +229,7 @@
                                 <label for="tipo" class="form-label">{{__('Tipo da data')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da data --</option>
-                                    <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
+                                    <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Publicação da lista de convocados</option>
                                     <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
                                     <option @if(old('tipo') == $tipos_data['analise']) selected @endif value="{{$tipos_data['analise']}}">Análise de documentos</option>
                                     <option @if(old('tipo') == $tipos_data['resultado_parcial']) selected @endif value="{{$tipos_data['resultado_parcial']}}">Resultado parcial</option>
@@ -275,10 +275,10 @@
                         </div>
                         <div class="col-md-4">
                             <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-data-form"><span class="px-4" >Publicar</span></button>
-                        </div>       
+                        </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -289,7 +289,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modalFundo p-3">
                     <div class="col-md-12 tituloModal">Excluir data</div>
-        
+
                     <div class="col-md-12 pt-3 pb-2 textoModal">
                         <form id="deletar-data-form-{{$data->id}}" method="POST" action="{{route('datas.destroy', ['data' => $data])}}">
                             @csrf
@@ -303,7 +303,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-data-form-{{$data->id}}" style="background-color: #FC605F;"><span class="px-4" >Excluir</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -337,17 +337,17 @@
                                     <label for="tipo">{{__('Tipo da data')}}</label>
                                     <select name="tipo" id="tipo" class="form-control @error('tipo') is-invalid @enderror" required>
                                         <option value="{{$data->tipo}}" selected >
-                                            @if ($data->tipo == $tipos_data['convocacao']) Convocação 
-                                            @elseif($data->tipo == $tipos_data['envio']) Envio de documentos 
+                                            @if ($data->tipo == $tipos_data['convocacao']) Publicação da lista de convocados
+                                            @elseif($data->tipo == $tipos_data['envio']) Envio de documentos
                                             @elseif($data->tipo == $tipos_data['analise']) Análise de documentos
                                             @elseif($data->tipo == $tipos_data['resultado_parcial']) Resultado parcial
                                             @elseif($data->tipo == $tipos_data['reenvio']) Período de retificação
                                             @elseif($data->tipo == $tipos_data['analise_reenvio']) Análise do período de retificação
-                                            @elseif($data->tipo == $tipos_data['resultado_final']) Resultado 
+                                            @elseif($data->tipo == $tipos_data['resultado_final']) Resultado
                                             @endif
                                         </option>
                                         @if ($data->tipo != $tipos_data['convocacao'])
-                                            <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Convocação</option>
+                                            <option @if(old('tipo') == $tipos_data['convocacao']) selected @endif value="{{$tipos_data['convocacao']}}">Publicação da lista de convocados</option>
                                         @endif
                                         @if ($data->tipo != $tipos_data['envio'])
                                             <option @if(old('tipo') == $tipos_data['envio']) selected @endif value="{{$tipos_data['envio']}}">Envio de documentos</option>
@@ -405,7 +405,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-data-form-{{$data->id}}"><span class="px-4">Salvar</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -440,10 +440,10 @@
                                 <label for="tipo">{{__('Selecione o tipo')}}</label>
                                 <select name="tipo" id="tipo" class="form-control campoDeTexto @error('tipo') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o tipo da listagem --</option>
-                                    <option @if(old('tipo') == $tipos_listagem['convocacao']) selected @endif value="{{$tipos_listagem['convocacao']}}">Convocação</option>
-                                    <option @if(old('tipo') == $tipos_listagem['resultado']) selected @endif value="{{$tipos_listagem['resultado']}}">Resultado</option>
-                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Pendência</option>
-                                    <option @if(old('tipo') == $tipos_listagem['final']) selected @endif value="{{$tipos_listagem['final']}}">Final</option>
+                                    <option @if(old('tipo') == $tipos_listagem['convocacao']) selected @endif value="{{$tipos_listagem['convocacao']}}">Convocados</option>
+                                    <option @if(old('tipo') == $tipos_listagem['pendencia']) selected @endif value="{{$tipos_listagem['pendencia']}}">Parcial/Pendências documentais</option>
+                                    <option @if(old('tipo') == $tipos_listagem['resultado']) selected @endif value="{{$tipos_listagem['resultado']}}">Validados e invalidados</option>
+                                    <option @if(old('tipo') == $tipos_listagem['final']) selected @endif value="{{$tipos_listagem['final']}}">Final/Ingressantes e reservas</option>
                                 </select>
 
                                 @error('tipo')
@@ -465,7 +465,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <input id="radio-ordenacao-nota" class="form-check-input" type="radio" name="ordenacao" value="nota" @if(old('ordenacao') == 'nota') checked @endif>
-                                        <label for="radio-ordenacao-nome">{{__('Nota do ENEM')}}</label>
+                                        <label for="radio-ordenacao-nota">{{__('Nota do ENEM')}}</label>
                                     </div>
                                 </div>
 
@@ -494,7 +494,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input form-check-cursos" id="chk_marcar_desmarcar_todos_cursos" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_curso')">
-                                                <label for="btn_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
+                                                <label for="chk_marcar_desmarcar_todos_cursos"><b>Selecionar todos</b></label>
                                             </div>
                                         </div>
                                         @foreach ($cursos as $curso)
@@ -523,7 +523,7 @@
                                             <div class="col-sm-12 form-group">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input form-check-cursos" id="chk_marcar_desmarcar_todas_cotas" onclick="marcar_desmarcar_todos_checkbox_por_classe(this, 'checkbox_cota')">
-                                                    <label for="btn_marcar_desmarcar_todas_cotas"><b>Selecionar todas</b></label>
+                                                    <label for="chk_marcar_desmarcar_todas_cotas"><b>Selecionar todas</b></label>
                                                 </div>
                                             </div>
                                             @foreach ($cotas as $cota)
@@ -549,7 +549,7 @@
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-listagem-form"><span class="px-4">Publicar</span></button>
-                    </div>       
+                    </div>
                 </div>
                 {{-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
@@ -564,7 +564,7 @@
             <div class="modal-dialog">
                 <div class="modal-content modalFundo pt-3 px-3 pb-1">
                   <div class="col-md-12 tituloModal">Listagens</div>
-      
+
                     <div class="col-md-12 pt-1 textoModal">
                         <form id="deletar-listagem-form-{{$listagem->id}}" method="POST" action="{{route('listagems.destroy', ['listagem' => $listagem])}}">
                             @csrf
@@ -578,10 +578,10 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-listagem-form-{{$listagem->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
-                            </div>       
+                            </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -601,19 +601,19 @@
                                             <tr>
                                                 <th class="align-middle pe-0">
                                                     @if ($data->tipo == $tipos_data['convocacao'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_convocacao.png')}}" alt="Icone de convocação" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-chamada.svg')}}" alt="Icone de convocação" width="45">
                                                     @elseif($data->tipo == $tipos_data['envio'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de envio" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de envio" width="45">
                                                     @elseif($data->tipo == $tipos_data['analise'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de analise" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-analiseDoc (2).svg')}}" alt="Icone de analise" width="45">
                                                     @elseif($data->tipo == $tipos_data['resultado_parcial'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de resultado parcial" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-resultadoParcial.svg')}}" alt="Icone de resultado parcial" width="45">
                                                     @elseif($data->tipo == $tipos_data['reenvio'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de reenvio" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-envioDoc.svg')}}" alt="Icone de reenvio" width="45">
                                                     @elseif($data->tipo == $tipos_data['analise_reenvio'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_envio.png')}}" alt="Icone de analise do reenvio" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-analiseRetificacao.svg')}}" alt="Icone de analise do reenvio" width="45">
                                                     @elseif($data->tipo == $tipos_data['resultado_final'])
-                                                        <img class="img-card-data" src="{{asset('img/icon_resultado.png')}}" alt="Icone de resultado final" width="45">
+                                                        <img class="img-card-data" src="{{asset('img/icon-resultadoFinal.svg')}}" alt="Icone de resultado final" width="45">
                                                     @endif
                                                 </th>
                                                 <td class="align-middle p-0">
@@ -627,8 +627,8 @@
                                                     </div>
                                                 </td>
                                                 <td style="text-align: right;" class="align-middle">
-                                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticDeletarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir data" style="cursor: pointer;"></a>
-                                                    <a data-bs-toggle="modal" data-bs-target="#modalStaticEditarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar data" style="cursor: pointer;"></a>
+                                                    <button title="Deletar data" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone excluir data" style="cursor: pointer;"></button>
+                                                    <button title="Editar data" data-bs-toggle="modal" data-bs-target="#modalStaticEditarData_{{$data->id}}"><img class="m-1" width="35" src="{{asset('img/Grupo 1665.svg')}}"alt="Icone editar data" style="cursor: pointer;"></button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -636,7 +636,7 @@
                                 </table>
                             </div>
                         </li>
-                    </ul> 
+                    </ul>
                 </div>
                 <div class="row justify-content-between mt-4">
                     <div class="col-md-3">
@@ -644,7 +644,7 @@
                     </div>
                     <div class="col-md-4">
                         {{-- <button type="button" class="btn botaoVerde my-2 py-1"><span class="px-4">Publicar</span></button> --}}
-                    </div>       
+                    </div>
                 </div>
             </div>
         </div>
@@ -652,7 +652,7 @@
 </x-app-layout>
 <script src="{{ asset('js/checkbox_marcar_todos.js') }}" defer></script>
 
-@if(old('data_id') == -1) 
+@if(old('data_id') == -1)
 <script>
     $(document).ready(function(){
         $('#modalStaticCriarData_{{old('chamada')}}').modal('show');

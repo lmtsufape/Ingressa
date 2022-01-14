@@ -115,23 +115,7 @@ class User extends Authenticatable
         return $heteroidentificacao;
     }
 
-    public function ehAnalistaGeral() 
-    {
-        if ($this->role == User::ROLE_ENUM['analista']) {
-            return $this->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['geral'])->get()->count()  > 0;
-        }
-
-        return false;
-    }
-
-    public function ehAnalistaHeteroidentificacao() 
-    {
-        if ($this->role == User::ROLE_ENUM['analista']) {
-            return $this->tipo_analista()->where('tipo', TipoAnalista::TIPO_ENUM['heteroidentificacao'])->get()->count()  > 0;
-        }
-
-        return false;
-    }
+    
 
     public static function gerar_user_inscricao(Inscricao $inscricao) 
     {

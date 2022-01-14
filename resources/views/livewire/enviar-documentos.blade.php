@@ -23,7 +23,7 @@
                                     id="docDeclaracaoVeracidade"
                                     type="file"
                                     class="d-none">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('declaracao_veracidade'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -56,7 +56,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docConclusaoMedio">
-                                    @if ($inscricao->isDocumentosRequeridos())
+                                    @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('certificado_conclusao'))
                                         <img src="{{ asset('img/upload2.svg') }}"
                                             width="30">
                                     @endif
@@ -92,7 +92,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docHistorico">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('historico'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -116,13 +116,15 @@
                                 o arquivo nos dois campos);
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
-                                <label class="form-check-label subtexto3" for="checkHistorico">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                    <label class="form-check-label subtexto3" for="checkHistorico">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('nascimento_ou_casamento'))
@@ -134,7 +136,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docNascimento">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('nascimento_ou_casamento'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -156,13 +158,15 @@
                                 Regristro de Nascimento ou Certidão de Casamento;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
-                                <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                    <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('rg'))
@@ -174,7 +178,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docRG">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('rg'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -210,7 +214,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docCPF">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('cpf'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -246,7 +250,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docEleitoral">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('quitacao_eleitoral'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -275,13 +279,15 @@
                                 <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
-                                <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                    <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('quitacao_militar'))
@@ -293,7 +299,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docMilitar">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('quitacao_militar'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -317,13 +323,15 @@
                                 militar;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
-                                <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                    primeira semana de aula.
-                                </label>
-                            </div>
+                            @if ($inscricao->isDocumentosRequeridos())
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                    <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     @endif
                     @if($documentos->contains('foto'))
@@ -335,7 +343,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docFoto">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('foto'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -379,7 +387,7 @@
                                     type="file"
                                     class="d-none"
                                     id="cotista">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('declaracao_cotista'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -422,13 +430,6 @@
                                 make a type specimen book.
                             </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input @error('declaracoes.preto_pardo') is-invalid @enderror" type="checkbox" value="true" id="checkpreto_pardo" wire:model="declaracoes.preto_pardo">
-                            <label class="form-check-label subtexto3" for="checkpreto_pardo">
-                                Declaro que me candidatei às vagas destinadas aos candidatos autodeclarados pretos ou pardos.
-                            </label>
-                        </div>
-                        <div class="invalid-feedback" style="display: block">@error('declaracoes.preto_pardo'){{$message}}@enderror</div>
 
                         <div class="mt-2">
                             <label for="docHeteroidentificacao"
@@ -438,7 +439,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docHeteroidentificacao">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('heteroidentificacao'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -470,7 +471,7 @@
                                     type="file"
                                     class="d-none"
                                     id="docFotografia">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('fotografia'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -516,7 +517,7 @@
                                     type="file"
                                     class="d-none"
                                     id="cotaRenda">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('comprovante_renda'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -555,13 +556,6 @@
                                 it to
                                 make a type specimen book. </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input @error('declaracoes.indigena') is-invalid @enderror" type="checkbox" value="true" id="checkindigena" wire:model="declaracoes.indigena">
-                            <label class="form-check-label subtexto3" for="checkindigena">
-                                Declaro que me candidatei às vagas destinadas aos candidatos autodeclarados indígenas.
-                            </label>
-                        </div>
-                        <div class="invalid-feedback" style="display: block">@error('declaracoes.indigena'){{$message}}@enderror</div>
                         <div class="mt-2">
                             <label for="rani"
                                 title="Enviar documento"
@@ -570,7 +564,7 @@
                                     type="file"
                                     class="d-none"
                                     id="rani">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('rani'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -623,7 +617,7 @@
                                     type="file"
                                     class="d-none"
                                     id="cotaPCD">
-                                @if ($inscricao->isDocumentosRequeridos())
+                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('laudo_medico'))
                                     <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
                                 @endif
@@ -659,7 +653,7 @@
                 <span class="px-4">Voltar</span>
             </a>
         </div>
-        @if ($inscricao->isDocumentosRequeridos())
+        @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
             <div class="col-md-3">
                 <button type="submit"
                     form="enviar-documentos"

@@ -134,7 +134,7 @@
                                     <th>AF</th>
                                     <th>CPF</th>
                                     <th>Nome</th>
-                                    <th>Pendenciais documentais</th>
+                                    <th>Pendênciais documentais</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -146,9 +146,10 @@
                                         <th>
                                             @switch($inscricao->cd_efetivado)
                                                 @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                                                    Cadastro validado com pendênciais
+                                                    Sem pendências
                                                     @break
                                                 @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
+                                                @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'])
                                                     @php
                                                         $arquivos_invalidos = 0;
                                                         foreach ($inscricao->arquivos as $arquivo) {
@@ -163,7 +164,7 @@
                                                             @if($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
                                                                 @if($i == $arquivos_invalidos)
                                                                     {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!}.
-                                                                @else 
+                                                                @else
                                                                     {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!};
                                                                 @endif
                                                             @endif
@@ -171,8 +172,8 @@
                                                     </div>
                                                     @break
                                                 @default
-                                                    Sem pendências
-                                                    @break                                                   
+                                                    Não enviado
+                                                    @break
                                             @endswitch
                                         </th>
                                     </tr>

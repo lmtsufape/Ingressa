@@ -1,13 +1,14 @@
 <x-app-layout>
     <div class="fundo2 px-5">
+
         <div class="container">
-            <div class="row">
+            {{--<div class="row">
                 <div class="col-sm-12">
                     <div class="col-md-12" style="text-align: right">
                         <a class="btn botao my-2 py-1" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}"> <span class="px-4">Voltar</span></a>
                     </div>
                 </div>
-            </div>
+            </div>--}}
             @if(session('success'))
                 <div class="row mt-3" id="mensagemSucesso">
                     <div class="col-md-12">
@@ -56,6 +57,24 @@
                     </div>
                 </div>
             @endcan
+            <div class="pb-3">
+                <span style="color: #373737; font-size: 17px; font-weight: 700;" > <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;">  Chamada</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Cursos</a> >  <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" style="text-decoration: none; color: #373737;"> {{$inscricao->curso->nome}} -
+                    @switch($inscricao->curso->turno)
+                        @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            Matutino
+                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            Vespertino
+                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            Noturno
+                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            Integral
+                            @break
+                    @endswitch </a>
+                > </span> <span style="color: #24CEE8; font-size: 17px; font-weight: 600;">{{$inscricao->candidato->user->name}} - {{$inscricao->cota->cod_cota}}</span>
+            </div>
             <div class="row justify-content-between">
                 <div class="col-md-8">
                     @if(session('nomeDoc'))
@@ -69,20 +88,38 @@
                         <div class="cabecalhoAzul p-2 px-3 align-items-center">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-md-10">
-                                    <a onclick="carregarFicha()" style="cursor:pointer;"><img src="{{asset('img/Grupo 1662.svg')}}"
-                                        alt="" width="40" class="img-flex"></a>
+                                    <button title="Carregar ficha cadastral" onclick="carregarFicha()" style="cursor:pointer;"><img src="{{asset('img/Grupo 1662.svg')}}"
+                                        alt="" width="40" class="img-flex" alt="Icone de ficha cadastral"></button>
 
                                     <label class="tituloTabelas ps-1" id="nomeDoc">Ficha Geral</label>
                                 </div>
                                 <div class="col-md-2" style="text-align: right">
-                                    <a title="Documento anterior" onclick="carregarProxDoc({{$inscricao->id}}, -1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropleft-circle.svg')}}"></a>
-                                    <a title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></a>
+                                    <button title="Documento anterior" onclick="carregarProxDoc({{$inscricao->id}}, -1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropleft-circle.svg')}}"></button>
+                                    <button title="Próximo documento" onclick="carregarProxDoc({{$inscricao->id}}, 1)" style="cursor:pointer;"><img width="30" src="{{asset('img/Icon ionic-ios-arrow-dropright-circle.svg')}}"></button>
                                 </div>
                             </div>
                         </div>
-                        <div id="mensagemVazia" class="text-center" style="display: none;" >
-                            <div class="col-md-12 text-center legenda" style="font-weight: bolder; font-size: 20px;">
-                                Documento não enviado pelo candidato
+                        <div class="corpo" id="mensagemVazia" class="text-center" style="display: none;" >
+                            <div class="row justify-content-center">
+                                <div class="col-md-10">
+                                    <p id="aguardandoTexto" style="font-weight: bolder; font-size: 18px; padding-top: 10px;">O candidato informou que:</p>
+                                </div>
+                            </div>
+                            <div id="rowCheckboxCaixa" class="row justify-content-center">
+                                <div class="col-md-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked disabled id="checkboxCaixa">
+                                        <label class="form-check-label" id="caixaTexto" style="font-weight: bolder; font-size: 18px;" for="checkboxCaixa">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 px-3 pt-5">
+                                <div class="row justify-content-between">
+                                    <div class="col-md-6">
+                                        <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" type="button" class="btn botao my-2 py-1 col-md-5"><span class="px-4">Voltar</span></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="corpo p-3" style="display: none;">
@@ -94,11 +131,12 @@
                                 <div class="col-md-12 px-3 pt-5">
                                     <div class="row justify-content-between">
                                         <div class="col-md-6">
-                                            <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #1492E6;;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></a>
+                                            <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" type="button" class="btn botao my-2 py-1 col-md-5"><span class="px-4">Voltar</span></a>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row justify-content-end">
-                                                <a data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar()"><span class="px-3 text-center" >Aprovar</span></a>
+                                                <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #FC605F;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></button>
+                                                <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar()"><span class="px-3 text-center" >Aprovar</span></button>
                                             </div>
                                         </div>
                                     </div>
@@ -124,10 +162,10 @@
                                         Data de Nascimento: <p class="nomeDocumento" style="display: inline">{{date('d/m/Y',strtotime($inscricao->candidato->dt_nascimento))}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Sexo: <p class="nomeDocumento" style="display: inline">{{$inscricao->tp_sexo}}</p>
+                                        Sexo: <p class="nomeDocumento" style="display: inline">{{$inscricao->tp_sexo == "M" ? 'Masculino' : 'Feminino'}}</p>
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
-                                        Estado Civil:<p class="nomeDocumento" style="display: inline"></p>
+                                        Estado Civil: @isset($inscricao->candidato->estado_civil)<p class="nomeDocumento" style="display: inline">{{\App\Models\Candidato::ESTADO_CIVIL[$inscricao->candidato->estado_civil]}}</p>@endisset
                                     </div>
                                     <div class="tituloDocumento mx-3 pt-1">
                                         CPF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->nu_cpf_inscrito}}</p>
@@ -143,32 +181,43 @@
 
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
+                                    <div class="col-md-5 tituloDocumento">
+                                        Orgão expedidor: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->orgao_expedidor}}</p>
+                                    </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->uf_rg}}</p>
+                                    </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Título Eleitoral:<p class="nomeDocumento" style="display: inline"></p>
-                                    </div>
-                                    <div class="col-md-3 tituloDocumento">
-                                        Zona:<p class="nomeDocumento" style="display: inline"></p>
-                                    </div>
-                                    <div class="col-md-3 tituloDocumento">
-                                        Seção:<p class="nomeDocumento" style="display: inline"></p>
+                                        Expedição: <p class="nomeDocumento" style="display: inline">{{date('d/m/Y', strtotime($inscricao->candidato->data_expedicao))}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
-                                        UF:<p class="nomeDocumento" style="display: inline"></p>
+                                    <div class="col-md-5 tituloDocumento">
+                                        Título Eleitoral: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->titulo}}</p>
                                     </div>
                                     <div class="col-md-3 tituloDocumento">
-                                        País:<p class="nomeDocumento" style="display: inline"></p>
+                                        Zona: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->zona_eleitoral}}</p>
                                     </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        Seção: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->secao_eleitoral}}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
                                     <div class="col-md-5 tituloDocumento">
-                                        Naturalidade:<p class="nomeDocumento" style="display: inline"></p>
+                                        Naturalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->cidade_natal}}</p>
+                                    </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->uf_natural}}</p>
+                                    </div>
+                                    <div class="col-md-3 tituloDocumento">
+                                        País: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->pais_natural}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
                                     Nome da Mãe: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_mae}}</p>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
-                                    Nome do Pai:<p class="nomeDocumento" style="display: inline"></p>
+                                    Nome do Pai: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->pai}}</p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
@@ -188,25 +237,25 @@
                                         Forma de Ingresso: <p class="nomeDocumento" style="display: inline">SiSU</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_modalidade_concorrencia}}</p>
+                                        Ano de Ingresso: <p class="nomeDocumento" style="display: inline">{{date('Y',strtotime($inscricao->dt_operacao))}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Ano de Ingresso: <p class="nomeDocumento" style="display: inline">{{date('Y',strtotime($inscricao->dt_operacao))}}</p>
+                                        Nota: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_nota_candidato}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
-                                    <div class="col-md-4 tituloDocumento">
+                                    <div class="col-md-8 tituloDocumento">
                                         Curso: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_curso}}</p>
                                     </div>
                                     {{--<div class="col-md-4 tituloDocumento">
                                         Semestre:
                                     </div>--}}
-                                    <div class="col-md-4 tituloDocumento">
-                                        Nota: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_nota_candidato}}</p>
-                                    </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
                                     Cota de Classificação:<p class="nomeDocumento" style="display: inline"></p>
+                                </div>
+                                <div class="col-md-12 pt-2 tituloDocumento">
+                                    Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->no_modalidade_concorrencia}}</p>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
@@ -237,10 +286,10 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Telefone:<p class="nomeDocumento" style="display: inline"></p>
+                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone1}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone1}}</p>
+                                        Celular: <p class="nomeDocumento" style="display: inline">{{$inscricao->nu_fone2}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-12 pt-2 tituloDocumento">
@@ -249,55 +298,63 @@
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="col-md-12 tituloDocumento">
-                                    Estabelecimento que concluiu o Ensino Médio:<p class="nomeDocumento" style="display: inline"></p>
+                                    Estabelecimento que concluiu o Ensino Médio: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->escola_ens_med}}</p>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-2 tituloDocumento">
-                                        UF:<p class="nomeDocumento" style="display: inline"></p>
+                                        UF: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->uf_escola}}</p>
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Ano de Conclusão:<p class="nomeDocumento" style="display: inline"></p>
+                                        Ano de Conclusão: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->ano_conclusao}}</p>
                                     </div>
                                     <div class="col-md-6 tituloDocumento">
-                                        Modalidade:<p class="nomeDocumento" style="display: inline"></p>
+                                        Modalidade: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->modalidade}}</p>
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-12 tituloDocumento">
-                                        Concluiu o Ensino Médio na rede pública?<p class="nomeDocumento" style="display: inline"></p>
+                                        Concluiu o Ensino Médio na rede pública?
+                                        @isset($inscricao->candidato->concluiu_publica)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->concluiu_publica ? 'Sim' : 'Não'}}</p>@endisset
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                                 <div class="row">
                                     <div class="col-md-12 tituloDocumento">
-                                        Necessidades Especiais:<p class="nomeDocumento" style="display: inline"></p>
+                                        Necessidades Especiais:
+                                        @isset($inscricao->candidato->necessidades)
+                                        <p class="nomeDocumento" style="display: inline">
+                                            @foreach (explode(',', $inscricao->candidato->necessidades) as $necessidade)
+                                                {{\App\Models\Candidato::NECESSIDADES[$necessidade]}}@if(!$loop->last),@endif
+                                            @endforeach
+                                        </p>
+                                        @endisset
                                     </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-md-4 tituloDocumento">
-                                        Cor/Raça:<p class="nomeDocumento" style="display: inline"></p>
+                                        Cor/Raça: @isset($inscricao->candidato->cor_raca)<p class="nomeDocumento" style="display: inline">{{\App\Models\Candidato::COR_RACA[$inscricao->candidato->cor_raca]}}</p>@endisset
                                     </div>
                                     <div class="col-md-4 tituloDocumento">
-                                        Etnia:<p class="nomeDocumento" style="display: inline"></p>
+                                        Etnia: @isset($inscricao->candidato->etnia)<p class="nomeDocumento" style="display: inline">{{\App\Models\Candidato::ETNIA[$inscricao->candidato->etnia]}}</p>@endisset
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 py-3 px-3">
                                 <div class="tituloDocumento">
-                                    Qual a Cidade/Estado onde você reside atualmente?<p class="nomeDocumento" style="display: inline"></p>
+                                    Qual a Cidade/Estado onde você reside atualmente? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->reside}}</p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Seu local de moradia atual se encontra em:<p class="nomeDocumento" style="display: inline"></p>
+                                    Seu local de moradia atual se encontra em: @isset($inscricao->candidato->localidade)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->localidade == "zona_urbana" ? 'Zona urbana' : "Zona rural"}}</p>@endisset
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Você trabalha?<p class="nomeDocumento" style="display: inline"></p>
+                                    Você trabalha? @isset($inscricao->candidato->trabalha)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->trabalha ? 'Sim' : 'Não'}}</p>@endisset
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Quantas pessoas fazem parte do seu grupo familiar?<p class="nomeDocumento" style="display: inline"></p>
+                                    Quantas pessoas fazem parte do seu grupo familiar? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->grupo_familiar}}</p>
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Qual o valor da sua renda total?<p class="nomeDocumento" style="display: inline"></p>
+                                    Qual o valor da sua renda total? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->valor_renda}}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -308,16 +365,27 @@
 
                     <div class="col-md-4">
                         <div class="col-md-12 caixa shadow p-3">
-                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
+                            @can('isAdmin', \App\Models\User::class)
                                 <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                     <div class="d-flex align-items-center">
                                         <span class="tituloTipoDoc">Documentação básica</span>
                                     </div>
-                                    <a href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
-                                        <img width="35" src="{{asset('img/download1.svg')}}"></a>
+                                    <a title="Baixar todos os documentos do candidato" href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
+                                        <img width="35" src="{{asset('img/download1.svg')}}" alt="Icone de baixar todos os documentos"></a>
                                     </a>
                                 </div>
-                            @endif
+                            @else
+                                @can('ehAnalistaGeral', \App\Models\User::class)
+                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Documentação básica</span>
+                                        </div>
+                                        <a title="Baixar todos os documentos do candidato" href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
+                                            <img width="35" src="{{asset('img/download1.svg')}}" alt="Icone de baixar todos os documentos"></a>
+                                        </a>
+                                    </div>
+                                @endcan
+                            @endcan
                             @foreach ($documentos as $indice =>  $documento)
                                 @if($documento == 'rani')
                                     <div>
@@ -368,84 +436,84 @@
                                     <div class="d-flex align-items-center justify-content-between pt-3">
                                         @if($inscricao->arquivos()->where('nome', $documento)->first() != null)
                                             <div class="col-md-2">
-                                                <a href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img src="{{asset('img/download2.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                                <a title="Abrir documento em nova aba" href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img @if(is_null($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{asset('img/download2.svg')}}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])  src="{{asset('img/documento-aceito.svg')}}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) src="{{asset('img/documento-recusado.svg')}}" @endif alt="arquivo atual"  width="45" class="img-flex"></a>
                                             </div>
                                         @else
                                             <div class="col-md-2">
-                                                <a target="_blank" style="cursor:pointer;"><img src="{{asset('img/download3.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
+                                                <a title="Documento não enviado" target="_blank" style="cursor:pointer;"><img src="{{asset('img/download3.svg')}}" alt="arquivo atual"  width="45" class="img-flex"></a>
                                             </div>
                                         @endif
 
                                         @if($documento == 'declaracao_veracidade')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Declaração de Veracidade;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Declaração de Veracidade;</button>
                                             </div>
                                         @elseif($documento == 'certificado_conclusao')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente;</button>
                                             </div>
                                         @elseif($documento == 'historico')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Histórico Escolar do Ensino Médio ou equivalente;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Histórico Escolar do Ensino Médio ou equivalente;</button>
                                             </div>
                                         @elseif($documento == 'nascimento_ou_casamento')
                                             <div class="col-md-10" style="cursor:pointer;" >
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro de Nascimento ou Certidão de Casamento;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro de Nascimento ou Certidão de Casamento;</button>
                                             </div>
                                         @elseif($documento == 'cpf')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Cadastro de Pessoa Física (CPF) - pode estar no RG;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Cadastro de Pessoa Física (CPF) - pode estar no RG;</button>
                                             </div>
                                         @elseif($documento == 'rg')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Carteira de Identidade (RG) - Frente e verso;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Carteira de Identidade (RG) - Frente e verso;</button>
                                             </div>
                                         @elseif($documento == 'quitacao_eleitoral')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</button>
                                             </div>
                                         @elseif($documento == 'quitacao_militar')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Militar, para candidatos do sexo masculino que tenham de 18 a 45 anos - Frente e verso;</button>
                                             </div>
                                         @elseif($documento == 'foto')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Uma foto 3x4 atual;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Uma foto 3x4 atual;</button>
                                             </div>
                                         @elseif($documento == 'rani')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro Administrativo de Nascimento de Indígena ou equivalente;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Registro Administrativo de Nascimento de Indígena ou equivalente;</button>
                                             </div>
                                         @elseif($documento == 'declaracao_cotista')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração como candidato participante de reserva de vaga;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Autodeclaração como candidato participante de reserva de vaga;</button>
                                             </div>
                                         @elseif($documento == 'heteroidentificacao')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Vídeo individual e recente para procedimento de heteroidentificação;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Vídeo individual e recente para procedimento de heteroidentificação;</button>
                                             </div>
                                         @elseif($documento == 'fotografia')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Fotografia individual e recente para procedimento de heteroidentificação;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Fotografia individual e recente para procedimento de heteroidentificação;</button>
                                             </div>
                                         @elseif($documento == 'comprovante_renda')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de renda, ou de que não possui renda, de cada membro do grupo familiar, seja maior ou menor de idade;</button>
                                             </div>
                                         @elseif($documento == 'laudo_medico')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <div class="nomeDocumento ps-3" style="display:inline-block;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico;</div>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico;</button>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                        @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'] || (auth()->user()->ehAnalistaGeral() == true))
-                            <button id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
-                            <button id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
-                        @endif
-                        <a data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" style="background-color: #1492E6;" class="btn botaoVerde mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></a>
+                        @can('isAdminOrAnalistaGeral', \App\Models\User::class)
+                            <button @if($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']) disabled @endif id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
+                            <button @if($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
+                        @endcan
+                        <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></button>
                     </div>
                 </div>
             </div>
@@ -599,7 +667,7 @@
 <script>
     $(document).ready(function(){
         var inputs = document.getElementsByClassName('ckeditor-editor');
-        
+
         for(var i = 0; i < inputs.length; i++) {
             CKEDITOR.replace(inputs[i].id);
         }
@@ -627,9 +695,23 @@
             dataType:'json',
             success: function(documento) {
                 atualizarNome(documento_nome);
+                if(parseInt(document.getElementById("documento_indice").value) != -1){
+                    document.getElementById("nomeDocumento"+parseInt(document.getElementById("documento_indice").value)).style.fontWeight = "normal";
+                }
+                document.getElementById("nomeDocumento"+indice).style.fontWeight = "700";
+
+
                 document.getElementById("documento_indice").value = indice;
                 if(documento.id == null){
                     if($("#mensagemVazia").is(":hidden")){
+                        if(documento.nome == "Aguardando o envio do documento."){
+                            $("#rowCheckboxCaixa").hide();
+                            document.getElementById("aguardandoTexto").innerHTML = documento.nome;
+                        }else{
+                            document.getElementById("aguardandoTexto").innerHTML = "O candidato informou que:";
+                            document.getElementById("caixaTexto").innerHTML = documento.nome;
+                            $("#rowCheckboxCaixa").show();
+                        }
                         $("#mensagemVazia").show();
                     }
                     iFrame.hide();
@@ -639,6 +721,7 @@
                     document.getElementById("documento_id").value = documento.id;
                     document.getElementById("comentario").value = documento.comentario;
                     document.getElementById("documento_nome").value = documento_nome;
+
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     if(documento.avaliacao == "1"){
@@ -713,6 +796,9 @@
     }
 
     function carregarFicha(){
+        if(parseInt(document.getElementById("documento_indice").value) != -1){
+            document.getElementById("nomeDocumento"+parseInt(document.getElementById("documento_indice").value)).style.fontWeight = "normal";
+        }
         atualizarNome("ficha");
         document.getElementById("documento_indice").value = -1;
         document.getElementById("documentoPDF").parentElement.parentElement.style.display = 'none';
@@ -722,6 +808,9 @@
 
     function carregarProxDoc(inscricao_id, valor){
         var indice = document.getElementById("documento_indice")
+        if(parseInt(document.getElementById("documento_indice").value) != -1){
+            document.getElementById("nomeDocumento"+parseInt(document.getElementById("documento_indice").value)).style.fontWeight = "normal";
+        }
         var documento_indice = parseInt(document.getElementById("documento_indice").value)+valor;
         indice.value = documento_indice;
         $.ajax({
@@ -731,7 +820,6 @@
             dataType:'json',
             success: function(documento) {
                 indice.value = documento.indice;
-                console.log(indice.value);
                 if(documento.nome == 'ficha'){
                     carregarFicha();
                 }else{
