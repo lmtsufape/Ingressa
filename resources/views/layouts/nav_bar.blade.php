@@ -60,10 +60,10 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link mx-3" href="#">Contato</a>
+                            <a class="nav-link mx-3" href="{{route('contato')}}">Contato</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mx-3" href="#">Sobre</a>
+                            <a class="nav-link mx-3" href="{{route('sobre')}}">Sobre</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link mx-3" href="{{route('logar')}}">Login</a>
