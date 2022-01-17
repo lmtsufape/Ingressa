@@ -43,7 +43,7 @@
                                 Olá, <b>{{auth()->user()->name}}</b>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{route('profile.show')}}">{{ __('Profile') }}</a></li>
+                                <li><a class="dropdown-item" href="{{route('profile.show')}}">{{ __('Perfil') }}</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><!-- Authentication -->
                                     <form method="POST" action="{{ route('logout') }}">
@@ -52,7 +52,7 @@
                                         <button class="dropdown-item" href="{{ route('logout') }}"
                                                  onclick="event.preventDefault();
                                                         this.closest('form').submit();">
-                                            {{ __('Log Out') }}
+                                            {{ __('Sair') }}
                                         </button >
                                     </form>
                                 </li>
@@ -60,13 +60,13 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link mx-3" href="#">Contato</a>
+                            <a class="nav-link mx-3" href="{{route('contato')}}">Contato</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mx-3" href="#">Sobre</a>
+                            <a class="nav-link mx-3" href="{{route('sobre')}}">Sobre</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mx-3" href="{{route('logar')}}">Login</a>
+                            <a class="nav-link mx-3" href="{{route('logar')}}">Entrar</a>
                         </li>
                         {{-- <li class="nav-item">
                             <a class="nav-link mx-3 @if(request()->routeIs('login')) active @endif" href="{{route('login')}}">Login</a>

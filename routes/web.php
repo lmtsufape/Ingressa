@@ -26,6 +26,9 @@ include "fortify.php";
 
 Route::get('/', [WelcomeController::class, 'index'])->name('index');
 Route::get('/login', [WelcomeController::class, 'login'])->name('logar');
+Route::get('/sobre', [WelcomeController::class, 'sobre'])->name('sobre');
+Route::get('/contato', [WelcomeController::class, 'contato'])->name('contato');
+Route::post('/contato/enviar', [WelcomeController::class, 'enviarMensagem'])->name('enviar.mensagem');
 
 Route::get('/primeiro-acesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
 Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('primeiroAcesso.verificacao');

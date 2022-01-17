@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Sisu;
 use App\Models\DataChamada;
 use App\Models\Listagem;
+use App\Models\User;
+use App\Notifications\ContatoNotification;
+use Illuminate\Support\Facades\Notification;
 
 class WelcomeController extends Controller
 {
@@ -23,5 +26,32 @@ class WelcomeController extends Controller
     public function login()
     {
         return view('auth.login');
+    }
+
+    public function sobre()
+    {
+        return view('about');
+    }
+
+    public function contato()
+    {
+        return view('contact');
+    }
+
+    public function enviarMensagem(Request $request)
+    {
+        $request->validate([
+            'assunto' => 'required|string|min:3|max:255',
+            'email'         => 'required|email',
+            'mensagem'      => 'required|min:25|max:2000',
+            'nome_completo' => 'required|string|min:7|max:150',
+        ]);
+
+        $user = User::where('role', User::ROLE_ENUM['admin'])->first();
+        $user->email = env('MAIL_CONTATO');
+
+        Notification::send($user, new ContatoNotification($request, $request->assunto));
+
+        return redirect()->back()->with(['success' => 'Obrigado por entrar em contato, sua mensagem foi enviada com sucesso!']);
     }
 }
