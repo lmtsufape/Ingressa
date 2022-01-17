@@ -9,32 +9,41 @@
         @page {
             margin: 120px 50px 80px 50px;
         }
-        #head{
-            font-size: 14px;
-            text-align: left;
+        #head {
+            background-repeat: no-repeat;
+            text-align: center;
             width: 100%;
-            height: auto;
             position: fixed;
-            top: -80px;
-            left: 0;
-            right: 0;
+            top: -120px;
+            left: 0px;
+            right: -15px;
         }
+
         #head img {
-            display: inline-block;
-            float: left;
+			width: 115%;
+		}
+
+        .titulo {
+            position: relative;
+            top: -70px;
+            font-size: 18px;
+            font-weight: bolder;
+            color: #03284d;
         }
-        #head #head-span-left {
-            text-align: left;
-            float: left;
-            padding-top: 12px;
-            margin-left: 10px;
-            padding-bottom: 12px;
+
+        .subtitulo {
+            font-weight: normal;
+            position: relative;
+            font-size: 18px;
+            color: #03284d;
+            text-align: center;
+            margin-bottom: 10px;
         }
-        #head #head-span-rigth {
-            float: right;
-            text-align: right;
-            padding-top: 12px;
+
+        .quebrar_pagina {
+            page-break-after: always;
         }
+
         #corpo{
             float: left;
             width: 600px;
@@ -52,7 +61,7 @@
         table thead {
             border-top: 1px solid rgb(126, 126, 126);
             border-bottom: 1px solid rgb(126, 126, 126);
-            background-color: rgb(71, 71, 71);
+            background-color: #021c35;
             color: white;
         }
         #footer {
@@ -77,110 +86,116 @@
             float: left;
         }
         .back-color-1 {
-            background-color: rgb(235, 235, 235);
+            background-color: white;
         }
         .back-color-2 {
-            background-color: rgb(196, 196, 196);
+            background-color: #d1e7fd;
+        }
+
+        .body {
+            position: relative;
+            top: 20px;
+        }
+
+        .acao_afirmativa {
+            text-align: justify;
+            margin: 15px;
+            position: relative; 
+            left: 5px;
         }
     </style>
 
 </head>
 <body>
-    <div id="head">
-        <img src="{{asset('img/logo_ufape_blue.png')}}" width="35px" alt="">
-        <span id="head-span-left">
-            UNIVERSIDADE FEDERAL DO AGRESTE DE PERNAMBUCO<br>
-            PRÓ-REITORIA DE ENSINO DE GRADUAÇÃO<br>
-            SETOR DE ESCOLARIDADE<br>
-            RELAÇÃO DOS CANDIDATOS COM PENDÊNCIAS <span style="text-transform:uppercase">{{$chamada->nome}} - {{$chamada->sisu->edicao}}</span><br>
-        </span>
-        <span id="head-span-rigth">
-            DATA: {{date('d/m/Y', strtotime(today()))}}<br>
-            PAG:
+    <div id="head">        
+        <img src="{{asset('img/cabecalho_listagem.png')}}" width="100%" alt="">
+        <span class="titulo">
+            RELAÇÃO DOS CANDIDADOS PENDENTES {{date('Y', strtotime(today()))}}<br>
         </span>
     </div>
     <div id="body">
         @foreach ($collect_inscricoes as $i => $collect)
-            @php
-                $exibirNomeCurso = true;
-            @endphp
             @if ($collect->count() > 0)
                 @foreach ($collect as $j => $inscricoes)
-                    @if ($exibirNomeCurso)
-                        <h3>Curso: {{$inscricoes[0]->curso->nome}} - @switch($inscricoes[0]->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                                Matutino
-                                @break
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                                Vespertino
-                                @break
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                                Noturno
-                                @break
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
-                                Integral
-                                @break
-                            @endswitch</h3>
-                        @php
-                            $exibirNomeCurso = false;
-                        @endphp
-                    @endif
-                    <div id="modalidade">
-                        <h4 style="position: relative; left: 10px; right: 10px;">@if($inscricoes[0]->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                        $inscricoes[0]->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' || $inscricoes[0]->no_modalidade_concorrencia == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$inscricoes[0]->cota->cod_cota}} - {{$inscricoes[0]->no_modalidade_concorrencia}} @endif</h4>
-                        <table>
-                            <thead>
-                                <tr class="esquerda">
-                                    <th>AF</th>
-                                    <th>CPF</th>
-                                    <th>Nome</th>
-                                    <th>Pendênciais documentais</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($inscricoes as $k =>  $inscricao)
-                                    <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
-                                        <th>{{$inscricao->cota->cod_cota}}</th>
-                                        <th>{{$inscricao->candidato->getCpfPDF()}}</th>
-                                        <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
-                                        <th>
-                                            @switch($inscricao->cd_efetivado)
-                                                @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                                                    Sem pendências
-                                                    @break
-                                                @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
-                                                @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'])
-                                                    @php
-                                                        $arquivos_invalidos = 0;
-                                                        foreach ($inscricao->arquivos as $arquivo) {
-                                                            if ($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) {
-                                                                $arquivos_invalidos++;
-                                                            }
-                                                        }
-                                                    @endphp
-                                                    <div style="font-weight: normal;">
-                                                        {!!str_replace(['<p>', '</p>'], "",$inscricao->justificativa)!!};
-                                                        @foreach ($inscricao->arquivos as $i => $arquivo)
-                                                            @if($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
-                                                                @if($i == $arquivos_invalidos)
-                                                                    {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!}.
-                                                                @else
-                                                                    {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!};
-                                                                @endif
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-                                                    @break
-                                                @default
-                                                    Não enviado
-                                                    @break
-                                            @endswitch
-                                        </th>
+                    <h3 class="subtitulo">Curso: {{$inscricoes[0]->curso->nome}} - @switch($inscricoes[0]->curso->turno)
+                    @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                        Matutino (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        @break
+                    @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                        Vespertino (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        @break
+                    @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                        Noturno (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        @break
+                    @case(App\Models\Curso::TURNO_ENUM['integral'])
+                        Integral (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        @break
+                    @endswitch</h3>
+                    <div class="body">
+                        <div id="modalidade">
+                            <h4 class="acao_afirmativa" style="position: relative; left: 10px; right: 10px;">@if($inscricoes[0]->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                            $inscricoes[0]->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' || $inscricoes[0]->no_modalidade_concorrencia == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$inscricoes[0]->cota->cod_cota}} - {{$inscricoes[0]->no_modalidade_concorrencia}} @endif</h4>
+                            <table>
+                                <thead>
+                                    <tr class="esquerda">
+                                        <th>AF</th>
+                                        <th>CPF</th>
+                                        <th>Nome</th>
+                                        <th>Pendênciais documentais</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($inscricoes as $k =>  $inscricao)
+                                        <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
+                                            <th>{{$inscricao->cota->cod_cota}}</th>
+                                            <th>{{$inscricao->candidato->getCpfPDF()}}</th>
+                                            <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
+                                            <th>
+                                                @switch($inscricao->cd_efetivado)
+                                                    @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
+                                                        Sem pendências
+                                                        @break
+                                                    @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'])
+                                                    @case(\App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'])
+                                                        @php
+                                                            $arquivos_invalidos = 0;
+                                                            foreach ($inscricao->arquivos as $arquivo) {
+                                                                if ($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) {
+                                                                    $arquivos_invalidos++;
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        <div style="font-weight: normal;">
+                                                            {!!str_replace(['<p>', '</p>'], "",$inscricao->justificativa)!!};
+                                                            @foreach ($inscricao->arquivos as $i => $arquivo)
+                                                                @if($arquivo->avaliacao != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
+                                                                    @if($i == $arquivos_invalidos)
+                                                                        {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!}.
+                                                                    @else
+                                                                        {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!};
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                        @break
+                                                    @default
+                                                        Não enviado
+                                                        @break
+                                                @endswitch
+                                            </th>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    @if ($i != $collect_inscricoes->count() - 1)
+                    <br/><div class="quebrar_pagina"></div>
+                    @else 
+                        @if ($j != $collect->count() - 1)
+                        <br/><div class="quebrar_pagina"></div>
+                        @endif
+                    @endif
                 @endforeach
 
             @endif
