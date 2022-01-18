@@ -32,6 +32,14 @@
     <body class="">
         @component('layouts.nav_bar')@endcomponent
         <div class="fundo px-5 py-5">
+            <div class="row justify-content-center" style="margin-bottom: 40px;">
+                <div class="col-md-12" style="text-align: center; margin-bottom: 10px;">
+                    <span style="font-size: 35px; color: var(--secundaria); font-weight: bolder;">Bem vindo ao Ingressa!</span>
+                </div>
+                <div class="col-md-8" style="text-align: center;">
+                    O Ingressa é um sistema desenvolvido pela Universidade Federal do Agreste de Pernambuco (UFAPE) que visa auxiliar no processo de ingresso de alunos via SISU, facilitando o recebimento de documentos para revisão, análise e matrícula do aluno na Universidade. Pense no Ingressa como a continuação do SISU, o candidato entra com seus dados e envia os documentos para efetivar a matricula! É rápido, simples e fácil!
+                </div>
+            </div>
             <div class="py-3 px-4 row ms-0 justify-content-between">
                 @if($edicao_atual != null)
                     <div class="col-md-3 shadow p-3 caixa">
@@ -48,7 +56,7 @@
                                 Nenhuma chamada criada
                             </div>
                         @else
-                            @if ($chamadas->first()->datasChamada->count() != 0)
+                            @if ($chamadas->first()->datasChamada->count() == 0)
                                 <div class="col-md-12 text-center">
                                     <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
                                 </div>

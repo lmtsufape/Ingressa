@@ -7,8 +7,7 @@
                         Atualização dos dados
                     </div>
                     <div class="mt-2 subtexto">
-                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo
-                        a ser o texto padrão
+                        Confira se seus dados cadastrais estão corretos. Caso tenha alguma informação incorreta, pedimos que corrija, visto que serão fundamentais para a Universidade e que preencha algumas informações adicionais.
                     </div>
                     <div class="row">
                         <div class="col-md-12">
