@@ -36,7 +36,7 @@
                 <div class="py-3 px-4 row ms-0 justify-content-between">
                     <div class="col-md-7">
                         <div class="text-center "style="font-size: 55px;">
-                            LOGO
+                            <img width="250px" src="{{asset('img/Ingressa.svg')}}">
                         </div>
                         <div class="mt-4 tituloEntrada">
                             1- Envie seus documentos
