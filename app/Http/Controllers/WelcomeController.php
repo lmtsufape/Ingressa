@@ -54,4 +54,8 @@ class WelcomeController extends Controller
 
         return redirect()->back()->with(['success' => 'Obrigado por entrar em contato, sua mensagem foi enviada com sucesso!']);
     }
+
+    public function envio_docs() {
+        return view('informacoes.enviar_docs');
+    }
 }

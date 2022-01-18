@@ -12,7 +12,7 @@
                         Primeiro acesso
                     </div>
                     <div class="mt-2 subtexto">
-                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão
+                        Caso você esteja na lista de chamada dos ingressantes, insira seu CPF e data de nascimento para cadastrar um e-mail e senha.
                     </div>
                     <div class="row">
                         <div class="col-md-12">

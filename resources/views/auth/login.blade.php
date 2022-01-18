@@ -36,14 +36,14 @@
                 <div class="py-3 px-4 row ms-0 justify-content-between">
                     <div class="col-md-7">
                         <div class="text-center "style="font-size: 55px;">
-                            LOGO
+                            <img width="250px" src="{{asset('img/Ingressa.svg')}}">
                         </div>
                         <div class="mt-4 tituloEntrada">
                             1- Envie seus documentos
                         </div>
                         <!--deixar o texto justificado-->
-                        <div class="textoEntrada mt-2 text-justify">
-                            O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão usado por estas indústrias desde o ano de 1500, quando uma misturou os caracteres de um texto para criar um espécime de livro. Este texto não só sobreviveu 5 séculos, mas também o salto para a tipografia electrónica, mantendo-se essencialmente inalterada. Foi popularizada nos anos 60 com a disponibilização das folhas de Letraset, que continham passagens com Lorem Ipsum, e mais recentemente com os programas de publicação como o Aldus PageMaker que incluem versões do Lorem Ipsum.
+                        <div class="textoEntrada mt-2 text-justify" style="text-align: justify;">
+                            <p>Para enviar um documento por esta plataforma, primeiro você deve digitalizá-lo utilizando um scanner, uma câmera digital ou um celular. Em seguida, você deve salvar o arquivo em seu computador ou celular. Finalmente, basta entrar no link correspondente ao documento em questão (os links estão nomeados de acordo com cada documento a ser enviado), anexar o arquivo escaneado correspondente e clicar em ENVIAR.  <a href="{{route('envio.docs')}}">Continuar lendo...</a></p>
                         </div>
                     </div>
                     <div class="col-md-3 caixa shadow p-3 bg-white">
@@ -67,7 +67,7 @@
                             Entrar
                         </div>
                         <div class="mt-2 subtexto">
-                            O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão 
+                            Entre com o seu e-mail e senha na conta. Caso não tenha uma senha, realize o primeiro acesso.
                         </div>
                         <div class="row">
                             <form id="login-form" class="my-4" method="POST" action="{{route('login')}}">
