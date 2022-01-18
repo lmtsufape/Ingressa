@@ -628,3 +628,7 @@ ul.timeline > li:before{
 .check-mark::after{
     border-color: black;
 }
+
+label {
+    font-weight: bolder;
+}
