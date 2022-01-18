@@ -158,19 +158,19 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Documentos aceitos sem pêndencias" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos aceitos sem pendências" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1365.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
-                                        Documentos aceitos sem pêndencias
+                                        Documentos aceitos sem pendências
                                     </div>
                                 </div>
                             </li>
                             @can('isAdminOrAnalistaGeral', auth()->user())
                             <li>
-                                <div title="Documentos aceitos com pêndencias" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos aceitos com pendências" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1193.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
-                                        Documentos aceitos com pêndencias
+                                        Documentos aceitos com pendências
                                     </div>
                                 </div>
                             </li>
