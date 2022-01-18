@@ -52,14 +52,14 @@
                             @endswitch)
                             </div>
                             <div class="subtitulo" >
-                                Envio da documentação: 
-                                <span style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">
+                                <strong>Envio da documentação: </strong>
+                                <span>
                                     {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_inicio))}} - {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_fim))}}
                                 </span>
                             </div>
                             <div class="subtitulo" style="margin-top: 10px;">
-                                Status: 
-                                <span style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">
+                                <strong>Status: </strong>
+                                <span>
                                     @switch($inscricoes[$count]->status)
                                         @case($situacoes['documentos_pendentes'])
                                             @can('dataEnvio', $inscricoes[$count]->chamada)

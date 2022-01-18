@@ -433,7 +433,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6 textoInput">
-                                        <label for="localidade"><span style="color: red; font-weight: bold;">*</span> {{ __('Seu local de moradia atual se encontra em:') }}</label>
+                                        <label for="localidade"><span style="color: red; font-weight: bold;">*</span> {{ __('Qual a zona de sua moradia atual?') }}</label>
                                         <select id="localidade"
                                             class="form-control form-control-sm caixaDeTexto @error('localidade') is-invalid @enderror"
                                             name="localidade">
@@ -523,12 +523,17 @@
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="modalidade"><span style="color: red; font-weight: bold;">*</span> {{ __('Modalidade') }}</label>
-                                        <input id="modalidade"
-                                            class="form-control form-control-sm caixaDeTexto @error('modalidade') is-invalid @enderror"
-                                            type="text"
-                                            placeholder="Insira o tipo de modalidade"
-                                            name="modalidade"
-                                            value="{{old('modalidade', $candidato->modalidade)}}">
+                                        <select id="modalidade"
+                                                class="form-control form-control-sm caixaDeTexto @error('modalidade') is-invalid @enderror"
+                                                name="modalidade">
+                                            <option value="" disabled selected>-- Selecione --</option>
+                                            <option value="{{old('modalidade', 'regular')}}">Regular</option>
+                                            <option value="{{old('modalidade', 'tecnico_integrado')}}">Técnico Integrado</option>
+                                            <option value="{{old('modalidade', 'eja')}}">EJA</option>
+                                            <option value="{{old('modalidade', 'certificacao_enem_encceja')}}">Certificação Enem/Encceja</option>
+                                            <option value="{{old('modalidade', 'outro')}}">Outro</option>
+                                        </select>
+
                                         @error('modalidade')
                                             <div id="validationServer03Feedback"
                                                 class="invalid-feedback">
@@ -539,7 +544,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="concluiu_publica"><span style="color: red; font-weight: bold;">*</span> {{ __('Concluiu o Ensino Médio na rede pública') }}</label>
+                                        <label for="concluiu_publica"><span style="color: red; font-weight: bold;">*</span> {{ __('Concluiu o Ensino Médio na rede pública?') }}</label>
                                         <select id="concluiu_publica"
                                             class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
                                             name="concluiu_publica">
@@ -555,7 +560,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-8">
-                                        <label for="necessidades"><span style="color: red; font-weight: bold;">*</span> {{ __('Necessidades Especiais') }}</label>
+                                        <label for="necessidades"><span style="color: red; font-weight: bold;">*</span> {{ __('Deficiências/transtornos') }}</label>
                                         <select id="necessidades"
                                             class="form-control form-control-sm caixaDeTexto selectpicker @error('necessidades') is-invalid @enderror"
                                             name="necessidades[]"
@@ -577,7 +582,7 @@
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="nu_fone1"><span style="color: red; font-weight: bold;">*</span> {{ __('Celular') }}</label>
                                         <input id="nu_fone1"
-                                            class="form-control form-control-sm caixaDeTexto @error('nu_fone1') is-invalid @enderror"
+                                            class="form-control form-control-sm caixaDeTexto @error('nu_fone1') is-invalid @enderror celular"
                                             type="text"
                                             name="nu_fone1"
                                             value="{{old('nu_fone1', $inscricao->nu_fone1)}}">
@@ -591,7 +596,7 @@
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="nu_fone2">{{ __('Celular') }}</label>
                                         <input id="nu_fone2"
-                                            class="form-control form-control-sm caixaDeTexto @error('nu_fone2') is-invalid @enderror"
+                                            class="form-control form-control-sm caixaDeTexto @error('nu_fone2') is-invalid @enderror celular"
                                             type="text"
                                             name="nu_fone2"
                                             value="{{old('nu_fone2', $inscricao->nu_fone2)}}">
@@ -713,4 +718,44 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function($) {
+            $('#cpf').mask('000.000.000-00');
+            var SPMaskBehavior = function(val) {
+                    return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+                },
+                spOptions = {
+                    onKeyPress: function(val, e, field, options) {
+                        field.mask(SPMaskBehavior.apply({}, arguments), options);
+                    }
+                };
+            $('.celular').mask(SPMaskBehavior, spOptions);
+            $('#cep').mask('00000-000');
+            $("#nome").mask("#", {
+                maxlength: true,
+                translation: {
+                    '#': { pattern: /^[A-Za-záâãéêíóôõúçÁÂÃÉÊÍÓÔÕÚÇ\s]+$/, recursive: true }
+                }
+            });
+            $("#sobrenome").mask("#", {
+                maxlength: true,
+                translation: {
+                    '#': { pattern: /^[A-Za-záâãéêíóôõúçÁÂÃÉÊÍÓÔÕÚÇ\s]+$/, recursive: true }
+                }
+            });
+            $("#nome_do_pai").mask("#", {
+                maxlength: true,
+                translation: {
+                    '#': { pattern: /^[A-Za-záâãéêíóôõúçÁÂÃÉÊÍÓÔÕÚÇ\s]+$/, recursive: true }
+                }
+            });
+            $("#nome_do_mãe").mask("#", {
+                maxlength: true,
+                translation: {
+                    '#': { pattern: /^[A-Za-záâãéêíóôõúçÁÂÃÉÊÍÓÔÕÚÇ\s]+$/, recursive: true }
+                }
+            });
+        });
+    </script>
 </x-app-layout>

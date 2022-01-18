@@ -25,5 +25,9 @@
                 <li>UFAPE: Link Futuro</li>
             </ul>
         </div>
+        
+        <div class="col-md-2 mt-4">
+            <a href="{{route('logar')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a> 
+        </div>
     </div>
 </x-guest-layout>

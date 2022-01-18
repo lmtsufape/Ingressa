@@ -13,9 +13,7 @@
                                     class="img-flex me-1">
                                 <!--ICONE DO CURSO-->
                                 <!--OS ICONES REFERENTES A ESSA CLASSIFICAÇÃO ESTÃO COMO NOMEDOCURSO_BRANCO-->
-                                <span class="tituloTabelas ps-1">{{ $inscricao->curso->nome }}-</span><span
-                                    style="font-weight: 600;"
-                                    class="tituloTabelas">{{ $inscricao->curso->getTurno() }}</span>
+                                <span class="tituloTabelas ps-1">{{$inscricao->curso->nome}} - {{$inscricao->curso->getTurno()}}</span>
                             </div>
                         </div>
                     </div>
@@ -30,7 +28,7 @@
                     <div class="subtexto mt-2 mb-4"> Toda a documentação deverá ser enviada na forma de arquivos
                         digitalizados (.pdf),
                         de boa qualidade (sem cortes, rasuras ou emendas) e com todas as informações
-                        legíveis com tamanho máximo de 64MB cada. Os arquivos enviados que não sejam
+                        legíveis com tamanho máximo de 64 MB cada. Os arquivos enviados que não sejam
                         de boa qualidade ou que estejam ilegíveis não serão validados. Caso não possa
                         enviar algum documento dispensável, assinalar o termo de compromisso dos arquivos.</div>
                     <livewire:enviar-documentos :inscricao="$inscricao" :documentos="$documentos"/>
