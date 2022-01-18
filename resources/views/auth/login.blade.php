@@ -43,7 +43,7 @@
                         </div>
                         <!--deixar o texto justificado-->
                         <div class="textoEntrada mt-2 text-justify" style="text-align: justify;">
-                            <p>Para enviar um documento por esta plataforma, primeiro você deve digitalizá-lo utilizando um scanner, uma câmera digital ou um celular. Em seguida, você deve salvar o arquivo em seu computador ou celular. Finalmente, basta entrar no link correspondente ao documento em questão (os links estão nomeados de acordo com cada documento a ser enviado), anexar o arquivo escaneado correspondente e clicar em ENVIAR.  <a href="{{route('envio.docs')}}">Continuar lendo...</a></p>
+                            <p>Para enviar um documento por esta plataforma, primeiro você deve digitalizá-lo utilizando um scanner, uma câmera digital ou um celular. Em seguida, salvar o arquivo em seu computador ou celular. Finalmente, entrar no link correspondente ao documento em questão (os links estão nomeados de acordo com cada documento a ser enviado), anexar o arquivo escaneado correspondente e clicar em ENVIAR. <a href="{{route('envio.docs')}}">Continuar lendo...</a></p>
                         </div>
                     </div>
                     <div class="col-md-3 caixa shadow p-3 bg-white">
