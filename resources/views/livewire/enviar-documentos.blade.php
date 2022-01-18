@@ -7,12 +7,7 @@
                 <li class="px-1 align-middle">
                     <div class="col-md-12">
                         <div class="tituloEnvio"> Documentação básica </div>
-                        <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                            ever
-                            since the 1500s, when an unknown printer took a galley of type and scrambled it
-                            to
-                            make a type specimen book. </div>
+                        <div class="subtexto2 my-1">A documentação básica corresponde a documentação que o(a) candidato(a) deve enviar.</div>
                     </div>
                     @if ($documentos->contains('declaracao_veracidade'))
                         <div class="mt-2">
@@ -111,9 +106,9 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
-                                Histórico Escolar do Ensino Médio ou Equivalente (pode estar junto com
+                                Histórico Escolar do Ensino Médio ou Equivalente [pode estar junto com
                                 o Certificado de Conclusão do Ensino Médio (escanear frente e verso da Ficha 19), neste caso anexar
-                                o arquivo nos dois campos);
+                                o arquivo nos dois campos];
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
                             @if ($inscricao->isDocumentosRequeridos())
@@ -276,7 +271,7 @@
                                 pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
                                 tela) do relatório de quitação de débitos do eleitor (quitação de multas,
                                 disponível no
-                                <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>;
+                                <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>);
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
                             @if ($inscricao->isDocumentosRequeridos())
@@ -370,14 +365,7 @@
                     <li class="mt-4 px-1 align-middle">
                         <div class="col-md-12">
                             <div class="tituloEnvio"> Candidato inscrito em cota</div>
-                            <div class="subtexto2 my-1">
-                                Lorem Ipsum is simply dummy text of the printing and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
-                                text ever
-                                since the 1500s, when an unknown printer took a galley of type and scrambled
-                                it to
-                                make a type specimen book.
-                            </div>
+                            <div class="subtexto2 my-1">Para concorrer a uma vaga nas cotas, também é necessário o envio destes documentos.</div>
                         </div>
                         <div class="mt-2">
                             <label for="cotista"
@@ -422,13 +410,7 @@
                                 vaga para candidato autodeclarado negro (preto ou
                                 pardo) </div>
                             <div class="subtexto2 my-1">
-                                Lorem Ipsum is simply dummy text of the printing and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
-                                text ever
-                                since the 1500s, when an unknown printer took a galley of type and scrambled
-                                it to
-                                make a type specimen book.
-                            </div>
+                                Você está concorrendo a uma vaga de cota de candidato autodeclarado negro (preto ou pardo), portanto deve enviar o respectivo comprovante.</div>
                         </div>
 
                         <div class="mt-2">
@@ -501,13 +483,7 @@
                     <li class="mt-4 px-1 align-middle">
                         <div class="col-md-12">
                             <div class="tituloEnvio">Comprovação da renda familiar bruta mensal per capita </div>
-                            <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing
-                                and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
-                                text ever
-                                since the 1500s, when an unknown printer took a galley of type and scrambled
-                                it to
-                                make a type specimen book. </div>
+                            <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota de renda, portanto deve enviar o documento de renda familiar bruta mensal per capita.</div>
                         </div>
                         <div class="mt-2">
                             <label for="cotaRenda"
@@ -548,13 +524,7 @@
                         <div class="col-md-12">
                             <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
                                 vaga para candidato autodeclarado indígena</div>
-                            <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing
-                                and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
-                                text ever
-                                since the 1500s, when an unknown printer took a galley of type and scrambled
-                                it to
-                                make a type specimen book. </div>
+                            <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota indígena, portanto deve enviar o respectivo comprovante.</div>
                         </div>
                         <div class="mt-2">
                             <label for="rani"
@@ -601,13 +571,7 @@
                             <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
                                 vaga para pessoas com deficiência
                             </div>
-                            <div class="subtexto2 my-1"> Lorem Ipsum is simply dummy text of the printing
-                                and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy
-                                text ever
-                                since the 1500s, when an unknown printer took a galley of type and scrambled
-                                it to
-                                make a type specimen book. </div>
+                            <div class="subtexto2 my-1">Você está concorrendo a uma vaga para pessoas com deficiência, portanto deve enviar o respectivo comprovante.</div>
                         </div>
                         <div class="mt-2">
                             <label for="cotaPCD"

@@ -52,7 +52,7 @@
                                     @endif
                                 </div>
                                 <div class="row">
-                                    <div style="color: var(--textcolor2); font-size: 14px;">
+                                    <div style="color: rgb(53, 53, 53); font-size: 14px;">
                                         Se tiver alguma dúvida sobre o processo seletivo, encontrou algum problema no sistema ou tem alguma reclamação a fazer, entre em contato com o DRCA.
                                     </div>
                                 </div>
@@ -109,21 +109,21 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-6 mt-4">
+                            <div class="col-md-6 mt-4" style="color: rgb(53, 53, 53);">
                                 <div class="text-center">
                                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.7060201187555!2d-36.49670028521417!3d-8.906898843605621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7070c593b2b96d3%3A0x9e8a2fd11fab3580!2sUFAPE%20-%20Universidade%20Federal%20do%20Agreste%20de%20Pernambuco!5e0!3m2!1spt-BR!2sbr!4v1642423274932!5m2!1spt-BR!2sbr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                                 </div>
                                 <div class="text-center">
                                     <div class=" text-center  my-2 pt-1 pb-3">
                                         <img class="aling-middle" width="20" src="{{asset('img/Icon awesome-map-marker-alt.svg')}}" alt="icone-busca">
-                                        <span style="font-size: 14px; color: var(--textcolor2);">Av. Bom Pastor, s/n - Boa Vista,<br> Garanhuns - PE, 55292-270</span>
+                                        <span style="font-size: 14px;">Av. Bom Pastor, s/n - Boa Vista,<br> Garanhuns - PE, 55292-270</span>
                                         <div>
                                             <img class="aling-middle" width="20" src="{{asset('img/Icon ionic-ios-call.svg')}}" alt="icone-busca">
-                                            <span style="font-size: 14px; color: var(--textcolor2);">(00) 99999-9999</span>
+                                            <span style="font-size: 14px;">(00) 99999-9999</span>
                                         </div>
                                         <div>
                                             <img class="aling-middle" width="20" src="{{asset('img/Icon material-email.svg')}}" alt="icone-busca">
-                                            <span style="font-size: 14px; color: var(--textcolor2);">exemplo@exemplo.com</span>
+                                            <span style="font-size: 14px;">exemplo@exemplo.com</span>
                                         </div>
                                     </div>
                                 </div>

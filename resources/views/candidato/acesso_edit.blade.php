@@ -8,7 +8,7 @@
                         Primeiro acesso
                     </div>
                     <div class="mt-2 subtexto">
-                        O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão. O Lorem Ipsum tem vindo a ser o texto padrão 
+                        Insira um e-mail e senha que será usado para você realizar o acesso ao sistema.
                     </div>
                     <div class="row">
                         <div class="col-md-12">
