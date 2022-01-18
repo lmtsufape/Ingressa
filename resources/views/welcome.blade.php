@@ -48,7 +48,9 @@
                                 Nenhuma chamada criada
                             </div>
                         @else
-                            @if ($chamadas->first()->datasChamada->count() != 0)
+                            @if(\App\Models\DataChamada::select('data_chamadas.*')
+                                    ->whereIn('chamada_id', $chamadas->pluck('id')->toArray())
+                                    ->get()->count() == 0)
                                 <div class="col-md-12 text-center">
                                     <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
                                 </div>
@@ -120,7 +122,9 @@
                                     </div>
                                 </div>
                             @else
-                                @if($chamadas->first()->listagem->count() == 0)
+                                @if(\App\Models\Listagem::select('listagems.*')
+                                ->whereIn('chamada_id', $chamadas->pluck('id')->toArray())
+                                ->get()->count() == 0)
                                     <div class="text-center" style="margin-bottom: 10px;" >
                                         <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1654.svg')}}">
                                         <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
@@ -135,7 +139,7 @@
                                                     <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                                         <div class="">
                                                             <div class="mx-2 tituloLista">
-                                                                {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
+                                                                {{$listagem->titulo}}{{-- - <span class="destaqueLista">@switch($listagem->tipo)
                                                                     @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
                                                                         convocação
                                                                         @break
@@ -145,7 +149,7 @@
                                                                     @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
                                                                         resultado
                                                                         @break
-                                                                @endswitch</span>
+                                                                @endswitch</span>--}}
                                                             </div>
                                                             <div class="row px-1 link">
                                                                 <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>

@@ -123,7 +123,7 @@
                                         </div>
                                         <div>
                                             <img class="aling-middle" width="20" src="{{asset('img/Icon material-email.svg')}}" alt="icone-busca">
-                                            <span style="font-size: 14px; color: var(--textcolor2);">exemplo@exemplo.com</span>
+                                            <span style="font-size: 14px; color: var(--textcolor2);">drca@ufape.edu.br</span>
                                         </div>
                                     </div>
                                 </div>
