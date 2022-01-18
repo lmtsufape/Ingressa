@@ -26,7 +26,7 @@
                                 @endif
 
                                 <div class="form-group textoInput">
-                                    <label for="exampleInputEmail1">{{ __('Email') }}</label>
+                                    <label for="exampleInputEmail1">{{ __('E-mail') }}</label>
                                     <input id="email" class="form-control form-control-sm caixaDeTexto @error('email') is-invalid @enderror" type="text" placeholder="Insira um e-mail para ser usado no login" name="email" value="{{old('email')}}" required>
                                 
                                     @error('email')
@@ -35,7 +35,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="form-group textoInput">
+                                <div class="form-group mt-2 textoInput">
                                     <label for="exampleInputEmail1">{{ __('Password') }}</label>
                                     <input id="password" class="form-control form-control-sm caixaDeTexto @error('password') is-invalid @enderror" type="password" placeholder="Insira uma senha para ser usada no login" name="password" value="" required>
                                 

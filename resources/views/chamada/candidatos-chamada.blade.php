@@ -39,7 +39,7 @@
                         <a title="Listar candidatos do curso {{$cursos[$count]->nome}}" style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center" >
                             <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
                             <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
-                            <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
+                            <div class="subtitulo"><strong>(@switch($cursos[$count]->grau_academico)
                                 @case($graus['bacharelado']){{"Bacharelado"}}@break
                                 @case($graus['licenciatura']){{"Licenciatura"}}@break
                                 @case($graus['tecnologo']){{"Tecnólogo"}}@break
@@ -49,16 +49,16 @@
                                 @case($turnos['vespertino']){{"Vespertino"}}@break
                                 @case($turnos['noturno']){{"Noturno"}}@break
                                 @case($turnos['integral']){{"Integral"}}@break
-                            @endswitch)
+                            @endswitch)</strong>
                             </div>
                             <div class="subtitulo" style="width: 100%">
-                                {{"Concluídos: ".$concluidos[$count]}}<br>
+                                <strong>{{"Concluídos: "}}</strong>{{$concluidos[$count]}}<br>
                                 @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                                    {{"Concluídos(pendências): ".$concluidosPendentes[$count]}}<br>
+                                    <strong>{{"Concluídos(pendências): "}}</strong>{{$concluidosPendentes[$count]}}<br>
                                 @endcan
-                                {{"Enviados: ".$enviados[$count]}}<br>
-                                {{"Pendentes: ".$naoEnviados[$count]}}<br>
-                                {{"Invalidados: ".$invalidados[$count]}}
+                                <strong>{{"Enviados: "}}</strong>{{$enviados[$count]}}<br>
+                                <strong>{{"Pendentes: "}}</strong>{{$naoEnviados[$count]}}<br>
+                                <strong>{{"Invalidados: "}}</strong>{{$invalidados[$count]}}
                             </div>
                         </a>
                     @else

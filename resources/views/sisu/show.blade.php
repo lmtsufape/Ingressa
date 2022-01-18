@@ -272,7 +272,7 @@
                                 <div class="pb-2 pt-2">Selecione o curso:</div>
                                 @foreach ($cursos as $i => $curso)
                                     <div class="form-check">
-                                        <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="radio" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
+                                        <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="checkbox" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
                                         <div class="form-check-label" for="cota_{{$curso->id}}">
                                             {{$curso->nome}} - @switch($curso->turno)
                                             @case($turnos['matutino']){{"Matutino"}}@break
@@ -294,7 +294,7 @@
                                                                 Número de validados
                                                             </div>
                                                             <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
-                                                                Multiplicador de vagas
+                                                                Multiplicador
                                                             </div>
                                                         </div>
                                                         <div class="row align-items-center">

@@ -641,7 +641,7 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-6 textoInput">
-                                        <label for="trabalha"><span style="color: red; font-weight: bold;">*</span> {{ __('Você trabalha?') }}</label>
+                                        <label for="trabalha"><span style="color: red; font-weight: bold;">*</span> {{ __('Você exerce alguma atividade remunerada?') }}</label>
                                         <select id="trabalha"
                                             class="form-control form-control-sm caixaDeTexto @error('trabalha') is-invalid @enderror"
                                             name="trabalha">

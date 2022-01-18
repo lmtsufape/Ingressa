@@ -84,7 +84,7 @@ class CandidatoController extends Controller
         $inscricao->fill($validated);
         $candidato->save();
         $inscricao->save();
-        return view('dashboard');
+        return redirect(route('inscricaos.index'));
     }
 
     public function edit(Candidato $candidato, Inscricao $inscricao)
