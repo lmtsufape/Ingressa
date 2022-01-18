@@ -348,7 +348,7 @@
                                     Seu local de moradia atual se encontra em: @isset($inscricao->candidato->localidade)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->localidade == "zona_urbana" ? 'Zona urbana' : "Zona rural"}}</p>@endisset
                                 </div>
                                 <div class="tituloDocumento pt-2">
-                                    Você trabalha? @isset($inscricao->candidato->trabalha)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->trabalha ? 'Sim' : 'Não'}}</p>@endisset
+                                    Você exerce alguma atividade remunerada? @isset($inscricao->candidato->trabalha)<p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->trabalha ? 'Sim' : 'Não'}}</p>@endisset
                                 </div>
                                 <div class="tituloDocumento pt-2">
                                     Quantas pessoas fazem parte do seu grupo familiar? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->grupo_familiar}}</p>
@@ -388,7 +388,8 @@
                             @endcan
                             @foreach ($documentos as $indice =>  $documento)
                                 @if($documento == 'rani')
-                                    <div>
+                                    <br>
+                                    <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
                                                 <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
@@ -397,7 +398,8 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'heteroidentificacao')
-                                    <div>
+                                    <br>
+                                    <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
                                                 <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
@@ -407,7 +409,8 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'comprovante_renda')
-                                    <div>
+                                    <br>
+                                    <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
                                                 <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da renda familiar bruta mensal per capita</span>
@@ -415,7 +418,8 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'laudo_medico')
-                                    <div>
+                                    <br>
+                                    <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
                                                 <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
@@ -424,7 +428,8 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'declaracao_cotista')
-                                    <div>
+                                    <br>
+                                    <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
                                                 <span class="tituloTipoDoc" style="font-size: 20px;">Autodeclaração como candidato participante de reserva de vaga</span>

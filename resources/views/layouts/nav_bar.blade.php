@@ -1,7 +1,7 @@
 <div id="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-1">
         <div class="container-fluid px-lg-5 justify-content-between">
-            <a class="navbar-brand" href="{{route('index')}}">LOGO</a>
+            <a class="navbar-brand" href="{{route('index')}}"><img width="100px" src="{{asset('img/Ingressa.svg')}}"></a>
             <div class="ml-auto justify-content-end">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -10,9 +10,9 @@
             <div class="collapse navbar-collapse justify-content-end navbarNav" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     @auth
-                        <li class="nav-item">
+                        {{--<li class="nav-item">
                             <a class="nav-link mx-3 @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
-                        </li>
+                        </li>--}}
                         @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                             <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('usuarios.*')) active @endif" href="{{route('usuarios.index')}}">{{ __('Analistas') }}</a>
