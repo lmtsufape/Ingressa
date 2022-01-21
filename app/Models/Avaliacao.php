@@ -31,4 +31,9 @@ class Avaliacao extends Model
     {
         return $this->avaliacao == self::AVALIACAO_ENUM['recusado'];
     }
+
+    public function isAceito()
+    {
+        return $this->avaliacao == self::AVALIACAO_ENUM['aceito'];
+    }
 }

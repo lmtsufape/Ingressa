@@ -312,7 +312,7 @@ class ListagemController extends Controller
                     }
                 }
 
-                while($cota_curso_quantidade > 0){
+                if($cota_curso_quantidade > 0){
                     foreach($cota->remanejamentos as $remanejamento){
                         $cotaRemanejamento = $remanejamento->proximaCota;
                         $candidatosCotaCursoRemanejamento = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],

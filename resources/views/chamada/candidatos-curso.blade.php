@@ -113,7 +113,9 @@
                                                             @endif
                                                         @endcan
                                                         @can('ehAnalistaHeteroidentificacaoOuMedico', auth()->user())
-                                                            @if($concluidos->contains($candidato->id))
+                                                            @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
+                                                                    <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                            @elseif($concluidos->contains($candidato->id))
                                                                 <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
                                                             @elseif($invalidados->contains($candidato->id))
                                                                 <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">

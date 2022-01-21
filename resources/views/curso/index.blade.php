@@ -39,30 +39,30 @@
                 $controle = true;
             @endphp
             @while ($controle)
-                @if(($count+1) % 4 == 1)
+                @if(($count+1) % 3 == 1)
                     <div class="row justify-content-between">
                 @endif
                 @if (array_key_exists($count, $cursos->toArray()))
-                    <div class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center">
+                    <div class="col-md-3 caixa mt-5 shadow p-3 py-4 text-center">
                         <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
                         <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
                         <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
                             @case($graus['bacharelado']){{"Bacharelado"}}@break
                             @case($graus['licenciatura']){{"Licenciatura"}}@break
                             @case($graus['tecnologo']){{"Tecnólogo"}}@break
-                        @endswitch -
+                        @endswitch -<strong>
                         @switch($cursos[$count]->turno)
                             @case($turnos['matutino']){{"Matutino"}}@break
                             @case($turnos['vespertino']){{"Vespertino"}}@break
                             @case($turnos['noturno']){{"Noturno"}}@break
                             @case($turnos['integral']){{"Integral"}}@break
-                        @endswitch)
+                        @endswitch)</strong>
                         </div>
                     </div>
                 @else
-                    <div class="col-md-2  mt-4  p-3 text-center"></div>
+                    <div class="col-md-3  mt-4  p-3 text-center"></div>
                 @endif
-                @if(($count+1) % 4 == 0)
+                @if(($count+1) % 3 == 0)
                     </div>
                     @if (!(array_key_exists($count, $cursos->toArray())))
                         @php
