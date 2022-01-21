@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SisuRequest;
 use App\Models\Chamada;
+use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
@@ -47,6 +48,16 @@ class SisuController extends Controller
         $sisu = new Sisu();
         $sisu->setAtributes($request);
         $sisu->save();
+
+        $cursos = Curso::all();
+        $cotas = Cota::all();
+        foreach($cursos as $curso){
+            foreach($cotas as $cota){
+                $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
+                $cota_curso->vagas_ocupadas = 0;
+                $cota_curso->update();
+            }
+        }
 
         return redirect(route('sisus.index'))->with(['success' => 'Edição cadastrada com sucesso!']);
     }
