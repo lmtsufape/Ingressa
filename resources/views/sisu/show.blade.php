@@ -1,87 +1,144 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="row justify-content-center">
-            <div class="col-md-7 cabecalho p-2 px-3 align-items-center">
-              <div class="row justify-content-between">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <img src="{{asset('img/Grupo 1684.svg')}}"
-                          alt="" width="40" class="img-flex">
-                      <span class="tituloTabelas ps-1">Chamadas da edição <span style="font-weight: 600;">{{$sisu->edicao}}</span></span>
-                  </div>
-                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                        <button title="Adicionar chamada" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}" alt="Icone de adiconar nova chamada"></button>
-                    @endif
-                </div>
-
-              </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-7 corpo p-2 px-3">
-                @if(session('success'))
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                </symbol>
-                            </svg>
-
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="col-md-8">
+                <div class="row justify-content-center">
+                    <div class="col-md-11 cabecalho p-2 px-3 align-items-center">
+                        <div class="row">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{asset('img/Grupo 1684.svg')}}"
+                                        alt="" width="40" class="img-flex">
+                                    <span class="tituloTabelas ps-1">Chamadas da edição <span style="font-weight: 600;">{{$sisu->edicao}}</span></span>
+                                </div>
+                                @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                                    <button title="Adicionar chamada" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#adicionarChamada"><img width="35" src="{{asset('img/Grupo 1674.svg')}}" alt="Icone de adiconar nova chamada"></button>
+                                @endif
                             </div>
                         </div>
                     </div>
-                @endif
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Regular</th>
-                            <th class="text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($chamadas as $i => $chamada)
-                            <tr>
-                                <th class="align-middle"> {{$i+1}}</th>
-                                <td class="align-middle"> {{$chamada->nome}}</td>
-                                @if ($chamada->regular)
-                                    <td class="align-middle">Sim</td>
-                                @else
-                                    <td class="align-middle">Não</td>
-                                @endif
-                                <td class="align-middle text-center">
-                                    <div class="btn-group">
-                                        @if ($batches[$i] == null)
-                                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                                                <button title="Cadastrar candidatos" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
-                                            @else
-                                                <button title="Cadastrar candidatos (apenas o administrador pode fazer isso)" style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
-                                            @endif
-                                        @else
-                                            @if($batches[$i]->finished())
-                                                <a title="Listar candidatos da chamada" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos"></a>
-                                            @else
-                                                <a title="Cadastrando candidatos"><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
-                                            @endif
-                                        @endif
+                </div>
+                <div class="row justify-content-center" style="margin-bottom: 20px;">
+                    <div class="col-md-11 corpo p-2 px-3">
+                        @if(session('success'))
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                        </symbol>
+                                    </svg>
+
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                                        <a title="Datas e listagens da chamada" href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="Icone de exibir datas e listagens"></a>
-                                        <button title="Editar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar chamada"></button>
-                                        <button title="Deletar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar chamada"></button>
-                                    @endif
-                                </td>
-                        @endforeach
-                    </tbody>
-                </table>
-                @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                    <a class="btn botao my-2 py-1" href="{{route('sisus.index')}}"> <span class="px-4">Voltar</span></a>
-                @endif
+                                </div>
+                            </div>
+                        @endif
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Regular</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($chamadas as $i => $chamada)
+                                    <tr>
+                                        <th class="align-middle"> {{$i+1}}</th>
+                                        <td class="align-middle"> {{$chamada->nome}}</td>
+                                        @if ($chamada->regular)
+                                            <td class="align-middle">Sim</td>
+                                        @else
+                                            <td class="align-middle">Não</td>
+                                        @endif
+                                        <td class="align-middle text-center">
+                                            <div class="btn-group">
+                                                @if ($batches[$i] == null)
+                                                    @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                                                        <button title="Cadastrar candidatos" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
+                                                    @else
+                                                        <button title="Cadastrar candidatos (apenas o administrador pode fazer isso)" style="cursor: pointer;" disabled><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
+                                                    @endif
+                                                @else
+                                                    @if($batches[$i]->finished())
+                                                        <a title="Listar candidatos da chamada" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos"></a>
+                                                    @else
+                                                        <a title="Cadastrando candidatos"><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                                                <a title="Datas e listagens da chamada" href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="Icone de exibir datas e listagens"></a>
+                                                <button title="Editar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar chamada"></button>
+                                                <button title="Deletar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar chamada"></button>
+                                            @endif
+                                        </td>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                            <a class="btn botao my-2 py-1" href="{{route('sisus.index')}}"> <span class="px-4">Voltar</span></a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row justify-content-start">
+                    <div class="col-md-12 shadow-sm p-2 px-3" style="background-color: white; border-radius: 00.5rem;">
+                        <div style="font-size: 21px;" class="tituloModal">
+                            Legenda
+                        </div>
+                        <ul class="list-group list-unstyled">
+                            @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                                <li>
+                                    <div title="Cadastrar/listar candidatos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                        <img class="aling-middle" width="33" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de cadastrar/listar candidatos">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Cadastrar/listar candidatos
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Datas e listagens da chamada" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                        <img class="aling-middle" width="33" src="{{asset('img/Grupo 1681.svg')}}" alt="Icone de datas e listagens da chamada">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Datas e listagens da chamada
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Editar chamada" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                        <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar chamada">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Editar analista
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Deletar chamada" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                        <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar chamada">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Deletar analista
+                                        </div>
+                                    </div>
+                                </li>
+                            @else 
+                                <li>
+                                    <div title="Listar candidatos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                        <img class="aling-middle" width="33" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Listar candidatos
+                                        </div>
+                                    </div>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
