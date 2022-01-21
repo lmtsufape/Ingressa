@@ -148,6 +148,14 @@ class Inscricao extends Model
         return false;
     }
 
+    public function isArquivoAceito($nome)
+    {
+        if ($this->isArquivoAvaliado($nome)) {
+            return $this->arquivo($nome)->avaliacao->isAceito();
+        }
+        return false;
+    }
+
     public function arquivo($nome)
     {
         return $this->arquivos()->where('nome', $nome)->first();

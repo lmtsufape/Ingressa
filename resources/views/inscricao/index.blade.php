@@ -33,7 +33,7 @@
                     @endif
                     @if (array_key_exists($count, $cursos->toArray()))
 
-                        <a style="text-decoration: none"  @can('dataEnvio', $inscricoes[$count]->chamada) href="{{route('inscricao.documentacao', $inscricoes[$count]->id)}}" @endcan class="col-md-3 caixa mt-5 shadow p-3 py-3 text-center" >
+                        <a style="text-decoration: none"  href="{{route('inscricao.documentacao', $inscricoes[$count]->id)}}" class="col-md-3 caixa mt-5 shadow p-3 py-3 text-center" >
                             <h6 style="color: rgb(110, 110, 110)">
                                 <strong>SiSU {{$inscricoes[$count]->chamada->sisu->edicao}}</strong><br>
                             </h6>
