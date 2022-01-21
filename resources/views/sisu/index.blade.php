@@ -79,7 +79,7 @@
                         </div>
                         <ul class="list-group list-unstyled">
                             <li>
-                                <div title="Exibir chamadas da edição" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Exibir chamadas da edição" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1681.svg')}}" alt="Icone de exibir chamadas">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Exibir chamadas da edição
@@ -87,7 +87,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Importar lista de candidatos regulares/espera" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Importar lista de candidatos regulares/espera" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1683.svg')}}" alt="Icone de importar lista de candidatos regulares/espera">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Importar lista de candidatos regulares/espera
@@ -95,7 +95,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Deletar edição" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Deletar edição" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar edição">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Deletar edição
@@ -103,7 +103,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Editar edição" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Editar edição" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar edição">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Editar edição

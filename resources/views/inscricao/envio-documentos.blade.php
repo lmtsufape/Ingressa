@@ -42,7 +42,7 @@
                 </div>
                 <ul class="list-group list-unstyled">
                     <li>
-                        <div title="Envio de documento" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                        <div title="Envio de documento" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                             <img class="aling-middle" width="33" src="{{asset('img/upload2.svg')}}" alt="icone-upload2">
                             <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                 Enviar documento
@@ -50,7 +50,7 @@
                         </div>
                     </li>
                     <li>
-                        <div title="Envio de documento" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                        <div title="Envio de documento" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                             <img class="aling-middle" width="33" src="{{asset('img/download2.svg')}}" alt="icone-upload2">
                             <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                 Baixar documento enviado
@@ -58,7 +58,7 @@
                         </div>
                     </li>
                     <li>
-                        <div title="Envio de documento" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                        <div title="Envio de documento" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                             <img class="aling-middle" width="33" src="{{asset('img/download3.svg')}}" alt="icone-upload2">
                             <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                 Documento não enviado

@@ -142,7 +142,7 @@
                         </div>
                         <ul class="list-group list-unstyled">
                             <li>
-                                <div title="Primeiro acesso do candidato realizado" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Primeiro acesso do candidato realizado" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g830.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Primeiro acesso do candidato realizado
@@ -150,7 +150,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Primeiro acesso do candidato não realizado" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Primeiro acesso do candidato não realizado" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/Icon ionic-ios-person.svg')}}" alt="icone-busca">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Primeiro acesso do candidato não realizado
@@ -158,7 +158,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Documentos aceitos sem pendências" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos aceitos sem pendências" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1365.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos aceitos sem pendências
@@ -167,7 +167,7 @@
                             </li>
                             @can('isAdminOrAnalistaGeral', auth()->user())
                             <li>
-                                <div title="Documentos aceitos com pendências" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos aceitos com pendências" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1193.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos aceitos com pendências
@@ -176,7 +176,7 @@
                             </li>
                             @endcan
                             <li>
-                                <div title="Documentos enviados" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos enviados" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1949.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos enviados
@@ -184,7 +184,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Documentos pendentes" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos pendentes" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g2201.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos pendentes
@@ -192,7 +192,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Documentos invalidados" class="d-flex align-items-center listagemLista my-2 pt-1 pb-1">
+                                <div title="Documentos invalidados" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="30" src="{{asset('img/g1697.svg')}}" alt="icone-busca">
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Documentos invalidados
