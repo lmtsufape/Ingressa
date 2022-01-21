@@ -1,68 +1,181 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Cotas') }}
-        </h2>
-    </x-slot> --}}
-
     <div class="fundo2 px-5">
         <div class="row justify-content-center">
-            <div class="col-md-4 cabecalho p-2 px-3 align-items-center">
-              <div class="row justify-content-between">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <img src="{{asset('img/Grupo 1662.svg')}}"
-                          alt="" width="40" class="img-flex">
-                      <span class="tituloTabelas ps-1">Cotas</span>
-                  </div>
-                    <button title="Adicionar nova cota" data-bs-toggle="modal" data-bs-target="#criar-cota" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}" alt="Icone de adiconar nova cota"></button>
-                </div>
-              </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-4 corpo p-2 px-3">
-                @if(session('success'))
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                </symbol>
-                            </svg>
-
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="col-md-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-11 cabecalho p-2 px-3 align-items-center">
+                        <div class="row ">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{asset('img/Grupo 1662.svg')}}"
+                                        alt="" width="40" class="img-flex">
+                                    <span class="tituloTabelas ps-1">Cotas</span>
+                                </div>
+                                <div style="text-align: right">
+                                    <button title="Adicionar nova cota" data-bs-toggle="modal" data-bs-target="#criar-cota" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}" alt="Icone de adiconar nova cota"></button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                @endif
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Código</th>
-                        <th class="text-center">Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($cotas as $i => $cota)
-                        <tr>
-                            <th class="align-middle">{{$i+1}}</th>
-                            <td class="align-middle">{{$cota->cod_cota}}</td>
-                            <td class="align-middle text-center">
-                            <button title="Deletar cota" id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota"></button>
-                            <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar cota"></button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            <a href="{{route('dashboard')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
-              {{-- <button class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></button> --}}
+                </div>
+                <div class="row justify-content-center" style="margin-bottom: 20px;">
+                    <div class="col-md-11 corpo p-2 px-3">
+                        @if(session('success'))
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                        </symbol>
+                                    </svg>
+        
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Código</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cotas as $i => $cota)
+                                <tr>
+                                    <th class="align-middle">{{$i+1}}</th>
+                                    <td class="align-middle">{{$cota->cod_cota}}</td>
+                                    <td class="align-middle text-center">
+                                    <button title="Deletar cota" id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota"></button>
+                                    <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar cota"></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <a href="{{route('dashboard')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row justify-content-start">
+                    <div class="col-md-12 shadow-sm p-2 px-3" style="background-color: white; border-radius: 00.5rem;">
+                        <div style="font-size: 21px;" class="tituloModal">
+                            Legenda
+                        </div>
+                        <ul class="list-group list-unstyled">
+                            <li>
+                                <div title="Deletar cota" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Deletar cota
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Editar cota" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar cota">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Editar cota
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
+        {{-- <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12 cabecalho p-2 px-3 align-items-center">
+                        <div class="row justify-content-between">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{asset('img/Grupo 1662.svg')}}"
+                                        alt="" width="40" class="img-flex">
+                                    <span class="tituloTabelas ps-1">Cotas</span>
+                                </div>
+                                <button title="Adicionar nova cota" data-bs-toggle="modal" data-bs-target="#criar-cota" style="cursor: pointer;"><img width="35" src="{{asset('img/Grupo 1663.svg')}}" alt="Icone de adiconar nova cota"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 corpo p-2 px-3">
+                        @if(session('success'))
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                        </symbol>
+                                    </svg>
+        
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Código</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cotas as $i => $cota)
+                                <tr>
+                                    <th class="align-middle">{{$i+1}}</th>
+                                    <td class="align-middle">{{$cota->cod_cota}}</td>
+                                    <td class="align-middle text-center">
+                                    <button title="Deletar cota" id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota"></button>
+                                    <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar cota"></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    <a href="{{route('dashboard')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row justify-content-start">
+                    <div class="col-md-12 shadow-sm p-2 px-3" style="background-color: white; border-radius: 00.5rem;">
+                        <div style="font-size: 21px;" class="tituloModal">
+                            Legenda
+                        </div>
+                        <ul class="list-group list-unstyled">
+                            <li>
+                                <div title="Deletar analista" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar analista">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Deletar analista
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Editar analista" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar analista">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Editar analista
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
     </div>
 
     <div class="modal fade" id="criar-cota" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
