@@ -28,12 +28,12 @@
                     $controle = true;
                 @endphp
                 @while ($controle)
-                    @if(($count+1) % 4 == 1)
+                    @if(($count+1) % 3 == 1)
                         <div class="row justify-content-between">
                     @endif
                     @if (array_key_exists($count, $cursos->toArray()))
 
-                        <a style="text-decoration: none"  @can('dataEnvio', $inscricoes[$count]->chamada) href="{{route('inscricao.documentacao', $inscricoes[$count]->id)}}" @endcan class="col-md-2 caixa mt-5 shadow p-3 py-3 text-center" >
+                        <a style="text-decoration: none"  @can('dataEnvio', $inscricoes[$count]->chamada) href="{{route('inscricao.documentacao', $inscricoes[$count]->id)}}" @endcan class="col-md-3 caixa mt-5 shadow p-3 py-3 text-center" >
                             <h6 style="color: rgb(110, 110, 110)">
                                 <strong>SiSU {{$inscricoes[$count]->chamada->sisu->edicao}}</strong><br>
                             </h6>
@@ -91,9 +91,9 @@
 
                         </a>
                     @else
-                        <div class="col-md-2  mt-4  p-3 text-center"></div>
+                        <div class="col-md-3  mt-4  p-3 text-center"></div>
                     @endif
-                    @if(($count+1) % 4 == 0)
+                    @if(($count+1) % 3 == 0)
                         </div>
                         @if (!(array_key_exists($count, $cursos->toArray())))
                             @php

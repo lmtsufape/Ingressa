@@ -32,18 +32,18 @@
                     $controle = true;
                 @endphp
                 @while ($controle)
-                    @if(($count+1) % 4 == 1)
+                    @if(($count+1) % 3 == 1)
                         <div class="row justify-content-between">
                     @endif
                     @if (array_key_exists($count, $cursos->toArray()))
-                        <a title="Listar candidatos do curso {{$cursos[$count]->nome}}" style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-2 caixa mt-5 shadow p-3 py-4 text-center" >
+                        <a title="Listar candidatos do curso {{$cursos[$count]->nome}}" style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-3 caixa mt-5 shadow py-4 text-center" >
                             <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
                             <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
-                            <div class="subtitulo"><strong>(@switch($cursos[$count]->grau_academico)
+                            <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
                                 @case($graus['bacharelado']){{"Bacharelado"}}@break
                                 @case($graus['licenciatura']){{"Licenciatura"}}@break
                                 @case($graus['tecnologo']){{"Tecnólogo"}}@break
-                            @endswitch -
+                            @endswitch -<strong>
                             @switch($cursos[$count]->turno)
                                 @case($turnos['matutino']){{"Matutino"}}@break
                                 @case($turnos['vespertino']){{"Vespertino"}}@break
@@ -54,7 +54,7 @@
                             <div class="subtitulo" style="width: 100%">
                                 <strong>{{"Concluídos: "}}</strong>{{$concluidos[$count]}}<br>
                                 @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                                    <strong>{{"Concluídos(pendências): "}}</strong>{{$concluidosPendentes[$count]}}<br>
+                                    <strong>{{"Concluídos (pendências): "}}</strong>{{$concluidosPendentes[$count]}}<br>
                                 @endcan
                                 <strong>{{"Enviados: "}}</strong>{{$enviados[$count]}}<br>
                                 <strong>{{"Pendentes: "}}</strong>{{$naoEnviados[$count]}}<br>
@@ -62,9 +62,9 @@
                             </div>
                         </a>
                     @else
-                        <div class="col-md-2  mt-4  p-3 text-center"></div>
+                        <div class="col-md-3  mt-4  p-3 text-center"></div>
                     @endif
-                    @if(($count+1) % 4 == 0)
+                    @if(($count+1) % 3 == 0)
                         </div>
                         @if (!(array_key_exists($count, $cursos->toArray())))
                             @php
