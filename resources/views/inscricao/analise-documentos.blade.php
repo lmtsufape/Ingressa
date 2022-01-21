@@ -388,7 +388,6 @@
                             @endcan
                             @foreach ($documentos as $indice =>  $documento)
                                 @if($documento == 'rani')
-                                    <br>
                                     <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
@@ -398,7 +397,7 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'heteroidentificacao')
-                                    <br>
+
                                     <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
@@ -409,7 +408,6 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'comprovante_renda')
-                                    <br>
                                     <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
@@ -418,7 +416,6 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'laudo_medico')
-                                    <br>
                                     <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
@@ -428,7 +425,6 @@
                                         </div>
                                     </div>
                                 @elseif($documento == 'declaracao_cotista')
-                                    <br>
                                     <div class="row">
                                         <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
                                             <div class="d-flex align-items-center">
