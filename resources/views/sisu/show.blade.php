@@ -95,7 +95,7 @@
                         <ul class="list-group list-unstyled">
                             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                                 <li>
-                                    <div title="Cadastrar/listar candidatos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <div title="Cadastrar/listar candidatos" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de cadastrar/listar candidatos">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Cadastrar/listar candidatos
@@ -103,7 +103,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div title="Datas e listagens da chamada" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <div title="Datas e listagens da chamada" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1681.svg')}}" alt="Icone de datas e listagens da chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Datas e listagens da chamada
@@ -111,7 +111,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div title="Editar chamada" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <div title="Editar chamada" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Editar analista
@@ -119,7 +119,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div title="Deletar chamada" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <div title="Deletar chamada" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Deletar analista
@@ -128,7 +128,7 @@
                                 </li>
                             @else 
                                 <li>
-                                    <div title="Listar candidatos" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                    <div title="Listar candidatos" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Listar candidatos

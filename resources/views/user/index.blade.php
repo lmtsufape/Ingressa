@@ -78,7 +78,7 @@
                         </div>
                         <ul class="list-group list-unstyled">
                             <li>
-                                <div title="Deletar analista" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Deletar analista" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar analista">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Deletar analista
@@ -86,7 +86,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div title="Editar analista" class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                <div title="Editar analista" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar analista">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Editar analista
