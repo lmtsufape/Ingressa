@@ -6,6 +6,7 @@ use App\Http\Controllers\InscricaoController;
 use App\Models\Arquivo;
 use App\Models\Avaliacao;
 use App\Models\Inscricao;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;
 use Livewire\Component;
@@ -14,6 +15,7 @@ use Livewire\WithFileUploads;
 
 class EnviarDocumentos extends Component
 {
+    use AuthorizesRequests;
     use WithFileUploads;
 
     public $documentos;
@@ -186,7 +188,8 @@ class EnviarDocumentos extends Component
 
     public function updated($documento, $value)
     {
-        if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isDocumentosInvalidados())) {
+        $this->authorize('dataEnvio', $this->inscricao->chamada);
+        if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1]))) {
             $this->validateOnly($documento);
             $documento = explode('.', $documento)[1];
             $path = 'documentos/inscricaos/'. $this->inscricao->id . '/';
