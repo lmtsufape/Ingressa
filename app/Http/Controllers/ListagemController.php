@@ -580,4 +580,10 @@ class ListagemController extends Controller
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
+
+    public function publicar(Request $request) {
+        $listagem = Listagem::find($request->listagem_id);
+        $listagem->publicada = $request->publicar;
+        return $listagem->save();
+    }
 }

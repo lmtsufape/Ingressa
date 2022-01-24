@@ -115,24 +115,34 @@
                     @if ($listagens->first() != null)
                         <ul class="list-group mx-2 list-unstyled">
                             @foreach ($listagens as $listagem)
-                                <li>
-                                    <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
-                                        <div class="">
-                                            <div class="mx-2 tituloLista">
-                                                {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
-                                                    @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
-                                                        convocação
-                                                        @break
-                                                    @case(\App\Models\Listagem::TIPO_ENUM['pendencia'])
-                                                        pendência
-                                                        @break
-                                                    @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
-                                                        resultado
-                                                        @break
-                                                @endswitch</span>
+                                <li class="listagemLista">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="d-flex align-items-center my-2 pt-1 pb-3">
+                                                <div class="">
+                                                    <div class="mx-2 tituloLista">
+                                                        {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
+                                                            @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
+                                                                convocação
+                                                                @break
+                                                            @case(\App\Models\Listagem::TIPO_ENUM['pendencia'])
+                                                                pendência
+                                                                @break
+                                                            @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
+                                                                resultado
+                                                                @break
+                                                        @endswitch</span>
+                                                    </div>
+                                                    <div class="row px-1 link">
+                                                        <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="row px-1 link">
-                                                <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
+                                        </div>
+                                        <div class="col-md-4 form-group" style="text-align: right;">
+                                            <div class="mt-4">
+                                                <input id="publicada" type="checkbox" name="publicada" class="form-check-input form-check-cursos" @if($listagem->publicada) checked @endif onclick="publicar({{$listagem->id}}, this)">
+                                                <label for="publicada">Publicada</label>
                                             </div>
                                         </div>
                                     </div>
@@ -650,6 +660,20 @@
         </div>
     </div>
 </x-app-layout>
+<script>
+    function publicar(id, checkbox_input) {
+        $.ajax({
+            url: "{{route('publicar.listagem')}}",
+            method: 'get',
+            type: 'get',
+            data: {
+                "listagem_id": id,
+                "publicar": checkbox_input.checked,
+                },
+            dataType:'json',
+        });
+    }
+</script>
 <script src="{{ asset('js/checkbox_marcar_todos.js') }}" defer></script>
 
 @if(old('data_id') == -1)

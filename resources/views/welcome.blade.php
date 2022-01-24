@@ -128,7 +128,7 @@
                                     </div>
                                 </div>
                             @else
-                                @if($chamadas->first()->listagem->count() == 0)
+                                @if($checagem_chamada)
                                     <div class="text-center" style="margin-bottom: 10px;" >
                                         <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1654.svg')}}">
                                         <div class="col-md-12 text-center legenda" style="font-weight: bolder;">
@@ -139,28 +139,30 @@
                                     @foreach ($chamadas as $chamada)
                                         <ul class="list-group mx-2 list-unstyled">
                                             @foreach ($chamada->listagem as $listagem)
-                                                <li>
-                                                    <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
-                                                        <div class="">
-                                                            <div class="mx-2 tituloLista">
-                                                                {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
-                                                                    @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
-                                                                        convocação
-                                                                        @break
-                                                                    @case(\App\Models\Listagem::TIPO_ENUM['pendencia'])
-                                                                        pendência
-                                                                        @break
-                                                                    @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
-                                                                        resultado
-                                                                        @break
-                                                                @endswitch</span>
-                                                            </div>
-                                                            <div class="row px-1 link">
-                                                                <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
+                                                @if($listagem->publicada)
+                                                    <li>
+                                                        <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
+                                                            <div class="">
+                                                                <div class="mx-2 tituloLista">
+                                                                    {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
+                                                                        @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
+                                                                            convocação
+                                                                            @break
+                                                                        @case(\App\Models\Listagem::TIPO_ENUM['pendencia'])
+                                                                            pendência
+                                                                            @break
+                                                                        @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
+                                                                            resultado
+                                                                            @break
+                                                                    @endswitch</span>
+                                                                </div>
+                                                                <div class="row px-1 link">
+                                                                    <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     @endforeach

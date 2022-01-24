@@ -20,6 +20,7 @@ class CreateListagemsTable extends Migration
             $table->string('caminho_listagem');
             $table->unsignedBigInteger('chamada_id');
             $table->foreign('chamada_id')->references('id')->on('chamadas');
+            $table->boolean('publicada')->default(false);
             $table->timestamps();
         });
     }
