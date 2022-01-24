@@ -111,7 +111,7 @@ class Inscricao extends Model
     {
         return $this->belongsTo(Cota::class, 'cota_vaga_ocupada_id');
     }
- 
+
     public function sisu()
     {
         return $this->belongsTo(Sisu::class, 'sisu_id');
@@ -146,6 +146,19 @@ class Inscricao extends Model
             return $this->arquivo($nome)->avaliacao->isRecusado();
         }
         return false;
+    }
+
+    public function isArquivoReenviado($nome)
+    {
+        if ($this->isArquivoAvaliado($nome)) {
+            return $this->arquivo($nome)->avaliacao->isReenviado();
+        }
+        return false;
+    }
+
+    public function isArquivoRecusadoOuReenviado($nome)
+    {
+        return $this->isArquivoRecusado($nome) || $this->isArquivoReenviado($nome);
     }
 
     public function isArquivoAceito($nome)
