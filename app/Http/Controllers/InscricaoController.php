@@ -131,7 +131,7 @@ class InscricaoController extends Controller
         return Storage::disk()->exists('public/' . $arquivo->caminho) ? response()->file('storage/' . $arquivo->caminho) : abort(404);
     }
 
-    private function documentosRequisitados($id)
+    public function documentosRequisitados($id)
     {
         $inscricao = Inscricao::find($id);
         $documentos = collect();
