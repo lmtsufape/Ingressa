@@ -20,7 +20,9 @@ class WelcomeController extends Controller
         $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->first();
         $chamadas = $edicao_atual->chamadas()->orderBy('created_at', 'DESC')->get();
 
-        return view('welcome', compact('chamadas', 'edicao_atual'))->with(['tipos_data' => DataChamada::TIPO_ENUM, ['tipos_listagem' => Listagem::TIPO_ENUM]]);
+        $checagem_chamada = $this->listas_a_serem_exibidas($chamadas);
+
+        return view('welcome', compact('chamadas', 'edicao_atual', 'checagem_chamada'))->with(['tipos_data' => DataChamada::TIPO_ENUM, ['tipos_listagem' => Listagem::TIPO_ENUM]]);
     }
 
     public function login()
@@ -57,5 +59,17 @@ class WelcomeController extends Controller
 
     public function envio_docs() {
         return view('informacoes.enviar_docs');
+    }
+
+    private function listas_a_serem_exibidas($chamadas) {
+        foreach ($chamadas as $chamada) {
+            foreach ($chamada->listagem as $listagem) {
+                if ($listagem->publicada) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
