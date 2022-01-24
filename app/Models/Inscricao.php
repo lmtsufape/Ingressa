@@ -29,6 +29,7 @@ class Inscricao extends Model
         'cota_id',
         'curso_id',
         'protocolo',
+        'protocolo_envio',
         'status',
         'cd_efetivado',
         'justificativa',
@@ -161,5 +162,12 @@ class Inscricao extends Model
     public function isDocumentosInvalidados()
     {
         return $this->status == self::STATUS_ENUM['documentos_invalidados'];
+    }
+
+    public function gerarProtocolo() 
+    {
+        $this->protocolo_envio = uniqid();
+        $this->update();
+        return hash('sha256', $this->protocolo_envio);
     }
 }

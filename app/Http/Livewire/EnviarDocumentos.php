@@ -7,10 +7,11 @@ use App\Models\Arquivo;
 use App\Models\Avaliacao;
 use App\Models\Inscricao;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
+use App\Notifications\ComprovanteEnvioDocumentosNotification;
 
 class EnviarDocumentos extends Component
 {
@@ -181,6 +182,9 @@ class EnviarDocumentos extends Component
         $this->attributes();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
+
+        Notification::send(auth()->user(), new ComprovanteEnvioDocumentosNotification('Comprovante de envio', $this->inscricao));
+
         return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
     }
 

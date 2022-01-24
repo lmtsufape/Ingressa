@@ -24,6 +24,7 @@ class CreateInscricaosTable extends Migration
             $table->unsignedBigInteger('sisu_id');
             $table->foreign('sisu_id')->references('id')->on('sisus');
             $table->string('protocolo');
+            $table->string('protocolo_envio')->nullable();
             $table->string('status');
             $table->integer('cd_efetivado')->nullable();
             //justificativa para cadastro invalidado ou validado
