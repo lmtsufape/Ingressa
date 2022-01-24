@@ -36,7 +36,7 @@ class Chamada extends Model
 
     public function datasChamada()
     {
-        return $this->hasMany(DataChamada::class, 'chamada_id');
+        return $this->hasMany(DataChamada::class, 'chamada_id')->orderBy('tipo');
     }
 
     public function listagem()

@@ -112,7 +112,7 @@
     <div id="head">        
         <img src="{{asset('img/cabecalho_listagem.png')}}" width="100%" alt="">
         <span class="titulo">
-            RELAÇÃO DOS CANDIDADOS INGRESSANTES {{date('Y', strtotime(today()))}}<br>
+            RELAÇÃO DOS CANDIDATOS CONVOCADOS ({{$chamada->nome}} - {{$chamada->sisu->edicao}})<br>
         </span>
     </div>
     <div>
@@ -121,16 +121,16 @@
                 @foreach ($collect as $j => $inscricoes)
                     <h3 class="subtitulo">Curso: {{$inscricoes[0]->curso->nome}} - @switch($inscricoes[0]->curso->turno)
                     @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                        Matutino (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        Matutino
                         @break
                     @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                        Vespertino (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        Vespertino
                         @break
                     @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                        Noturno (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        Noturno
                         @break 
                     @case(App\Models\Curso::TURNO_ENUM['integral'])
-                        Integral (ingressantes de {{$inscricoes[0]->sisu->edicao}})
+                        Integral
                         @break 
                     @endswitch</h3>
                     <div class="body">

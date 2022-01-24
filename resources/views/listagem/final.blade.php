@@ -20,8 +20,8 @@
         }
 
         #head img {
-			width: 115%;
-		}
+            width: 115%;
+        }
 
         .titulo {
             position: relative;
@@ -37,7 +37,7 @@
             font-size: 18px;
             color: #03284d;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .quebrar_pagina {
@@ -57,6 +57,7 @@
         }
         table th {
             font-weight: 100;
+            font-size: 15px;
         }
         table thead {
             border-top: 1px solid rgb(126, 126, 126);
@@ -96,7 +97,7 @@
 
         .body {
             position: relative;
-            top: 20px;
+            top: 15px;
         }
 
         .acao_afirmativa {
@@ -112,15 +113,19 @@
     <div id="head">        
         <img src="{{asset('img/cabecalho_listagem.png')}}" width="100%" alt="">
         <span class="titulo">
-            RELAÇÃO DOS CANDIDADOS INGRESSANTES {{date('Y', strtotime(today()))}}<br>
+            RELAÇÃO DOS CANDIDATOS INGRESSANTES {{$chamada->sisu->edicao}}<br>
         </span>
     </div>
-    <div>
+    <div id="body">
         @php
             $semestre = "indefinido";
         @endphp
-        @foreach ($candidatosIngressantesCursos as $curso)
+        @foreach ($candidatosIngressantesCursos as $i => $curso)
             @if($curso->count() <= 40)
+                @php
+                    $exibirNomeCurso = true;
+                @endphp
+                @if($exibirNomeCurso)
                     <h3 class="subtitulo">Curso: {{$curso->first()->curso->nome}} - @switch($curso->first()->curso->turno)
                         @case(App\Models\Curso::TURNO_ENUM['matutino'])
                             Matutino
@@ -153,56 +158,11 @@
                                             $semestre = "indefinido";
                                         @endphp
                                     @endif</h3>
-                <div class="body">
-                    <div id="modalidade">
-                        <table>
-                            <thead>
-                                <tr class="esquerda">
-                                    <th>Seq.</th>
-                                    <th>CPF</th>
-                                    <th>AF</th>
-                                    <th>Nome</th>
-                                    <th>Nota</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $k = 0;
-                                @endphp
-                                @foreach ($curso as $inscricao)
-                                    <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
-                                        <th>{{$k+1}}</th>
-                                        <th>{{$inscricao->candidato->getCpfPDF()}}</th>
-                                        <th>{{$inscricao->cota->cod_cota}}</th>
-                                        <th>{{$inscricao->candidato->user->name}}</th>
-                                        <th>{{$inscricao->nu_nota_candidato}}</th>
-                                    </tr>
-                                    @php
-                                        $k += 1;
-                                    @endphp
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endif
-        @endforeach
-        @foreach ($candidatosReservaCursos as $i => $curso)
-            <h3 class="subtitulo">Curso: {{$curso->first()->curso->nome}} - @switch($curso->first()->curso->turno)
-            @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                Matutino
-                @break
-            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                Vespertino
-                @break
-            @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                Noturno
-                @break
-            @case(App\Models\Curso::TURNO_ENUM['integral'])
-                Integral
-                @break
-            @endswitch</h3>
-            <div class="body">
+                    
+                    @php
+                        $exibirNomeCurso = false;
+                    @endphp
+                @endif
                 <div id="modalidade">
                     <table>
                         <thead>
@@ -211,7 +171,6 @@
                                 <th>CPF</th>
                                 <th>AF</th>
                                 <th>Nome</th>
-                                <th>Situação</th>
                                 <th>Nota</th>
                             </tr>
                         </thead>
@@ -225,7 +184,6 @@
                                     <th>{{$inscricao->candidato->getCpfPDF()}}</th>
                                     <th>{{$inscricao->cota->cod_cota}}</th>
                                     <th>{{$inscricao->candidato->user->name}}</th>
-                                    <th>RESERVA</th>
                                     <th>{{$inscricao->nu_nota_candidato}}</th>
                                 </tr>
                                 @php
@@ -235,8 +193,70 @@
                         </tbody>
                     </table>
                 </div>
+                @if ($i != $curso->count() - 1)
+                    <br/><div class="quebrar_pagina"></div>
+                @endif
+            @endif
+        @endforeach
+
+        @foreach ($candidatosReservaCursos as $i => $curso)
+            @php
+                $exibirNomeCurso = true;
+            @endphp
+            @if($exibirNomeCurso)
+                <h3>Curso: {{$curso->first()->curso->nome}} - @switch($curso->first()->curso->turno)
+                    @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                        Matutino
+                        @break
+                    @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                        Vespertino
+                        @break
+                    @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                        Noturno
+                        @break
+                    @case(App\Models\Curso::TURNO_ENUM['integral'])
+                        Integral
+                        @break
+                    @endswitch</h3>
+                @php
+                    $exibirNomeCurso = false;
+                @endphp
+            @endif
+            <div id="modalidade">
+                <table>
+                    <thead>
+                        <tr class="esquerda">
+                            <th>Seq.</th>
+                            <th>CPF</th>
+                            <th>AF</th>
+                            <th>Nome</th>
+                            <th>Situação</th>
+                            <th>Nota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $k = 0;
+                        @endphp
+                        @foreach ($curso as $inscricao)
+                            <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
+                                <th>{{$k+1}}</th>
+                                <th>{{$inscricao->candidato->getCpfPDF()}}</th>
+                                <th>{{$inscricao->cota->cod_cota}}</th>
+                                <th>{{$inscricao->candidato->user->name}}</th>
+                                <th>RESERVA</th>
+                                <th>{{$inscricao->nu_nota_candidato}}</th>
+                            </tr>
+                            @php
+                                $k += 1;
+                            @endphp
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            <br/><div class="quebrar_pagina"></div>
+            @if ($i != $curso->count() - 1)
+                <br/><div class="quebrar_pagina"></div>
+            @endif
         @endforeach
     </div>
 </body>

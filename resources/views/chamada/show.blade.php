@@ -121,7 +121,7 @@
                                             <div class="d-flex align-items-center my-2 pt-1 pb-3">
                                                 <div class="">
                                                     <div class="mx-2 tituloLista">
-                                                        {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
+                                                        {{$listagem->titulo}} {{--  - <span class="destaqueLista">@switch($listagem->tipo)
                                                             @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
                                                                 convocação
                                                                 @break
@@ -131,7 +131,7 @@
                                                             @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
                                                                 resultado
                                                                 @break
-                                                        @endswitch</span>
+                                                        @endswitch</span> --}}
                                                     </div>
                                                     <div class="row px-1 link">
                                                         <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>

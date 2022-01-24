@@ -32,6 +32,23 @@
     <body class="">
         @component('layouts.nav_bar')@endcomponent
         <div class="fundo px-5 py-5">
+            @can('isCandidato', \App\Models\User::class)
+                @if($edicao_atual != null && auth()->user()->candidato->inscricoes->last()->sisu == $edicao_atual && date('d/m/Y', strtotime(now())) <= date('d/m/Y', strtotime(auth()->user()->candidato->inscricoes->last()->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first()->data_fim)))
+                    @if ((auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'heteroidentificacao')->first() != null &&
+                        auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'heteroidentificacao')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) ||
+                        (auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first() != null &&
+                        $user->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>Sua documentação de heteroidentificação foi <strong>indeferida</strong>! Por favor, entre em contato com o DRCA se deseja entrar com recurso.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endif
+            @endcan
             <div class="row justify-content-center" style="margin-bottom: 40px;">
                 <div class="col-md-12" style="text-align: center; margin-bottom: 10px;">
                     <span style="font-size: 35px; color: var(--secundaria); font-weight: bolder;">Bem vindo ao Ingressa!</span>
@@ -56,7 +73,9 @@
                                 Nenhuma chamada criada
                             </div>
                         @else
-                            @if ($chamadas->first()->datasChamada->count() == 0)
+                            @if(\App\Models\DataChamada::select('data_chamadas.*')
+                                    ->whereIn('chamada_id', $chamadas->pluck('id')->toArray())
+                                    ->get()->count() == 0)
                                 <div class="col-md-12 text-center">
                                     <img class="img-fluid py-4" width="270" src="{{asset('img/Grupo 1652.svg')}}">
                                 </div>
@@ -144,7 +163,7 @@
                                                         <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">
                                                             <div class="">
                                                                 <div class="mx-2 tituloLista">
-                                                                    {{$listagem->titulo}} - <span class="destaqueLista">@switch($listagem->tipo)
+                                                                    {{$listagem->titulo}}{{-- - <span class="destaqueLista">@switch($listagem->tipo)
                                                                         @case(\App\Models\Listagem::TIPO_ENUM['convocacao'])
                                                                             convocação
                                                                             @break
@@ -154,7 +173,7 @@
                                                                         @case(\App\Models\Listagem::TIPO_ENUM['resultado'])
                                                                             resultado
                                                                             @break
-                                                                    @endswitch</span>
+                                                                    @endswitch</span> --}}
                                                                 </div>
                                                                 <div class="row px-1 link">
                                                                     <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
