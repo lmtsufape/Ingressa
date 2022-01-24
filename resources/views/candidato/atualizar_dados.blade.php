@@ -254,17 +254,10 @@
                                 <div class="form-group mt-2 textoInput">
                                     <label for="no_mae"><span style="color: red; font-weight: bold;">*</span> {{ __('Nome da mãe') }}</label>
                                     <input id="no_mae"
-                                        class="form-control form-control-sm caixaDeTexto @error('no_mae') is-invalid @enderror"
+                                        class="form-control form-control-sm caixaDeTexto"
                                         type="text"
-                                        placeholder="Insira o nome da mãe"
-                                        name="no_mae"
-                                        value="{{old('no_mae', $inscricao->no_mae)}}">
-                                    @error('no_mae')
-                                        <div id="validationServer03Feedback"
-                                            class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                                        value="{{$inscricao->no_mae}}"
+                                        disabled>
                                 </div>
                                 <div class="form-group mt-2 textoInput">
                                     <label for="pai">{{ __('Nome do pai') }}</label>

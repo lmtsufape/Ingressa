@@ -60,7 +60,6 @@ class UpdateCandidatoRequest extends FormRequest
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],
             'valor_renda' => ['required', 'numeric'],
-            'no_mae' => ['required', 'string'],
             'ds_logradouro' => ['required', 'string'],
             'nu_endereco' => ['required', 'string'],
             'nu_cep' => ['required', 'string'],
