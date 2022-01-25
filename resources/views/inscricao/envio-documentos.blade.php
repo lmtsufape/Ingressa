@@ -22,7 +22,17 @@
 
             <div class="row justify-content-center">
                 <div class="col-md-12 corpo p-2 px-4">
-                    <div class="mt-2">
+                    @can('periodoRetificacao', $inscricao->chamada)
+                        @if($inscricao->isDocumentosInvalidados())
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning" role="alert">
+                                    <h5 class="alert-heading">Período de retificação!</h5>
+                                    <p>Envie um novo documento, para aqueles documentos que foram recusados.</p>
+                                </div>
+                            </div>
+                        @endif
+                    @endcan
+                    <div>
                         <span class="tituloEnvio">Instruções para o envio de documentos</span>
                     </div>
                     <div class="subtexto mt-2 mb-4"> Toda a documentação deverá ser enviada na forma de arquivos
