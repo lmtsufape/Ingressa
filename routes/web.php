@@ -111,4 +111,6 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
 
     Route::get('/usuario/info', [UserController::class, 'infoUser'])->name('usuario.info.ajax');
+
+    Route::get('/listagens/publicar', [ListagemController::class, 'publicar'])->name('publicar.listagem');
 });
