@@ -31,7 +31,7 @@
         <script src="{{asset('bootstrap-select/js/bootstrap-select.min.js')}}"></script>
 
         <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
-        
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
     </head>
     <body class="font-sans antialiased">
@@ -60,5 +60,7 @@
 
         @component('layouts.footer')@endcomponent
         @livewireScripts
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <x-livewire-alert::scripts />
     </body>
 </html>

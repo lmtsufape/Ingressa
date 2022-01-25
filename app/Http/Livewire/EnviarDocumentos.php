@@ -9,12 +9,14 @@ use App\Models\Inscricao;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 
 class EnviarDocumentos extends Component
 {
+    use LivewireAlert;
     use AuthorizesRequests;
     use WithFileUploads;
 
@@ -180,7 +182,6 @@ class EnviarDocumentos extends Component
 
     public function submit()
     {
-        $this->attributes();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
         return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
@@ -188,6 +189,7 @@ class EnviarDocumentos extends Component
 
     public function updated($documento, $value)
     {
+        $this->attributes();
         $this->authorize('dataEnvio', $this->inscricao->chamada);
         if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1]))) {
             $this->validateOnly($documento);
@@ -214,6 +216,13 @@ class EnviarDocumentos extends Component
                     'nome' => $documento,
                 ]);
             }
+            $this->alert('success', 'Arquivo enviado com sucesso!', [
+                'position' => 'bottom-end',
+                'timer' => 3000,
+                'toast' => true,
+                'timerProgressBar' => true,
+                'width' => '400',
+                ]);
         }
     }
 
