@@ -14,6 +14,8 @@ use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 
+use function PHPUnit\Framework\isNull;
+
 class EnviarDocumentos extends Component
 {
     use LivewireAlert;
@@ -58,9 +60,21 @@ class EnviarDocumentos extends Component
         }
     }
 
+    /**
+     * Função para verificar se o candidato já enviou o arquivo e se o documento foi recusado.
+     * Retorna true se o documento foi enviado mas ainda não tem avaliação ou se o documento foi enviado e aceito.
+     * Retorna false se o documento foi enviado e recusado.
+     */
+    private function arquivoEnviado($documento)
+    {
+        return !is_null($this->inscricao->arquivo($documento))
+            && (is_null($this->inscricao->arquivo($documento)->avaliacao)
+            || !$this->inscricao->arquivo($documento)->avaliacao->isRecusado());
+    }
+
     public function rulePdf($documento)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if ($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required', 'file', 'mimes:pdf', 'max:2048'];
@@ -70,7 +84,7 @@ class EnviarDocumentos extends Component
     public function rulePdfWithoutAll($documento, $all)
     {
         $nomes = implode(',', $all);
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required_without_all:'.$nomes, 'nullable', 'file', 'mimes:pdf', 'max:2048'];
@@ -79,7 +93,7 @@ class EnviarDocumentos extends Component
 
     public function rulePdfIf($documento, $nome)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:pdf', 'max:2048'];
@@ -88,7 +102,7 @@ class EnviarDocumentos extends Component
 
     public function ruleVideo($documento)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
         } else {
             return ['required', 'file', 'mimes:mp4', 'max:65536'];
@@ -97,7 +111,7 @@ class EnviarDocumentos extends Component
 
     public function ruleVideoIf($documento, $nome)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4', 'max:65536'];
@@ -106,7 +120,7 @@ class EnviarDocumentos extends Component
 
     public function ruleImage($documento)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'image', 'max:10240'];
         } else {
             return ['required', 'image', 'max:10240'];
@@ -116,7 +130,7 @@ class EnviarDocumentos extends Component
     public function ruleImageWithoutAll($documento, $all)
     {
         $nomes = implode(',', $all);
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'image', 'max:10240'];
         } else {
             return ['required_without_all:'.$nomes, 'image', 'max:10240'];
@@ -125,7 +139,7 @@ class EnviarDocumentos extends Component
 
     public function ruleImageIf($documento, $nome)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'image', 'max:10240'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'image', 'max:10240'];
@@ -182,6 +196,9 @@ class EnviarDocumentos extends Component
 
     public function submit()
     {
+        $this->rules();
+        $this->attributes();
+        $this->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
         return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
