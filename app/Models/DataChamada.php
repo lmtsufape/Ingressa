@@ -40,4 +40,50 @@ class DataChamada extends Model
         $this->data_inicio = $request->data_inicio;
         $this->data_fim = $request->data_fim;
     }
+
+    /**
+     * Retorna o nome do evento a qual a data pertence
+     *
+     * Envio de Documentos da Chamada Regular 
+     * Retificação de Documentos da Chamada Regular 
+     * Envio de Documentos da 1ª Chamada da Lista de Espera 
+     * Retificação de Documentos da 1ª Chamada da Lista de Espera   
+     * Envio de Documentos da 2ª Chamada da Lista de Espera  
+     * Retificação de Documentos da 2ª Chamada da Lista de Espera
+     * ... 
+     * Envio de Documentos da nª Chamada da Lista de Espera  
+     * Retificação de Documentos da nª Chamada da Lista de Espera
+     * 
+     * @return string $nomeEvento
+     */
+    public function getNomeEvento()
+    {
+        switch ($this->tipo) {
+            case $this::TIPO_ENUM['envio']:
+                return 'envio de documentos da ' . $this->chamada->getNomeRegular();
+                break;
+            case $this::TIPO_ENUM['reenvio']:
+                return 'retificação de documentos da ' . $this->chamada->getNomeRegular();
+                break;
+        }
+    }
+
+    /**
+     * Retorna um boleano que indica se a é uma data que emails devem ser enviados
+     * 
+     * @return boolean
+     */
+    public function ehDataDeEnvio() 
+    {
+        switch ($this->tipo) {
+            case $this::TIPO_ENUM['envio']:
+                return true;
+                break;
+            case $this::TIPO_ENUM['reenvio']:
+                return true;
+                break;
+        }
+
+        return false;
+    }
 }

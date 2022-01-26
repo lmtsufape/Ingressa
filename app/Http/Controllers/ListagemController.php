@@ -11,7 +11,8 @@ use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Bus;
+use App\Jobs\EnviarEmailsPublicacaoListagem;
 
 class ListagemController extends Controller
 {
@@ -584,6 +585,14 @@ class ListagemController extends Controller
     public function publicar(Request $request) {
         $listagem = Listagem::find($request->listagem_id);
         $listagem->publicada = $request->publicar;
+
+        if ($listagem->job_batch_id == null && $listagem->enviaEmails()) {
+            $batch = Bus::batch([
+                new EnviarEmailsPublicacaoListagem($listagem),
+            ])->name('Enviar e-mails da listagem id: '.$listagem->id)->dispatch();
+            $listagem->job_batch_id = $batch->id;
+        }
+
         return $listagem->save();
     }
 }

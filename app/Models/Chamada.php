@@ -43,4 +43,47 @@ class Chamada extends Model
     {
         return $this->hasMany(Listagem::class, 'chamada_id');
     }
+
+    /**
+     * Retorna o nome da chamada respeitando a posição e se é regular ou não.
+     *
+     * @return string $string
+     */
+    public function getNomeRegular() 
+    {
+        $chamadas = $this->sisu->chamadas;
+        $chamadas = $chamadas->sortBy('created_at');
+
+        foreach ($chamadas as $posicao => $chamada) {
+            if ($this->id == $chamadas[$posicao]->id) {
+                if ($posicao == 0) {
+                    return 'chamada regular';
+                } else {
+                    return $posicao . 'ª chamada de lista de espera';
+                }
+            }
+        }        
+    }
+
+    /**
+     * Retorna o nome da chamada respeitando a posição e se é regular ou não, supondo
+     * que a listagem seja de pendecias.
+     *
+     * @return string $string
+     */
+    public function getNomeRegularPendecia() 
+    {
+        $chamadas = $this->sisu->chamadas;
+        $chamadas = $chamadas->sortBy('created_at');
+
+        foreach ($chamadas as $posicao => $chamada) {
+            if ($this->id == $chamadas[$posicao]->id) {
+                if ($posicao == 0) {
+                    return 'retificação de documentos da chamada regular';
+                } else {
+                    return 'retificação de documentos da ' . $posicao . 'ª chamada de lista de espera';
+                }
+            }
+        }  
+    }
 }
