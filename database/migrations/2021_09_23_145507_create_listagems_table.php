@@ -21,6 +21,7 @@ class CreateListagemsTable extends Migration
             $table->unsignedBigInteger('chamada_id');
             $table->foreign('chamada_id')->references('id')->on('chamadas');
             $table->boolean('publicada')->default(false);
+            $table->string('job_batch_id')->nullable();
             $table->timestamps();
         });
     }
