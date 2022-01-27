@@ -160,7 +160,7 @@
                             @can('dataEnvio', $inscricao->chamada)
                                 @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
                                     <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                        <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
                                         <label class="form-check-label subtexto3" for="checkHistorico">
                                             Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
                                             primeira semana de aula.
