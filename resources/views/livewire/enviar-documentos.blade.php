@@ -53,13 +53,13 @@
                         @elseif($inscricao->isArquivoAceito('declaracao_veracidade'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('declaracao_veracidade'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -111,13 +111,13 @@
                         @elseif($inscricao->isArquivoAceito('certificado_conclusao'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('certificado_conclusao'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -179,13 +179,13 @@
                         @elseif($inscricao->isArquivoAceito('historico'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('historico'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -245,13 +245,13 @@
                         @elseif($inscricao->isArquivoAceito('nascimento_ou_casamento'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('nascimento_ou_casamento'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -303,13 +303,13 @@
                         @elseif($inscricao->isArquivoAceito('rg'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('rg'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -361,13 +361,13 @@
                         @elseif($inscricao->isArquivoAceito('cpf'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('cpf'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -434,13 +434,13 @@
                         @elseif($inscricao->isArquivoAceito('quitacao_eleitoral'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('quitacao_eleitoral'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -502,13 +502,13 @@
                         @elseif($inscricao->isArquivoAceito('quitacao_militar'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('quitacao_militar'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -555,13 +555,13 @@
                         @elseif($inscricao->isArquivoAceito('foto'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoReenviado('foto'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                         @endif
@@ -620,13 +620,13 @@
                     @elseif($inscricao->isArquivoAceito('declaracao_cotista'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoReenviado('declaracao_cotista'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -684,13 +684,13 @@
                             @elseif($inscricao->isArquivoAceito('heteroidentificacao'))
                                 <div class="mt-2">
                                     <div class="alert alert-success " role="alert">
-                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                     </div>
                                 </div>
                             @elseif($inscricao->isArquivoReenviado('heteroidentificacao'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                             @endif
@@ -738,13 +738,13 @@
                             @elseif($inscricao->isArquivoAceito('fotografia'))
                                 <div class="mt-2">
                                     <div class="alert alert-success " role="alert">
-                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                     </div>
                                 </div>
                             @elseif($inscricao->isArquivoReenviado('fotografia'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                             @endif
@@ -802,13 +802,13 @@
                     @elseif($inscricao->isArquivoAceito('comprovante_renda'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoReenviado('comprovante_renda'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -870,13 +870,13 @@
                     @elseif($inscricao->isArquivoAceito('rani'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoReenviado('rani'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -934,13 +934,13 @@
                     @elseif($inscricao->isArquivoAceito('laudo_medico'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoReenviado('laudo_medico'))
                         <div class="mt-2">
                             <div class="alert alert-primary " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento reenviado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
