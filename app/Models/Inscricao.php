@@ -185,7 +185,7 @@ class Inscricao extends Model
         return $this->status == self::STATUS_ENUM['documentos_invalidados'];
     }
 
-    public function gerarProtocolo() 
+    public function gerarProtocolo()
     {
         $this->protocolo_envio = uniqid();
         $this->update();
