@@ -95,9 +95,9 @@
                             @endif
                             <span class="subtexto3 @error('arquivos.certificado_conclusao') is-invalid text-danger @enderror">
                                 Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou
-                                Certificação de Ensino Médio através do ENEM ou documento equivalente (pode estar junto com
+                                Certificação de Ensino Médio através do ENEM ou documento equivalente [pode estar junto com
                                 o Histórico Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos
-                                dois campos);
+                                dois campos];
                             </span>
                             <div class="invalid-feedback">@error('arquivos.certificado_conclusao'){{$message}}@enderror</div>
                         </div>
@@ -220,7 +220,7 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
-                                Regristro de Nascimento ou Certidão de Casamento;
+                                Registro de Nascimento ou Certidão de Casamento;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)

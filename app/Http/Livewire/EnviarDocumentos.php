@@ -201,7 +201,7 @@ class EnviarDocumentos extends Component
         $this->attributes();
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
-                $this->alert('error', 'Erro ao enviar arquivos, corrija os campos inválidos!', [
+                $this->alert('error', 'Erro ao enviar arquivos, verifique os campos inválidos!', [
                     'position' => 'bottom-end',
                     'timer' => 3000,
                     'toast' => true,
