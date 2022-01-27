@@ -14,7 +14,7 @@ use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 use App\Notifications\ComprovanteEnvioDocumentosNotification;
-
+use Illuminate\Validation\Validator;
 
 class EnviarDocumentos extends Component
 {
@@ -198,7 +198,17 @@ class EnviarDocumentos extends Component
     {
         $this->rules();
         $this->attributes();
-        $this->validate();
+        $this->withValidator(function (Validator $validator) {
+            if ($validator->fails()) {
+                $this->alert('error', 'Erro ao enviar arquivos, corrija os campos inválidos!', [
+                    'position' => 'bottom-end',
+                    'timer' => 3000,
+                    'toast' => true,
+                    'timerProgressBar' => true,
+                    'width' => '400',
+                    ]);
+            }
+        })->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
 
