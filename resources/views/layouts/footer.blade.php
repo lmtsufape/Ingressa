@@ -3,7 +3,7 @@
         <div class="row justify-content-between align-items-center my-2">
             <div class="col-md-4 text-center py-1">
                 <a class="navbar-brand mx-3" href="">
-                    <img width="150px" src="{{asset('img/Ingressa.svg')}}">
+                    <img width="200px" src="{{asset('img/logo-sisu.png')}}">
                 </a>
             </div>
 
