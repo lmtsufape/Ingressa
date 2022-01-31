@@ -1,7 +1,7 @@
 <div id="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-1">
         <div class="container-fluid px-lg-5 justify-content-between">
-            <a class="navbar-brand" href="{{route('index')}}"><img width="100px" src="{{asset('img/Ingressa.svg')}}"></a>
+            <a class="navbar-brand" href="{{route('index')}}"><img width="100px" src="{{asset('img/logo-sisu.png')}}"></a>
             <div class="ml-auto justify-content-end">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

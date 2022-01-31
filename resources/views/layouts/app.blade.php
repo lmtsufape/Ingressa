@@ -16,8 +16,8 @@
 
         <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/main.css')}}">
-
         <link rel="stylesheet" href="{{asset('bootstrap-select/css/bootstrap-select.min.css')}}">
+        <link rel="icon" type="imagem/png" href="{{asset('img/logo-icon.png')}}">
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>

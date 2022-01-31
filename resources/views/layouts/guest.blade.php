@@ -9,11 +9,12 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
+    
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/main.css')}}">
+        <link rel="icon" type="imagem/png" href="{{asset('img/logo-icon.png')}}">
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
