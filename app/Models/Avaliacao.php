@@ -36,4 +36,9 @@ class Avaliacao extends Model
     {
         return $this->avaliacao == self::AVALIACAO_ENUM['aceito'];
     }
+
+    public function isReenviado()
+    {
+        return $this->avaliacao == self::AVALIACAO_ENUM['reenviado'];
+    }
 }

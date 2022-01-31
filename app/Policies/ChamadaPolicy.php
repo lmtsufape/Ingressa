@@ -100,7 +100,7 @@ class ChamadaPolicy
      * @param  \App\Models\Chamada  $chamada
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function dataEnvio(User $user, Chamada $chamada) 
+    public function dataEnvio(User $user, Chamada $chamada)
     {
         $data_envio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['envio'])->first();
         $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
@@ -111,5 +111,11 @@ class ChamadaPolicy
             return true;
         }
         return false;
+    }
+
+    public function periodoRetificacao(User $user, Chamada $chamada)
+    {
+        $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
+        return $data_reenvio && $data_reenvio->data_inicio <= now() && $data_reenvio->data_fim >= now();
     }
 }

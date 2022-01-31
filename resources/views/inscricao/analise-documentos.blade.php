@@ -366,7 +366,7 @@
                     <div class="col-md-4">
                         <div class="col-md-12 caixa shadow p-3">
                             @can('isAdmin', \App\Models\User::class)
-                                <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2">
                                     <div class="d-flex align-items-center">
                                         <span class="tituloTipoDoc">Documentação básica</span>
                                     </div>
@@ -376,7 +376,7 @@
                                 </div>
                             @else
                                 @can('ehAnalistaGeral', \App\Models\User::class)
-                                    <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2">
                                         <div class="d-flex align-items-center">
                                             <span class="tituloTipoDoc">Documentação básica</span>
                                         </div>
@@ -389,9 +389,9 @@
                             @foreach ($documentos as $indice =>  $documento)
                                 @if($documento == 'rani')
                                     <div class="row">
-                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2 pt-4">
                                             <div class="d-flex align-items-center">
-                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
+                                                <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
                                                     vaga para candidato autodeclarado indígena</span>
                                             </div>
                                         </div>
@@ -399,9 +399,9 @@
                                 @elseif($documento == 'heteroidentificacao')
 
                                     <div class="row">
-                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2 pt-4">
                                             <div class="d-flex align-items-center">
-                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
+                                                <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
                                                     vaga para candidato autodeclarado negro (preto ou
                                                     pardo)</span>
                                             </div>
@@ -409,26 +409,26 @@
                                     </div>
                                 @elseif($documento == 'comprovante_renda')
                                     <div class="row">
-                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2 pt-4">
                                             <div class="d-flex align-items-center">
-                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da renda familiar bruta mensal per capita</span>
+                                                <span class="tituloTipoDoc">Comprovação da renda familiar bruta mensal per capita</span>
                                             </div>
                                         </div>
                                     </div>
                                 @elseif($documento == 'laudo_medico')
                                     <div class="row">
-                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2 pt-4">
                                             <div class="d-flex align-items-center">
-                                                <span class="tituloTipoDoc" style="font-size: 20px;">Comprovação da condição de beneficiário da reserva de
+                                                <span class="tituloTipoDoc">Comprovação da condição de beneficiário da reserva de
                                                     vaga para pessoas com deficiência</span>
                                             </div>
                                         </div>
                                     </div>
                                 @elseif($documento == 'declaracao_cotista')
                                     <div class="row">
-                                        <div style="border-bottom: 1px solid #f5f5f5;" class="d-flex align-items-center justify-content-between pb-2">
+                                        <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;" class="d-flex align-items-center justify-content-between pb-2 pt-4">
                                             <div class="d-flex align-items-center">
-                                                <span class="tituloTipoDoc" style="font-size: 20px;">Autodeclaração como candidato participante de reserva de vaga</span>
+                                                <span class="tituloTipoDoc">Autodeclaração como candidato participante de reserva de vaga</span>
                                             </div>
                                         </div>
                                     </div>
@@ -437,7 +437,7 @@
                                     <div class="d-flex align-items-center justify-content-between pt-3">
                                         @if($inscricao->arquivos()->where('nome', $documento)->first() != null)
                                             <div class="col-md-2">
-                                                <a title="Abrir documento em nova aba" href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img @if(is_null($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{asset('img/download2.svg')}}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])  src="{{asset('img/documento-aceito.svg')}}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) src="{{asset('img/documento-recusado.svg')}}" @endif alt="arquivo atual"  width="45" class="img-flex"></a>
+                                                <a title="Abrir documento em nova aba" href="{{route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento])}}" target="_blank" style="cursor:pointer;"><img @if(is_null($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{asset('img/download2.svg')}}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])  src="{{asset('img/documento-aceito.svg')}}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) src="{{asset('img/documento-recusado.svg')}}" @else src="{{asset('img/download2.svg')}}" @endif alt="arquivo atual"  width="45" class="img-flex"></a>
                                             </div>
                                         @else
                                             <div class="col-md-2">

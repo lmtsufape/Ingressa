@@ -18,10 +18,12 @@
                                     id="docDeclaracaoVeracidade"
                                     type="file"
                                     class="d-none">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('declaracao_veracidade'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
-                                @endif
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('declaracao_veracidade'))
                                 <a wire:click="baixar('declaracao_veracidade')"
@@ -45,15 +47,21 @@
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('declaracao_veracidade')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('declaracao_veracidade')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('declaracao_veracidade'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('declaracao_veracidade'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if ($documentos->contains('certificado_conclusao'))
@@ -65,10 +73,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docConclusaoMedio">
-                                    @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('certificado_conclusao'))
-                                        <img src="{{ asset('img/upload2.svg') }}"
+                                    @can('dataEnvio', $inscricao->chamada)
+                                        @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados()))
+                                            <img src="{{ asset('img/upload2.svg') }}"
                                             width="30">
-                                    @endif
+                                        @endif
+                                    @endcan
                             </label>
                             @if ($inscricao->arquivo('certificado_conclusao'))
                                 <a wire:click="baixar('certificado_conclusao')"
@@ -85,9 +95,9 @@
                             @endif
                             <span class="subtexto3 @error('arquivos.certificado_conclusao') is-invalid text-danger @enderror">
                                 Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou
-                                Certificação de Ensino Médio através do ENEM ou documento equivalente (pode estar junto com
+                                Certificação de Ensino Médio através do ENEM ou documento equivalente [pode estar junto com
                                 o Histórico Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos
-                                dois campos);
+                                dois campos];
                             </span>
                             <div class="invalid-feedback">@error('arquivos.certificado_conclusao'){{$message}}@enderror</div>
                         </div>
@@ -95,15 +105,21 @@
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('certificado_conclusao')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('certificado_conclusao')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('certificado_conclusao'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('certificado_conclusao'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('historico'))
@@ -115,10 +131,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docHistorico">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('historico'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('historico'))
                                 <a wire:click="baixar('historico')"
@@ -139,29 +157,37 @@
                                 o arquivo nos dois campos];
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
-                            @if ($inscricao->isDocumentosRequeridos())
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="declaracoes.historico " value="true" id="checkHistorico" wire:model="declaracoes.historico">
-                                    <label class="form-check-label subtexto3" for="checkHistorico">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
-                            @endif
+                            @can('dataEnvio', $inscricao->chamada)
+                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                        <label class="form-check-label subtexto3" for="checkHistorico">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
+                            @endcan
                         </div>
                         @if($inscricao->isArquivoRecusado('historico'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('historico')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('historico')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('historico'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('historico'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('nascimento_ou_casamento'))
@@ -173,10 +199,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docNascimento">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('nascimento_ou_casamento'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('nascimento_ou_casamento'))
                                 <a wire:click="baixar('nascimento_ou_casamento')"
@@ -192,32 +220,40 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
-                                Regristro de Nascimento ou Certidão de Casamento;
+                                Registro de Nascimento ou Certidão de Casamento;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
-                            @if ($inscricao->isDocumentosRequeridos())
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
-                                    <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
-                            @endif
+                            @can('dataEnvio', $inscricao->chamada)
+                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                        <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
+                            @endcan
                         </div>
                         @if($inscricao->isArquivoRecusado('nascimento_ou_casamento'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('nascimento_ou_casamento')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('nascimento_ou_casamento')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('nascimento_ou_casamento'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('nascimento_ou_casamento'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('rg'))
@@ -229,10 +265,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docRG">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('rg'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('rg'))
                                 <a wire:click="baixar('rg')"
@@ -259,15 +297,21 @@
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('rg')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('rg')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('rg'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('rg'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('cpf'))
@@ -279,10 +323,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docCPF">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('cpf'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('cpf'))
                                 <a wire:click="baixar('cpf')"
@@ -309,15 +355,21 @@
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('cpf')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('cpf')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('cpf'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('cpf'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('quitacao_eleitoral'))
@@ -329,10 +381,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docEleitoral">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('quitacao_eleitoral'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('quitacao_eleitoral'))
                                 <a wire:click="baixar('quitacao_eleitoral')"
@@ -358,29 +412,37 @@
                                 <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>);
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
-                            @if ($inscricao->isDocumentosRequeridos())
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
-                                    <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
-                            @endif
+                            @can('dataEnvio', $inscricao->chamada)
+                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                        <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
+                            @endcan
                         </div>
                         @if($inscricao->isArquivoRecusado('quitacao_eleitoral'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('quitacao_eleitoral')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('quitacao_eleitoral')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('quitacao_eleitoral'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('quitacao_eleitoral'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('quitacao_militar'))
@@ -392,10 +454,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docMilitar">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('quitacao_militar'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('quitacao_militar'))
                                 <a wire:click="baixar('quitacao_militar')"
@@ -416,29 +480,37 @@
                                 militar;
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
-                            @if ($inscricao->isDocumentosRequeridos())
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
-                                    <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
-                            @endif
+                            @can('dataEnvio', $inscricao->chamada)
+                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                        <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
+                            @endcan
                         </div>
                         @if($inscricao->isArquivoRecusado('quitacao_militar'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('quitacao_militar')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('quitacao_militar')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('quitacao_militar'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('quitacao_militar'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                     @if($documentos->contains('foto'))
@@ -450,10 +522,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docFoto">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('foto'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('foto'))
                                 <a wire:click="baixar('foto')"
@@ -475,15 +549,21 @@
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
                                     <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                    <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('foto')->avaliacao->comentario!!}</span>
+                                    <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('foto')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
                         @elseif($inscricao->isArquivoAceito('foto'))
                             <div class="mt-2">
                                 <div class="alert alert-success " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                 </div>
                             </div>
+                        @elseif($inscricao->isArquivoReenviado('foto'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                         @endif
                     @endif
                 </li>
@@ -501,10 +581,12 @@
                                     type="file"
                                     class="d-none"
                                     id="cotista">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('declaracao_cotista'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('declaracao_cotista'))
                                 <a wire:click="baixar('declaracao_cotista')"
@@ -532,13 +614,19 @@
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
                                 <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('declaracao_cotista')->avaliacao->comentario!!}</span>
+                                <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('declaracao_cotista')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoAceito('declaracao_cotista'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
+                            </div>
+                        </div>
+                    @elseif($inscricao->isArquivoReenviado('declaracao_cotista'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -561,10 +649,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docHeteroidentificacao">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('heteroidentificacao'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('heteroidentificacao'))
                                 <a wire:click="baixar('heteroidentificacao')"
@@ -588,15 +678,21 @@
                                 <div class="mt-2">
                                     <div class="alert alert-danger " role="alert">
                                         <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                        <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('heteroidentificacao')->avaliacao->comentario!!}</span>
+                                        <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('heteroidentificacao')->avaliacao->comentario!!}</span>
                                     </div>
                                 </div>
                             @elseif($inscricao->isArquivoAceito('heteroidentificacao'))
                                 <div class="mt-2">
                                     <div class="alert alert-success " role="alert">
-                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                     </div>
                                 </div>
+                            @elseif($inscricao->isArquivoReenviado('heteroidentificacao'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                             @endif
                         </div>
                         <div class="mt-2">
@@ -607,10 +703,12 @@
                                     type="file"
                                     class="d-none"
                                     id="docFotografia">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('fotografia'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('fotografia'))
                                 <a wire:click="baixar('fotografia')"
@@ -634,15 +732,21 @@
                                 <div class="mt-2">
                                     <div class="alert alert-danger " role="alert">
                                         <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                        <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('heteroidentificacao')->avaliacao->comentario!!}</span>
+                                        <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('heteroidentificacao')->avaliacao->comentario!!}</span>
                                     </div>
                                 </div>
                             @elseif($inscricao->isArquivoAceito('fotografia'))
                                 <div class="mt-2">
                                     <div class="alert alert-success " role="alert">
-                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
                                     </div>
                                 </div>
+                            @elseif($inscricao->isArquivoReenviado('fotografia'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
+                            </div>
+                        </div>
                             @endif
                         </div>
                     </li>
@@ -661,10 +765,12 @@
                                     type="file"
                                     class="d-none"
                                     id="cotaRenda">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('comprovante_renda'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('comprovante_renda'))
                                 <a wire:click="baixar('comprovante_renda')"
@@ -690,13 +796,19 @@
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
                                 <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('comprovante_renda')->avaliacao->comentario!!}</span>
+                                <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('comprovante_renda')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoAceito('comprovante_renda'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
+                            </div>
+                        </div>
+                    @elseif($inscricao->isArquivoReenviado('comprovante_renda'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -716,10 +828,12 @@
                                     type="file"
                                     class="d-none"
                                     id="rani">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('rani'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('rani'))
                                 <a wire:click="baixar('rani')"
@@ -750,13 +864,19 @@
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
                                 <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('rani')->avaliacao->comentario!!}</span>
+                                <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('rani')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoAceito('rani'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
+                            </div>
+                        </div>
+                    @elseif($inscricao->isArquivoReenviado('rani'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -777,10 +897,12 @@
                                     type="file"
                                     class="d-none"
                                     id="cotaPCD">
-                                @if ($inscricao->isDocumentosRequeridos() || $inscricao->isArquivoRecusado('laudo_medico'))
-                                    <img src="{{ asset('img/upload2.svg') }}"
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados()))
+                                        <img src="{{ asset('img/upload2.svg') }}"
                                         width="30">
-                                @endif
+                                    @endif
+                                @endcan
                             </label>
                             @if ($inscricao->arquivo('laudo_medico'))
                                 <a wire:click="baixar('laudo_medico')"
@@ -806,13 +928,19 @@
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
                                 <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
-                                <span style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('laudo_medico')->avaliacao->comentario!!}</span>
+                                <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('laudo_medico')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
                     @elseif($inscricao->isArquivoAceito('laudo_medico'))
                         <div class="mt-2">
                             <div class="alert alert-success " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="alert-heading">Documento aceito!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento aceito!</h6>
+                            </div>
+                        </div>
+                    @elseif($inscricao->isArquivoReenviado('laudo_medico'))
+                        <div class="mt-2">
+                            <div class="alert alert-primary " role="alert">
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 14px;" class="mb-0 alert-heading">Documento reenviado!</h6>
                             </div>
                         </div>
                     @endif
@@ -820,21 +948,23 @@
             </ul>
         </form>
     </div>
-    <div class="row justify-content-between mt-5">
-        <div class="col-md-3">
+    <div class="d-flex flex-wrap justify-content-between mt-5">
+        <div>
             <a href="{{route('inscricaos.index')}}"
                 class="btn botao my-2 py-1">
                 <span class="px-4">Voltar</span>
             </a>
         </div>
-        @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
-            <div class="col-md-3">
-                <button type="submit"
-                    form="enviar-documentos"
-                    class="btn botaoVerde my-2 py-1">
-                    <span class="px-4">Enviar</span>
-                </button>
-            </div>
-        @endif
+        @can('dataEnvio', $inscricao->chamada)
+            @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
+                <div>
+                    <button type="submit"
+                        form="enviar-documentos"
+                        class="btn botaoVerde my-2 py-1">
+                        <span class="px-4">Enviar</span>
+                    </button>
+                </div>
+            @endif
+        @endcan
     </div>
 </div>

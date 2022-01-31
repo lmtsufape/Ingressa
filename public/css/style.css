@@ -1,5 +1,9 @@
 /* CONFIG */
 
+span.p-zero > p {
+    margin-bottom: 0px;
+}
+
 :root{
     --textcolor: #373737;
     --textcolor2: #6C6C6C;

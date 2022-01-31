@@ -9,24 +9,26 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Inscricao;
 
-class ComprovanteEnvioDocumentosNotification extends Notification
+class ComprovanteEnvioDocumentosNotification extends Notification implements ShouldQueue
 {
     use Queueable;
     public $assunto;
     public $inscricao;
     public $arquivos;
     public $inscricaoController;
+    public $documentos;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($assunto, Inscricao $inscricao)
+    public function __construct($assunto, Inscricao $inscricao, $documentos)
     {
         $this->assunto = $assunto;
         $this->inscricao = $inscricao;
         $this->arquivos = $inscricao->arquivos;
         $this->inscricaoController = new InscricaoController();
+        $this->documentos = $documentos;
     }
 
     /**
@@ -49,12 +51,12 @@ class ComprovanteEnvioDocumentosNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)->markdown(
-            'mail.comprovante', 
+            'mail.comprovante',
             [
                 'inscricao' => $this->inscricao,
                 'arquivos' => $this->arquivos,
                 'protocolo' => $this->inscricao->gerarProtocolo(),
-                'documentos_requisitados' => $this->inscricaoController->documentosRequisitados($this->inscricao->id),
+                'documentos_requisitados' => $this->documentos,
             ]
         )->subject($this->assunto);
     }

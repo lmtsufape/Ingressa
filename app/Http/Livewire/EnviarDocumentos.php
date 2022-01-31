@@ -6,15 +6,21 @@ use App\Http\Controllers\InscricaoController;
 use App\Models\Arquivo;
 use App\Models\Avaliacao;
 use App\Models\Inscricao;
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 use App\Notifications\ComprovanteEnvioDocumentosNotification;
+use Illuminate\Validation\Validator;
 
 class EnviarDocumentos extends Component
 {
+    use LivewireAlert;
+    use AuthorizesRequests;
     use WithFileUploads;
 
     public $documentos;
@@ -55,9 +61,21 @@ class EnviarDocumentos extends Component
         }
     }
 
+    /**
+     * Função para verificar se o candidato já enviou o arquivo e se o documento foi recusado.
+     * Retorna true se o documento foi enviado mas ainda não tem avaliação ou se o documento foi enviado e aceito.
+     * Retorna false se o documento foi enviado e recusado.
+     */
+    private function arquivoEnviado($documento)
+    {
+        return !is_null($this->inscricao->arquivo($documento))
+            && (is_null($this->inscricao->arquivo($documento)->avaliacao)
+            || !$this->inscricao->arquivo($documento)->avaliacao->isRecusado());
+    }
+
     public function rulePdf($documento)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if ($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required', 'file', 'mimes:pdf', 'max:2048'];
@@ -67,7 +85,7 @@ class EnviarDocumentos extends Component
     public function rulePdfWithoutAll($documento, $all)
     {
         $nomes = implode(',', $all);
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required_without_all:'.$nomes, 'nullable', 'file', 'mimes:pdf', 'max:2048'];
@@ -76,7 +94,7 @@ class EnviarDocumentos extends Component
 
     public function rulePdfIf($documento, $nome)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:pdf', 'max:2048'];
@@ -85,7 +103,7 @@ class EnviarDocumentos extends Component
 
     public function ruleVideo($documento)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
         } else {
             return ['required', 'file', 'mimes:mp4', 'max:65536'];
@@ -94,7 +112,7 @@ class EnviarDocumentos extends Component
 
     public function ruleVideoIf($documento, $nome)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4', 'max:65536'];
@@ -103,7 +121,7 @@ class EnviarDocumentos extends Component
 
     public function ruleImage($documento)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'image', 'max:10240'];
         } else {
             return ['required', 'image', 'max:10240'];
@@ -113,7 +131,7 @@ class EnviarDocumentos extends Component
     public function ruleImageWithoutAll($documento, $all)
     {
         $nomes = implode(',', $all);
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'image', 'max:10240'];
         } else {
             return ['required_without_all:'.$nomes, 'image', 'max:10240'];
@@ -122,7 +140,7 @@ class EnviarDocumentos extends Component
 
     public function ruleImageIf($documento, $nome)
     {
-        if($this->inscricao->arquivo($documento)) {
+        if($this->arquivoEnviado($documento)) {
             return ['nullable', 'image', 'max:10240'];
         } else {
             return ['required_if:'.$nome.',true', 'nullable', 'image', 'max:10240'];
@@ -179,18 +197,32 @@ class EnviarDocumentos extends Component
 
     public function submit()
     {
+        $this->rules();
         $this->attributes();
+        $this->withValidator(function (Validator $validator) {
+            if ($validator->fails()) {
+                $this->alert('error', 'Erro ao enviar arquivos, verifique os campos inválidos!', [
+                    'position' => 'bottom-end',
+                    'timer' => 3000,
+                    'toast' => true,
+                    'timerProgressBar' => true,
+                    'width' => '400',
+                    ]);
+            }
+        })->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
         $this->inscricao->save();
 
-        Notification::send(auth()->user(), new ComprovanteEnvioDocumentosNotification('Comprovante de envio', $this->inscricao));
+        Notification::send(auth()->user(), new ComprovanteEnvioDocumentosNotification('Comprovante de envio', $this->inscricao, $this->documentos));
 
         return redirect(route('inscricaos.index'))->with(['success' => 'Documentação enviada com sucesso. Aguarde o resultado da avaliação dos documentos.']);
     }
 
     public function updated($documento, $value)
     {
-        if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isDocumentosInvalidados())) {
+        $this->attributes();
+        $this->authorize('dataEnvio', $this->inscricao->chamada);
+        if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1]))) {
             $this->validateOnly($documento);
             $documento = explode('.', $documento)[1];
             $path = 'documentos/inscricaos/'. $this->inscricao->id . '/';
@@ -215,6 +247,13 @@ class EnviarDocumentos extends Component
                     'nome' => $documento,
                 ]);
             }
+            $this->alert('success', 'Arquivo enviado com sucesso!', [
+                'position' => 'bottom-end',
+                'timer' => 3000,
+                'toast' => true,
+                'timerProgressBar' => true,
+                'width' => '400',
+                ]);
         }
     }
 

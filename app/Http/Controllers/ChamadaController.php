@@ -550,7 +550,7 @@ class ChamadaController extends Controller
                 $candidatosEnviado = $retorno['candidatosEnviado'];
                 $candidatosInvalidados = $retorno['candidatosInvalidados'];
             }elseif($userPolicy->soEhAnalistaMedico(auth()->user())){
-                $retorno = $this->inscricoesMedico($chamada, $curso, $L9, $L10, $L13, $L14);
+                $retorno = $this->inscricoesMedico($chamada, $curso, [$L9->id, $L10->id, $L13->id, $L14->id]);
                 $candidatosConcluidos = $retorno['candidatosConcluidos'];
                 $candidatosConcluidosPendencia = $retorno['candidatosConcluidosPendencia'];
                 $candidatosNaoEnviado = $retorno['candidatosNaoEnviado'];

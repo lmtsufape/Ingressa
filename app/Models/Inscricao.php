@@ -112,7 +112,7 @@ class Inscricao extends Model
     {
         return $this->belongsTo(Cota::class, 'cota_vaga_ocupada_id');
     }
- 
+
     public function sisu()
     {
         return $this->belongsTo(Sisu::class, 'sisu_id');
@@ -149,6 +149,19 @@ class Inscricao extends Model
         return false;
     }
 
+    public function isArquivoReenviado($nome)
+    {
+        if ($this->isArquivoAvaliado($nome)) {
+            return $this->arquivo($nome)->avaliacao->isReenviado();
+        }
+        return false;
+    }
+
+    public function isArquivoRecusadoOuReenviado($nome)
+    {
+        return $this->isArquivoRecusado($nome) || $this->isArquivoReenviado($nome);
+    }
+
     public function isArquivoAceito($nome)
     {
         if ($this->isArquivoAvaliado($nome)) {
@@ -172,7 +185,7 @@ class Inscricao extends Model
         return $this->status == self::STATUS_ENUM['documentos_invalidados'];
     }
 
-    public function gerarProtocolo() 
+    public function gerarProtocolo()
     {
         $this->protocolo_envio = uniqid();
         $this->update();
