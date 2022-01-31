@@ -1,3 +1,44 @@
+# Ingressa
+
+<p align="center"><a href="https://ibb.co/CWH28SP"><img src="https://i.ibb.co/Pt6QjVD/logo-sisu.png" alt="logo-sisu" border="0" width="350px"></a></p>
+
+O sistema Ingressa foi pensado para atender a demanda da UFAPE em gerir, de forma independente, todos os processos de matrícula do SiSU.
+
+## Principais funções
+
+- Cadastro automático dos candidatos por meio de importações de arquivos .csv;
+- Envio de documentos;
+- Avaliação de documentos enviados;
+- Produção automática de listas de convocados das chamadas;
+- Produção automática de listas de candidatos com cadastro validado ou invalidado;
+- Produção automática de listas de ingressantes e suplentes da edição do SiSU.
+
+## Requisitos
+
+- [Composer 2.0 ou superior](https://getcomposer.org/);
+- [php v7.4 ou superior](https://www.php.net/);
+- [postgres v12 ou superior](https://www.postgresql.org/).
+
+## Instalação
+
+Faça o fork, caso queira contribuir com código, e clone o repositório. Então execute `composer install` ou `composer update`;
+
+Crie um arquivo `.env` com o conteúdo do `.env.example` na pasta raiz;
+
+Gere a chave do aplicação com `php artisan key:generate`;
+
+Crie o banco de dados e coloque as informações no `.env`;
+
+Migre as tabelas no banco de dados com `php artisan migrate`;
+
+Se você quiser utilizar os usuários de teste, use `php artisan db:seed` para preencher o banco de dados;
+
+Para os arquivos serem lidos e escritos de forma correta utilize o comando `php artisan storage:link`;
+
+Para o envio de e-mails ocorrer, as informações do e-mail remetente e que será utilizado para enviar os mesmos também precisam ser escritas no arquivo `.env`.
+
+## Laravel
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
