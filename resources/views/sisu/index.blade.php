@@ -28,7 +28,7 @@
                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                         </symbol>
                                     </svg>
-        
+
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -59,6 +59,7 @@
                                                 @if($sisu->caminho_import_espera == null)
                                                     <button title ="Importar lista de espera" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$sisu->id}}_espera" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="Icone de importar lista"></button>
                                                 @endif
+                                                <a href="{{route('exportar-ingressantes', $sisu->chamadas->first())}}" title ="Exportar ingressantes" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar ingressantes"></a>
                                             @endif
                                             <button title="Deletar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar edicao"></button>
                                             <button title="Editar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticEditarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar edicao"></button>
@@ -91,6 +92,14 @@
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1683.svg')}}" alt="Icone de importar lista de candidatos regulares/espera">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Importar lista de candidatos regulares/espera
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Exportar ingressantes" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <img class="aling-middle" width="33" src="{{asset('img/export_siga.svg')}}" alt="Icone de Exportar ingressantes">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Exportar ingressantes
                                     </div>
                                 </div>
                             </li>
