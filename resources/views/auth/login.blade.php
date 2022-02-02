@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         {{-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> --}}
@@ -19,14 +19,14 @@
                 font-family: 'Nunito', sans-serif;
             }
         </style> --}}
-        
+
         @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>
 
-        <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">   
+        <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/main.css')}}">
     </head>
     <body class="">
@@ -75,7 +75,7 @@
                                 <div class="form-group textoInput">
                                     <label for="email">E-mail</label>
                                     <input class="form-control form-control-sm caixaDeTexto @error('email') is-invalid @enderror" id="email" name="email" value="{{old('email')}}" type="text" placeholder="E-mail" required>
-                                
+
                                     @error('email')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -85,7 +85,7 @@
                                 <div class="form-group mt-2 textoInput">
                                     <label for="password">Senha</label>
                                     <input class="form-control form-control-sm caixaDeTexto @error('password') is-invalid @enderror" type="password" id="password" name="password" value="{{old('password')}}" type="text" placeholder="Senha" required>
-                                
+
                                     @error('password')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -105,16 +105,16 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 text-center" style="margin-bottom: 10px;">
-                                <button type="submit" class="btn botaoEntrar col-md-10" form="login-form" style="width: 100%;">Entrar</button> 
+                                <button type="submit" class="btn botaoEntrar col-md-10" form="login-form" style="width: 100%;">Entrar</button>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 text-center">
-                                <a href="{{route('primeiro.acesso')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Primeiro acesso</a> 
+                                <a href="{{route('primeiro.acesso')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Primeiro acesso</a>
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
         @component('layouts.footer')@endcomponent
