@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         {{-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> --}}
@@ -31,9 +31,9 @@
     </head>
     <body class="">
         @component('layouts.nav_bar')@endcomponent
-            <div class="fundo2 px-5"> 
+            <div class="fundo2 px-5">
                 <div class="row justify-content-center">
-                    <div class="col-md-8 caixa shadow-sm p-2 px-3"> 
+                    <div class="col-md-8 caixa shadow-sm p-2 px-3">
                     <div class="row">
                         <div class="col-md-6 my-1">
                                 <div class="row">

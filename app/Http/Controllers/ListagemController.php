@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Excel;
+use App\Exports\AprovadosExport;
 use App\Http\Requests\ListagemRequest;
 use App\Models\Listagem;
 use Illuminate\Http\Request;
@@ -13,9 +15,11 @@ use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\EnviarEmailsPublicacaoListagem;
+use Illuminate\Support\Facades\Log;
 
 class ListagemController extends Controller
 {
+    private $periodos = [];
     /**
      * Display a listing of the resource.
      *
@@ -44,7 +48,6 @@ class ListagemController extends Controller
      */
     public function store(ListagemRequest $request)
     {
-        set_time_limit(300);
         $this->authorize('isAdmin', User::class);
         $request->validated();
         $listagem = new Listagem();
@@ -285,6 +288,16 @@ class ListagemController extends Controller
     private function gerarListagemFinal(ListagemRequest $request, Listagem $listagem)
     {
         $chamada = Chamada::find($request->chamada);
+        $inscricoes = $this->getInscricoesIngressantesReservas($request);
+
+        $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $inscricoes['ingressantes'], 'candidatosReservaCursos' => $inscricoes['reservas'], 'chamada' => $chamada]);
+
+        return $this->salvarListagem($listagem, $pdf->stream());
+    }
+
+    public function getInscricoesIngressantesReservas($request)
+    {
+        $chamada = Chamada::find($request->chamada);
         $sisu = $chamada->sisu;
         $cursos = Curso::all();
         $cotas = Cota::all();
@@ -295,8 +308,14 @@ class ListagemController extends Controller
             $candidatosIngressantesCurso = collect();
 
             foreach($cotas as $cota){
-                $candidatosCotaCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
-                ['cota_id', $cota->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+                $candidatosCotaCurso = Inscricao::where(
+                    [
+                        ['sisu_id', $sisu->id],
+                        ['curso_id', $curso->id],
+                        ['cota_id', $cota->id],
+                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                    ]
+                )->get();
 
                 $candidatosCotaCurso = $candidatosCotaCurso->sortByDesc(function($candidato){
                     return $candidato['nu_nota_candidato'];
@@ -314,10 +333,16 @@ class ListagemController extends Controller
                 }
 
                 if($cota_curso_quantidade > 0){
-                    foreach($cota->remanejamentos as $remanejamento){
+                    foreach($cota->remanejamentos as $key => $remanejamento){
                         $cotaRemanejamento = $remanejamento->proximaCota;
-                        $candidatosCotaCursoRemanejamento = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
-                        ['cota_id', $cotaRemanejamento->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
+                        $candidatosCotaCursoRemanejamento = Inscricao::where(
+                                [
+                                    ['sisu_id', $sisu->id],
+                                    ['curso_id', $curso->id],
+                                    ['cota_id', $cotaRemanejamento->id],
+                                    ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                                ]
+                            )->get();
 
                         $candidatosCotaCursoRemanejamento = $candidatosCotaCursoRemanejamento->sortByDesc(function($candidato){
                             return $candidato['nu_nota_candidato'];
@@ -330,6 +355,7 @@ class ListagemController extends Controller
                                 if(!$candidatosIngressantesCurso->contains($candidato)){
                                     $candidatosIngressantesCurso->push($candidato);
                                     $cota_curso_quantidade -= 1;
+                                    Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
                                 }
                             }else{
                                 $continua = true;
@@ -339,7 +365,7 @@ class ListagemController extends Controller
                         if($continua){
                             break;
                         }
-                        
+
                     }
                 }
             }
@@ -361,7 +387,7 @@ class ListagemController extends Controller
                 $retorno = $this->divirPorSemestre($cotasNaoDeficientes, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, false);
                 $primeiroSemestre = $retorno[0];
                 $segundoSemestre = $retorno[1];
-                
+
 
                 if($request->ordenacao == "nome"){
                     $primeiroSemestre = $primeiroSemestre->sortBy(function($candidato){
@@ -391,7 +417,7 @@ class ListagemController extends Controller
                     return $candidato['nu_nota_candidato'];
                 });
             }
-        
+
             $candidatosIngressantesCursos->push($candidatosIngressantesCurso);
             $candidatosCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
             ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
@@ -408,10 +434,146 @@ class ListagemController extends Controller
             }
             $candidatosReservaCursos->push($candidatosReservaCurso);
         }
+        return ['ingressantes' => $candidatosIngressantesCursos, 'reservas' => $candidatosReservaCursos];
+    }
 
-        $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $candidatosIngressantesCursos, 'candidatosReservaCursos' => $candidatosReservaCursos,'chamada' => $chamada]);
+    public function exportarCSV(Request $request)
+    {
+        $this->periodos = [
+            '118468' => 0,
+            '118466' => 0,
+            '118470' => 0,
+        ];
 
-        return $this->salvarListagem($listagem, $pdf->stream());
+        $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
+            ->filter(function ($value, $key) {
+                return $value->count() <= 40;
+            })
+            ->map(function ($value, $key) {
+                return $value->map(function ($value, $key) {
+                    return [
+                        $value->candidato->nu_cpf_inscrito,
+                        $value->nu_rg,
+                        $this->removeAcentos($value->candidato->user->name),
+                        $this->getCodProgramaForm($value->curso),
+                        $this->getPeriodo($value->curso),
+                        $value->sisu->edicao,
+                        $this->getTurno($value->curso),
+                        2, //presencial
+                        15, //sisu
+                        $this->removeAcentos($value->no_mae),
+                        $this->removeAcentos($value->candidato->pai),
+                        $value->tp_sexo,
+                        $this->getNacionalidade($value->candidato->pais_natural),
+                        date('d/m/Y', strtotime($value->candidato->dt_nascimento)),
+                        $value->candidato->estado_civil,
+                        $this->removeAcentos($value->candidato->cidade_natal),
+                        $value->nu_cep,
+                        $this->getNumeroEndereco($value->nu_endereco),
+                        $this->removeAcentos($value->ds_complemento),
+                        date('d/m/Y', strtotime($value->candidato->data_expedicao)),
+                        $value->candidato->orgao_expedidor,
+                        $value->candidato->uf_rg,
+                        'BRA',
+                        $value->candidato->user->email,
+                        //passaporte
+                        $value->nu_nota_candidato,
+                        //INSCRICAOVEST
+                        //NOTAVEST
+                        //CLASSVEST
+                        $value->candidato->ano_conclusao,
+                        $this->getCotaFinal($value->cota, $value->cotaRemanejada),
+                        154575, //POLO DE RECIFE??
+                        $value->candidato->cor_raca,
+                        $value->candidato->titulo,
+                        $value->candidato->zona_eleitoral,
+                        $value->candidato->secao_eleitoral,
+                        $value->nu_fone1,
+                        $value->nu_fone2,
+                        $this->removeAcentos($value->candidato->escola_ens_med),
+                        //escolaridade mae
+                        //escolaridade pai
+                        $value->candidato->necessidades,
+                    ];
+                });
+            })->collect();
+        return Excel::download(
+            new AprovadosExport($retorno),
+            'ingressantes.csv',
+            \Maatwebsite\Excel\Excel::CSV,
+            ['Content-Type' => 'text/csv']
+        );
+    }
+
+    private function getCotaFinal(Cota $cota, Cota $cotaRemanejada = null)
+    {
+        $codigos = [
+            'B4342' => 0,
+            'A0' => 0,
+            'L2' => 3,
+            'L1' => 4,
+            'L6' => 5,
+            'L5' => 6,
+            'L10' => 9,
+            'L9' => 10,
+            'L14' => 11,
+            'L13' => 12
+        ];
+        if($cotaRemanejada == null) return $codigos[$cota->cod_cota];
+        return ($codigos[$cota->cod_cota]);
+    }
+
+    private function removeAcentos($palavra)
+    {
+        return strtr(utf8_decode($palavra), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\''), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY ');
+    }
+
+    private function getNumeroEndereco($numero)
+    {
+        if ($numero == null | is_numeric($numero) && strlen(strval($numero)) <= 5) return $numero;
+        return null;
+    }
+
+    private function getPeriodo(Curso $curso,)
+    {
+        if($curso->semestre != null) {
+            return $curso->semestre;
+        }
+        return $this->periodos[$curso->cod_curso]++ < 40 ? 1 : 2;
+
+    }
+
+    private function getNacionalidade($nacionalidade)
+    {
+        $nacionalidades = [
+            'BRASIL' => 'BRA',
+        ];
+        return $nacionalidades[strtoupper($nacionalidade)];
+    }
+
+    private function getCodProgramaForm($curso)
+    {
+        $codigos = [
+            91555  => 44,
+            118468 => 95,
+            118466 => 93,
+            118470 => 94,
+            91969  => 47,
+            91561  => 45,
+            91738  => 46,
+        ];
+        return $codigos[$curso->cod_curso];
+    }
+
+    private function getTurno($curso)
+    {
+        $turnos = [
+            1 => 2, //matutino
+            2 => 3, //vespertino
+            3 => 4, //noturno
+            4 => 1, //integral
+        ];
+        return $turnos[$curso->turno];
     }
 
     private function divirPorSemestre($cotas, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, $deficiente)
@@ -433,7 +595,7 @@ class ListagemController extends Controller
             }else{
                 $metade = ceil($porCota->count()/2);
                 $divisoes = $porCota->chunk($metade);
-    
+
                 if($divisoes->count()>0){
                     $first = $divisoes[0];
                 }else{
@@ -444,7 +606,7 @@ class ListagemController extends Controller
                 }else{
                     $second = collect();
                 }
-    
+
                 if($first->count()!=$second->count()){
                     if($primeiroSemestre->count()<$segundoSemestre->count()){
                         $primeiroSemestre = $primeiroSemestre->concat($first);
@@ -453,7 +615,7 @@ class ListagemController extends Controller
                         $ultimoElemento = $first->slice($first->count()-1, 1)->first();
                         $first = $first->slice(0, -1);
                         $second->push($ultimoElemento);
-    
+
                         $primeiroSemestre = $primeiroSemestre->concat($first);
                         $segundoSemestre = $segundoSemestre->concat($second);
                     }else{

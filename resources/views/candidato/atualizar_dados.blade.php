@@ -27,7 +27,7 @@
                                             value="{{$inscricao->nu_rg}}">
                                     </div>
                                     <div class="form-group col-md-3 textoInput">
-                                        <label for="orgao_expedidor"><span style="color: red; font-weight: bold;">*</span> {{ __('Orgão expedidor') }}</label>
+                                        <label for="orgao_expedidor"><span style="color: red; font-weight: bold;">*</span> {{ __('Orgão expedidor (Sigla)') }}</label>
                                         <input id="orgao_expedidor"
                                             class="form-control form-control-sm caixaDeTexto @error('orgao_expedidor') is-invalid @enderror"
                                             type="text"

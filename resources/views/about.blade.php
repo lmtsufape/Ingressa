@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         {{-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> --}}
@@ -31,15 +31,15 @@
     </head>
     <body class="">
         @component('layouts.nav_bar')@endcomponent
-        <div class="fundo2 px-5"> 
+        <div class="fundo2 px-5">
             <div class="row justify-content-center">
-                <div class="col-md-8 shadow-sm caixa p-3"> 
+                <div class="col-md-8 shadow-sm caixa p-3">
                     <div style="border-bottom: 1px solid #f5f5f5; color: var(--primaria); font-size: 25px; font-weight: 600;" class="mb-1">
                         Sobre
                     </div>
                     <div style="color: var(--textcolor); font-size: 18px; font-weight: 600;" class="my-1">
                         Apresentação:
-                    </div> 
+                    </div>
                     <div style="color: var(--textcolor2); font-size: 15px;">
                         O sistema Ingressa foi pensado para atender a demanda da UFAPE em gerir, de forma independente, todos os processos de matrícula do SiSU.
                     </div>

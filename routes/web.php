@@ -86,6 +86,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::resource('datas', DataChamadaController::class);
     Route::resource('listagems', ListagemController::class);
 
+    Route::get('/listagem/{chamada}/export', [ListagemController::class, 'exportarCSV'])->name('exportar-ingressantes');
+
     Route::resource('inscricaos', InscricaoController::class);
     Route::get('/inscricaos/{inscricao_id}/documentacao', [InscricaoController::class, 'showInscricaoDocumentacao'])->name('inscricao.documentacao');
     Route::post('/inscricaos/{inscricao_id}/enviar-documentos', [InscricaoController::class, 'enviarDocumentos'])->name('inscricao.enviar.documentos');

@@ -102,14 +102,14 @@
         .acao_afirmativa {
             text-align: justify;
             margin: 15px;
-            position: relative; 
+            position: relative;
             left: 5px;
         }
     </style>
 
 </head>
 <body>
-    <div id="head">        
+    <div id="head">
         <img src="{{asset('img/cabecalho_listagem.png')}}" width="100%" alt="">
         <span class="titulo">
             RELAÇÃO DOS CANDIDATOS VALIDADOS ({{$chamada->nome}} - {{$chamada->sisu->edicao}})<br>
@@ -157,15 +157,12 @@
                                             <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
                                             @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
                                                 <th>CADASTRO VALIDADO</th>
+                                                <th>-</th>
                                             @else
                                                 <th>CADASTRO INVALIDADO</th>
-                                            @endif
-                                            @if($inscricao->justificativa != null)
                                                 <th>{{$inscricao->justificativa}}</th>
-                                            @else
-                                                <th>-</th>
                                             @endif
-                                            
+
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -174,7 +171,7 @@
                     </div>
                     @if ($i != $collect_inscricoes->count() - 1)
                     <br/><div class="quebrar_pagina"></div>
-                    @else 
+                    @else
                         @if ($j != $collect->count() - 1)
                         <br/><div class="quebrar_pagina"></div>
                         @endif
