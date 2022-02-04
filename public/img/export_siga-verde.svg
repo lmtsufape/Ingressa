@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="52" height="52">
+	<title>export_siga-svg</title>
+	<style>
+		.s0 { fill: #008025 } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<g id="Grupo_1683">
+		<path id="Retângulo_4063" class="s0" d="m0 10c0-5.5 4.5-10 10-10h32c5.5 0 10 4.5 10 10v32c0 5.5-4.5 10-10 10h-32c-5.5 0-10-4.5-10-10z" />
+		<path id="Icon_ionic-md-download" class="s1" d="m26.4 33.7l-12.4-12.2h7.1v-10.5h10.6v10.5h7.1zm12.3 3.5v3.5h-24.7v-3.5z" />
+	</g>
+</svg>
