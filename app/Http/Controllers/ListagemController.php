@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Excel;
 use App\Exports\AprovadosExport;
+use App\Exports\SisuGestaoExport;
 use App\Http\Requests\ListagemRequest;
 use App\Models\Listagem;
 use Illuminate\Http\Request;
@@ -505,6 +506,41 @@ class ListagemController extends Controller
         );
     }
 
+    public function exportarCSVSisuGestao(Request $request)
+    {
+        $chamada = Chamada::find($request->chamada);
+        $cursosIngressantes = $this->getInscricoesIngressantesReservas($request)['ingressantes']
+            ->filter(function ($value, $key) {
+                return $value->count() <= 40;
+            })
+            ->map(function ($value, $key) {
+                return $value->map(function ($value, $key) {
+                    return [
+                        $value->co_inscricao_enem,
+                        'M',
+                    ];
+                });
+            })->collect();
+        $ingressantes = collect();
+        foreach($cursosIngressantes as $curso){
+            $ingressantes = $ingressantes->concat($curso->all());
+        }
+        $candidatos = Inscricao::where('sisu_id', $chamada->sisu->id)
+            ->whereIn('status', [Inscricao::STATUS_ENUM['documentos_pendentes'], Inscricao::STATUS_ENUM['documentos_invalidados']])
+            ->get()->map(function ($value) {
+                return [
+                    $value->co_inscricao_enem,
+                    $this->situacaoMatricula($value->status),
+                ];
+            })->collect();;
+        return Excel::download(
+            new SisuGestaoExport($ingressantes->concat($candidatos)),
+            'sisu_gestao_export.csv',
+            \Maatwebsite\Excel\Excel::CSV,
+            ['Content-Type' => 'text/csv']
+        );
+    }
+    
     private function getCotaFinal(Cota $cota, Cota $cotaRemanejada = null)
     {
         $codigos = [
@@ -523,6 +559,15 @@ class ListagemController extends Controller
         return ($codigos[$cota->cod_cota]);
     }
 
+    private function situacaoMatricula($status)
+    {
+        $matriculas = [
+            Inscricao::STATUS_ENUM['documentos_pendentes'] => 'N',
+            Inscricao::STATUS_ENUM['documentos_invalidados'] => 'R',
+        ];
+        return $matriculas[$status];
+    }
+
     private function removeAcentos($palavra)
     {
         return strtr(utf8_decode($palavra), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\''), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY ');
@@ -534,7 +579,7 @@ class ListagemController extends Controller
         return null;
     }
 
-    private function getPeriodo(Curso $curso,)
+    private function getPeriodo(Curso $curso)
     {
         if($curso->semestre != null) {
             return $curso->semestre;
@@ -547,6 +592,7 @@ class ListagemController extends Controller
     {
         $nacionalidades = [
             'BRASIL' => 'BRA',
+            null => '',
         ];
         return $nacionalidades[strtoupper($nacionalidade)];
     }
