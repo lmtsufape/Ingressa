@@ -9,7 +9,6 @@ use App\Models\Inscricao;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\FileUploadConfiguration;
@@ -19,7 +18,6 @@ use Illuminate\Validation\Validator;
 
 class EnviarDocumentos extends Component
 {
-    use LivewireAlert;
     use AuthorizesRequests;
     use WithFileUploads;
 
@@ -201,13 +199,7 @@ class EnviarDocumentos extends Component
         $this->attributes();
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
-                $this->alert('error', 'Erro ao enviar arquivos, verifique os campos inválidos!', [
-                    'position' => 'bottom-end',
-                    'timer' => 3000,
-                    'toast' => true,
-                    'timerProgressBar' => true,
-                    'width' => '400',
-                    ]);
+                session()->flash('error', 'Erro ao enviar os arquivos, verifique os campos inválidos!');
             }
         })->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
@@ -247,13 +239,7 @@ class EnviarDocumentos extends Component
                     'nome' => $documento,
                 ]);
             }
-            $this->alert('success', 'Arquivo enviado com sucesso!', [
-                'position' => 'bottom-end',
-                'timer' => 3000,
-                'toast' => true,
-                'timerProgressBar' => true,
-                'width' => '400',
-                ]);
+            session()->flash('success', 'Arquivo enviado com sucesso!');
         }
     }
 

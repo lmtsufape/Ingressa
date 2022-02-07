@@ -3,6 +3,16 @@
         <form id="enviar-documentos"
             wire:submit.prevent="submit"
             enctype="multipart/form-data">
+            @if (session()->has('error'))
+                <script>
+                    error();
+                </script>
+            @endif
+            @if (session()->has('success'))
+                <script>
+                    success();
+                </script>
+            @endif
             <ul class="timeline">
                 <li class="px-1 align-middle">
                     <div class="col-md-12">

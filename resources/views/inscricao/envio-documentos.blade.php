@@ -84,4 +84,34 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            function success(){
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Arquivo enviado com sucesso!',
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    timer: 3000,
+                    toast: true,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                })
+            }
+            function error(){
+                Swal.fire({
+                    position: 'bottom-end',
+                    icon: 'error',
+                    title: 'Erro ao enviar os arquivos, verifique os campos inválidos!',
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    timer: 3000,
+                    toast: true,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                })
+            }
+        </script>
+    @endpush
 </x-app-layout>
