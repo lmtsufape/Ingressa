@@ -59,8 +59,10 @@
                                                 @if($sisu->caminho_import_espera == null)
                                                     <button title ="Importar lista de espera" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$sisu->id}}_espera" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1683.svg')}}"  alt="Icone de importar lista"></button>
                                                 @endif
-                                                <a href="{{route('exportar-ingressantes', $sisu->chamadas->first())}}" title ="Exportar ingressantes SIGA" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1700.svg')}}"  alt="Icone de exportar ingressantes siga"></a>
-                                                <a href="{{route('exportar-sisu-gestao', $sisu->chamadas->first())}}" title ="Exportar SiSU Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar"></a>
+                                                @if($sisu->chamadas->first() != null)
+                                                    <a href="{{route('exportar-ingressantes', $sisu->chamadas->first())}}" title ="Exportar ingressantes SIGA" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1700.svg')}}"  alt="Icone de exportar ingressantes siga"></a>
+                                                    <a href="{{route('exportar-sisu-gestao', $sisu->chamadas->first())}}" title ="Exportar SiSU Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar"></a>
+                                                @endif
                                             @endif
                                             <button title="Deletar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar edicao"></button>
                                             <button title="Editar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticEditarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar edicao"></button>
@@ -122,7 +124,7 @@
                             </li>
                             <li>
                                 <div title="Editar edição" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
-                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar edição">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar edição">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Editar edição
                                     </div>
