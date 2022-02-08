@@ -97,6 +97,31 @@ class CadastroRegularCandidato implements ShouldQueue
                 ]);
 
                 $candidatoExistente = Candidato::where('nu_cpf_inscrito', $data[10])->first();
+                if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                $inscricao->no_modalidade_concorrencia == 'Ampla concorrência' || $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'){
+                    $cota = Cota::where('descricao',  'Ampla concorrência')->first();
+                }else{
+                    $cota = Cota::where('descricao', $inscricao->no_modalidade_concorrencia)->first();
+                }
+
+                if($inscricao->ds_turno == 'Matutino'){
+                    $turno =  Curso::TURNO_ENUM['matutino'];
+                }elseif($inscricao->ds_turno  == 'Vespertino'){
+                    $turno = Curso::TURNO_ENUM['vespertino'];
+                }elseif($inscricao->ds_turno == 'Noturno'){
+                    $turno = Curso::TURNO_ENUM['noturno'];
+                }elseif($inscricao->ds_turno == 'Integral'){
+                    $turno = Curso::TURNO_ENUM['integral'];
+                }
+
+                $curs = Curso::where([['cod_curso', $inscricao->co_ies_curso], ['turno', $turno]])->first();
+
+                $inscricao->chamada_id = $this->chamada->id;
+                $inscricao->sisu_id = $this->chamada->sisu->id;
+                $inscricao->cota_id = $cota->id;
+                $inscricao->cota_vaga_ocupada_id = $cota->id;
+                $inscricao->curso_id = $curs->id;
+
                 if($candidatoExistente == null){
                     $user = new User([
                         'name' => $data[8],
@@ -125,34 +150,8 @@ class CadastroRegularCandidato implements ShouldQueue
                     }
                     $candidato->user_id = $user->id;
                     $candidato->save();
-
-                    if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                    $inscricao->no_modalidade_concorrencia == 'Ampla concorrência' || $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'){
-                        $cota = Cota::where('descricao',  'Ampla concorrência')->first();
-                    }else{
-                        $cota = Cota::where('descricao', $inscricao->no_modalidade_concorrencia)->first();
-                    }
-
-                    if($inscricao->ds_turno == 'Matutino'){
-                        $turno =  Curso::TURNO_ENUM['matutino'];
-                    }elseif($inscricao->ds_turno  == 'Vespertino'){
-                        $turno = Curso::TURNO_ENUM['vespertino'];
-                    }elseif($inscricao->ds_turno == 'Noturno'){
-                        $turno = Curso::TURNO_ENUM['noturno'];
-                    }elseif($inscricao->ds_turno == 'Integral'){
-                        $turno = Curso::TURNO_ENUM['integral'];
-                    }
-
-                    $curs = Curso::where([['cod_curso', $inscricao->co_ies_curso], ['turno', $turno]])->first();
-
-                    $inscricao->chamada_id = $this->chamada->id;
-                    $inscricao->sisu_id = $this->chamada->sisu->id;
                     $inscricao->candidato_id = $candidato->id;
-                    $inscricao->cota_id = $cota->id;
-                    $inscricao->cota_vaga_ocupada_id = $cota->id;
-                    $inscricao->curso_id = $curs->id;
                     $inscricao->save();
-
                 }else{
                     $candidatoExistente->atualizar_dados = true;
                     if($data[9] != null){
@@ -164,7 +163,6 @@ class CadastroRegularCandidato implements ShouldQueue
                     $candidatoExistente->update();
                     $candidatoExistente->user->update();
 
-                    $inscricao->chamada_id = $this->chamada->id;
                     $inscricao->candidato_id = $candidatoExistente->id;
                     $inscricao->save();
 
