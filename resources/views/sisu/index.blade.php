@@ -122,7 +122,7 @@
                             </li>
                             <li>
                                 <div title="Editar edição" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
-                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar edição">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar edição">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Editar edição
                                     </div>
