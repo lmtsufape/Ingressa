@@ -61,6 +61,6 @@
         @component('layouts.footer')@endcomponent
         @livewireScripts
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <x-livewire-alert::scripts />
+        @stack('scripts')
     </body>
 </html>
