@@ -56,6 +56,8 @@
                                 <span>
                                     @if($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first() != null)
                                         {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_inicio))}} - {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_fim))}}
+                                    @else
+                                        <span style="color: rgb(255, 89, 89)">período de envio indefinido</span>
                                     @endif
                                 </span>
                             </div>
