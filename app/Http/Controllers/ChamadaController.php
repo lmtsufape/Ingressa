@@ -135,6 +135,9 @@ class ChamadaController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($id);
+        if($chamada->inscricoes()->count() > 0){
+            return redirect()->back()->with(['error' => 'Não foi possível deletar esta chamada, há inscrições de candidatos nela.']);
+        }
         $sisu = Sisu::find($chamada->sisu_id);
         $chamada->delete();
 

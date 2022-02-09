@@ -129,6 +129,9 @@ class SisuController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($id);
+        if($sisu->chamadas()->count() > 0){
+            return redirect()->back()->with(['error' => 'Não foi possível deletar esta edição, há chamadas criadas para ela.']);
+        }
         $sisu->delete();
 
         return redirect(route('sisus.index'))->with(['success' => 'Edição deletada com sucesso!']);
