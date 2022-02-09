@@ -36,6 +36,16 @@
                                 </div>
                             </div>
                         @endif
+                        @if(session('error'))
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('error')}}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <table class="table">
                             <thead>
                                 <tr>
@@ -114,7 +124,7 @@
                                     <div title="Editar chamada" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                            Editar analista
+                                            Editar chamada
                                         </div>
                                     </div>
                                 </li>
@@ -122,7 +132,7 @@
                                     <div title="Deletar chamada" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
-                                            Deletar analista
+                                            Deletar chamada
                                         </div>
                                     </div>
                                 </li>
