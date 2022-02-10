@@ -8,6 +8,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
+use DateTime;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
