@@ -8,6 +8,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\User;
+use DateTime;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -85,7 +86,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => strval($data[39]),
-                    'dt_operacao' => strval($data[40]),
+                    'dt_operacao' => DateTime::createFromFormat('d/m/Y H:i', $data[40])->format('Y/m/d'),
                     'co_ies' => strval($data[41]),
                     'no_ies' => strval($data[42]),
                     'sg_ies' => strval($data[43]),
@@ -139,13 +140,13 @@ class CadastroRegularCandidato implements ShouldQueue
                             'no_inscrito' => strval($data[8]),
                             'no_social' => strval($data[9]),
                             'nu_cpf_inscrito' => strval($data[10]),
-                            'dt_nascimento' => strval($data[11]),
+                            'dt_nascimento' => DateTime::createFromFormat('d/m/Y H:i', $data[11])->format('Y/m/d'),
                         ]);
                     }else{
                         $candidato = new Candidato([
                             'no_inscrito' => strval($data[8]),
                             'nu_cpf_inscrito' => strval($data[10]),
-                            'dt_nascimento' => strval($data[11]),
+                            'dt_nascimento' => DateTime::createFromFormat('d/m/Y H:i', $data[11])->format('Y/m/d'),
                         ]);
                     }
                     $candidato->user_id = $user->id;
