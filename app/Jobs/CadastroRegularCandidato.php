@@ -47,56 +47,56 @@ class CadastroRegularCandidato implements ShouldQueue
             }else{
                 $inscricao = new Inscricao([
                     'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make($data[8].$this->chamada->id),
-                    'nu_etapa' => $data[0],
-                    'no_campus' => $data[1],
-                    'co_ies_curso' => $data[2],
-                    'no_curso' => $data[3],
-                    'ds_turno' => $data[4],
-                    'ds_formacao' => $data[5],
-                    'qt_vagas_concorrencia' => $data[6],
-                    'co_inscricao_enem' => $data[7],
+                    'protocolo' => Hash::make(strval($data[8]).$this->chamada->id),
+                    'nu_etapa' => strval($data[0]),
+                    'no_campus' => strval($data[1]),
+                    'co_ies_curso' => strval($data[2]),
+                    'no_curso' => strval($data[3]),
+                    'ds_turno' => strval($data[4]),
+                    'ds_formacao' => strval($data[5]),
+                    'qt_vagas_concorrencia' => strval($data[6]),
+                    'co_inscricao_enem' => strval($data[7]),
                     //'cd_efetivado' => false,
-                    'tp_sexo' => $data[12],
-                    'nu_rg' => $data[13],
-                    'no_mae' => $data[14],
-                    'ds_logradouro' => $data[15],
-                    'nu_endereco' => $data[16],
-                    'ds_complemento' => $data[17],
-                    'sg_uf_inscrito' => $data[18],
-                    'no_municipio' => $data[19],
-                    'no_bairro' => $data[20],
-                    'nu_cep' => $data[21],
-                    'nu_fone1' => $data[22],
-                    'nu_fone2' => $data[23],
-                    'ds_email' => $data[24],
+                    'tp_sexo' => strval($data[12]),
+                    'nu_rg' => strval($data[13]),
+                    'no_mae' => strval($data[14]),
+                    'ds_logradouro' => strval($data[15]),
+                    'nu_endereco' => strval($data[16]),
+                    'ds_complemento' => strval($data[17]),
+                    'sg_uf_inscrito' => strval($data[18]),
+                    'no_municipio' => strval($data[19]),
+                    'no_bairro' => strval($data[20]),
+                    'nu_cep' => strval($data[21]),
+                    'nu_fone1' => strval($data[22]),
+                    'nu_fone2' => strval($data[23]),
+                    'ds_email' => strval($data[24]),
                     'nu_nota_l' => floatval(str_replace( ',', '.', $data[25])),
                     'nu_nota_ch' => floatval(str_replace( ',', '.', $data[26])),
                     'nu_nota_cn' => floatval(str_replace( ',', '.', $data[27])),
                     'nu_nota_m' => floatval(str_replace( ',', '.', $data[28])),
                     'nu_nota_r' => floatval(str_replace( ',', '.', $data[29])),
-                    'co_curso_inscricao' => $data[30],
-                    'st_opcao' => $data[31],
-                    'no_modalidade_concorrencia' => $data[32],
-                    'st_bonus_perc' => $data[33],
-                    'qt_bonus_perc' => $data[34],
-                    'no_acao_afirmativa_bonus' => $data[35],
+                    'co_curso_inscricao' => strval($data[30]),
+                    'st_opcao' => strval($data[31]),
+                    'no_modalidade_concorrencia' => strval($data[32]),
+                    'st_bonus_perc' => strval($data[33]),
+                    'qt_bonus_perc' => strval($data[34]),
+                    'no_acao_afirmativa_bonus' => strval($data[35]),
                     'nu_nota_candidato' => floatval(str_replace( ',', '.', $data[36])),
                     'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
-                    'ds_matricula' => $data[39],
-                    'dt_operacao' => $data[40],
-                    'co_ies' => $data[41],
-                    'no_ies' => $data[42],
-                    'sg_ies' => $data[43],
-                    'sg_uf_ies' => $data[44],
-                    'st_lei_optante' => $data[45],
-                    'st_lei_renda' => $data[46],
-                    'st_lei_etnia_p' => $data[47],
-                    'st_lei_etnia_i' => $data[48],
+                    'ds_matricula' => strval($data[39]),
+                    'dt_operacao' => strval($data[40]),
+                    'co_ies' => strval($data[41]),
+                    'no_ies' => strval($data[42]),
+                    'sg_ies' => strval($data[43]),
+                    'sg_uf_ies' => strval($data[44]),
+                    'st_lei_optante' => strval($data[45]),
+                    'st_lei_renda' => strval($data[46]),
+                    'st_lei_etnia_p' => strval($data[47]),
+                    'st_lei_etnia_i' => strval($data[48]),
                 ]);
 
-                $candidatoExistente = Candidato::where('nu_cpf_inscrito', $data[10])->first();
+                $candidatoExistente = Candidato::where('nu_cpf_inscrito', strval($data[10]))->first();
                 if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
                 $inscricao->no_modalidade_concorrencia == 'Ampla concorrência' || $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'){
                     $cota = Cota::where('descricao',  'Ampla concorrência')->first();
@@ -124,28 +124,28 @@ class CadastroRegularCandidato implements ShouldQueue
 
                 if($candidatoExistente == null){
                     $user = new User([
-                        'name' => $data[8],
+                        'name' => strval($data[8]),
                         'password' => Hash::make('12345678'),
                         'role' => User::ROLE_ENUM['candidato'],
                         'primeiro_acesso' => true,
                     ]);
                     if($data[9] != null){
-                        $user->name = $data[9];
+                        $user->name = strval($data[9]);
                     }
                     $user->save();
 
                     if($data[9] != null){
                         $candidato = new Candidato([
-                            'no_inscrito' => $data[8],
-                            'no_social' => $data[9],
-                            'nu_cpf_inscrito' => $data[10],
-                            'dt_nascimento' => $data[11],
+                            'no_inscrito' => strval($data[8]),
+                            'no_social' => strval($data[9]),
+                            'nu_cpf_inscrito' => strval($data[10]),
+                            'dt_nascimento' => strval($data[11]),
                         ]);
                     }else{
                         $candidato = new Candidato([
-                            'no_inscrito' => $data[8],
-                            'nu_cpf_inscrito' => $data[10],
-                            'dt_nascimento' => $data[11],
+                            'no_inscrito' => strval($data[8]),
+                            'nu_cpf_inscrito' => strval($data[10]),
+                            'dt_nascimento' => strval($data[11]),
                         ]);
                     }
                     $candidato->user_id = $user->id;
@@ -155,10 +155,10 @@ class CadastroRegularCandidato implements ShouldQueue
                 }else{
                     $candidatoExistente->atualizar_dados = true;
                     if($data[9] != null){
-                        $candidatoExistente->no_social = $data[9];
-                        $candidatoExistente->user->name = $data[9];
+                        $candidatoExistente->no_social = strval($data[9]);
+                        $candidatoExistente->user->name = strval($data[9]);
                     }else{
-                        $candidatoExistente->user->name = $data[8];
+                        $candidatoExistente->user->name = strval($data[8]);
                     }
                     $candidatoExistente->update();
                     $candidatoExistente->user->update();
