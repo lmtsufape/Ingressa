@@ -17,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Hash;
+use DateTime;
 
 class CadastroRegularCandidato implements ShouldQueue
 {
@@ -40,6 +41,7 @@ class CadastroRegularCandidato implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('auto_detect_line_endings', true);
         $dados = fopen(public_path('storage/'.$this->chamada->sisu->caminho_import_regular), "r");
         $primeira = true;
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
@@ -86,7 +88,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => strval($data[39]),
-                    'dt_operacao' => DateTime::createFromFormat('d/m/Y H:i', $data[40])->format('Y/m/d'),
+                    'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $data[40])->format('Y/m/d'),
                     'co_ies' => strval($data[41]),
                     'no_ies' => strval($data[42]),
                     'sg_ies' => strval($data[43]),
@@ -140,13 +142,13 @@ class CadastroRegularCandidato implements ShouldQueue
                             'no_inscrito' => strval($data[8]),
                             'no_social' => strval($data[9]),
                             'nu_cpf_inscrito' => strval($data[10]),
-                            'dt_nascimento' => DateTime::createFromFormat('d/m/Y H:i', $data[11])->format('Y/m/d'),
+                            'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d'),
                         ]);
                     }else{
                         $candidato = new Candidato([
                             'no_inscrito' => strval($data[8]),
                             'nu_cpf_inscrito' => strval($data[10]),
-                            'dt_nascimento' => DateTime::createFromFormat('d/m/Y H:i', $data[11])->format('Y/m/d'),
+                            'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d'),
                         ]);
                     }
                     $candidato->user_id = $user->id;
