@@ -171,6 +171,11 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
+            if($inscricao->cota->cod_cota == 'L5' || $inscricao->cota->cod_cota == 'L6'){
+                if(!$documentos->contains('declaracao_cotista')){
+                    $documentos->push('declaracao_cotista');
+                }
+            }
         } else {
             if($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())){
                 if($inscricao->st_lei_etnia_p == 'S'){
