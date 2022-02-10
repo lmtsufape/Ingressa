@@ -18,7 +18,12 @@ class WelcomeController extends Controller
         $intervalo_fim = now()->addMonth(2);
         
         $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->first();
-        $chamadas = $edicao_atual->chamadas()->orderBy('created_at', 'DESC')->get();
+        
+        if($edicao_atual != null){
+            $chamadas = $edicao_atual->chamadas()->orderBy('created_at', 'DESC')->get();
+        }else{
+            $chamadas = collect();
+        }
 
         $checagem_chamada = $this->listas_a_serem_exibidas($chamadas);
 
