@@ -50,7 +50,9 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
 
     Route::resource('sisus', SisuController::class);
 
-    Route::resource('chamadas', ChamadaController::class);
+    Route::resource('chamadas', ChamadaController::class)->except([
+        'create'
+    ]);
 
     Route::get('/sisus/{sisu_id}/criar-chamada', [ChamadaController::class, 'create'])
         ->name('chamadas.create');
