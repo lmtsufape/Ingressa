@@ -220,7 +220,14 @@ class EnviarDocumentos extends Component
         $this->attributes();
         $this->authorize('dataEnvio', $this->inscricao->chamada);
         if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1]))) {
-            $this->validateOnly($documento);
+            $this->withValidator(function (Validator $validator) {
+                if ($validator->fails()) {
+                    $this->dispatchBrowserEvent('swal:fire', [
+                        'icon' => 'error',
+                        'title' => 'Erro ao enviar o arquivo, verifique o campo inválido!'
+                    ]);
+                }
+            })->validateOnly($documento);
             $documento = explode('.', $documento)[1];
             $path = 'documentos/inscricaos/'. $this->inscricao->id . '/';
             $nome = $documento . '.' . $value->getClientOriginalExtension();
