@@ -199,7 +199,10 @@ class EnviarDocumentos extends Component
         $this->attributes();
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
-                session()->flash('error', 'Erro ao enviar os arquivos, verifique os campos inválidos!');
+                $this->dispatchBrowserEvent('swal:fire', [
+                    'icon' => 'error',
+                    'title' => 'Erro ao enviar os arquivos, verifique os campos inválidos!'
+                ]);
             }
         })->validate();
         $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
@@ -239,7 +242,10 @@ class EnviarDocumentos extends Component
                     'nome' => $documento,
                 ]);
             }
-            session()->flash('success', 'Arquivo enviado com sucesso!');
+            $this->dispatchBrowserEvent('swal:fire', [
+                'icon' => 'success',
+                'title' => 'Arquivo enviado com sucesso!'
+            ]);
         }
     }
 
