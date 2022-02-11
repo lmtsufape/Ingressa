@@ -229,7 +229,7 @@ class EnviarDocumentos extends Component
                 if (Storage::exists($arquivo->caminho)) {
                     Storage::delete($arquivo->caminho);
                 }
-                $value->storeAs('public/'.$path, $nome);
+                $value->storeAs($path, $nome);
                 if($arquivo->avaliacao != null)
                 {
                     $avaliacao = $arquivo->avaliacao;
@@ -237,7 +237,7 @@ class EnviarDocumentos extends Component
                     $avaliacao->save();
                 }
             }else{
-                $value->storeAs('public/'.$path, $nome);
+                $value->storeAs($path, $nome);
                 Arquivo::create([
                     'inscricao_id' => $this->inscricao->id,
                     'caminho' => $path.$nome,
@@ -253,7 +253,7 @@ class EnviarDocumentos extends Component
 
     public function baixar($documento)
     {
-        return response()->download('storage/' . $this->inscricao->arquivo($documento)->caminho);
+        return response()->download(storage_path('app/'.$this->inscricao->arquivo($documento)->caminho));
     }
 
     public function apagar($documento)

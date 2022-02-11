@@ -149,7 +149,7 @@
                         <div class="corpo p-3" id="corpoFicha">
                             <div class="d-flex align-items-center my-2 pt-1 pb-3">
                                 <div style="border-radius: 0.5rem;" class="shadow">
-                                    <img class="aling-middle" width="130" src="@if($inscricao->arquivo('foto')) {{asset('storage/'.$inscricao->arquivo('foto')->caminho)}} @else{{asset('img/foto_geral.svg')}}@endif" alt="icone-busca">
+                                    <img class="aling-middle" width="130" src="@if($inscricao->arquivo('foto')) {{route('inscricao.arquivo', [$inscricao->id, 'foto'])}} @else{{asset('img/foto_geral.svg')}}@endif" alt="icone-busca">
                                 </div>
                                 <div class="">
                                     <div class="tituloDocumento mx-3">
