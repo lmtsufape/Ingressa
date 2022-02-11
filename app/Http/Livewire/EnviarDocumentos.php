@@ -25,6 +25,7 @@ class EnviarDocumentos extends Component
     public $declaracoes;
     public $arquivos;
     public $inscricao;
+    public $nomes;
     protected $validationAttributes = [];
     protected $messages = [
         'arquivos.historico.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
@@ -49,6 +50,7 @@ class EnviarDocumentos extends Component
             default:
                     break;
             }
+            $this->nomes[$documento] = InscricaoController::getNome($documento);
         }
     }
 
@@ -252,6 +254,29 @@ class EnviarDocumentos extends Component
     public function baixar($documento)
     {
         return response()->download('storage/' . $this->inscricao->arquivo($documento)->caminho);
+    }
+
+    public function apagar($documento)
+    {
+        $this->authorize('dataEnvio', $this->inscricao->chamada);
+        if ($this->inscricao->arquivo($documento) == null)
+            if($this->inscricao->isDocumentosRequeridos() || ($this->inscricao->isArquivoRecusadoOuReenviado($documento) && $this->inscricao->isDocumentosInvalidados()))
+            {
+                $this->dispatchBrowserEvent('swal:fire', [
+                    'icon' => 'error',
+                    'title' => 'Não é possível deletar este arquivo!'
+                ]);
+                return;
+            }
+        $arquivo = $this->inscricao->arquivo($documento);
+        if (Storage::exists($arquivo->caminho)) {
+            Storage::delete($arquivo->caminho);
+        }
+        $arquivo->delete();
+        $this->dispatchBrowserEvent('swal:fire', [
+            'icon' => 'success',
+            'title' => 'Arquivo deletado com sucesso.'
+        ]);
     }
 
     protected function cleanupOldUploads()

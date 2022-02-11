@@ -34,6 +34,11 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-declaracao_veracidade" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -89,6 +94,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-certificado_conclusao" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -147,6 +158,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-historico" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -215,6 +232,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-nascimento_ou_casamento" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -281,6 +304,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-rg" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -339,6 +368,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-cpf" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -397,6 +432,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-quitacao_eleitoral" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -470,6 +511,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-quitacao_militar" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -538,6 +585,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-foto" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -597,6 +650,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-declaracao_cotista" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -665,6 +724,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-heteroidentificacao" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -719,6 +784,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-fotografia" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -781,6 +852,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-comprovante_renda" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -844,6 +921,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-rani" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -913,6 +996,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('dataEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-laudo_medico" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -967,4 +1056,31 @@
             @endif
         @endcan
     </div>
+    @foreach ($documentos as $documento)
+        @if ($inscricao->arquivo($documento))
+            @can('dataEnvio', $inscricao->chamada)
+                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado($documento) && $inscricao->isDocumentosInvalidados()))
+                    <!-- Modal Deletar documento enviado -->
+                    <div class="modal fade" id="deletar-arquivo-{{$documento}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content modalFundo p-3">
+                                <div class="col-md-12 tituloModal">Excluir {{$nomes[$documento]}}</div>
+                                <div class="pt-3">
+                                    Tem certeza que deseja deletar {{$nomes[$documento]}}?
+                                </div>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" data-bs-dismiss="modal" wire:click="apagar('{{$documento}}')" class="btn botaoVerde my-2 py-1" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endcan
+        @endif
+    @endforeach
 </div>

@@ -78,6 +78,14 @@
                                     </div>
                                 </div>
                             </li>
+                            <li>
+                                <div title="Deletar documento enviado" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar arquivo">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Deletar documento enviado
+                                    </div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
