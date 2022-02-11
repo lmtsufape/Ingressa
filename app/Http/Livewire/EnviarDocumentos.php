@@ -76,9 +76,9 @@ class EnviarDocumentos extends Component
     public function rulePdf($documento)
     {
         if ($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            return ['nullable', 'file', 'mimes:pdf', 'max:5120'];
         } else {
-            return ['required', 'file', 'mimes:pdf', 'max:2048'];
+            return ['required', 'file', 'mimes:pdf', 'max:5120'];
         }
     }
 
@@ -86,45 +86,45 @@ class EnviarDocumentos extends Component
     {
         $nomes = implode(',', $all);
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'mimes:pdf', 'max:2048'];
+            return ['nullable', 'mimes:pdf', 'max:5120'];
         } else {
-            return ['required_without_all:'.$nomes, 'nullable', 'file', 'mimes:pdf', 'max:2048'];
+            return ['required_without_all:'.$nomes, 'nullable', 'file', 'mimes:pdf', 'max:5120'];
         }
     }
 
     public function rulePdfIf($documento, $nome)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            return ['nullable', 'file', 'mimes:pdf', 'max:5120'];
         } else {
-            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:pdf', 'max:2048'];
+            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:pdf', 'max:5120'];
         }
     }
 
     public function ruleVideo($documento)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
+            return ['nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
         } else {
-            return ['required', 'file', 'mimes:mp4', 'max:65536'];
+            return ['required', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
         }
     }
 
     public function ruleVideoIf($documento, $nome)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:mp4', 'max:65536'];
+            return ['nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
         } else {
-            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4', 'max:65536'];
+            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
         }
     }
 
     public function ruleImage($documento)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'image', 'max:10240'];
+            return ['nullable', 'image', 'max:92160'];
         } else {
-            return ['required', 'image', 'max:10240'];
+            return ['required', 'image', 'max:92160'];
         }
     }
 
@@ -132,18 +132,18 @@ class EnviarDocumentos extends Component
     {
         $nomes = implode(',', $all);
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'image', 'max:10240'];
+            return ['nullable', 'image', 'max:92160'];
         } else {
-            return ['required_without_all:'.$nomes, 'image', 'max:10240'];
+            return ['required_without_all:'.$nomes, 'image', 'max:92160'];
         }
     }
 
     public function ruleImageIf($documento, $nome)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'image', 'max:10240'];
+            return ['nullable', 'image', 'max:92160'];
         } else {
-            return ['required_if:'.$nome.',true', 'nullable', 'image', 'max:10240'];
+            return ['required_if:'.$nome.',true', 'nullable', 'image', 'max:92160'];
         }
     }
 
