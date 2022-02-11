@@ -28,14 +28,14 @@ class Sisu extends Model
     public function salvar_import_regular($file) 
     {
         if($this->caminho_import_regular != null) {
-            if (Storage::disk()->exists('public/' . $this->caminho_import_regular)) {
-                Storage::delete('public/' . $this->caminho_import_regular);
+            if (Storage::disk()->exists($this->caminho_import_regular)) {
+                Storage::delete($this->caminho_import_regular);
             }
         }
 
-        $path = 'sisu/'.$this->id.'/';
+        $path = 'sisu'. DIRECTORY_SEPARATOR .$this->id. DIRECTORY_SEPARATOR;
         $nomeRegular = $file->getClientOriginalName();
-        Storage::putFileAs('public/'.$path, $file, $nomeRegular);
+        Storage::putFileAs($path, $file, $nomeRegular);
         $this->caminho_import_regular = $path . $nomeRegular;
         $this->update();
     }
@@ -43,14 +43,14 @@ class Sisu extends Model
     public function salvar_import_espera($file) 
     {
         if($this->caminho_import_espera != null){
-            if (Storage::disk()->exists('public/' . $this->caminho_import_espera)) {
-                Storage::delete('public/' . $this->caminho_import_espera);
+            if (Storage::disk()->exists($this->caminho_import_espera)) {
+                Storage::delete($this->caminho_import_espera);
             }
         }
 
-        $path = 'sisu/'.$this->id.'/';
+        $path = 'sisu'. DIRECTORY_SEPARATOR .$this->id. DIRECTORY_SEPARATOR;
         $nomeEspera = $file->getClientOriginalName();
-        Storage::putFileAs('public/'.$path, $file, $nomeEspera);
+        Storage::putFileAs($path, $file, $nomeEspera);
         $this->caminho_import_espera = $path . $nomeEspera;
         $this->update();
     }
