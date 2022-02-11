@@ -41,7 +41,7 @@ class Chamada extends Model
 
     public function listagem()
     {
-        return $this->hasMany(Listagem::class, 'chamada_id');
+        return $this->hasMany(Listagem::class, 'chamada_id')->orderBy('created_at', 'DESC');
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\MultiplicadorVaga;
 use App\Models\User;
+use DateTime;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -40,6 +41,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('max_execution_time', 900);
+        ini_set('auto_detect_line_endings', true);
         $dados = fopen(public_path('storage/'.$this->chamada->sisu->caminho_import_espera), "r");
         $primeira = true;
         $candidatos = collect();
@@ -67,7 +70,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'no_inscrito' => strval($data[8]),
                     'no_social' => strval($data[9]),
                     'nu_cpf_inscrito' => strval($data[10]),
-                    'dt_nascimento' => strval($data[11]),
+                    'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d'),
 
                     //'cd_efetivado' => false,
                     'tp_sexo' => strval($data[12]),
@@ -98,7 +101,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => strval($data[39]),
-                    'dt_operacao' => strval($data[40]),
+                    'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $data[40])->format('Y/m/d'),
                     'co_ies' => strval($data[41]),
                     'no_ies' => strval($data[42]),
                     'sg_ies' => strval($data[43]),
