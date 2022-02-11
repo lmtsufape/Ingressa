@@ -24,7 +24,7 @@ class CandidatoController extends Controller
 
         if ($candidato == null){
             return redirect(route('primeiro.acesso'))
-                ->withErrors('Dados Incorretos')
+                ->withErrors(['cpf' => 'Dados Incorretos'])
                 ->withInput();
         }
         else{
@@ -37,7 +37,7 @@ class CandidatoController extends Controller
             }
             else{
                 return redirect(route('primeiro.acesso'))
-                    ->withErrors('Login já cadastrado')
+                    ->withErrors(['cpf' => 'Login já cadastrado'])
                     ->withInput();
             }
 
