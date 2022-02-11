@@ -258,7 +258,7 @@ class EnviarDocumentos extends Component
 
     public function apagar($documento)
     {
-        $this->authorize('dataEnvio', $this->inscricao->chamada);
+        $this->authorize('periodoEnvio', $this->inscricao->chamada);
         if ($this->inscricao->arquivo($documento) == null)
             if($this->inscricao->isDocumentosRequeridos() || ($this->inscricao->isArquivoRecusadoOuReenviado($documento) && $this->inscricao->isDocumentosInvalidados()))
             {
