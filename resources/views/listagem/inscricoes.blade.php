@@ -81,7 +81,6 @@
             margin-top: 10px;
             margin-bottom: 10px;
             padding-bottom: 10px;
-            page-break-inside: avoid;
         }
         .esquerda {
             text-align: left;
@@ -132,7 +131,7 @@
                 </h3>
                 @foreach ($collect as $j => $inscricoes)
                     <div class="body">
-                        <div id="modalidade">
+                        <div id="modalidade" @if($inscricoes->count() <= 40) style="page-break-inside: avoid;" @endif>
                             <h4 class="acao_afirmativa">@if($inscricoes[0]->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
                             $inscricoes[0]->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' || $inscricoes[0]->no_modalidade_concorrencia == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$inscricoes[0]->cota->cod_cota}} - {{$inscricoes[0]->no_modalidade_concorrencia}} @endif</h4>
                             <table>
