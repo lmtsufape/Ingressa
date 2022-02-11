@@ -144,8 +144,9 @@
                                     id="docHistorico">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['historico'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -175,14 +176,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
-                                        <label class="form-check-label subtexto3" for="checkHistorico">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('historico'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                            <label class="form-check-label subtexto3" for="checkHistorico">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -218,8 +221,9 @@
                                     id="docNascimento">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -247,14 +251,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
-                                        <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('nascimento_ou_casamento'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                            <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -418,8 +424,9 @@
                                     id="docEleitoral">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -454,14 +461,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
-                                        <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('quitacao_eleitoral'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                            <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -497,8 +506,9 @@
                                     id="docMilitar">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['quitacao_militar'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -528,14 +538,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
-                                        <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('quitacao_militar'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                            <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
