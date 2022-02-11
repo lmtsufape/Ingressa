@@ -3,16 +3,6 @@
         <form id="enviar-documentos"
             wire:submit.prevent="submit"
             enctype="multipart/form-data">
-            @if (session()->has('error'))
-                <script>
-                    error();
-                </script>
-            @endif
-            @if (session()->has('success'))
-                <script>
-                    success();
-                </script>
-            @endif
             <ul class="timeline">
                 <li class="px-1 align-middle">
                     <div class="col-md-12">
@@ -44,6 +34,11 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-declaracao_veracidade" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -99,6 +94,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-certificado_conclusao" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -143,8 +144,9 @@
                                     id="docHistorico">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['historico'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -157,6 +159,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-historico" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -168,14 +176,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
-                                        <label class="form-check-label subtexto3" for="checkHistorico">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('historico'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                            <label class="form-check-label subtexto3" for="checkHistorico">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -211,8 +221,9 @@
                                     id="docNascimento">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -225,6 +236,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-nascimento_ou_casamento" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -234,14 +251,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
-                                        <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('nascimento_ou_casamento'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                            <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -291,6 +310,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-rg" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -349,6 +374,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-cpf" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -393,8 +424,9 @@
                                     id="docEleitoral">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -407,6 +439,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-quitacao_eleitoral" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -423,14 +461,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
-                                        <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('quitacao_eleitoral'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                            <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -466,8 +506,9 @@
                                     id="docMilitar">
                                 @can('dataEnvio', $inscricao->chamada)
                                     @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                        @if (in_array($declaracoes['quitacao_militar'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -480,6 +521,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-quitacao_militar" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -491,14 +538,16 @@
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
-                                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
-                                        <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
+                                @if(!$inscricao->arquivo('quitacao_militar'))
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()))
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                            <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
                                 @endif
                             @endcan
                         </div>
@@ -548,6 +597,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-foto" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -607,6 +662,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-declaracao_cotista" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -675,6 +736,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-heteroidentificacao" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -729,6 +796,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-fotografia" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -791,6 +864,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-comprovante_renda" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -854,6 +933,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-rani" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -923,6 +1008,12 @@
                                         alt="arquivo atual"
                                         width="30"
                                         class="img-flex"></a>
+
+                                @can('periodoEnvio', $inscricao->chamada)
+                                    @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados()))
+                                        <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-laudo_medico" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
+                                    @endif
+                                @endcan
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
@@ -977,4 +1068,31 @@
             @endif
         @endcan
     </div>
+    @foreach ($documentos as $documento)
+        @if ($inscricao->arquivo($documento))
+            @can('dataEnvio', $inscricao->chamada)
+                @if ($inscricao->isDocumentosRequeridos() || ($inscricao->isArquivoRecusadoOuReenviado($documento) && $inscricao->isDocumentosInvalidados()))
+                    <!-- Modal Deletar documento enviado -->
+                    <div class="modal fade" id="deletar-arquivo-{{$documento}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content modalFundo p-3">
+                                <div class="col-md-12 tituloModal">Excluir {{$nomes[$documento]}}</div>
+                                <div class="pt-3">
+                                    Tem certeza que deseja deletar {{$nomes[$documento]}}?
+                                </div>
+                                <div class="row justify-content-between mt-4">
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" data-bs-dismiss="modal" wire:click="apagar('{{$documento}}')" class="btn botaoVerde my-2 py-1" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endcan
+        @endif
+    @endforeach
 </div>

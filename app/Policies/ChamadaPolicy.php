@@ -118,4 +118,13 @@ class ChamadaPolicy
         $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
         return $data_reenvio && $data_reenvio->data_inicio <= now() && $data_reenvio->data_fim >= now();
     }
+
+    public function periodoEnvio(User $user, Chamada $chamada)
+    {
+        $data_envio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['envio'])->first();
+        if ($data_envio && $data_envio->data_inicio <= now() && $data_envio->data_fim >= now()) {
+            return true;
+        }
+        return false;
+    }
 }

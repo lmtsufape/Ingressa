@@ -14,7 +14,7 @@ class Candidato extends Model
         2 => 'Preto(a)',
         3 => 'Pardo(a)',
         4 => 'Amarelo(a)',
-        5 => 'Indigena',
+        5 => 'Indígena',
     ];
 
     public const NECESSIDADES = [

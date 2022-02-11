@@ -608,9 +608,13 @@
                                             class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
                                             name="cor_raca">
                                             <option value="" selected disabled>-- Selecione --</option>
-                                            @foreach (\App\Models\Candidato::COR_RACA as $valor => $cor_raca)
-                                                <option value="{{$valor}}" @if(old('cor_raca', $candidato->cor_raca) == $valor)) selected @endif>{{$cor_raca}}</option>
-                                            @endforeach
+                                                @if ($inscricao->st_lei_etnia_i != 'S' && $inscricao->st_lei_etnia_p != 'S')
+                                                    <option value="1" @if(old('cor_raca', $candidato->cor_raca) == 1) selected @endif>{{$cores_racas[1]}}</option>
+                                                    <option value="4" @if(old('cor_raca', $candidato->cor_raca) == 4) selected @endif>{{$cores_racas[4]}}</option>
+                                                @endif
+                                                <option value="2" @if(old('cor_raca', $candidato->cor_raca) == 2) selected @endif>{{$cores_racas[2]}}</option>
+                                                <option value="3" @if(old('cor_raca', $candidato->cor_raca) == 3) selected @endif>{{$cores_racas[3]}}</option>
+                                                <option value="5" @if(old('cor_raca', $candidato->cor_raca) == 5) selected @endif>{{$cores_racas[5]}}</option>
                                         </select>
                                         @error('cor_raca')
                                             <div id="validationServer03Feedback"

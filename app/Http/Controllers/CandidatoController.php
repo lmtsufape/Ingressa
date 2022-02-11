@@ -90,7 +90,8 @@ class CandidatoController extends Controller
     public function edit(Candidato $candidato, Inscricao $inscricao)
     {
         $this->authorize('isCandidatoDono', $inscricao);
-        return view('candidato.atualizar_dados', compact('candidato', 'inscricao'));
+        $cores_racas = Candidato::COR_RACA;
+        return view('candidato.atualizar_dados', compact('candidato', 'inscricao', 'cores_racas'));
     }
 
 }
