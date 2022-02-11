@@ -40,6 +40,7 @@ class CadastroRegularCandidato implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('max_execution_time', 0);
         ini_set('auto_detect_line_endings', true);
         $dados = fopen(public_path('storage/'.$this->chamada->sisu->caminho_import_regular), "r");
         $primeira = true;
