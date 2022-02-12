@@ -558,6 +558,7 @@
                                             class="form-control form-control-sm caixaDeTexto selectpicker @error('necessidades') is-invalid @enderror"
                                             name="necessidades[]"
                                             title="-- Selecione --"
+                                            required
                                             multiple>
                                             @foreach (\App\Models\Candidato::NECESSIDADES as $valor => $necessidade)
                                                 <option value="{{$valor}}" @if(in_array($valor, old('necessidades', explode(',', $candidato->necessidades)))) selected @endif>{{$necessidade}}</option>

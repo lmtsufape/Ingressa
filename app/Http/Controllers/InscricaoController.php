@@ -128,7 +128,7 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($inscricao_id);
         $this->authorize('isCandidatoDono', $inscricao);
         $arquivo = Arquivo::where([['inscricao_id', $inscricao_id], ['nome', $documento_nome]])->first();
-        return Storage::disk()->exists('public/' . $arquivo->caminho) ? response()->file('storage/' . $arquivo->caminho) : abort(404);
+        return Storage::disk()->exists($arquivo->caminho) ? response()->file(storage_path('app/'.$arquivo->caminho)) : abort(404);
     }
 
     public function documentosRequisitados($id)
@@ -465,7 +465,7 @@ class InscricaoController extends Controller
         $filename = $nomeCandidato.'.zip';
         $zip = new ZipArchive();
         $zip->open(storage_path('app'. DIRECTORY_SEPARATOR . $filename), ZipArchive::CREATE);
-        $path = 'app'. DIRECTORY_SEPARATOR .'public' . DIRECTORY_SEPARATOR . 'documentos' . DIRECTORY_SEPARATOR . 'inscricaos' . DIRECTORY_SEPARATOR . $id;
+        $path = 'app'. DIRECTORY_SEPARATOR . 'documentos' . DIRECTORY_SEPARATOR . 'inscricaos' . DIRECTORY_SEPARATOR . $id;
 
 
         $files = File::files(storage_path($path));
