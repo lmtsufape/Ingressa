@@ -171,7 +171,7 @@ class ChamadaController extends Controller
             $chamada->job_batch_id = $batch->id;
         }
         $chamada->update();
-        return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Realizando o cadastro. Aguarde...']);
+        return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Cadastro feito!']);
     }
 
     private function salvarMultiplicadores($chamada, $request)

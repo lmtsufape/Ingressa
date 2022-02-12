@@ -395,7 +395,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao"><span class="px-4">Cadastrar</span></button>
+                            <button type="submit" class="btn botaoVerde submeterFormBotao my-2 py-1" form="cadastrar-candidatos-chamada-form-{{$chamada->id}}" id="submeterFormBotao"><span class="px-4">Cadastrar</span></button>
                         </div>
                     </div>
                 </div>
