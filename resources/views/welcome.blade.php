@@ -38,7 +38,7 @@
                         @if ((auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'heteroidentificacao')->first() != null &&
                             auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'heteroidentificacao')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) ||
                             (auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first() != null &&
-                            $user->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
+                            auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
                             <div class="row justify-content-center">
                                 <div class="col-md-8">
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
