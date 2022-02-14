@@ -36,6 +36,7 @@
                         <a style="text-decoration: none"  href="{{route('inscricao.documentacao', $inscricoes[$count]->id)}}" class="col-md-3 caixa mt-5 shadow p-3 py-3 text-center" >
                             <h6 style="color: rgb(110, 110, 110)">
                                 <strong>SiSU {{$inscricoes[$count]->chamada->sisu->edicao}}</strong><br>
+                                <strong>{{$inscricoes[$count]->chamada->nome}}</strong><br>
                             </h6>
                             <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
                             <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
@@ -52,13 +53,25 @@
                             @endswitch)
                             </div>
                             <div class="subtitulo" >
-                                <strong>Envio da documentação: </strong>
+                                @can('periodoRetificacao', $inscricoes[$count]->chamada)
+                                    <strong>Reenvio da documentação: </strong>
+                                @else
+                                    <strong>Envio da documentação: </strong>
+                                @endcan
                                 <span>
-                                    @if($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first() != null)
-                                        {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_inicio))}} - {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_fim))}}
+                                    @can('periodoRetificacao', $inscricoes[$count]->chamada)
+                                        @if($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first() != null)
+                                            {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first()->data_inicio))}} - {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first()->data_fim))}}
+                                        @else
+                                            <span style="color: rgb(255, 89, 89)">período de reenvio indefinido</span>
+                                        @endif
                                     @else
-                                        <span style="color: rgb(255, 89, 89)">período de envio indefinido</span>
-                                    @endif
+                                        @if($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first() != null)
+                                            {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_inicio))}} - {{date('d/m/Y',strtotime($inscricoes[$count]->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['envio'])->first()->data_fim))}}
+                                        @else
+                                            <span style="color: rgb(255, 89, 89)">período de envio indefinido</span>
+                                        @endif
+                                    @endcan
                                 </span>
                             </div>
                             <div class="subtitulo" style="margin-top: 10px;">
@@ -72,7 +85,7 @@
                                                 Documentos pendentes
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <small> Fora do periodo de envio</small>
+                                                        <small> Fora do periodo de envio/reenvio</small>
                                                     </div>
                                                 </div>
                                             @endcan

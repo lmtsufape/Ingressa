@@ -124,7 +124,10 @@
                     $exibirNomeCurso = true;
                 @endphp
                 @if($exibirNomeCurso)
-                    <h3 class="subtitulo">Curso: {{$curso->first()->curso->nome}} - @switch($curso->first()->curso->turno)
+                    @php
+                        $inscricao = App\Models\Inscricao::find($curso->first()['id']);
+                    @endphp
+                    <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
                         @case(App\Models\Curso::TURNO_ENUM['matutino'])
                             Matutino
                             @break
@@ -137,8 +140,8 @@
                         @case(App\Models\Curso::TURNO_ENUM['integral'])
                             Integral
                             @break
-                        @endswitch @if(!is_null($curso->first()->curso->semestre))
-                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/{{$curso->first()->curso->semestre}})
+                        @endswitch @if(!is_null($inscricao->curso->semestre))
+                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/{{$inscricao->curso->semestre}})
                                         </span>
                                         @php
                                             $semestre = "indefinido";
@@ -178,6 +181,9 @@
                                     $k = 0;
                                 @endphp
                                 @foreach ($curso as $inscricao)
+                                    @php
+                                        $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                    @endphp
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$k+1}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
@@ -204,7 +210,10 @@
                 $exibirNomeCurso = true;
             @endphp
             @if($exibirNomeCurso)
-                <h3 class="subtitulo">Curso: {{$curso->first()->curso->nome}} - @switch($curso->first()->curso->turno)
+                @php
+                    $inscricao = App\Models\Inscricao::find($curso->first()['id']);
+                @endphp
+                <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
                     @case(App\Models\Curso::TURNO_ENUM['matutino'])
                         Matutino
                         @break
@@ -242,6 +251,9 @@
                                 $k = 0;
                             @endphp
                             @foreach ($curso as $inscricao)
+                                @php
+                                    $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                @endphp
                                 <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                     <th>{{$k+1}}</th>
                                     <th>{{$inscricao->candidato->getCpfPDF()}}</th>
