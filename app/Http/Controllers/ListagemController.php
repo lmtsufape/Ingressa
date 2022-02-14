@@ -173,6 +173,7 @@ class ListagemController extends Controller
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
+                    $ampla2 = $ampla2->map->only(['id']);
                     $ampla = $ampla->concat($ampla2);
                 }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
                     //ignorar a de 10% visto que entra na mesma tabela que A0
@@ -184,6 +185,7 @@ class ListagemController extends Controller
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     if($inscritosCota->count() > 0 ){
+                        $inscritosCota = $inscritosCota->map->only(['id']);
                         $inscricoes_curso->push($inscritosCota);
                     }
                 }
@@ -265,6 +267,7 @@ class ListagemController extends Controller
                 ->get();
 
             if ($inscricoes_curso->count() > 0) {
+                $inscricoes_curso = $inscricoes_curso->map->only(['id']);
                 $inscricoes->push($inscricoes_curso);
             }
         }
@@ -392,6 +395,9 @@ class ListagemController extends Controller
                         return $candidato['nu_nota_candidato'];
                     });
                 }
+                $primeiroSemestre = $primeiroSemestre->map->only(['id']);
+                $segundoSemestre = $segundoSemestre->map->only(['id']);
+
                 $candidatosIngressantesCursos->push($primeiroSemestre);
                 $candidatosIngressantesCursos->push($segundoSemestre);
             }
@@ -420,6 +426,9 @@ class ListagemController extends Controller
                     return $candidato['nu_nota_candidato'];
                 });
             }
+            $candidatosReservaCurso = $candidatosReservaCurso->map->only(['id']);
+            $candidatosIngressantesCurso = $candidatosIngressantesCurso->map->only(['id']);
+
             $candidatosReservaCursos->push($candidatosReservaCurso);
         }
         return ['ingressantes' => $candidatosIngressantesCursos, 'reservas' => $candidatosReservaCursos];
@@ -754,6 +763,7 @@ class ListagemController extends Controller
                 ->get();
 
             if ($inscricoes_curso->count() > 0) {
+                $inscricoes_curso = $inscricoes_curso->map->only(['id']);
                 $inscricoes->push($inscricoes_curso);
             }
         }

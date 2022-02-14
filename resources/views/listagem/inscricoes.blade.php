@@ -114,7 +114,10 @@
     <div id="body">
         @foreach ($collect_inscricoes as $i => $collect)
             @if ($collect->count() > 0)
-                <h3 class="subtitulo">Curso: {{$collect->first()->first()->curso->nome}} - @switch($collect->first()->first()->curso->turno)
+                @php
+                    $inscricao = App\Models\Inscricao::find($collect->first()->first()['id']);
+                @endphp
+                <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
                     @case(App\Models\Curso::TURNO_ENUM['matutino'])
                         Matutino
                         @break
@@ -130,10 +133,13 @@
                     @endswitch
                 </h3>
                 @foreach ($collect as $j => $inscricoes)
+                    @php
+                        $inscricao = App\Models\Inscricao::find($inscricoes->first()['id']);
+                    @endphp
                     <div class="body">
                         <div id="modalidade" @if($inscricoes->count() <= 40) style="page-break-inside: avoid;" @endif>
-                            <h4 class="acao_afirmativa">@if($inscricoes[0]->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                            $inscricoes[0]->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' || $inscricoes[0]->no_modalidade_concorrencia == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$inscricoes[0]->cota->cod_cota}} - {{$inscricoes[0]->no_modalidade_concorrencia}} @endif</h4>
+                            <h4 class="acao_afirmativa">@if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                            $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' || $inscricao->no_modalidade_concorrencia == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$inscricao->cota->cod_cota}} - {{$inscricao->no_modalidade_concorrencia}} @endif</h4>
                             <table>
                                 <thead>
                                     <tr class="esquerda">
@@ -146,6 +152,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($inscricoes as $k =>  $inscricao)
+                                        @php
+                                            $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                        @endphp
                                         <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                             <th>{{$k+1}}</th>
                                             <th>{{$inscricao->candidato->getCpfPDF()}}</th>

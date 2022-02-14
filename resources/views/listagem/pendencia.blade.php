@@ -117,7 +117,10 @@
     <div id="body">
         @foreach ($collect_inscricoes as $i => $curso)
             @if ($curso->count() > 0)
-                <h3 class="subtitulo">Curso: {{$curso->first()->curso->nome}} - @switch($curso->first()->curso->turno)
+                @php
+                    $inscricao = App\Models\Inscricao::find($curso->first()['id']);
+                @endphp
+                <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
                     @case(App\Models\Curso::TURNO_ENUM['matutino'])
                         Matutino
                         @break
@@ -149,6 +152,9 @@
                                     $cont = 1;
                                 @endphp
                                 @foreach ($curso as $k =>  $inscricao)
+                                    @php
+                                        $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                    @endphp
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$cont}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
