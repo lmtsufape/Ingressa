@@ -1058,16 +1058,47 @@
         </div>
         @can('dataEnvio', $inscricao->chamada)
             @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
-                <div>
-                    <button type="submit"
-                        form="enviar-documentos"
-                        class="btn botaoVerde my-2 py-1">
-                        <span class="px-4">Enviar</span>
-                    </button>
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <button type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal-confirmar"
+                            class="btn botaoVerde my-2 py-1">
+                            <span class="px-4">Enviar</span>
+                        </button>
+                    </div>
                 </div>
             @endif
         @endcan
     </div>
+    {{-- Modal de confirmação --}}
+    <div class="modal fade" id="modal-confirmar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-dialog">
+                <div class="modal-content modalFundo p-3">
+                    <div class="col-md-12 tituloModal">Enviar documentos</div>
+                        <div class="pt-3 pb-2 textoModal">
+                            Tem certeza que você deseja confirmar o envio dos documentos? Após essa confirmação você não poderá mais editar/enviar documentos.
+                            <div class="d-flex flex-wrap justify-content-between mt-4">
+                                <div class="col-md-4">
+                                    <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span>Cancelar envio</span></button>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit"
+                                            class="btn botaoVerde my-2 py-1"
+                                            data-bs-dismiss="modal"
+                                            form="enviar-documentos">
+                                            <span class="px-4">Confirmar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @foreach ($documentos as $documento)
         @if ($inscricao->arquivo($documento))
             @can('dataEnvio', $inscricao->chamada)
