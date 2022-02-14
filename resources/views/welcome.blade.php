@@ -53,10 +53,10 @@
             @endcan
             <div class="row justify-content-center" style="margin-bottom: 40px;">
                 <div class="col-md-12" style="text-align: center; margin-bottom: 10px;">
-                    <span style="font-size: 35px; color: var(--secundaria); font-weight: bolder;">Bem vindo ao Ingressa!</span>
+                    <span style="font-size: 35px; color: var(--secundaria); font-weight: bolder;">Bem-vindo(a) ao Ingressa!</span>
                 </div>
                 <div class="col-md-8" style="text-align: center;">
-                    O Ingressa é um sistema desenvolvido pela Universidade Federal do Agreste de Pernambuco (UFAPE) que visa auxiliar no processo de ingresso de alunos via SISU, facilitando o recebimento de documentos para revisão, análise e matrícula do aluno na Universidade. Pense no Ingressa como a continuação do SISU, o candidato entra com seus dados e envia os documentos para efetivar a matricula! É rápido, simples e fácil!
+                    O Ingressa é um sistema desenvolvido pela Universidade Federal do Agreste de Pernambuco (UFAPE) que visa auxiliar no processo de ingresso de alunos via SiSU, facilitando o recebimento de documentos para revisão, análise e matrícula do(a) aluno(a) na Universidade. Pense no Ingressa como a continuação do SiSU, o(a) candidato(a) entra com seus dados e envia os documentos para efetivar a matrícula! É rápido, simples e fácil! <br> Confira mais informações sobre a matrícula <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">AQUI</a>
                 </div>
             </div>
             <div class="py-3 px-4 row ms-0 justify-content-between">

@@ -126,6 +126,8 @@
                             <div class="d-flex align-items-center my-2 pt-1 pb-3">
                                 <iframe width="100%" height="700" frameborder="0" allowtransparency="true" id="documentoPDF" src="" ></iframe>
                             </div>
+                            <div id="motivo-reprovacao" style="display: none" class="col-md-12 alert alert-danger" role="alert">
+                            </div>
 
                             <div id="avaliarDoc" style="display: none">
                                 <div class="col-md-12 px-3 pt-5">
@@ -135,7 +137,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row justify-content-end">
-                                                <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #FC605F;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar()"> <span class="px-3 text-center">Recusar</span></button>
+                                                <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #FC605F;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar();CKEDITOR.instances.comentario.setData( '', function() { this.updateElement();})"> <span class="px-3 text-center">Recusar</span></button>
                                                 <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar()"><span class="px-3 text-center" >Aprovar</span></button>
                                             </div>
                                         </div>
@@ -725,11 +727,14 @@
 
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
+                    document.getElementById("motivo-reprovacao").style.display = "none";
                     if(documento.avaliacao == "1"){
                         btnAprovar.innerText  = "Aprovado";
                         btnAprovar.disabled = true;
                     }else if(documento.avaliacao == "2"){
                         btnReprovar.innerText  = "Reprovado";
+                        document.getElementById("motivo-reprovacao").innerHTML = documento.comentario;
+                        document.getElementById("motivo-reprovacao").style.display = "block";
                         btnReprovar.disabled = true;
                     }
                     $('#documentoPDF').on("load", function() {
@@ -746,6 +751,7 @@
 
     function atualizarInputAprovar(){
         $('#comentario').attr('required', false);
+        $('#comentario').val('');
 
         document.getElementById('inputAprovar').value = true;
         $("#aprovarTituloForm").show();
@@ -759,6 +765,7 @@
 
     function atualizarInputReprovar(){
         $('#comentario').attr('required', false);
+        $('#comentario').val('');
 
         document.getElementById('inputAprovar').value = false;
         $("#aprovarTituloForm").hide();

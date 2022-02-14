@@ -118,12 +118,8 @@
                                         <img class="aling-middle" width="20" src="{{asset('img/Icon awesome-map-marker-alt.svg')}}" alt="icone-busca">
                                         <span style="font-size: 14px;">Av. Bom Pastor, s/n - Boa Vista,<br> Garanhuns - PE, 55292-270</span>
                                         <div>
-                                            <img class="aling-middle" width="20" src="{{asset('img/Icon ionic-ios-call.svg')}}" alt="icone-busca">
-                                            <span style="font-size: 14px;">(00) 99999-9999</span>
-                                        </div>
-                                        <div>
                                             <img class="aling-middle" width="20" src="{{asset('img/Icon material-email.svg')}}" alt="icone-busca">
-                                            <span style="font-size: 14px;">drca@ufape.edu.br</span>
+                                            <span style="font-size: 14px;">matriculas.sisu@ufape.edu.br</span>
                                         </div>
                                     </div>
                                 </div>

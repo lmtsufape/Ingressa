@@ -12,7 +12,7 @@
                         Primeiro acesso
                     </div>
                     <div class="mt-2 subtexto">
-                        Caso você esteja na lista de chamada dos ingressantes, insira seu CPF e data de nascimento para cadastrar um e-mail e senha.
+                        Caso seu nome conste em alguma das <a href="{{route('index')}}">listas de chamadas</a>, insira seu CPF e data de nascimento para cadastrar um e-mail e senha.
                     </div>
                     <div class="row">
                         <div class="col-md-12">

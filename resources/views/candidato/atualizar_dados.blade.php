@@ -7,7 +7,7 @@
                         Atualização dos dados
                     </div>
                     <div class="mt-2 subtexto">
-                        Confira se seus dados cadastrais estão corretos. Caso tenha alguma informação incorreta, pedimos que corrija, visto que serão fundamentais para a Universidade e que preencha algumas informações adicionais.
+                        Confira se seus dados cadastrais estão corretos. Caso tenha algum dado incorreto, pedimos que corrija, visto que essas são informações fundamentais para seu ingresso na Universidade. Solicitamos também, que preencha alguns dados adicionais.
                     </div>
                     <div class="row">
                         <div class="col-md-12">
