@@ -126,6 +126,8 @@
                             <div class="d-flex align-items-center my-2 pt-1 pb-3">
                                 <iframe width="100%" height="700" frameborder="0" allowtransparency="true" id="documentoPDF" src="" ></iframe>
                             </div>
+                            <div id="motivo-reprovacao" style="display: none" class="col-md-12 alert alert-danger" role="alert">
+                            </div>
 
                             <div id="avaliarDoc" style="display: none">
                                 <div class="col-md-12 px-3 pt-5">
@@ -725,11 +727,14 @@
 
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
+                    document.getElementById("motivo-reprovacao").style.display = "none";
                     if(documento.avaliacao == "1"){
                         btnAprovar.innerText  = "Aprovado";
                         btnAprovar.disabled = true;
                     }else if(documento.avaliacao == "2"){
                         btnReprovar.innerText  = "Reprovado";
+                        document.getElementById("motivo-reprovacao").innerHTML = documento.comentario;
+                        document.getElementById("motivo-reprovacao").style.display = "block";
                         btnReprovar.disabled = true;
                     }
                     $('#documentoPDF').on("load", function() {
