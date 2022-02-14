@@ -672,6 +672,7 @@
                 },
             dataType:'json',
         });
+        document.location.reload(true);
     }
 </script>
 <script src="{{ asset('js/checkbox_marcar_todos.js') }}" defer></script>

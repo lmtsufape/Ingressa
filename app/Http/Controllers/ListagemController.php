@@ -767,12 +767,12 @@ class ListagemController extends Controller
         $listagem = Listagem::find($request->listagem_id);
         $listagem->publicada = $request->publicar;
 
-        if ($listagem->job_batch_id == null && $listagem->enviaEmails()) {
+        /*if ($listagem->job_batch_id == null && $listagem->enviaEmails()) {
             $batch = Bus::batch([
                 new EnviarEmailsPublicacaoListagem($listagem),
             ])->name('Enviar e-mails da listagem id: '.$listagem->id)->dispatch();
             $listagem->job_batch_id = $batch->id;
-        }
+        }*/
 
         return $listagem->save();
     }
