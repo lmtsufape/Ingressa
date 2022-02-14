@@ -7,7 +7,7 @@
                 <li class="px-1 align-middle">
                     <div class="col-md-12">
                         <div class="tituloEnvio"> Documentação básica </div>
-                        <div class="subtexto2 my-1">A documentação básica corresponde a documentação que o(a) candidato(a) deve enviar.</div>
+                        <div class="subtexto2 my-1">A documentação básica corresponde a documentação comum a todos os candidatos.</div>
                     </div>
                     @if ($documentos->contains('declaracao_veracidade'))
                         <div class="mt-2">
@@ -44,7 +44,7 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
-                                Declaração de Veracidade;
+                                Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
                             </span>
                             <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
                         </div>
@@ -105,10 +105,11 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.certificado_conclusao') is-invalid text-danger @enderror">
-                                Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino Médio ou
-                                Certificação de Ensino Médio através do ENEM ou documento equivalente [pode estar junto com
-                                o Histórico Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos
-                                dois campos];
+                                Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino
+                                Médio ou Certificação de Ensino Médio através do ENEM ou documento equivalente.
+                                <b>OBS.</b>: Pode estar junto com o Histórico Escolar (escanear frente e verso da Ficha 19),
+                                neste caso anexar o arquivo nos dois campos (“certificado de conclusão do ensino
+                                médio” e “histórico escolar”)
                             </span>
                             <div class="invalid-feedback">@error('arquivos.certificado_conclusao'){{$message}}@enderror</div>
                         </div>
@@ -170,9 +171,9 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
-                                Histórico Escolar do Ensino Médio ou Equivalente [pode estar junto com
-                                o Certificado de Conclusão do Ensino Médio (escanear frente e verso da Ficha 19), neste caso anexar
-                                o arquivo nos dois campos];
+                                Histórico Escolar do Ensino Médio ou Equivalente. <b>OBS.</b>: Pode estar junto com o Histórico
+                                Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos dois
+                                campos (“certificado de conclusão do ensino médio” e “histórico escolar”)
                             </span>
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -247,7 +248,7 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
-                                Registro de Nascimento ou Certidão de Casamento;
+                                Registro de Nascimento ou Certidão de Casamento
                             </span>
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -321,10 +322,10 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.rg') is-invalid text-danger @enderror">
-                                Carteira de Identidade válida e com foto recente (RG), frente e verso. Caso tenha perdido ou sido
-                                roubado, anexar um Boletim de Ocorrência e algum outro documento com foto. A Carteira
-                                Nacional de Habilitação pode ser utilizado como documento com foto, mas não será aceita em
-                                substituição ao RG e ao CPF;
+                                Carteira de Identidade válida e com foto recente (RG) - escanear frente e verso. <b>OBS.</b>:
+                                Caso tenha perdido ou sido roubado, anexar um Boletim de Ocorrência e algum outro
+                                documento com foto. A Carteira Nacional de Habilitação pode ser utilizada como
+                                documento com foto, mas não será aceita em substituição ao RG e ao CPF
                             </span>
                             <div class="invalid-feedback">@error('arquivos.rg'){{$message}}@enderror</div>
                         </div>
@@ -385,11 +386,11 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.cpf') is-invalid text-danger @enderror">
-                                Cadastro de Pessoa Física (CPF). Caso conste o número do CPF na identidade (RG),
+                                Cadastro de Pessoa Física (CPF). <b>OBS.</b>: Caso conste o número do CPF na identidade (RG),
                                 anexar cópia da identidade, frente e verso. Caso tenha perdido ou sido
                                 roubado, emitir Comprovante de Situação Cadastral no CPF, através do
                             </span>
-                            <a href="https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp" target="_blank" rel="noopener noreferrer">site da Receita Federal</a>;
+                            <a href="https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp" target="_blank" rel="noopener noreferrer">site da Receita Federal</a>
                             <div class="invalid-feedback">@error('arquivos.cpf'){{$message}}@enderror</div>
                         </div>
                         @if($inscricao->isArquivoRecusado('cpf'))
@@ -451,13 +452,13 @@
                             @endif
                             <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                 Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
-                                quitação eleitoral. Essa certidão poderá ser emitida no
+                                quitação eleitoral. <b>OBS.</b>:  Essa certidão poderá ser emitida no
                                 <a href="https://www.tse.jus.br/eleitor/certidoes/certidao-de-quitacao-eleitoral" target="_blank" rel="noopener noreferrer">
                                 site do Tribunal Superior Eleitoral.</a> Caso a certidão de quitação eleitoral não possa ser emitida em função de
                                 pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
                                 tela) do relatório de quitação de débitos do eleitor (quitação de multas,
                                 disponível no
-                                <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>);
+                                <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>)
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -533,8 +534,8 @@
                             @endif
                             <span class="subtexto3 @error('arquivos.quitacao_militar') is-invalid text-danger @enderror">
                                 Comprovante de quitação com o Serviço Militar, para candidatos
-                                do sexo masculino que tenham de 18 a 45 anos - Frente e verso. Para os militares, apresentar cópia frente e verso da carteira de identidade
-                                militar;
+                                do sexo masculino que tenham de 18 a 45 anos - Frente e verso. <b>OBS.</b>:  Para os militares, apresentar cópia frente e verso da carteira de identidade
+                                militar
                             </span>
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -607,7 +608,7 @@
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
                             @endif
-                            <span class="subtexto3 @error('arquivos.foto') is-invalid text-danger @enderror">Uma foto 3x4 atual;</span>
+                            <span class="subtexto3 @error('arquivos.foto') is-invalid text-danger @enderror">Uma foto 3x4 atual</span>
                             <div class="invalid-feedback">@error('arquivos.foto'){{$message}}@enderror</div>
                         </div>
                         @if($inscricao->isArquivoRecusado('foto'))
@@ -676,7 +677,8 @@
                                 Autodeclaração como candidato participante de reserva de vaga
                                 prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                 devidamente assinada e preenchida, conforme a modalidade de
-                                concorrência;
+                                concorrência (preencher e assinar modelo disponível em:
+                                <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
                             </span>
                             <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
                         </div>
@@ -749,7 +751,7 @@
                             <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                 Vídeo individual e recente para procedimento de heteroidentificação.
                                 De acordo com as especificações e o roteiro descritos no edital do
-                                processo de seleção SISU 2022 da UFAPE;</span>
+                                processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
                             <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                             @if($inscricao->isArquivoRecusado('heteroidentificacao'))
                                 <div class="mt-2">
@@ -809,7 +811,7 @@
                             <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                 Fotografia individual e recente para procedimento de
                                 heteroidentificação. Conforme especificado no edital do processo de
-                                seleção SISU 2022 da UFAPE;</span>
+                                seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
                             <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                             @if($inscricao->isArquivoRecusado('fotografia'))
                                 <div class="mt-2">
@@ -876,7 +878,7 @@
                             @endif
                             <span class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
                                 Comprovante de renda, ou de que não possui renda, de cada membro
-                                do grupo familiar, seja maior ou menor de idade;
+                                do grupo familiar, seja maior ou menor de idade
                             </span>
                             <div class="invalid-feedback">@error('arquivos.comprovante_renda'){{$message}}@enderror</div>
                         </div>
@@ -1019,8 +1021,9 @@
                                     width="30">
                             @endif
                             <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
-                                Laudo Médico e exames de comprovação da condição de
-                                beneficiário da reserva de vaga para pessoas com deficiência
+                                Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
+                                para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
+                                SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>
                             </span>
                             <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
                         </div>
