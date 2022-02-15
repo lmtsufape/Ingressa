@@ -26,8 +26,15 @@ class EnviarDocumentos extends Component
     public $arquivos;
     public $inscricao;
     public $nomes;
+    public $termos = ['prouni' => null, 'vinculo' => null, 'confirmacaovinculo' => null];
     protected $validationAttributes = [];
     protected $messages = [
+        'termos.vinculo.required' => 'O termo acima é obrigatório.',
+        'termos.prouni.required' => 'O termo acima é obrigatório.',
+        'termos.confirmacaovinculo.required' => 'O termo acima é obrigatório.',
+        'termos.vinculo.accepted' => 'O termo acima é obrigatório.',
+        'termos.prouni.accepted' => 'O termo acima é obrigatório.',
+        'termos.confirmacaovinculo.accepted' => 'O termo acima é obrigatório.',
         'arquivos.historico.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
         'arquivos.nascimento_ou_casamento.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
         'arquivos.quitacao_militar.required_without_all' => 'O campo :attribute é obrigatório quando não marcar o termo de compromisso para entregar o documento na primeira semana de aula.',
@@ -150,6 +157,9 @@ class EnviarDocumentos extends Component
     public function rules()
     {
         $rules = [];
+        $rules['termos.vinculo'] = ['required', 'accepted'];
+        $rules['termos.prouni'] = ['required', 'accepted'];
+        $rules['termos.confirmacaovinculo'] = ['required', 'accepted'];
         foreach ($this->documentos as $documento) {
             if($documento == 'certificado_conclusao') {
                 $rules['arquivos.'.$documento] = $this->rulePdf($documento);
