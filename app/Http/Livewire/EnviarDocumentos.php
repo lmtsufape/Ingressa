@@ -80,12 +80,12 @@ class EnviarDocumentos extends Component
             || !$this->inscricao->arquivo($documento)->avaliacao->isRecusado());
     }
 
-    public function rulePdf($documento)
+    public function rulePdf($documento, $tamanho = 5120)
     {
         if ($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:pdf', 'max:5120'];
+            return ['nullable', 'file', 'mimes:pdf', 'max:'.$tamanho];
         } else {
-            return ['required', 'file', 'mimes:pdf', 'max:5120'];
+            return ['required', 'file', 'mimes:pdf', 'max:'.$tamanho];
         }
     }
 
@@ -154,48 +154,60 @@ class EnviarDocumentos extends Component
         }
     }
 
-    public function rules()
+    protected function rules()
     {
         $rules = [];
         $rules['termos.vinculo'] = ['required', 'accepted'];
         $rules['termos.prouni'] = ['required', 'accepted'];
         $rules['termos.confirmacaovinculo'] = ['required', 'accepted'];
-        foreach ($this->documentos as $documento) {
-            if($documento == 'certificado_conclusao') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'historico') {
-                $all = ['declaracoes.historico'];
-                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
-            } elseif($documento == 'nascimento_ou_casamento') {
-                $all = ['declaracoes.nascimento_ou_casamento'];
-                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
-            } elseif($documento == 'cpf') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'rg') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'quitacao_eleitoral') {
-                $all = ['declaracoes.quitacao_eleitoral'];
-                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
-            } elseif($documento == 'quitacao_militar') {
-                $all = ['declaracoes.quitacao_militar'];
-                $rules['arquivos.'.$documento] = $this->rulePdfWithoutAll($documento, $all);
-            } elseif($documento == 'foto') {
-                $rules['arquivos.'.$documento] = $this->ruleImage($documento);
-            } elseif($documento == 'comprovante_renda') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'laudo_medico') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'declaracao_veracidade') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'rani') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            } elseif($documento == 'heteroidentificacao') {
-                $rules['arquivos.'.$documento] = $this->ruleVideo($documento);
-            } elseif($documento == 'fotografia') {
-                $rules['arquivos.'.$documento] = $this->ruleImage($documento);
-            } elseif($documento == 'declaracao_cotista') {
-                $rules['arquivos.'.$documento] = $this->rulePdf($documento);
-            }
+        if($this->documentos->contains('certificado_conclusao')) {
+            $rules['arquivos.certificado_conclusao'] = $this->rulePdf('certificado_conclusao');
+        }
+        if($this->documentos->contains('historico')) {
+            $all = ['declaracoes.historico'];
+            $rules['arquivos.historico'] = $this->rulePdfWithoutAll('historico', $all);
+        }
+        if($this->documentos->contains('nascimento_ou_casamento')) {
+            $all = ['declaracoes.nascimento_ou_casamento'];
+            $rules['arquivos.nascimento_ou_casamento'] = $this->rulePdfWithoutAll('nascimento_ou_casamento', $all);
+        }
+        if($this->documentos->contains('cpf')) {
+            $rules['arquivos.cpf'] = $this->rulePdf('cpf');
+        }
+        if($this->documentos->contains('rg')) {
+            $rules['arquivos.rg'] = $this->rulePdf('rg');
+        }
+        if($this->documentos->contains('quitacao_eleitoral')) {
+            $all = ['declaracoes.quitacao_eleitoral'];
+            $rules['arquivos.quitacao_eleitoral'] = $this->rulePdfWithoutAll('quitacao_eleitoral', $all);
+        }
+        if($this->documentos->contains('quitacao_militar')) {
+            $all = ['declaracoes.quitacao_militar'];
+            $rules['arquivos.quitacao_militar'] = $this->rulePdfWithoutAll('quitacao_militar', $all);
+        }
+        if($this->documentos->contains('foto')) {
+            $rules['arquivos.foto'] = $this->ruleImage('foto');
+        }
+        if($this->documentos->contains('comprovante_renda')) {
+            $rules['arquivos.comprovante_renda'] = $this->rulePdf('comprovante_renda', 65536);
+        }
+        if($this->documentos->contains('laudo_medico')) {
+            $rules['arquivos.laudo_medico'] = $this->rulePdf('laudo_medico', 65536);
+        }
+        if($this->documentos->contains('declaracao_veracidade')) {
+            $rules['arquivos.declaracao_veracidade'] = $this->rulePdf('declaracao_veracidade');
+        }
+        if($this->documentos->contains('rani')) {
+            $rules['arquivos.rani'] = $this->rulePdf('rani');
+        }
+        if($this->documentos->contains('heteroidentificacao')) {
+            $rules['arquivos.heteroidentificacao'] = $this->ruleVideo('heteroidentificacao');
+        }
+        if($this->documentos->contains('fotografia')) {
+            $rules['arquivos.fotografia'] = $this->ruleImage('fotografia');
+        }
+        if($this->documentos->contains('declaracao_cotista')) {
+            $rules['arquivos.declaracao_cotista'] = $this->rulePdf('declaracao_cotista');
         }
         return $rules;
     }
