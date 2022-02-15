@@ -179,6 +179,11 @@ class Inscricao extends Model
     {
         return $this->status == self::STATUS_ENUM['documentos_pendentes'];
     }
+    
+    public function isDocumentosDiferentesPendentes()
+    {
+        return $this->status != self::STATUS_ENUM['documentos_pendentes'];
+    }
 
     public function isDocumentosInvalidados()
     {
