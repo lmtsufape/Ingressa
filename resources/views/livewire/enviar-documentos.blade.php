@@ -169,6 +169,15 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
+                                @if($inscricao->isDocumentosDiferentesPendentes())
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
                                 Histórico Escolar do Ensino Médio ou Equivalente. <b>OBS.</b>: Pode estar junto com o Histórico
@@ -246,6 +255,15 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
+                                @if($inscricao->isDocumentosDiferentesPendentes())
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
                                 Registro de Nascimento ou Certidão de Casamento
@@ -449,6 +467,15 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
+                                @if($inscricao->isDocumentosDiferentesPendentes())
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                 Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
@@ -531,6 +558,15 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
+                                @if($inscricao->isDocumentosDiferentesPendentes())
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.quitacao_militar') is-invalid text-danger @enderror">
                                 Comprovante de quitação com o Serviço Militar, para candidatos

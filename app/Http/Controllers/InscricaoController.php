@@ -398,8 +398,9 @@ class InscricaoController extends Controller
     public function inscricaoDocumentoAjax(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricao_id);
-        $this->authorize('isCandidatoDono', $inscricao);
+        $this->authorize('isAdminOrAnalista', User::class);
         $arquivo = Arquivo::where([['inscricao_id', $request->inscricao_id], ['nome', $request->documento_nome]])->first();
+        $userPolicy = new UserPolicy();
         if($arquivo != null){
             if($arquivo->avaliacao != null){
                 $documento = [
@@ -407,6 +408,7 @@ class InscricaoController extends Controller
                     'caminho' => route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $request->documento_nome]),
                     'avaliacao' => $arquivo->avaliacao->avaliacao,
                     'comentario' => $arquivo->avaliacao->comentario,
+                    'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
                 ];
             }else{
                 $documento = [
@@ -414,6 +416,7 @@ class InscricaoController extends Controller
                     'caminho' => route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $request->documento_nome]),
                     'avaliacao' => null,
                     'comentario' => null,
+                    'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
                 ];
             }
         }else{

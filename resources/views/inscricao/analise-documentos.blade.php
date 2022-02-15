@@ -737,6 +737,10 @@
                         document.getElementById("motivo-reprovacao").style.display = "block";
                         btnReprovar.disabled = true;
                     }
+                    if(documento.analisaGeral == true && (documento_nome == "heteroidentificacao" || documento_nome == "fotografia" || documento_nome == "laudo_medico")){
+                        btnAprovar.disabled = true;
+                        btnReprovar.disabled = true;
+                    }
                     $('#documentoPDF').on("load", function() {
                         $("#avaliarDoc").show();
                     });
