@@ -1202,8 +1202,22 @@
                 <span class="px-4">Voltar</span>
             </a>
         </div>
-        @can('dataEnvio', $inscricao->chamada)
-            @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
+        @can('periodoEnvio', $inscricao->chamada)
+            @if ($inscricao->isDocumentosRequeridos())
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <button type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal-confirmar"
+                            class="btn botaoVerde my-2 py-1">
+                            <span class="px-4">Enviar</span>
+                        </button>
+                    </div>
+                </div>
+            @endif
+        @endcan
+        @can('periodoRetificacao', $inscricao->chamada)
+            @if ($inscricao->isDocumentosInvalidados())
                 <div class="d-flex justify-content-end">
                     <div>
                         <button type="button"
