@@ -111,18 +111,18 @@ class EnviarDocumentos extends Component
     public function ruleVideo($documento)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
+            return ['nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg', 'max:122880'];
         } else {
-            return ['required', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
+            return ['required', 'file', 'mimes:mp4,avi,wmv,mjpeg', 'max:122880'];
         }
     }
 
     public function ruleVideoIf($documento, $nome)
     {
         if($this->arquivoEnviado($documento)) {
-            return ['nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
+            return ['nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg', 'max:122880'];
         } else {
-            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg,mov', 'max:122880'];
+            return ['required_if:'.$nome.',true', 'nullable', 'file', 'mimes:mp4,avi,wmv,mjpeg', 'max:122880'];
         }
     }
 
