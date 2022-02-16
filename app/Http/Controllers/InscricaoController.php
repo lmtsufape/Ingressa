@@ -561,7 +561,40 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($request->inscricaoID);
         if($request->confirmarInvalidacao == 'false'){
             $inscricao->cd_efetivado = null;
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+            //
+            $documentosAceitos = true;
+            $necessitaAvaliar = false;
+            foreach($inscricao->arquivos as $arqui){
+                if(!is_null($arqui->avaliacao)){
+                    if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
+                        $documentosAceitos = false;
+                    }
+                }else{
+                    $documentosAceitos = false;
+                    $necessitaAvaliar = true;
+                    break;
+                }
+            }
+            if($documentosAceitos){
+                $diferenca = array_diff($this->documentosRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
+                if(count($diferenca) == 0){
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+                }else{
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'];
+                }
+            }else{
+                if($necessitaAvaliar == true && $documentosAceitos == false){
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+                }else{
+                    if($necessitaAvaliar == true){
+                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+                    }else{
+                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                    }
+                }
+            }
+            $inscricao->update();
+
             $message = 'O candidato teve a invalidação do cadastro desfeita. É necessário reavaliar os documentos invalidados.';
         }else{
             $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'];
