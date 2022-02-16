@@ -127,7 +127,16 @@
                                                         @endcan
                                                     </div>
                                                 </td>
-                                                <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                @if($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                    @can('isAdmin', auth()->user())
+                                                        <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                    @else
+                                                        <td class="align-middle text-center"><button class="btn btn-sm" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;" disabled>Avaliar</button></td>
+                                                    @endcan
+                                                @else
+                                                    <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                @endif
+                                                
                                             </tr>
                                         @endforeach
                                     </tbody>
