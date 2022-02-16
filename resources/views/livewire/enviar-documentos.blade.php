@@ -186,21 +186,21 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
-                                @if($inscricao->isDocumentosDiferentesPendentes())
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" checked disabled>
-                                        <label class="form-check-label subtexto3">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
-                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
                                 Histórico Escolar do Ensino Médio ou Equivalente. <b>OBS.</b>: Pode estar junto com o Histórico
                                 Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos dois
                                 campos (“certificado de conclusão do ensino médio” e “histórico escolar”)
                             </span>
+                            @if (!$inscricao->arquivo('historico') && $inscricao->isDocumentosDiferentesPendentes())
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" checked disabled>
+                                    <label class="form-check-label subtexto3">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
                                 @if(!$inscricao->arquivo('historico'))
@@ -277,19 +277,19 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
-                                @if($inscricao->isDocumentosDiferentesPendentes())
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" checked disabled>
-                                        <label class="form-check-label subtexto3">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
-                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
                                 Registro de Nascimento ou Certidão de Casamento
                             </span>
+                            @if (!$inscricao->arquivo('nascimento_ou_casamento') && $inscricao->isDocumentosDiferentesPendentes())
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" checked disabled>
+                                    <label class="form-check-label subtexto3">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
                                 @if(!$inscricao->arquivo('nascimento_ou_casamento'))
@@ -506,15 +506,6 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
-                                @if($inscricao->isDocumentosDiferentesPendentes())
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" checked disabled>
-                                        <label class="form-check-label subtexto3">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
-                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                 Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
@@ -526,6 +517,15 @@
                                 disponível no
                                 <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>)
                             </span>
+                            @if (!$inscricao->arquivo('quitacao_eleitoral') && $inscricao->isDocumentosDiferentesPendentes())
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" checked disabled>
+                                    <label class="form-check-label subtexto3">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
                                 @if(!$inscricao->arquivo('quitacao_eleitoral'))
@@ -602,21 +602,21 @@
                             @else
                                 <img src="{{ asset('img/download3.svg') }}"
                                     width="30">
-                                @if($inscricao->isDocumentosDiferentesPendentes())
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" checked disabled>
-                                        <label class="form-check-label subtexto3">
-                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                            primeira semana de aula.
-                                        </label>
-                                    </div>
-                                @endif
                             @endif
                             <span class="subtexto3 @error('arquivos.quitacao_militar') is-invalid text-danger @enderror">
                                 Comprovante de quitação com o Serviço Militar, para candidatos
                                 do sexo masculino que tenham de 18 a 45 anos - Frente e verso. <b>OBS.</b>:  Para os militares, apresentar cópia frente e verso da carteira de identidade
                                 militar
                             </span>
+                            @if (!$inscricao->arquivo('quitacao_militar') && $inscricao->isDocumentosDiferentesPendentes())
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" checked disabled>
+                                    <label class="form-check-label subtexto3">
+                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                        primeira semana de aula.
+                                    </label>
+                                </div>
+                            @endif
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
                                 @if(!$inscricao->arquivo('quitacao_militar'))
