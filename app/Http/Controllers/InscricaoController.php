@@ -539,7 +539,7 @@ class InscricaoController extends Controller
         }else if($documento == 'comprovante_renda'){
             return "Comprovante de renda";
         }else if($documento == 'laudo_medico'){
-            return "Laudo médico";
+            return "Laudo médico e exames";
         }else if($documento == 'declaracao_veracidade'){
             return "Declaração de Veracidade";
         }else if($documento == 'rani'){

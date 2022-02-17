@@ -128,6 +128,8 @@
                             </div>
                             <div id="motivo-reprovacao" style="display: none" class="col-md-12 alert alert-danger" role="alert">
                             </div>
+                            <div id="motivo-aprovacao" style="display: none" class="col-md-12 alert alert-success" role="alert">
+                            </div>
 
                             <div id="avaliarDoc" style="display: none">
                                 <div class="col-md-12 px-3 pt-5">
@@ -505,7 +507,7 @@
                                             </div>
                                         @elseif($documento == 'laudo_medico')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico;</button>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;" for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Laudo médico e exames;</button>
                                             </div>
                                         @endif
                                     </div>
@@ -705,6 +707,8 @@
 
 
                 document.getElementById("documento_indice").value = indice;
+                document.getElementById("motivo-reprovacao").style.display = "none";
+                document.getElementById("motivo-aprovacao").style.display = "none";
                 if(documento.id == null){
                     if($("#mensagemVazia").is(":hidden")){
                         if(documento.nome == "Aguardando o envio do documento."){
@@ -728,8 +732,13 @@
                     btnAprovar = document.getElementById("aprovarBotao");
                     btnReprovar = document.getElementById("raprovarBotao");
                     document.getElementById("motivo-reprovacao").style.display = "none";
+                    document.getElementById("motivo-aprovacao").style.display = "none";
                     if(documento.avaliacao == "1"){
                         btnAprovar.innerText  = "Aprovado";
+                        if(documento.comentario != null){
+                            document.getElementById("motivo-aprovacao").innerHTML = documento.comentario;
+                            document.getElementById("motivo-aprovacao").style.display = "block";
+                        }
                         btnAprovar.disabled = true;
                     }else if(documento.avaliacao == "2"){
                         btnReprovar.innerText  = "Reprovado";
@@ -754,6 +763,7 @@
     }
 
     function atualizarInputAprovar(){
+        
         $('#comentario').attr('required', false);
         $('#comentario').val('');
 
@@ -763,7 +773,11 @@
         $("#aprovarButtonForm").show();
 
         $('#reprovarTituloForm').hide();
-        $('#reprovarTextForm').hide();
+        if($('#nomeDoc').text() == getNome('laudo_medico') || $('#nomeDoc').text() == getNome('heteroidentificacao') || $('#nomeDoc').text() == getNome('fotografia')){
+            $('#reprovarTextForm').show();
+        }else{
+            $('#reprovarTextForm').hide();
+        }
         $('#reprovarButtonForm').hide();
     }
 
@@ -867,7 +881,7 @@
         }else if($documento == 'comprovante_renda'){
             return "Comprovante de renda";
         }else if($documento == 'laudo_medico'){
-            return "Laudo médico";
+            return "Laudo médico e exames";
         }else if($documento == 'declaracao_veracidade'){
             return "Declaração de Veracidade";
         }else if($documento == 'rani'){
