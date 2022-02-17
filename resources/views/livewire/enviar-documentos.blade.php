@@ -57,7 +57,7 @@
                         @if($inscricao->isArquivoRecusado('declaracao_veracidade'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('declaracao_veracidade')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                         @if($inscricao->isArquivoRecusado('certificado_conclusao'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('certificado_conclusao')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -193,13 +193,33 @@
                                 campos (“certificado de conclusão do ensino médio” e “histórico escolar”)
                             </span>
                             @if (!$inscricao->arquivo('historico') && $inscricao->isDocumentosDiferentesPendentes())
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" checked disabled>
-                                    <label class="form-check-label subtexto3">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
+                                @can('periodoRetificacao', $inscricao->chamada)
+                                    @if($inscricao->isDocumentosEnviados())
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                            <label class="form-check-label subtexto3">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                            <label class="form-check-label subtexto3" for="checkHistorico">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endcan
                             @endif
                             <div class="invalid-feedback">@error('arquivos.historico'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -219,7 +239,7 @@
                         @if($inscricao->isArquivoRecusado('historico'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('historico')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -282,13 +302,33 @@
                                 Registro de Nascimento ou Certidão de Casamento
                             </span>
                             @if (!$inscricao->arquivo('nascimento_ou_casamento') && $inscricao->isDocumentosDiferentesPendentes())
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" checked disabled>
-                                    <label class="form-check-label subtexto3">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
+                                @can('periodoRetificacao', $inscricao->chamada)
+                                    @if($inscricao->isDocumentosEnviados())
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                            <label class="form-check-label subtexto3">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                            <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endcan
                             @endif
                             <div class="invalid-feedback">@error('arquivos.nascimento_ou_casamento'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -308,7 +348,7 @@
                         @if($inscricao->isArquivoRecusado('nascimento_ou_casamento'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('nascimento_ou_casamento')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -378,7 +418,7 @@
                         @if($inscricao->isArquivoRecusado('rg'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('rg')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -448,7 +488,7 @@
                         @if($inscricao->isArquivoRecusado('cpf'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('cpf')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -518,13 +558,33 @@
                                 <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>)
                             </span>
                             @if (!$inscricao->arquivo('quitacao_eleitoral') && $inscricao->isDocumentosDiferentesPendentes())
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" checked disabled>
-                                    <label class="form-check-label subtexto3">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
+                                @can('periodoRetificacao', $inscricao->chamada)
+                                    @if($inscricao->isDocumentosEnviados())
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                            <label class="form-check-label subtexto3">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                            <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endcan
                             @endif
                             <div class="invalid-feedback">@error('arquivos.quitacao_eleitoral'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -544,7 +604,7 @@
                         @if($inscricao->isArquivoRecusado('quitacao_eleitoral'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('quitacao_eleitoral')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -609,13 +669,33 @@
                                 militar
                             </span>
                             @if (!$inscricao->arquivo('quitacao_militar') && $inscricao->isDocumentosDiferentesPendentes())
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" checked disabled>
-                                    <label class="form-check-label subtexto3">
-                                        Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                        primeira semana de aula.
-                                    </label>
-                                </div>
+                                @can('periodoRetificacao', $inscricao->chamada)
+                                    @if($inscricao->isDocumentosEnviados())
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                            <label class="form-check-label subtexto3">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                            <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                                primeira semana de aula.
+                                            </label>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" checked disabled>
+                                        <label class="form-check-label subtexto3">
+                                            Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                            primeira semana de aula.
+                                        </label>
+                                    </div>
+                                @endcan
                             @endif
                             <div class="invalid-feedback">@error('arquivos.quitacao_militar'){{$message}}@enderror</div>
                             @can('dataEnvio', $inscricao->chamada)
@@ -635,7 +715,7 @@
                         @if($inscricao->isArquivoRecusado('quitacao_militar'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('quitacao_militar')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -700,7 +780,7 @@
                         @if($inscricao->isArquivoRecusado('foto'))
                             <div class="mt-2">
                                 <div class="alert alert-danger " role="alert">
-                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                    <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                     <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('foto')->avaliacao->comentario!!}</span>
                                 </div>
                             </div>
@@ -778,7 +858,7 @@
                     @if($inscricao->isArquivoRecusado('declaracao_cotista'))
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                 <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('declaracao_cotista')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
@@ -854,7 +934,7 @@
                             @if($inscricao->isArquivoRecusado('heteroidentificacao'))
                                 <div class="mt-2">
                                     <div class="alert alert-danger " role="alert">
-                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                         <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('heteroidentificacao')->avaliacao->comentario!!}</span>
                                     </div>
                                 </div>
@@ -920,7 +1000,7 @@
                             @if($inscricao->isArquivoRecusado('fotografia'))
                                 <div class="mt-2">
                                     <div class="alert alert-danger " role="alert">
-                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                        <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                         <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('heteroidentificacao')->avaliacao->comentario!!}</span>
                                     </div>
                                 </div>
@@ -996,7 +1076,7 @@
                     @if($inscricao->isArquivoRecusado('comprovante_renda'))
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                 <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('comprovante_renda')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
@@ -1076,7 +1156,7 @@
                     @if($inscricao->isArquivoRecusado('rani'))
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                 <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('rani')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
@@ -1153,7 +1233,7 @@
                     @if($inscricao->isArquivoRecusado('laudo_medico'))
                         <div class="mt-2">
                             <div class="alert alert-danger " role="alert">
-                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento recusado!</h6>
+                                <h6 style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px;" class="alert-heading">Documento invalidado!</h6>
                                 <span class="p-zero" style="font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 13px;" style="color: rgb(197, 0, 0)"><strong>Motivo: </strong>{!!$inscricao->arquivo('laudo_medico')->avaliacao->comentario!!}</span>
                             </div>
                         </div>
