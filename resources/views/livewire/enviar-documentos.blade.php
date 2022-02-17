@@ -1172,27 +1172,114 @@
                     @endif
                 @endif
             </ul>
-            <div class="form-check mt-2 @error('termos.vinculo') is-invalid @enderror">
-                <input class="form-check-input" type="checkbox" value="true" id="checkVinculo" wire:model="termos.vinculo">
-                <label class="form-check-label subtexto3" for="checkVinculo">
-                    DECLARO que não possuo vínculo em curso de graduação com outra instituição pública (Lei nº 12.089/2009)
-                </label>
-            </div>
-            <div class="invalid-feedback">@error('termos.vinculo'){{$message}}@enderror</div>
-            <div class="form-check mt-2 @error('termos.prouni') is-invalid @enderror">
-                <input class="form-check-input" type="checkbox" value="true" id="checkProuni" wire:model="termos.prouni">
-                <label class="form-check-label subtexto3" for="checkProuni">
-                    DECLARO que não sou beneficiário do PROUNI
-                </label>
-            </div>
-            <div class="invalid-feedback">@error('termos.prouni'){{$message}}@enderror</div>
-            <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
-                <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
-                <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                    DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>
-                </label>
-            </div>
-            <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
+            @can('dataEnvio', $inscricao->chamada)
+                @if($inscricao->isDocumentosRequeridos())
+                    <div class="form-check mt-2 @error('termos.vinculo') is-invalid @enderror">
+                        <input class="form-check-input" type="checkbox" value="true" id="checkVinculo" wire:model="termos.vinculo">
+                        <label class="form-check-label subtexto3" for="checkVinculo">
+                            DECLARO que não possuo vínculo em curso de graduação com outra instituição pública (Lei nº 12.089/2009)
+                        </label>
+                    </div>
+                    <div class="invalid-feedback">@error('termos.vinculo'){{$message}}@enderror</div>
+                    <div class="form-check mt-2 @error('termos.prouni') is-invalid @enderror">
+                        <input class="form-check-input" type="checkbox" value="true" id="checkProuni" wire:model="termos.prouni">
+                        <label class="form-check-label subtexto3" for="checkProuni">
+                            DECLARO que não sou beneficiário do PROUNI
+                        </label>
+                    </div>
+                    <div class="invalid-feedback">@error('termos.prouni'){{$message}}@enderror</div>
+                    <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
+                        <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
+                        <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
+                            DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                        </label>
+                    </div>
+                    <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
+                @elseif($inscricao->isDocumentosInvalidados())
+                    @can('periodoRetificacao', $inscricao->chamada)
+                        <div class="form-check mt-2 @error('termos.vinculo') is-invalid @enderror">
+                            <input class="form-check-input" type="checkbox" value="true" id="checkVinculo" wire:model="termos.vinculo">
+                            <label class="form-check-label subtexto3" for="checkVinculo">
+                                DECLARO que não possuo vínculo em curso de graduação com outra instituição pública (Lei nº 12.089/2009)
+                            </label>
+                        </div>
+                        <div class="invalid-feedback">@error('termos.vinculo'){{$message}}@enderror</div>
+                        <div class="form-check mt-2 @error('termos.prouni') is-invalid @enderror">
+                            <input class="form-check-input" type="checkbox" value="true" id="checkProuni" wire:model="termos.prouni">
+                            <label class="form-check-label subtexto3" for="checkProuni">
+                                DECLARO que não sou beneficiário do PROUNI
+                            </label>
+                        </div>
+                        <div class="invalid-feedback">@error('termos.prouni'){{$message}}@enderror</div>
+                        <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
+                            <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
+                            <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
+                                DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                            </label>
+                        </div>
+                        <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
+                    @else
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" checked disabled>
+                            <label class="form-check-label subtexto3">
+                                DECLARO que não possuo vínculo em curso de graduação com outra instituição pública (Lei nº 12.089/2009)
+                            </label>
+                        </div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" checked disabled>
+                            <label class="form-check-label subtexto3">
+                                DECLARO que não sou beneficiário do PROUNI
+                            </label>
+                        </div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" checked disabled>
+                            <label class="form-check-label subtexto3">
+                                DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                            </label>
+                        </div>
+                    @endcan
+                @endif
+            @else
+                @if (!$inscricao->isDocumentosRequeridos())
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" checked disabled>
+                        <label class="form-check-label subtexto3">
+                            DECLARO que não possuo vínculo em curso de graduação com outra instituição pública (Lei nº 12.089/2009)
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" checked disabled>
+                        <label class="form-check-label subtexto3">
+                            DECLARO que não sou beneficiário do PROUNI
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" checked disabled>
+                        <label class="form-check-label subtexto3">
+                            DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                        </label>
+                    </div>
+                @else
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" disabled>
+                        <label class="form-check-label subtexto3">
+                            DECLARO que não possuo vínculo em curso de graduação com outra instituição pública (Lei nº 12.089/2009)
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" disabled>
+                        <label class="form-check-label subtexto3">
+                            DECLARO que não sou beneficiário do PROUNI
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" disabled>
+                        <label class="form-check-label subtexto3">
+                            DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                        </label>
+                    </div>
+                @endif
+            @endcan
         </form>
     </div>
     <div class="d-flex flex-wrap justify-content-between mt-5">
@@ -1203,7 +1290,7 @@
             </a>
         </div>
         @can('dataEnvio', $inscricao->chamada)
-            @if ($inscricao->isDocumentosRequeridos() || $inscricao->isDocumentosInvalidados())
+            @if ($inscricao->isDocumentosRequeridos())
                 <div class="d-flex justify-content-end">
                     <div>
                         <button type="button"
@@ -1214,6 +1301,19 @@
                         </button>
                     </div>
                 </div>
+            @elseif($inscricao->isDocumentosInvalidados())
+                @can('periodoRetificacao', $inscricao->chamada)
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <button type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-confirmar"
+                                class="btn botaoVerde my-2 py-1">
+                                <span class="px-4">Enviar</span>
+                            </button>
+                        </div>
+                    </div>
+                @endcan
             @endif
         @endcan
     </div>
