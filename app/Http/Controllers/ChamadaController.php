@@ -16,6 +16,7 @@ use App\Models\MultiplicadorVaga;
 use App\Models\Sisu;
 use App\Models\User;
 use App\Policies\UserPolicy;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
@@ -64,6 +65,7 @@ class ChamadaController extends Controller
         if($request->regular == "true"){
             $chamada->regular = true;
         }else{
+            $chamada->confirmacao = true;
             $chamada->regular = false;
         }
         $chamada->save();
@@ -118,6 +120,7 @@ class ChamadaController extends Controller
         if($request->regular == "true"){
             $chamada->regular = true;
         }else{
+            $chamada->confirmacao = true;
             $chamada->regular = false;
         }
         $chamada->update();
@@ -156,19 +159,25 @@ class ChamadaController extends Controller
             ])->name('Importar Chamada Regular '.$chamada->id)->dispatch();
             $chamada->job_batch_id = $batch->id;
         }else{
+            if($chamada->confirmacao){
+                $sisu = $chamada->sisu;
+                if ($sisu->caminho_import_espera == null) {
+                    return redirect()->back()->withErrors(['error_espera' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
+                }
+    
+                $this->salvarMultiplicadores($chamada, $request);
+                $this->gerarListagemConfirmacao($chamada);
+                $chamada->confirmacao = false;
+                $chamada->update();
+                return redirect(route('chamadas.show', $chamada))->with(['success_listagem' =>  'Listagem criada com sucesso!']);
 
-            $sisu = $chamada->sisu;
-            if ($sisu->caminho_import_espera == null) {
-                return redirect()->back()->withErrors(['error_espera' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
+            }else{
+                //$this->cadastrarCandidatosEspera($chamada);
+                $batch = Bus::batch([
+                    new CadastroListaEsperaCandidato($chamada),
+                ])->name('Importar Chamada Lista Espera '.$chamada->id)->dispatch();
+                $chamada->job_batch_id = $batch->id;
             }
-
-            $this->salvarMultiplicadores($chamada, $request);
-            //$this->cadastrarCandidatosEspera($chamada);
-
-            $batch = Bus::batch([
-                new CadastroListaEsperaCandidato($chamada),
-            ])->name('Importar Chamada Lista Espera '.$chamada->id)->dispatch();
-            $chamada->job_batch_id = $batch->id;
         }
         $chamada->update();
         return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Cadastro feito!']);
@@ -1104,5 +1113,230 @@ class ChamadaController extends Controller
 
         }
         return redirect()->back()->with(['success' => 'Candidatos efetivados com sucesso.']);
+    }
+
+    private function gerarListagemConfirmacao($chamada)
+    {
+        ini_set('auto_detect_line_endings', true);
+        $dados = fopen(storage_path('app'.DIRECTORY_SEPARATOR.$chamada->sisu->caminho_import_espera), "r");
+        $primeira = true;
+        $candidatos = collect();
+        $chamados = collect();
+
+        while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
+            if($primeira){
+                $primeira = false;
+            }else{
+                $inscricao = array(
+                    'co_ies_curso' => strval($data[2]),
+                    'ds_turno' => strval($data[4]),
+                    'no_inscrito' => strval($data[8]),
+                    'nu_cpf_inscrito' => strval($data[10]),
+                    'no_modalidade_concorrencia' => strval($data[32]),
+                    'st_bonus_perc' => strval($data[33]),
+                    'nu_nota_candidato' => floatval(str_replace( ',', '.', $data[36])),
+                    'nu_classificacao' => intval($data[38]),
+                );
+                $candidatos->push($inscricao);
+            }
+        }
+        $grouped = $candidatos->groupBy(function ($candidato) {
+            return $candidato['co_ies_curso'].$candidato['ds_turno'];
+        });
+        $porCurso = collect();
+        foreach($grouped as $i => $curso){
+            $porCurso->push($curso->groupBy('no_modalidade_concorrencia'));
+        }
+        
+        $cursos = collect();
+        $cotasCursosCOD = collect();
+
+        foreach($porCurso as $i => $curso){
+            $modalidade = collect();
+            $ampla = collect();
+            $modalidades = collect();
+
+            $cotaCOD = collect();
+            $cotaAmpla = false;
+            foreach($curso as $porModalidade){
+                if($porModalidade[0]['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                    $porModalidade[0]['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $porModalidade[0]['no_modalidade_concorrencia'] == 'Ampla concorrência'){
+                    $ampla = $ampla->concat($porModalidade);
+                    if(!$cotaAmpla){
+                        $cotaAmpla = true;
+                    }
+                }else{
+                    $modalidade = $porModalidade;
+                    if(!$cotaCOD->contains($modalidade[0]['no_modalidade_concorrencia'])){
+                        $cotaCOD->push($modalidade[0]['no_modalidade_concorrencia']);
+                    }
+                    $modalidade = $modalidade->sortBy(function($candidato){
+                        return $candidato['nu_classificacao'];
+                    });
+                    $modalidades->push($modalidade);
+                }
+            }
+            $ampla = $ampla->sortBy(function($candidato){
+                return $candidato['nu_classificacao'];
+            });
+            $modalidades->push($ampla);
+            $cursos->push($modalidades);
+            if($cotaAmpla){
+                $cotaCOD->push(Cota::COD_COTA_ENUM['A0']);
+            }
+            $cotasCursosCOD->push($cotaCOD);    
+        }
+
+        foreach($cursos as $indexCurso => $curso){
+            $candidato = $curso[0][0];
+            if($candidato['ds_turno'] == 'Matutino'){
+                $turno =  Curso::TURNO_ENUM['matutino'];
+            }elseif($candidato['ds_turno'] == 'Vespertino'){
+                $turno = Curso::TURNO_ENUM['vespertino'];
+            }elseif($candidato['ds_turno'] == 'Noturno'){
+                $turno = Curso::TURNO_ENUM['noturno'];
+            }elseif($candidato['ds_turno'] == 'Integral'){
+                $turno = Curso::TURNO_ENUM['integral'];
+            }
+
+            $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
+
+            foreach($curs->cotas as $cota){
+                $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
+                $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
+                $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
+                if(!is_null($multiplicador)){
+                    $vagasCota *= $multiplicador->multiplicador;
+                }
+
+                $cursoAtual = $cotasCursosCOD[$indexCurso];
+                $modalidadeDaCotaIndex = null;
+
+                foreach($cursoAtual as $index => $modalidadeCursoAtual){
+                    if($modalidadeCursoAtual == $cota->descricao){
+                        $modalidadeDaCotaIndex = $index;
+                        break;
+                    }
+                }
+                if(!is_null($modalidadeDaCotaIndex)){
+                    $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
+                    $vagasCota = $retorno[0];
+                    $chamados = $retorno[1];
+                }
+
+                if($vagasCota > 0){
+                    foreach($cota->remanejamentos as $remanejamento){
+                        $cotaRemanejamento = $remanejamento->proximaCota;
+                        $cursoAtual = $cotasCursosCOD[$indexCurso];
+
+                        $modalidadeDaCotaIndex = null;
+
+                        foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
+                            if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
+                                $modalidadeDaCotaIndex = $indexRemanejamento;
+                                break;
+                            }
+                        }
+                        if(!is_null($modalidadeDaCotaIndex)){
+                            $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
+                            $vagasCota = $retorno[0];
+                            $chamados = $retorno[1];
+                        }
+                        if($vagasCota == 0){
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        $porCurso = collect();
+        $grouped = $chamados->groupBy('curso_id');
+
+        foreach($grouped as $i => $curso){
+            $porCurso->push($curso->groupBy('cota_id'));
+        }
+        foreach($porCurso as $i => $curso){
+            foreach($curso as $j => $modalidade){
+                $modalidade = $modalidade->sortBy(function($candidato){
+                    return $candidato['nu_classificacao'];
+                });
+                $porCurso[$i][$j] = $modalidade;
+            }
+            $curso = $curso->sortBy(function($modalidade){
+                return $modalidade->first()['cota_id'];
+            });
+            $porCurso[$i] = $curso;
+        }
+
+        $porCurso = $porCurso->sortBy(function($curso){
+            return $curso->first()->first()['curso_id'];
+        });
+
+        $listagem = new Listagem();
+        $listagem->caminho_listagem = 'caminho';
+        $listagem->titulo = 'Lista de convocação para checagem - '.$chamada->nome;
+        $listagem->tipo = Listagem::TIPO_ENUM['convocacao'];
+        $listagem->chamada_id = $chamada->id;
+        $listagem->save();
+
+        $pdf = PDF::loadView('listagem.checagem', ['collect_inscricoes' => $porCurso, 'chamada' => $chamada]);
+        $path = 'listagem/' . $listagem->id . '/';
+        $nome = 'listagem.pdf';
+        Storage::put('public/' . $path . $nome, $pdf->stream());
+        $listagem->caminho_listagem = $path . $nome;
+        $listagem->update();
+
+    }
+
+    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados, $chamada)
+    {
+        foreach($porModalidade as $inscrito){
+            if($vagasCota > 0){
+                $inscricao = array(
+                    'co_ies_curso' => $inscrito['co_ies_curso'],
+                    'ds_turno' => $inscrito['ds_turno'],
+                    'no_modalidade_concorrencia' => $inscrito['no_modalidade_concorrencia'],
+                    'st_bonus_perc' => $inscrito['st_bonus_perc'],
+                    'nu_nota_candidato' => floatval($inscrito['nu_nota_candidato']),
+                    'nu_classificacao' => intval($inscrito['nu_classificacao']),
+                    'no_inscrito' => $inscrito['no_inscrito'],
+                    'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
+                    'cota_id' => $cotaRemanejamento->id,
+                    'curso_id' => $curs->id,
+                );
+
+                $candidatoExistente = Candidato::where('nu_cpf_inscrito', $inscrito['nu_cpf_inscrito'])->first();
+                if($candidatoExistente == null){
+                    if(!$chamados->contains($inscricao)){
+                        $chamados->push($inscricao);
+                    }else{
+                        $vagasCota += 1;
+                    }
+                }else{
+                    $chamado = False;
+                    foreach($candidatoExistente->inscricoes as $inscricaoCandidato){
+                        if($inscricaoCandidato->chamada->sisu->id == $chamada->sisu->id){
+                            $chamado = True;
+                            break;
+                        }
+                    }
+                    if(!$chamado){
+                        if(!$chamados->contains($inscricao)){
+                            $chamados->push($inscricao);
+                        }
+                    }else{
+                        $vagasCota += 1;
+                    }
+
+                }
+                $vagasCota -= 1;
+            }else{
+                break;
+            }
+        }
+
+        return [$vagasCota, $chamados];
+
     }
 }

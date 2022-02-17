@@ -161,7 +161,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 }
             }
             //ordenamos os inscritos da modalidade daquele curso pela classificacao
-            $ampla = $ampla->sortByDesc(function($candidato){
+            $ampla = $ampla->sortBy(function($candidato){
                 return $candidato['nu_classificacao'];
             });
             $modalidades->push($ampla);
@@ -207,7 +207,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                 $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
                 //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-                $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_curso->id)->first();
+                $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $this->chamada->id]])->first();
                 if(!is_null($multiplicador)){
                     $vagasCota *= $multiplicador->multiplicador;
                 }
@@ -351,8 +351,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     $inscricao->sisu_id = $this->chamada->sisu->id;
                     $inscricao->candidato_id = $candidato->id;
 
-                    $inscricao->cota_id = $cota->id;
-                    $inscricao->cota_vaga_ocupada_id = $cotaRemanejamento->id;
+                    $inscricao->cota_id = $cotaRemanejamento->id;
+                    $inscricao->cota_vaga_ocupada_id = $cota->id;
 
                     $inscricao->curso_id = $curs->id;
                     $inscricao->save();
@@ -383,8 +383,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         $inscricao->sisu_id = $this->chamada->sisu->id;
                         $inscricao->candidato_id = $candidatoExistente->id;
 
-                        $inscricao->cota_id = $cota->id;
-                        $inscricao->cota_vaga_ocupada_id = $cotaRemanejamento->id;
+                        $inscricao->cota_id = $cotaRemanejamento->id;
+                        $inscricao->cota_vaga_ocupada_id = $cota->id;
 
                         $inscricao->curso_id = $curs->id;
                         $inscricao->save();

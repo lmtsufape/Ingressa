@@ -16,6 +16,7 @@ class Chamada extends Model
         'regular',
         'caminho_import_sisu_gestao',
         'job_batch_id',
+        'confirmacao',
     ];
 
     public function setAtributes($input)

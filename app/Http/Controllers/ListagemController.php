@@ -160,7 +160,7 @@ class ListagemController extends Controller
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
                 if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
                     $ampla2 = Inscricao::select('inscricaos.*')
-                        ->where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                        ->where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
                         ->whereIn(
                             'no_modalidade_concorrencia',
                             [
@@ -179,7 +179,7 @@ class ListagemController extends Controller
                     //ignorar a de 10% visto que entra na mesma tabela que A0
                 }else{
                     $inscritosCota = Inscricao::select('inscricaos.*')->
-                    where([['co_curso_inscricao', $curso->cod_curso], ['no_modalidade_concorrencia', $cota->getCodCota()], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                    where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
                         ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
                         ->join('users','users.id','=','candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
@@ -256,7 +256,7 @@ class ListagemController extends Controller
 
             $modalidadeCotaArray = array_merge($modalidadeCotaArray, $cotas->pluck('descricao')->toArray());
             $inscricoes_curso = Inscricao::select('inscricaos.*')->
-                where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
                 ->whereIn(
                     'no_modalidade_concorrencia',
                     $modalidadeCotaArray
@@ -752,7 +752,7 @@ class ListagemController extends Controller
 
             $modalidadeCotaArray = array_merge($modalidadeCotaArray, $cotas->pluck('descricao')->toArray());
             $inscricoes_curso = Inscricao::select('inscricaos.*')->
-                where([['co_curso_inscricao', $curso->cod_curso], ['chamada_id', $chamada->id], ['ds_turno', $turno]])
+                where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
                 ->whereIn(
                     'no_modalidade_concorrencia',
                     $modalidadeCotaArray

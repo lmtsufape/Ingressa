@@ -329,65 +329,70 @@
                         @else
                             <form id="cadastrar-candidatos-chamada-form-{{$chamada->id}}" method="POST" action="{{route('chamadas.importar.candidatos', ['sisu_id' =>$sisu->id, 'chamada_id' => $chamada->id])}}" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="chamada_id_espera" value="{{$chamada->id}}">
-                                @error('error_espera')
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="font-weight: normal;">
-                                        <span style="font-weight: bolder;">Arquivo de espera ausente</span>, envie a lista de espera e tente novamente.
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                @enderror
-                                <div class="pb-2 pt-2">Selecione o curso:</div>
-                                @foreach ($cursos as $i => $curso)
-                                    <div class="form-check">
-                                        <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="checkbox" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
-                                        <div class="form-check-label" for="cota_{{$curso->id}}">
-                                            {{$curso->nome}} - @switch($curso->turno)
-                                            @case($turnos['matutino']){{"Matutino"}}@break
-                                            @case($turnos['vespertino']){{"Vespertino"}}@break
-                                            @case($turnos['noturno']){{"Noturno"}}@break
-                                            @case($turnos['integral']){{"Integral"}}@break
-                                            @endswitch
+                                @if($chamada->confirmacao)
+                                    Antes de realizar o cadastro, faremos uma listagem com os candidatos que serão chamados. Deseja continuar com a produção desta listagem?
+                                    <input type="hidden" name="chamada_id_espera" value="{{$chamada->id}}">
+                                    @error('error_espera')
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="font-weight: normal;">
+                                            <span style="font-weight: bolder;">Arquivo de espera ausente</span>, envie a lista de espera e tente novamente.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
-                                        <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
-                                            @foreach ($curso->cotas as $cota)
-                                                @if($cota->cod_cota != "B4342")
-                                                    <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
-                                                        {{$cota->cod_cota}}
-                                                        <div class="row align-items-center">
-                                                            <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
-                                                                Número de vagas
+                                    @enderror
+                                    <div class="pb-2 pt-2">Selecione o curso:</div>
+                                    @foreach ($cursos as $i => $curso)
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="checkbox" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
+                                            <div class="form-check-label" for="cota_{{$curso->id}}">
+                                                {{$curso->nome}} - @switch($curso->turno)
+                                                @case($turnos['matutino']){{"Matutino"}}@break
+                                                @case($turnos['vespertino']){{"Vespertino"}}@break
+                                                @case($turnos['noturno']){{"Noturno"}}@break
+                                                @case($turnos['integral']){{"Integral"}}@break
+                                                @endswitch
+                                            </div>
+                                            <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
+                                                @foreach ($curso->cotas as $cota)
+                                                    @if($cota->cod_cota != "B4342")
+                                                        <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
+                                                            {{$cota->cod_cota}}
+                                                            <div class="row align-items-center">
+                                                                <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
+                                                                    Número de vagas
+                                                                </div>
+                                                                <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
+                                                                    Número de validados
+                                                                </div>
+                                                                <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
+                                                                    Multiplicador
+                                                                </div>
                                                             </div>
-                                                            <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
-                                                                Número de validados
-                                                            </div>
-                                                            <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
-                                                                Multiplicador
+                                                            <div class="row align-items-center">
+                                                                <div class="col-md-4">
+                                                                    <input type="number" id="vagas-curso-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->quantidade_vagas}}" disabled>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="number" id="candidatos-efetivados-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->vagas_ocupadas}}" disabled>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
+                                                                    <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
+                                                                    @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
+                                                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                                                            {{ $message }}
+                                                                        </div>
+                                                                    @enderror
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row align-items-center">
-                                                            <div class="col-md-4">
-                                                                <input type="number" id="vagas-curso-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->quantidade_vagas}}" disabled>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <input type="number" id="candidatos-efetivados-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->vagas_ocupadas}}" disabled>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
-                                                                <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
-                                                                @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
-                                                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                                                        {{ $message }}
-                                                                    </div>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </form>
+                                    @endforeach
+                                @else
+                                    Após verificar a listagem produzida na etapa anterior, deseja fazer o cadastro dos candidatos da {{$chamada->nome}} que foram apresentados naquela lista?
+                                </form>
+                            @endif
                         @endif
                     </div>
                     <div class="row justify-content-between mt-4">
