@@ -1219,7 +1219,7 @@ class ChamadaController extends Controller
                     }
                 }
                 if(!is_null($modalidadeDaCotaIndex)){
-                    $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados);
+                    $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
                     $vagasCota = $retorno[0];
                     $chamados = $retorno[1];
                 }
@@ -1238,7 +1238,7 @@ class ChamadaController extends Controller
                             }
                         }
                         if(!is_null($modalidadeDaCotaIndex)){
-                            $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados);
+                            $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
                             $vagasCota = $retorno[0];
                             $chamados = $retorno[1];
                         }
@@ -1289,7 +1289,7 @@ class ChamadaController extends Controller
 
     }
 
-    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados)
+    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados, $chamada)
     {
         foreach($porModalidade as $inscrito){
             if($vagasCota > 0){
@@ -1316,7 +1316,7 @@ class ChamadaController extends Controller
                 }else{
                     $chamado = False;
                     foreach($candidatoExistente->inscricoes as $inscricaoCandidato){
-                        if($inscricaoCandidato->chamada->sisu->id == $this->chamada->sisu->id){
+                        if($inscricaoCandidato->chamada->sisu->id == $chamada->sisu->id){
                             $chamado = True;
                             break;
                         }
