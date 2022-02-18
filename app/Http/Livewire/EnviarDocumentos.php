@@ -229,7 +229,14 @@ class EnviarDocumentos extends Component
                 ]);
             }
         })->validate();
-        $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+        if ($this->inscricao->isDocumentoAceitosComPendencias()) {
+            foreach ($this->documentos as $documento) {
+                if ($this->inscricao->isArquivoEnviado($documento) && !$this->inscricao->isArquivoAvaliado($documento))
+                    $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+            }
+        } else {
+            $this->inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+        }
         $this->inscricao->save();
 
         Notification::send(auth()->user(), new ComprovanteEnvioDocumentosNotification('Comprovante de envio', $this->inscricao, $this->documentos));
@@ -241,7 +248,13 @@ class EnviarDocumentos extends Component
     {
         $this->attributes();
         $this->authorize('dataEnvio', $this->inscricao->chamada);
-        if (explode('.', $documento)[0] == 'arquivos' && ($this->inscricao->isDocumentosRequeridos() || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1]))) {
+        if (
+            explode('.', $documento)[0] == 'arquivos'
+            && ($this->inscricao->isDocumentosRequeridos()
+            || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1])
+            || $this->inscricao->isDocumentoAceitosComPendencias()
+            || $this->arquivoNaoObrigatorio(explode('.', $documento)[1]))
+        ) {
             $this->withValidator(function (Validator $validator) {
                 if ($validator->fails()) {
                     $this->dispatchBrowserEvent('swal:fire', [
@@ -278,6 +291,11 @@ class EnviarDocumentos extends Component
                 'title' => 'Arquivo enviado com sucesso!'
             ]);
         }
+    }
+
+    private function arquivoNaoObrigatorio($documento)
+    {
+        return in_array($documento, ['historico', 'quitacao_militar', 'nascimento_ou_casamento', 'quitacao_eleitoral']);
     }
 
     public function baixar($documento)
