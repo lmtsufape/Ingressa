@@ -7,19 +7,22 @@
     <title>Listagem</title>
     <style type="text/css">
         @page {
-            margin: 120px 50px 80px 50px;
+            margin: 0px;
         }
-        #head {
-            background-repeat: no-repeat;
+        body {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 80px;
+            margin-top: 4.5cm;
+        }
+
+        header {
             text-align: center;
-            width: 100%;
             position: fixed;
-            top: -120px;
-            left: 0px;
-            right: -15px;
-        }
-        #head img {
-            width: 115%;
+            top: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 4.5cm;
         }
         .titulo {
             position: relative;
@@ -41,14 +44,9 @@
         .quebrar_pagina {
             page-break-after: always;
         }
-        #body{
-            position: relative;
-            top: 60px;
-        }
         table{
             margin-top: 10px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+            padding-bottom: 0px;
             border-collapse: collapse;
             width: 100%;
             position: relative;
@@ -96,25 +94,23 @@
         .back-color-2 {
             background-color: #d1e7fd;
         }
-        .body {
-        }
         .acao_afirmativa {
             text-align: justify;
             margin: 15px;
-            position: relative; 
+            position: relative;
             left: 5px;
         }
     </style>
 
 </head>
 <body>
-    <div id="head">        
+    <header>
         <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
         <span class="titulo">
             RELAÇÃO DOS CANDIDATOS INGRESSANTES<br><span style="font-weight: normal; text-transform:uppercase;" >SISU {{$chamada->sisu->edicao}}</span><br>
         </span>
-    </div>
-    <div id="body">
+    </header>
+    <div>
         @php
             $semestre = "indefinido";
         @endphp
@@ -159,7 +155,7 @@
                                             $semestre = "indefinido";
                                         @endphp
                                     @endif</h3>
-                    
+
                     @php
                         $exibirNomeCurso = false;
                     @endphp
