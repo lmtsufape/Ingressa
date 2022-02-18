@@ -250,6 +250,7 @@ class EnviarDocumentos extends Component
         $this->authorize('dataEnvio', $this->inscricao->chamada);
         if (
             explode('.', $documento)[0] == 'arquivos'
+            && is_null($this->inscricao->retificacao)
             && ($this->inscricao->isDocumentosRequeridos()
             || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1])
             || $this->inscricao->isDocumentoAceitosComPendencias()
