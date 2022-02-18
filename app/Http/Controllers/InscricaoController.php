@@ -395,6 +395,50 @@ class InscricaoController extends Controller
         return redirect()->back()->with(['success' => $message]);
     }
 
+    public function bloquearInscricao(Request $request)
+    {
+        $inscricao = Inscricao::find($request->inscricaoID);
+
+        if($inscricao->retificacao == null){
+            $message = "Inscrição bloqueada para retificação";
+            $inscricao->retificacao = intval($request->bloquear);
+        }else{
+            if($request->bloquear == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] && $inscricao->retificacao == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']){
+                $inscricao->retificacao = null;
+                $message = "Inscrição desbloqueada para retificação.";
+            }elseif($request->bloquear == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] && $inscricao->retificacao == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']){
+                $inscricao->retificacao = null;
+                $message = "Inscrição desbloqueada para retificação.";
+            }else{
+                if($inscricao->retificacao == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico']){
+                    if($request->bloquear == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']){
+                        $inscricao->retificacao = Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'];
+                    }else{
+                        $inscricao->retificacao = Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'];
+                    }
+                    $message = "Inscrição desbloqueada para retificação.";
+                }else{
+                    if($request->bloquear == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']){
+                        if($inscricao->retificacao == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']){
+                            $inscricao->retificacao = Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'];
+                        }else{
+                            $inscricao->retificacao = Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'];
+                        }
+                    }else{
+                        if($inscricao->retificacao == Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']){
+                            $inscricao->retificacao = Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'];
+                        }else{
+                            $inscricao->retificacao = Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'];
+                        }
+                    }
+                    $message = "Inscrição bloqueada para retificação";
+                }
+            }
+        }
+        $inscricao->update();
+        return redirect()->back()->with(['success' => $message]);
+    }
+
     public function inscricaoDocumentoAjax(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricao_id);

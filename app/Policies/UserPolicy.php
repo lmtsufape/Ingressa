@@ -40,6 +40,16 @@ class UserPolicy
         return $this->isAnalista($user) || $this->isAdmin($user);
     }
 
+    public function isAdminOrHeteroidentificacao(User $user)
+    {
+        return $this->ehAnalistaHeteroidentificacao($user) || $this->isAdmin($user);
+    }
+
+    public function isAdminOrMedico(User $user)
+    {
+        return $this->ehAnalistaMedico($user) || $this->isAdmin($user);
+    }
+
     public function isAdminOrAnalistaGeral(User $user)
     {
         return $this->ehAnalistaGeral($user) || $this->isAdmin($user);

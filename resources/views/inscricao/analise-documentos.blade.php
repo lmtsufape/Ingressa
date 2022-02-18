@@ -518,6 +518,16 @@
                             <button @if(($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] && $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])) disabled @endif id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
                             <button @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] || $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])@elseif($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span class="px-4">@if(is_null($inscricao->cd_efetivado) ||  $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Invalidar Cadastro @else  Cadastro Invalidado @endif</span></button>
                         @endcan
+                        @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
+                            @if($inscricao->isCotaRacial() && $inscricao->candidato->isPretoOrPardo())
+                                <button id="bloquearHeteroidentificacao" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="bloquearCandidatoInput({{\App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']}})" style="background-color: #FC605F;"> <span class="px-4">@if(is_null($inscricao->retificacao) || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'])Bloquear por não atender aos critérios fenotípicos @elseif($inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'])Bloqueado por não atender aos critérios fenotípicos @endif</span></button>
+                            @endif
+                        @endcan
+                        @can('isAdminOrMedico', \App\Models\User::class)
+                            @if($inscricao->isCotaDeficiencia())
+                                <button id="bloquearMedico" type="button" class="btn botao mt-2 py-1 col-md-12" onclick="bloquearCandidatoInput({{\App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']}})" style="background-color: #FC605F;"> <span class="px-4">@if(is_null($inscricao->retificacao) || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'])Bloquear por não atender aos critérios médicos @elseif($inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'])Bloqueado por não atender aos critérios médicos @endif</span></button>
+                            @endif
+                        @endcan
                         <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal" class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o candidato</span></button>
                     </div>
                 </div>
@@ -615,6 +625,58 @@
                     </div>
                     <div id ="aprovarCandidatoButtonForm" class="col-md-4">
                         <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bloquear-inscricao-racial" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modalFundo p-3">
+                <div class="col-md-12 tituloModal">Bloquear/Desbloquear Inscrição</div>
+                <div class="pt-3 pb-2 textoModal">
+                    <form method="post" id="bloquear-candidato-form" action="{{route('inscricao.bloquear.inscricao', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}">
+                        @csrf
+                        <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
+                        <input type="hidden" name="bloquear" id="bloquearInscricao" value="">
+                        <div class="pt-3">
+                            @if($inscricao->retificacao != null)
+                                @if($inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'])
+                                    @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
+                                        Tem certeza que deseja desbloquear a inscrição do candidato?
+                                    @else
+                                        Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
+                                    @endcan
+                                @elseif($inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'])
+                                    @can('isAdminOrMedico', \App\Models\User::class)
+                                        Tem certeza que deseja desbloquear a inscrição do candidato?
+                                    @else
+                                        Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
+                                    @endcan
+                                @else
+                                    @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
+                                        Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
+                                    @else
+                                        @can('isAdminOrMedico', \App\Models\User::class)
+                                            Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
+                                        @else 
+                                            Tem certeza que deseja desbloquear a inscrição do candidato?
+                                        @endcan
+                                    @endcan
+                                @endif
+                            @else
+                                Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
+                            @endif
+                        </div>
+                    </form>
+                </div>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn botaoVerde my-2 py-1" form="bloquear-candidato-form" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Sim</span></button>
                     </div>
                 </div>
             </div>
@@ -819,6 +881,11 @@
 
             $('#aprovar-recusar-candidato-modal').modal('toggle');
         }
+    }
+    
+    function bloquearCandidatoInput(valor){
+        document.getElementById('bloquearInscricao').value = valor;
+        $('#bloquear-inscricao-racial').modal('toggle');
     }
 
     function carregarFicha(){

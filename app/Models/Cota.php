@@ -23,6 +23,32 @@ class Cota extends Model
         'B4342' => 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
     ];
 
+    public const COTA_RACIAL = [
+        'L2' => true,
+        'L6' => true,
+        'L10' => true,
+        'L14' => true,
+
+        'A0' => false,
+        'L1' => false,
+        'L5' => false,
+        'L9' => false,
+        'L13' => false,
+    ];
+
+    public const COTA_DEFICIENCIA = [
+        'L9' => true,
+        'L10' => true,
+        'L13' => true,
+        'L14' => true,
+
+        'A0' => false,
+        'L1' => false,
+        'L2' => false,
+        'L5' => false,
+        'L6' => false,
+    ];
+
     protected $fillable = [
         'nome',
         'descricao',

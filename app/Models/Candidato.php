@@ -104,4 +104,9 @@ class Candidato extends Model
         }
         return $cpf;
     }
+
+    public function isPretoOrPardo()
+    {
+        return $this->cor_raca == 2 || $this->cor_raca == 3;
+    }
 }
