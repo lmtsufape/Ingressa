@@ -35,14 +35,26 @@
             @can('isCandidato', \App\Models\User::class)
                 @if(auth()->user()->candidato->inscricoes->last()->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first() != null)
                     @if($edicao_atual != null && auth()->user()->candidato->inscricoes->last()->sisu == $edicao_atual && date('d/m/Y', strtotime(now())) <= date('d/m/Y', strtotime(auth()->user()->candidato->inscricoes->last()->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first()->data_fim)))
-                        @if ((auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'heteroidentificacao')->first() != null &&
-                            auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'heteroidentificacao')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) ||
-                            (auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first() != null &&
-                            auth()->user()->candidato->inscricoes->last()->arquivos->where('nome', 'fotografia')->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
+                        @if(auth()->user()->candidato->inscricoes->last()->retificacao != null)
+                            @php
+                                if(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']){
+                                    $doc = 'heteroidentificação foi';
+                                    $banca = 'banca de heteroidenficação';
+                                    $invalidada = 'INVALIDADA';
+                                }elseif(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']){
+                                    $doc = 'laudo médico e exames foram';
+                                    $banca = 'equipe médica';
+                                    $invalidada = 'INVALIDADOS';
+                                }else{
+                                    $doc = 'heteroidentificação, laudo médico e exames foram';
+                                    $banca = 'banca de heteroidenficação e equipe médica';
+                                    $invalidada = 'INVALIDADOS';
+                                }
+                            @endphp
                             <div class="row justify-content-center">
                                 <div class="col-md-8">
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>Sua documentação de heteroidenficação foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao parecer da banca de heteroidenficação, siga os trâmites descritos no Edital.
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>Sua documentação de {{$doc}} <strong>{{$invalidada}}</strong>. Se deseja interpor recurso em relação ao parecer da {{$banca}}, siga os trâmites descritos no Edital.
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 </div>

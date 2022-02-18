@@ -75,6 +75,9 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/efetivar', [InscricaoController::class , 'updateStatusEfetivado'])
         ->name('inscricao.status.efetivado');
 
+    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/bloquear', [InscricaoController::class , 'bloquearInscricao'])
+        ->name('inscricao.bloquear.inscricao');
+
     Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/confirmar-invalidacao', [InscricaoController::class , 'confirmarInvalidacao'])
         ->name('inscricao.confirmar.invalidacao');
 

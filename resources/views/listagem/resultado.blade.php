@@ -24,14 +24,14 @@
         .titulo {
             position: relative;
             top: -70px;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: bolder;
             color: #03284d;
         }
         .subtitulo {
             font-weight: normal;
             position: inherit;
-            font-size: 16px;
+            font-size: 12px;
             color: #03284d;
             text-align: center;
             margin: -18px;
@@ -57,7 +57,7 @@
         }
         table th {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 12px;
         }
         table thead {
             border-top: 1px solid rgb(126, 126, 126);
@@ -103,12 +103,9 @@
     </style>
 
 </head>
-<body>
+<body style="font-family: Arial, Helvetica, sans-serif;">
     <div id="head">
         <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
-        <span class="titulo">
-            LISTA DE RESULTADO DA ETAPA DE ANÁLISE DOCUMENTAL<br><span style="font-weight: normal; text-transform:uppercase;" >{{$chamada->nome}}</span><br>
-        </span>
     </div>
     <div id="body">
         @foreach ($collect_inscricoes as $i => $curso)
@@ -116,7 +113,9 @@
                 @php
                     $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
-                <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
+                <h3 class="subtitulo" style="font-weight: bolder;">
+                    LISTA DE RESULTADO DA ETAPA DE ANÁLISE DOCUMENTAL<br><span style="font-weight: normal; text-transform:uppercase;" >{{$chamada->nome}}</span><br>
+                    <span style="font-weight: normal;">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
                     @case(App\Models\Curso::TURNO_ENUM['matutino'])
                         Matutino
                         @break
@@ -129,7 +128,7 @@
                     @case(App\Models\Curso::TURNO_ENUM['integral'])
                         Integral
                         @break
-                    @endswitch
+                    @endswitch</span>
                 </h3>
                 <div class="body">
                     <div id="modalidade">
@@ -156,7 +155,40 @@
                                         @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
                                             <th>VALIDADO</th>
                                         @else
-                                            <th>INVALIDADO<br>MOTIVO(S): {{$inscricao->justificativa}}</th>
+                                            <th>INVALIDADO<br>MOTIVO(S): 
+                                                <div style="font-weight: normal;">
+                                                    @foreach ($inscricao->arquivos as $i => $arquivo)
+                                                        @if($arquivo->avaliacao != null && $arquivo->avaliacao->comentario != null && $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'] && ($arquivo->nome != 'laudo_medico' && $arquivo->nome != 'fotografia' && $arquivo->nome != 'heteroidentificacao'))
+                                                            <span style="font-weight: bold">{{$arquivo->getNomeDoc()}}</span>: {!!str_replace(['<p>', '</p>'], "", $arquivo->avaliacao->comentario)!!}.<br>
+                                                        @endif
+                                                    @endforeach
+                                                    @if ($inscricao->arquivos()->where('nome', 'heteroidentificacao')->first() != null)
+                                                        @php
+                                                            $heteroidentificacao = $inscricao->arquivos()->where('nome', 'heteroidentificacao')->first();
+                                                            $fotografia = $inscricao->arquivos()->where('nome', 'fotografia')->first();
+                                                        @endphp
+                                                        @if(($heteroidentificacao->avaliacao != null && $heteroidentificacao->avaliacao->comentario != null && $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
+                                                            || ($fotografia->avaliacao != null && $fotografia->avaliacao->comentario != null && $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
+                                                                PARECER DA BANCA DE HETEROIDENTIFICAÇÃO - 
+                                                        @endif
+                                                        @if ($heteroidentificacao->avaliacao != null && $heteroidentificacao->avaliacao->comentario != null && $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
+                                                            <span style="font-weight: bold">{{$heteroidentificacao->getNomeDoc()}}</span>: {!!str_replace(['<p>', '</p>'], "", $heteroidentificacao->avaliacao->comentario)!!}.<br>
+                                                        @endif
+                                                        @if ($fotografia->avaliacao != null && $fotografia->avaliacao->comentario != null && $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
+                                                            <span style="font-weight: bold">{{$fotografia->getNomeDoc()}}</span>: {!!str_replace(['<p>', '</p>'], "", $fotografia->avaliacao->comentario)!!}.<br>
+                                                        @endif
+                                                    @endif
+                                                    @if ($inscricao->arquivos()->where('nome', 'laudo_medico')->first() != null)
+                                                        @php
+                                                            $medico = $inscricao->arquivos()->where('nome', 'laudo_medico')->first();
+                                                        @endphp
+                                                        @if ($medico->avaliacao != null && $medico->avaliacao->comentario != null && $medico->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
+                                                            PARECER DA EQUIPE MÉDICA - 
+                                                            <span style="font-weight: bold">{{$medico->getNomeDoc()}}</span>: {!!str_replace(['<p>', '</p>'], "", $medico->avaliacao->comentario)!!}.<br>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            </th>
                                         @endif
                                     </tr>
                                 @endforeach

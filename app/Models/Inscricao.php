@@ -23,6 +23,12 @@ class Inscricao extends Model
         'cadastro_invalidado' => 3,
     ];
 
+    public const STATUS_RETIFICACAO = [
+        'bloqueado_motivo_racial' => 1,
+        'bloqueado_motivo_medico' => 2,
+        'bloqueado_motivo_racial_e_medico' => 3,
+    ];
+
     protected $fillable = [
         'candidato_id',
         'chamada_id',
@@ -32,6 +38,7 @@ class Inscricao extends Model
         'protocolo_envio',
         'status',
         'cd_efetivado',
+        'retificacao',
         'justificativa',
         'nu_etapa',
         'no_campus',
@@ -195,6 +202,16 @@ class Inscricao extends Model
         return $this->status == self::STATUS_ENUM['documentos_invalidados'];
     }
 
+    public function isCotaRacial()
+    {
+        return Cota::COTA_RACIAL[$this->cota->cod_cota];
+    }
+
+    public function isCotaDeficiencia()
+    {
+        return Cota::COTA_DEFICIENCIA[$this->cota->cod_cota];
+    }
+    
     public function isDocumentoAceitosComPendencias()
     {
         return $this->status == self::STATUS_ENUM['documentos_aceitos_com_pendencias'];
