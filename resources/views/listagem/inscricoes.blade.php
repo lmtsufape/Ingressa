@@ -24,14 +24,14 @@
         .titulo {
             position: relative;
             top: -70px;
-            font-size: 18px;
+            font-size: 12px;
             font-weight: bolder;
             color: #03284d;
         }
         .subtitulo {
             font-weight: normal;
             position: inherit;
-            font-size: 18px;
+            font-size: 12px;
             color: #03284d;
             text-align: center;
             margin: -18px;
@@ -57,7 +57,7 @@
         }
         table th {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 12px;
         }
         table thead {
             border-top: 1px solid rgb(126, 126, 126);
@@ -96,6 +96,7 @@
         .body {
         }
         .acao_afirmativa {
+            font-size: 12px;
             text-align: justify;
             margin: 12px;
             position: relative;
@@ -104,7 +105,7 @@
     </style>
 
 </head>
-<body>
+<body style="font-family: Arial, Helvetica, sans-serif;">
     <div id="head">        
         <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
         <span class="titulo">
