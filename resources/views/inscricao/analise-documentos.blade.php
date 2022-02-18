@@ -641,33 +641,7 @@
                         <input type="hidden" name="inscricaoID" value="{{$inscricao->id}}">
                         <input type="hidden" name="bloquear" id="bloquearInscricao" value="">
                         <div class="pt-3">
-                            @if($inscricao->retificacao != null)
-                                @if($inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'])
-                                    @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
-                                        Tem certeza que deseja desbloquear a inscrição do candidato?
-                                    @else
-                                        Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
-                                    @endcan
-                                @elseif($inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] || $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico'])
-                                    @can('isAdminOrMedico', \App\Models\User::class)
-                                        Tem certeza que deseja desbloquear a inscrição do candidato?
-                                    @else
-                                        Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
-                                    @endcan
-                                @else
-                                    @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
-                                        Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
-                                    @else
-                                        @can('isAdminOrMedico', \App\Models\User::class)
-                                            Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
-                                        @else 
-                                            Tem certeza que deseja desbloquear a inscrição do candidato?
-                                        @endcan
-                                    @endcan
-                                @endif
-                            @else
-                                Tem certeza que deseja bloquear a inscrição do candidato?<br>Obs: esta ação fará com que o candidato não possa enviar documentos durante o período de retificação!
-                            @endif
+                            Tem certeza que deseja bloquear/desbloquear a inscrição do candidato?<br>
                         </div>
                     </form>
                 </div>
