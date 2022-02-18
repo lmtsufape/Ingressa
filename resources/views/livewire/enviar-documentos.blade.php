@@ -25,9 +25,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                                width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -91,9 +93,11 @@
                                         @endif
                                     @endcan
                                     @can('periodoRetificacao', $inscricao->chamada)
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados())
-                                            <img src="{{ asset('img/upload2.svg') }}"
-                                                width="30">
+                                        @if (is_null($inscricao->retificacao))
+                                            @if ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados())
+                                                <img src="{{ asset('img/upload2.svg') }}"
+                                                    width="30">
+                                            @endif
                                         @endif
                                     @endcan
                             </label>
@@ -163,9 +167,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('historico') && !$inscricao->isDocumentosEnviados())))
-                                        @if (in_array($declaracoes['historico'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('historico') && !$inscricao->isDocumentosEnviados())))
+                                            @if (in_array($declaracoes['historico'], [null, '']))
+                                                <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                            @endif
                                         @endif
                                     @endif
                                 @endcan
@@ -196,22 +202,24 @@
                             </span>
                             @if (!$inscricao->arquivo('historico') && $inscricao->isDocumentosDiferentesPendentes())
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if($inscricao->isDocumentosEnviados())
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" checked disabled>
-                                            <label class="form-check-label subtexto3">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
-                                    @else
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
-                                            <label class="form-check-label subtexto3" for="checkHistorico">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
+                                    @if (is_null($inscricao->retificacao))
+                                        @if($inscricao->isDocumentosEnviados())
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" checked disabled>
+                                                <label class="form-check-label subtexto3">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="declaracoes.historico" value="true" id="checkHistorico" wire:model="declaracoes.historico">
+                                                <label class="form-check-label subtexto3" for="checkHistorico">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Histórico Escolar do Ensino Médio ou Equivalente, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @endif
                                     @endif
                                 @else
                                     <div class="form-check mt-2">
@@ -276,9 +284,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados())))
-                                        @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados())))
+                                            @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
+                                                <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                            @endif
                                         @endif
                                     @endif
                                 @endcan
@@ -307,22 +317,24 @@
                             </span>
                             @if (!$inscricao->arquivo('nascimento_ou_casamento') && $inscricao->isDocumentosDiferentesPendentes())
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if($inscricao->isDocumentosEnviados())
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" checked disabled>
-                                            <label class="form-check-label subtexto3">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
-                                    @else
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
-                                            <label class="form-check-label subtexto3" for="checkNascimento_casamento">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
+                                    @if (is_null($inscricao->retificacao))
+                                        @if($inscricao->isDocumentosEnviados())
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" checked disabled>
+                                                <label class="form-check-label subtexto3">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="true" id="checkNascimento_casamento" wire:model="declaracoes.nascimento_ou_casamento">
+                                                <label class="form-check-label subtexto3" for="checkNascimento_casamento">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Registro de Nascimento ou Certidão de Casamento, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @endif
                                     @endif
                                 @else
                                     <div class="form-check mt-2">
@@ -386,9 +398,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -456,9 +470,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -527,9 +543,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados())))
-                                        @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados())))
+                                            @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
+                                                <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                            @endif
                                         @endif
                                     @endif
                                 @endcan
@@ -565,22 +583,24 @@
                             </span>
                             @if (!$inscricao->arquivo('quitacao_eleitoral') && $inscricao->isDocumentosDiferentesPendentes())
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if($inscricao->isDocumentosEnviados())
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" checked disabled>
-                                            <label class="form-check-label subtexto3">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
-                                    @else
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
-                                            <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
+                                    @if (is_null($inscricao->retificacao))
+                                        @if($inscricao->isDocumentosEnviados())
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" checked disabled>
+                                                <label class="form-check-label subtexto3">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_eleitoral " value="true" id="checkquitacao_eleitoral" wire:model="declaracoes.quitacao_eleitoral">
+                                                <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Eleitoral, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @endif
                                     @endif
                                 @else
                                     <div class="form-check mt-2">
@@ -645,9 +665,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_militar') && !$inscricao->isDocumentosEnviados())))
-                                        @if (in_array($declaracoes['quitacao_militar'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_militar') && !$inscricao->isDocumentosEnviados())))
+                                            @if (in_array($declaracoes['quitacao_militar'], [null, '']))
+                                                <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                            @endif
                                         @endif
                                     @endif
                                 @endcan
@@ -678,22 +700,24 @@
                             </span>
                             @if (!$inscricao->arquivo('quitacao_militar') && $inscricao->isDocumentosDiferentesPendentes())
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if($inscricao->isDocumentosEnviados())
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" checked disabled>
-                                            <label class="form-check-label subtexto3">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
-                                    @else
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
-                                            <label class="form-check-label subtexto3" for="checkquitacao_militar">
-                                                Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
-                                                primeira semana de aula.
-                                            </label>
-                                        </div>
+                                    @if (is_null($inscricao->retificacao))
+                                        @if($inscricao->isDocumentosEnviados())
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" checked disabled>
+                                                <label class="form-check-label subtexto3">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @else
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" name="declaracoes.quitacao_militar " value="true" id="checkquitacao_militar" wire:model="declaracoes.quitacao_militar">
+                                                <label class="form-check-label subtexto3" for="checkquitacao_militar">
+                                                    Comprometo-me a entregar junto ao DRCA/UFAPE o Comprovante de quitação com o Serviço Militar, na
+                                                    primeira semana de aula.
+                                                </label>
+                                            </div>
+                                        @endif
                                     @endif
                                 @else
                                     <div class="form-check mt-2">
@@ -757,9 +781,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -828,9 +854,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -909,9 +937,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -975,9 +1005,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -1049,9 +1081,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -1124,9 +1158,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -1205,9 +1241,11 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                        width="30">
+                                    @if (is_null($inscricao->retificacao))
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados())
+                                            <img src="{{ asset('img/upload2.svg') }}"
+                                            width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -1413,28 +1451,30 @@
             @endif
         @endcan
         @can('periodoRetificacao', $inscricao->chamada)
-            @if ($inscricao->isDocumentosInvalidados())
-                <div class="d-flex justify-content-end">
-                    <div>
-                        <button type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modal-confirmar"
-                            class="btn botaoVerde my-2 py-1">
-                            <span class="px-4">Enviar</span>
-                        </button>
+            @if (is_null($inscricao->retificacao))
+                @if ($inscricao->isDocumentosInvalidados())
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <button type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-confirmar"
+                                class="btn botaoVerde my-2 py-1">
+                                <span class="px-4">Enviar</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            @elseif($inscricao->isDocumentoAceitosComPendencias())
-                <div class="d-flex justify-content-end">
-                    <div>
-                        <button type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modal-confirmar"
-                            class="btn botaoVerde my-2 py-1">
-                            <span class="px-4">Enviar</span>
-                        </button>
+                @elseif($inscricao->isDocumentoAceitosComPendencias())
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <button type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-confirmar"
+                                class="btn botaoVerde my-2 py-1">
+                                <span class="px-4">Enviar</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                @endif
             @endif
         @endcan
     </div>

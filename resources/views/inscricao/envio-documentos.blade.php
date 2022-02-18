@@ -24,13 +24,15 @@
                 <div class="row justify-content-center" style="margin-bottom: 20px;">
                     <div class="col-md-11 corpo p-2 px-4">
                         @can('periodoRetificacao', $inscricao->chamada)
-                            @if($inscricao->isDocumentosInvalidados())
-                                <div class="col-md-12 mt-2">
-                                    <div class="alert alert-warning" role="alert">
-                                        <h5 class="alert-heading">Período de retificação!</h5>
-                                        <p>Envie um novo documento, para aqueles documentos que foram recusados.</p>
+                            @if (is_null($inscricao->retificacao))
+                                @if($inscricao->isDocumentosInvalidados())
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-warning" role="alert">
+                                            <h5 class="alert-heading">Período de retificação!</h5>
+                                            <p>Envie um novo documento, para aqueles documentos que foram recusados.</p>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endif
                         @endcan
                         <div>
