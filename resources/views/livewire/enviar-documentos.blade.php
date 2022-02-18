@@ -163,7 +163,7 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || $inscricao->isDocumentoAceitosComPendencias() || ($inscricao->isArquivoNaoEnviado('historico') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('historico') && !$inscricao->isDocumentosEnviados()))
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('historico') && !$inscricao->isDocumentosEnviados())))
                                         @if (in_array($declaracoes['historico'], [null, '']))
                                             <img src="{{ asset('img/upload2.svg') }}" width="30">
                                         @endif
@@ -276,7 +276,7 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || $inscricao->isDocumentoAceitosComPendencias() || ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados()))
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados())))
                                         @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
                                             <img src="{{ asset('img/upload2.svg') }}" width="30">
                                         @endif
@@ -527,7 +527,7 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || $inscricao->isDocumentoAceitosComPendencias() || ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados()))
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados())))
                                         @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
                                             <img src="{{ asset('img/upload2.svg') }}" width="30">
                                         @endif
@@ -645,7 +645,7 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || $inscricao->isDocumentoAceitosComPendencias() || ($inscricao->isArquivoNaoEnviado('quitacao_militar') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_militar') && !$inscricao->isDocumentosEnviados()))
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_militar') && !$inscricao->isDocumentosEnviados())))
                                         @if (in_array($declaracoes['quitacao_militar'], [null, '']))
                                             <img src="{{ asset('img/upload2.svg') }}" width="30">
                                         @endif
