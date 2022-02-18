@@ -184,7 +184,7 @@ class Inscricao extends Model
     {
         return $this->status == self::STATUS_ENUM['documentos_enviados'];
     }
-    
+
     public function isDocumentosDiferentesPendentes()
     {
         return $this->status != self::STATUS_ENUM['documentos_pendentes'];
@@ -193,6 +193,11 @@ class Inscricao extends Model
     public function isDocumentosInvalidados()
     {
         return $this->status == self::STATUS_ENUM['documentos_invalidados'];
+    }
+
+    public function isDocumentoAceitosComPendencias()
+    {
+        return $this->status == self::STATUS_ENUM['documentos_aceitos_com_pendencias'];
     }
 
     public function gerarProtocolo()
