@@ -163,8 +163,10 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('historico') && !$inscricao->isDocumentosEnviados())))
+                                        @if (in_array($declaracoes['historico'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -274,8 +276,10 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('nascimento_ou_casamento') && !$inscricao->isDocumentosEnviados())))
+                                        @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -523,8 +527,10 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_eleitoral') && !$inscricao->isDocumentosEnviados())))
+                                        @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -639,8 +645,10 @@
                                     @endif
                                 @endcan
                                 @can('periodoRetificacao', $inscricao->chamada)
-                                    @if ($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados())
-                                        <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                    @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') && !$inscricao->isDocumentosEnviados()) || (!$inscricao->isArquivoAvaliado('quitacao_militar') && !$inscricao->isDocumentosEnviados())))
+                                        @if (in_array($declaracoes['quitacao_militar'], [null, '']))
+                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
+                                        @endif
                                     @endif
                                 @endcan
                             </label>
@@ -1276,7 +1284,7 @@
                     </div>
                     <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
                 @else
-                    @if($inscricao->isDocumentosInvalidados())
+                    @if($inscricao->isDocumentosInvalidados() || $inscricao->isDocumentoAceitosComPendencias())
                         @can('periodoRetificacao', $inscricao->chamada)
                             <div class="form-check mt-2 @error('termos.vinculo') is-invalid @enderror">
                                 <input class="form-check-input" type="checkbox" value="true" id="checkVinculo" wire:model="termos.vinculo">
@@ -1416,19 +1424,17 @@
                         </button>
                     </div>
                 </div>
-            @elseif($inscricao->isDocumentosInvalidados())
-                @can('periodoRetificacao', $inscricao->chamada)
-                    <div class="d-flex justify-content-end">
-                        <div>
-                            <button type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-confirmar"
-                                class="btn botaoVerde my-2 py-1">
-                                <span class="px-4">Enviar</span>
-                            </button>
-                        </div>
+            @elseif($inscricao->isDocumentoAceitosComPendencias())
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <button type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal-confirmar"
+                            class="btn botaoVerde my-2 py-1">
+                            <span class="px-4">Enviar</span>
+                        </button>
                     </div>
-                @endcan
+                </div>
             @endif
         @endcan
     </div>
