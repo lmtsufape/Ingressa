@@ -140,7 +140,7 @@
                                         <div class="col-md-6">
                                             <div class="row justify-content-end">
                                                 <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="raprovarBotao" style="background-color: #FC605F;" class="me-1 btn botao my-2 py-1 col-md-5" onclick="atualizarInputReprovar();CKEDITOR.instances.comentario.setData( '', function() { this.updateElement();})"> <span class="px-3 text-center">Recusar</span></button>
-                                                <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar()"><span class="px-3 text-center" >Aprovar</span></button>
+                                                <button data-bs-toggle="modal" data-bs-target="#avaliar-documento-modal" id="aprovarBotao" class="btn botaoVerde my-2 py-1 col-md-5" onclick="atualizarInputAprovar();CKEDITOR.instances.comentario.setData( '', function() { this.updateElement();})"><span class="px-3 text-center" >Aprovar</span></button>
                                             </div>
                                         </div>
                                     </div>
@@ -799,7 +799,7 @@
     }
 
     function atualizarInputAprovar(){
-        
+
         $('#comentario').attr('required', false);
         $('#comentario').val('');
 
@@ -856,7 +856,7 @@
             $('#aprovar-recusar-candidato-modal').modal('toggle');
         }
     }
-    
+
     function bloquearCandidatoInput(valor){
         document.getElementById('bloquearInscricao').value = valor;
         $('#bloquear-inscricao-racial').modal('toggle');
