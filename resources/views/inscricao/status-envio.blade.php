@@ -75,7 +75,7 @@
                                 Escolar (escanear frente e verso da Ficha 19), neste caso anexar o arquivo nos dois
                                 campos (“certificado de conclusão do ensino médio” e “histórico escolar”)
                             </span>
-                            @if(!$inscricao->arquivo('historico') && is_null($pre_envio))
+                            @if(!$inscricao->arquivo('historico') && !$pre_envio)
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" checked disabled id="checkHistorico">
                                     <label class="form-check-label subtexto3" for="checkHistorico">
@@ -105,7 +105,7 @@
                             <span class="subtexto3">
                                 Registro de Nascimento ou Certidão de Casamento
                             </span>
-                            @if(!$inscricao->arquivo('nascimento_ou_casamento') && is_null($pre_envio))
+                            @if(!$inscricao->arquivo('nascimento_ou_casamento') && !$pre_envio)
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" checked disabled id="checkNascimento_casamento">
                                     <label class="form-check-label subtexto3" for="checkNascimento_casamento">
@@ -190,7 +190,7 @@
                                 disponível no
                                 <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>)
                             </span>
-                            @if(!$inscricao->arquivo('quitacao_eleitoral') && is_null($pre_envio))
+                            @if(!$inscricao->arquivo('quitacao_eleitoral') && !$pre_envio)
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" checked disabled id="checkquitacao_eleitoral">
                                     <label class="form-check-label subtexto3" for="checkquitacao_eleitoral">
@@ -222,7 +222,7 @@
                                 do sexo masculino que tenham de 18 a 45 anos - Frente e verso. <b>OBS.</b>:  Para os militares, apresentar cópia frente e verso da carteira de identidade
                                 militar
                             </span>
-                            @if(!$inscricao->arquivo('quitacao_militar') && is_null($pre_envio))
+                            @if(!$inscricao->arquivo('quitacao_militar') && !$pre_envio)
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" checked disabled id="checkquitacao_militar">
                                     <label class="form-check-label subtexto3" for="checkquitacao_militar">

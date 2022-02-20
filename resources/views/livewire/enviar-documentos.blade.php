@@ -445,7 +445,7 @@
                 @endif
             @endforeach
         @else
-            @include('inscricao.status-envio')
+            @include('inscricao.status-envio', ['pre_envio' => false])
         @endif
     @else
         @can('periodoRetificacao', $inscricao->chamada)
@@ -901,13 +901,13 @@
                     </div>
                 </div>
             @else
-                @include('inscricao.status-envio')
+                @include('inscricao.status-envio', ['pre_envio' => false])
             @endif
         @else
             @if ($inscricao->isDocumentosRequeridos())
                 @include('inscricao.status-envio', ['pre_envio' => true])
             @else
-                @include('inscricao.status-envio')
+                @include('inscricao.status-envio', ['pre_envio' => false])
             @endif
         @endcan
     @endcan
