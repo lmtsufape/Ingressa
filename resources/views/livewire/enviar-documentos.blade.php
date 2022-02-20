@@ -13,29 +13,12 @@
                             </div>
                             @if ($documentos->contains('declaracao_veracidade'))
                                 <div class="mt-2">
-                                    <label for="docDeclaracaoVeracidade"
-                                        title="Enviar documento"
-                                        style="cursor: pointer;">
-                                        <input wire:model="arquivos.declaracao_veracidade"
-                                            id="docDeclaracaoVeracidade"
-                                            type="file"
-                                            class="d-none">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="declaracao_veracidade"/>
                                     @if ($inscricao->arquivo('declaracao_veracidade'))
-                                        <a wire:click="baixar('declaracao_veracidade')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="declaracao_veracidade"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-declaracao_veracidade" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
                                         Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
@@ -45,29 +28,12 @@
                             @endif
                             @if ($documentos->contains('certificado_conclusao'))
                                 <div class="mt-2">
-                                    <label for="docConclusaoMedio"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.certificado_conclusao"
-                                            type="file"
-                                            class="d-none"
-                                            id="docConclusaoMedio">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="certificado_conclusao"/>
                                     @if ($inscricao->arquivo('certificado_conclusao'))
-                                        <a wire:click="baixar('certificado_conclusao')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="certificado_conclusao"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-certificado_conclusao" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.certificado_conclusao') is-invalid text-danger @enderror">
                                         Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino
@@ -81,30 +47,14 @@
                             @endif
                             @if($documentos->contains('historico'))
                                 <div class="mt-2">
-                                    <label for="docHistorico"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.historico"
-                                            type="file"
-                                            class="d-none"
-                                            id="docHistorico">
-                                        @if (in_array($declaracoes['historico'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                        @endif
-                                    </label>
+                                    @if (in_array($declaracoes['historico'], [null, '']))
+                                        <x-botao-enviar-documento documento="historico"/>
+                                    @endif
                                     @if ($inscricao->arquivo('historico'))
-                                        <a wire:click="baixar('historico')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="historico"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-historico" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
                                         Histórico Escolar do Ensino Médio ou Equivalente. <b>OBS.</b>: Pode estar junto com o Histórico
@@ -125,30 +75,14 @@
                             @endif
                             @if($documentos->contains('nascimento_ou_casamento'))
                                 <div class="mt-2">
-                                    <label for="docNascimento"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.nascimento_ou_casamento"
-                                            type="file"
-                                            class="d-none"
-                                            id="docNascimento">
-                                        @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                        @endif
-                                    </label>
+                                    @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
+                                        <x-botao-enviar-documento documento="nascimento_ou_casamento"/>
+                                    @endif
                                     @if ($inscricao->arquivo('nascimento_ou_casamento'))
-                                        <a wire:click="baixar('nascimento_ou_casamento')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="nascimento_ou_casamento"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-nascimento_ou_casamento" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
                                         Registro de Nascimento ou Certidão de Casamento
@@ -167,29 +101,12 @@
                             @endif
                             @if($documentos->contains('rg'))
                                 <div class="mt-2">
-                                    <label for="docRG"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.rg"
-                                            type="file"
-                                            class="d-none"
-                                            id="docRG">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="rg"/>
                                     @if ($inscricao->arquivo('rg'))
-                                        <a wire:click="baixar('rg')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="rg"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-rg" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.rg') is-invalid text-danger @enderror">
                                         Carteira de Identidade válida e com foto recente (RG) - escanear frente e verso. <b>OBS.</b>:
@@ -202,29 +119,12 @@
                             @endif
                             @if($documentos->contains('cpf'))
                                 <div class="mt-2">
-                                    <label for="docCPF"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.cpf"
-                                            type="file"
-                                            class="d-none"
-                                            id="docCPF">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="cpf"/>
                                     @if ($inscricao->arquivo('cpf'))
-                                        <a wire:click="baixar('cpf')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="cpf"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-cpf" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.cpf') is-invalid text-danger @enderror">
                                         Cadastro de Pessoa Física (CPF). <b>OBS.</b>: Caso conste o número do CPF na identidade (RG),
@@ -237,30 +137,14 @@
                             @endif
                             @if($documentos->contains('quitacao_eleitoral'))
                                 <div class="mt-2">
-                                    <label for="docEleitoral"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.quitacao_eleitoral"
-                                            type="file"
-                                            class="d-none"
-                                            id="docEleitoral">
-                                        @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                        @endif
-                                    </label>
+                                    @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
+                                        <x-botao-enviar-documento documento="quitacao_eleitoral"/>
+                                    @endif
                                     @if ($inscricao->arquivo('quitacao_eleitoral'))
-                                        <a wire:click="baixar('quitacao_eleitoral')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="quitacao_eleitoral"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-quitacao_eleitoral" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                         Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
@@ -286,30 +170,14 @@
                             @endif
                             @if($documentos->contains('quitacao_militar'))
                                 <div class="mt-2">
-                                    <label for="docMilitar"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.quitacao_militar"
-                                            type="file"
-                                            class="d-none"
-                                            id="docMilitar">
-                                        @if (in_array($declaracoes['quitacao_militar'], [null, '']))
-                                            <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                        @endif
-                                    </label>
+                                    @if (in_array($declaracoes['quitacao_militar'], [null, '']))
+                                        <x-botao-enviar-documento documento="quitacao_militar"/>
+                                    @endif
                                     @if ($inscricao->arquivo('quitacao_militar'))
-                                        <a wire:click="baixar('quitacao_militar')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="quitacao_militar"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-quitacao_militar" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.quitacao_militar') is-invalid text-danger @enderror">
                                         Comprovante de quitação com o Serviço Militar, para candidatos
@@ -330,29 +198,12 @@
                             @endif
                             @if($documentos->contains('foto'))
                                 <div class="mt-2">
-                                    <label for="docFoto"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.foto"
-                                            type="file"
-                                            class="d-none"
-                                            id="docFoto">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="foto"/>
                                     @if ($inscricao->arquivo('foto'))
-                                        <a wire:click="baixar('foto')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="foto"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-foto" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.foto') is-invalid text-danger @enderror">Uma foto 3x4 atual</span>
                                     <div class="invalid-feedback">@error('arquivos.foto'){{$message}}@enderror</div>
@@ -366,29 +217,12 @@
                                     <div class="subtexto2 my-1">Para concorrer a uma vaga nas cotas, também é necessário o envio destes documentos.</div>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="cotista"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.declaracao_cotista"
-                                            type="file"
-                                            class="d-none"
-                                            id="cotista">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="declaracao_cotista"/>
                                     @if ($inscricao->arquivo('declaracao_cotista'))
-                                        <a wire:click="baixar('declaracao_cotista')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="declaracao_cotista"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-declaracao_cotista" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.declaracao_cotista') is-invalid text-danger @enderror">
                                         Autodeclaração como candidato participante de reserva de vaga
@@ -411,29 +245,12 @@
                                         Você está concorrendo a uma vaga de cota de candidato autodeclarado negro (preto ou pardo), portanto deve enviar o respectivo comprovante.</div>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="docHeteroidentificacao"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.heteroidentificacao"
-                                            type="file"
-                                            class="d-none"
-                                            id="docHeteroidentificacao">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="heteroidentificacao"/>
                                     @if ($inscricao->arquivo('heteroidentificacao'))
-                                        <a wire:click="baixar('heteroidentificacao')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="heteroidentificacao"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-heteroidentificacao" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                         Vídeo individual e recente para procedimento de heteroidentificação.
@@ -442,29 +259,12 @@
                                     <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="docFotografia"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.fotografia"
-                                            type="file"
-                                            class="d-none"
-                                            id="docFotografia">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="fotografia"/>
                                     @if ($inscricao->arquivo('fotografia'))
-                                        <a wire:click="baixar('fotografia')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="fotografia"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-fotografia" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                         Fotografia individual e recente para procedimento de
@@ -481,29 +281,12 @@
                                     <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota de renda, portanto deve enviar o documento de renda familiar bruta mensal per capita.</div>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="cotaRenda"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.comprovante_renda"
-                                            type="file"
-                                            class="d-none"
-                                            id="cotaRenda">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="comprovante_renda"/>
                                     @if ($inscricao->arquivo('comprovante_renda'))
-                                        <a wire:click="baixar('comprovante_renda')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="comprovante_renda"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-comprovante_renda" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
                                         Comprovante de renda, ou de que não possui renda, de cada membro
@@ -521,29 +304,12 @@
                                     <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota indígena, portanto deve enviar o respectivo comprovante.</div>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="rani"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.rani"
-                                            type="file"
-                                            class="d-none"
-                                            id="rani">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="rani"/>
                                     @if ($inscricao->arquivo('rani'))
-                                        <a wire:click="baixar('rani')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="rani"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-rani" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
                                         Registro Administrativo de Nascimento de Indígena (RANI)
@@ -567,29 +333,12 @@
                                     <div class="subtexto2 my-1">Você está concorrendo a uma vaga para pessoas com deficiência, portanto deve enviar o respectivo comprovante.</div>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="cotaPCD"
-                                        title="Enviar documento"
-                                        style="cursor:pointer;">
-                                        <input wire:model="arquivos.laudo_medico"
-                                            type="file"
-                                            class="d-none"
-                                            id="cotaPCD">
-                                        <img src="{{ asset('img/upload2.svg') }}"
-                                            width="30">
-                                    </label>
+                                    <x-botao-enviar-documento documento="laudo_medico"/>
                                     @if ($inscricao->arquivo('laudo_medico'))
-                                        <a wire:click="baixar('laudo_medico')"
-                                            title="Baixar documento"
-                                            target="_blank"
-                                            style="cursor:pointer;">
-                                            <img src="{{asset('img/download2.svg')}}"
-                                                alt="arquivo atual"
-                                                width="30"
-                                                class="img-flex"></a>
+                                        <x-botao-baixar-documento documento="laudo_medico"/>
                                         <button type="button" title="Deletar documento enviado" data-bs-toggle="modal" data-bs-target="#deletar-arquivo-laudo_medico" style="cursor: pointer;"><img width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de Deletar documento enviado"></button>
                                     @else
-                                        <img src="{{ asset('img/download3.svg') }}"
-                                            width="30">
+                                        <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                         Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
@@ -713,30 +462,13 @@
                                 </div>
                                 @if ($documentos->contains('declaracao_veracidade'))
                                     <div class="mt-2">
-                                        <label for="docDeclaracaoVeracidade"
-                                            title="Enviar documento"
-                                            style="cursor: pointer;">
-                                            <input wire:model="arquivos.declaracao_veracidade"
-                                                id="docDeclaracaoVeracidade"
-                                                type="file"
-                                                class="d-none">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="declaracao_veracidade"/>
+                                        @endif
                                         @if ($inscricao->arquivo('declaracao_veracidade'))
-                                            <a wire:click="baixar('declaracao_veracidade')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="declaracao_veracidade"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
                                             Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
@@ -747,30 +479,13 @@
                                 @endif
                                 @if ($documentos->contains('certificado_conclusao'))
                                     <div class="mt-2">
-                                        <label for="docConclusaoMedio"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.certificado_conclusao"
-                                                type="file"
-                                                class="d-none"
-                                                id="docConclusaoMedio">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="certificado_conclusao"/>
+                                        @endif
                                         @if ($inscricao->arquivo('certificado_conclusao'))
-                                            <a wire:click="baixar('certificado_conclusao')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="certificado_conclusao"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.certificado_conclusao') is-invalid text-danger @enderror">
                                             Certificado de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino
@@ -785,32 +500,15 @@
                                 @endif
                                 @if($documentos->contains('historico'))
                                     <div class="mt-2">
-                                        <label for="docHistorico"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.historico"
-                                                type="file"
-                                                class="d-none"
-                                                id="docHistorico">
-                                            @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados())
-                                            || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') || !$inscricao->isArquivoAvaliado('historico'))))
-                                                @if (in_array($declaracoes['historico'], [null, '']))
-                                                    <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                                @endif
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') || !$inscricao->isArquivoAvaliado('historico'))))
+                                            @if (in_array($declaracoes['historico'], [null, '']))
+                                                <x-botao-enviar-documento documento="historico"/>
                                             @endif
-                                        </label>
+                                        @endif
                                         @if ($inscricao->arquivo('historico'))
-                                            <a wire:click="baixar('historico')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="historico"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.historico') is-invalid text-danger @enderror">
                                             Histórico Escolar do Ensino Médio ou Equivalente. <b>OBS.</b>: Pode estar junto com o Histórico
@@ -832,32 +530,15 @@
                                 @endif
                                 @if($documentos->contains('nascimento_ou_casamento'))
                                     <div class="mt-2">
-                                        <label for="docNascimento"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.nascimento_ou_casamento"
-                                                type="file"
-                                                class="d-none"
-                                                id="docNascimento">
-                                            @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados())
-                                            || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') || !$inscricao->isArquivoAvaliado('nascimento_ou_casamento'))))
-                                                @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
-                                                    <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                                @endif
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') || !$inscricao->isArquivoAvaliado('nascimento_ou_casamento'))))
+                                            @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
+                                                <x-botao-enviar-documento documento="nascimento_ou_casamento"/>
                                             @endif
-                                        </label>
+                                        @endif
                                         @if ($inscricao->arquivo('nascimento_ou_casamento'))
-                                            <a wire:click="baixar('nascimento_ou_casamento')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="nascimento_ou_casamento"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.nascimento_ou_casamento') is-invalid text-danger @enderror">
                                             Registro de Nascimento ou Certidão de Casamento
@@ -877,30 +558,13 @@
                                 @endif
                                 @if($documentos->contains('rg'))
                                     <div class="mt-2">
-                                        <label for="docRG"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.rg"
-                                                type="file"
-                                                class="d-none"
-                                                id="docRG">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="rg"/>
+                                        @endif
                                         @if ($inscricao->arquivo('rg'))
-                                            <a wire:click="baixar('rg')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="rg"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.rg') is-invalid text-danger @enderror">
                                             Carteira de Identidade válida e com foto recente (RG) - escanear frente e verso. <b>OBS.</b>:
@@ -914,30 +578,13 @@
                                 @endif
                                 @if($documentos->contains('cpf'))
                                     <div class="mt-2">
-                                        <label for="docCPF"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.cpf"
-                                                type="file"
-                                                class="d-none"
-                                                id="docCPF">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="cpf"/>
+                                        @endif
                                         @if ($inscricao->arquivo('cpf'))
-                                            <a wire:click="baixar('cpf')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="cpf"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.cpf') is-invalid text-danger @enderror">
                                             Cadastro de Pessoa Física (CPF). <b>OBS.</b>: Caso conste o número do CPF na identidade (RG),
@@ -951,32 +598,15 @@
                                 @endif
                                 @if($documentos->contains('quitacao_eleitoral'))
                                     <div class="mt-2">
-                                        <label for="docEleitoral"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.quitacao_eleitoral"
-                                                type="file"
-                                                class="d-none"
-                                                id="docEleitoral">
-                                            @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados())
-                                            || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') || !$inscricao->isArquivoAvaliado('quitacao_eleitoral'))))
-                                                @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
-                                                    <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                                @endif
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') || !$inscricao->isArquivoAvaliado('quitacao_eleitoral'))))
+                                            @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
+                                                <x-botao-enviar-documento documento="quitacao_eleitoral"/>
                                             @endif
-                                        </label>
+                                        @endif
                                         @if ($inscricao->arquivo('quitacao_eleitoral'))
-                                            <a wire:click="baixar('quitacao_eleitoral')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="quitacao_eleitoral"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                             Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
@@ -1003,32 +633,15 @@
                                 @endif
                                 @if($documentos->contains('quitacao_militar'))
                                     <div class="mt-2">
-                                        <label for="docMilitar"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.quitacao_militar"
-                                                type="file"
-                                                class="d-none"
-                                                id="docMilitar">
-                                            @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados())
-                                            || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') || !$inscricao->isArquivoAvaliado('quitacao_militar'))))
-                                                @if (in_array($declaracoes['quitacao_militar'], [null, '']))
-                                                    <img src="{{ asset('img/upload2.svg') }}" width="30">
-                                                @endif
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') || !$inscricao->isArquivoAvaliado('quitacao_militar'))))
+                                            @if (in_array($declaracoes['quitacao_militar'], [null, '']))
+                                                <x-botao-enviar-documento documento="quitacao_militar"/>
                                             @endif
-                                        </label>
+                                        @endif
                                         @if ($inscricao->arquivo('quitacao_militar'))
-                                            <a wire:click="baixar('quitacao_militar')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="quitacao_militar"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.quitacao_militar') is-invalid text-danger @enderror">
                                             Comprovante de quitação com o Serviço Militar, para candidatos
@@ -1050,30 +663,13 @@
                                 @endif
                                 @if($documentos->contains('foto'))
                                     <div class="mt-2">
-                                        <label for="docFoto"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.foto"
-                                                type="file"
-                                                class="d-none"
-                                                id="docFoto">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="foto"/>
+                                        @endif
                                         @if ($inscricao->arquivo('foto'))
-                                            <a wire:click="baixar('foto')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="foto"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.foto') is-invalid text-danger @enderror">Uma foto 3x4 atual</span>
                                         <div class="invalid-feedback">@error('arquivos.foto'){{$message}}@enderror</div>
@@ -1088,30 +684,13 @@
                                         <div class="subtexto2 my-1">Para concorrer a uma vaga nas cotas, também é necessário o envio destes documentos.</div>
                                     </div>
                                     <div class="mt-2">
-                                        <label for="cotista"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.declaracao_cotista"
-                                                type="file"
-                                                class="d-none"
-                                                id="cotista">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="declaracao_cotista"/>
+                                        @endif
                                         @if ($inscricao->arquivo('declaracao_cotista'))
-                                            <a wire:click="baixar('declaracao_cotista')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="declaracao_cotista"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.declaracao_cotista') is-invalid text-danger @enderror">
                                             Autodeclaração como candidato participante de reserva de vaga
@@ -1136,30 +715,13 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        <label for="docHeteroidentificacao"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.heteroidentificacao"
-                                                type="file"
-                                                class="d-none"
-                                                id="docHeteroidentificacao">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="heteroidentificacao"/>
+                                        @endif
                                         @if ($inscricao->arquivo('heteroidentificacao'))
-                                            <a wire:click="baixar('heteroidentificacao')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="heteroidentificacao"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                             Vídeo individual e recente para procedimento de heteroidentificação.
@@ -1168,30 +730,13 @@
                                         <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                     </div>
                                     <div class="mt-2">
-                                        <label for="docFotografia"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.fotografia"
-                                                type="file"
-                                                class="d-none"
-                                                id="docFotografia">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endcan
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="fotografia"/>
+                                        @endcan
                                         @if ($inscricao->arquivo('fotografia'))
-                                            <a wire:click="baixar('fotografia')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="fotografia"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                             Fotografia individual e recente para procedimento de
@@ -1209,30 +754,13 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota de renda, portanto deve enviar o documento de renda familiar bruta mensal per capita.</div>
                                     </div>
                                     <div class="mt-2">
-                                        <label for="cotaRenda"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.comprovante_renda"
-                                                type="file"
-                                                class="d-none"
-                                                id="cotaRenda">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="comprovante_renda"/>
+                                        @endif
                                         @if ($inscricao->arquivo('comprovante_renda'))
-                                            <a wire:click="baixar('comprovante_renda')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="comprovante_renda"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
                                             Comprovante de renda, ou de que não possui renda, de cada membro
@@ -1251,30 +779,13 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota indígena, portanto deve enviar o respectivo comprovante.</div>
                                     </div>
                                     <div class="mt-2">
-                                        <label for="rani"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.rani"
-                                                type="file"
-                                                class="d-none"
-                                                id="rani">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="rani"/>
+                                        @endif
                                         @if ($inscricao->arquivo('rani'))
-                                            <a wire:click="baixar('rani')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="rani"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
                                             Registro Administrativo de Nascimento de Indígena (RANI)
@@ -1299,30 +810,13 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga para pessoas com deficiência, portanto deve enviar o respectivo comprovante.</div>
                                     </div>
                                     <div class="mt-2">
-                                        <label for="cotaPCD"
-                                            title="Enviar documento"
-                                            style="cursor:pointer;">
-                                            <input wire:model="arquivos.laudo_medico"
-                                                type="file"
-                                                class="d-none"
-                                                id="cotaPCD">
-                                            @if ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados())
-                                                <img src="{{ asset('img/upload2.svg') }}"
-                                                    width="30">
-                                            @endif
-                                        </label>
+                                        @if ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados())
+                                            <x-botao-enviar-documento documento="laudo_medico"/>
+                                        @endif
                                         @if ($inscricao->arquivo('laudo_medico'))
-                                            <a wire:click="baixar('laudo_medico')"
-                                                title="Baixar documento"
-                                                target="_blank"
-                                                style="cursor:pointer;">
-                                                <img src="{{asset('img/download2.svg')}}"
-                                                    alt="arquivo atual"
-                                                    width="30"
-                                                    class="img-flex"></a>
+                                            <x-botao-baixar-documento documento="laudo_medico"/>
                                         @else
-                                            <img src="{{ asset('img/download3.svg') }}"
-                                                width="30">
+                                            <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                             Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
