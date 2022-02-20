@@ -21,7 +21,7 @@
                                         <img src="{{ asset('img/download3.svg') }}" width="30">
                                     @endif
                                     <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
-                                        Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
+                                        Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
                                     </span>
                                     <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
                                 </div>
@@ -229,7 +229,7 @@
                                         prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                         devidamente assinada e preenchida, conforme a modalidade de
                                         concorrência (preencher e assinar modelo disponível em:
-                                        <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
+                                        <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
                                     </span>
                                     <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
                                 </div>
@@ -255,7 +255,7 @@
                                     <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                         Vídeo individual e recente para procedimento de heteroidentificação.
                                         De acordo com as especificações e o roteiro descritos no edital do
-                                        processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
+                                        processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
                                     <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                 </div>
                                 <div class="mt-2">
@@ -269,7 +269,7 @@
                                     <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                         Fotografia individual e recente para procedimento de
                                         heteroidentificação. Conforme especificado no edital do processo de
-                                        seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
+                                        seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
                                     <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                                 </div>
                             </li>
@@ -343,7 +343,7 @@
                                     <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                         Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                         para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                        SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>
+                                        SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
                                     </span>
                                     <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
                                 </div>
@@ -445,11 +445,11 @@
                 @endif
             @endforeach
         @else
-            @include('inscricao.status-envio')
+            @include('inscricao.status-envio', ['pre_envio' => false])
         @endif
     @else
         @can('periodoRetificacao', $inscricao->chamada)
-            @if (($inscricao->isDocumentosInvalidados() || $inscricao->isDocumentoAceitosComPendencias()) && is_null($inscricao->retificacao))
+            @if (($inscricao->isDocumentosInvalidados() || $inscricao->isDocumentoAceitosComPendencias() || $inscricao->isDocumentosRequeridos()) && is_null($inscricao->retificacao))
                 <div clss="mb-5">
                     <form id="enviar-documentos"
                         wire:submit.prevent="submit"
@@ -462,7 +462,7 @@
                                 </div>
                                 @if ($documentos->contains('declaracao_veracidade'))
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('declaracao_veracidade'))
                                             <x-botao-enviar-documento documento="declaracao_veracidade"/>
                                         @endif
                                         @if ($inscricao->arquivo('declaracao_veracidade'))
@@ -471,7 +471,7 @@
                                             <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
-                                            Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
+                                            Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
                                         </span>
                                         <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
                                     </div>
@@ -479,7 +479,7 @@
                                 @endif
                                 @if ($documentos->contains('certificado_conclusao'))
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('certificado_conclusao'))
                                             <x-botao-enviar-documento documento="certificado_conclusao"/>
                                         @endif
                                         @if ($inscricao->arquivo('certificado_conclusao'))
@@ -500,7 +500,7 @@
                                 @endif
                                 @if($documentos->contains('historico'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') || !$inscricao->isArquivoAvaliado('historico'))))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('historico'))
                                             @if (in_array($declaracoes['historico'], [null, '']))
                                                 <x-botao-enviar-documento documento="historico"/>
                                             @endif
@@ -530,7 +530,7 @@
                                 @endif
                                 @if($documentos->contains('nascimento_ou_casamento'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') || !$inscricao->isArquivoAvaliado('nascimento_ou_casamento'))))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('nascimento_ou_casamento'))
                                             @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
                                                 <x-botao-enviar-documento documento="nascimento_ou_casamento"/>
                                             @endif
@@ -558,7 +558,7 @@
                                 @endif
                                 @if($documentos->contains('rg'))
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('rg'))
                                             <x-botao-enviar-documento documento="rg"/>
                                         @endif
                                         @if ($inscricao->arquivo('rg'))
@@ -578,7 +578,7 @@
                                 @endif
                                 @if($documentos->contains('cpf'))
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('cpf'))
                                             <x-botao-enviar-documento documento="cpf"/>
                                         @endif
                                         @if ($inscricao->arquivo('cpf'))
@@ -598,7 +598,7 @@
                                 @endif
                                 @if($documentos->contains('quitacao_eleitoral'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') || !$inscricao->isArquivoAvaliado('quitacao_eleitoral'))))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('quitacao_eleitoral'))
                                             @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
                                                 <x-botao-enviar-documento documento="quitacao_eleitoral"/>
                                             @endif
@@ -633,7 +633,7 @@
                                 @endif
                                 @if($documentos->contains('quitacao_militar'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') || !$inscricao->isArquivoAvaliado('quitacao_militar'))))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('quitacao_militar'))
                                             @if (in_array($declaracoes['quitacao_militar'], [null, '']))
                                                 <x-botao-enviar-documento documento="quitacao_militar"/>
                                             @endif
@@ -663,7 +663,7 @@
                                 @endif
                                 @if($documentos->contains('foto'))
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('foto'))
                                             <x-botao-enviar-documento documento="foto"/>
                                         @endif
                                         @if ($inscricao->arquivo('foto'))
@@ -684,7 +684,7 @@
                                         <div class="subtexto2 my-1">Para concorrer a uma vaga nas cotas, também é necessário o envio destes documentos.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('declaracao_cotista'))
                                             <x-botao-enviar-documento documento="declaracao_cotista"/>
                                         @endif
                                         @if ($inscricao->arquivo('declaracao_cotista'))
@@ -697,7 +697,7 @@
                                             prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                             devidamente assinada e preenchida, conforme a modalidade de
                                             concorrência (preencher e assinar modelo disponível em:
-                                            <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>)
+                                            <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
                                         </span>
                                         <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
                                     </div>
@@ -715,7 +715,7 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('heteroidentificacao'))
                                             <x-botao-enviar-documento documento="heteroidentificacao"/>
                                         @endif
                                         @if ($inscricao->arquivo('heteroidentificacao'))
@@ -726,11 +726,11 @@
                                         <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                             Vídeo individual e recente para procedimento de heteroidentificação.
                                             De acordo com as especificações e o roteiro descritos no edital do
-                                            processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
+                                            processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
                                         <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('fotografia'))
                                             <x-botao-enviar-documento documento="fotografia"/>
                                         @endcan
                                         @if ($inscricao->arquivo('fotografia'))
@@ -741,7 +741,7 @@
                                         <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                             Fotografia individual e recente para procedimento de
                                             heteroidentificação. Conforme especificado no edital do processo de
-                                            seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
+                                            seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
                                         <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                                     </div>
                                 </li>
@@ -754,7 +754,7 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota de renda, portanto deve enviar o documento de renda familiar bruta mensal per capita.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('comprovante_renda'))
                                             <x-botao-enviar-documento documento="comprovante_renda"/>
                                         @endif
                                         @if ($inscricao->arquivo('comprovante_renda'))
@@ -779,7 +779,7 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota indígena, portanto deve enviar o respectivo comprovante.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('rani'))
                                             <x-botao-enviar-documento documento="rani"/>
                                         @endif
                                         @if ($inscricao->arquivo('rani'))
@@ -810,7 +810,7 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga para pessoas com deficiência, portanto deve enviar o respectivo comprovante.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if ($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados())
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('laudo_medico'))
                                             <x-botao-enviar-documento documento="laudo_medico"/>
                                         @endif
                                         @if ($inscricao->arquivo('laudo_medico'))
@@ -821,7 +821,7 @@
                                         <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                             Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                             para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                            SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a>
+                                            SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
                                         </span>
                                         <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
                                     </div>
@@ -901,13 +901,13 @@
                     </div>
                 </div>
             @else
-                @include('inscricao.status-envio')
+                @include('inscricao.status-envio', ['pre_envio' => false])
             @endif
         @else
             @if ($inscricao->isDocumentosRequeridos())
                 @include('inscricao.status-envio', ['pre_envio' => true])
             @else
-                @include('inscricao.status-envio')
+                @include('inscricao.status-envio', ['pre_envio' => false])
             @endif
         @endcan
     @endcan

@@ -140,6 +140,11 @@ class Inscricao extends Model
         return $this->arquivo($nome) == null;
     }
 
+    public function isArquivoNaoEnviadoOrNaoAvaliado($nome)
+    {
+        return $this->isArquivoNaoEnviado($nome) || !$this->isArquivoAvaliado($nome);
+    }
+
     public function isArquivoAvaliado($nome)
     {
         if ($this->isArquivoEnviado($nome)) {
@@ -211,7 +216,7 @@ class Inscricao extends Model
     {
         return Cota::COTA_DEFICIENCIA[$this->cota->cod_cota];
     }
-    
+
     public function isDocumentoAceitosComPendencias()
     {
         return $this->status == self::STATUS_ENUM['documentos_aceitos_com_pendencias'];
