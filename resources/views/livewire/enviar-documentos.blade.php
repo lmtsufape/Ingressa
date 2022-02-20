@@ -462,7 +462,7 @@
                                 </div>
                                 @if ($documentos->contains('declaracao_veracidade'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('declaracao_veracidade') || !$inscricao->isArquivoAvaliado('declaracao_veracidade')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('declaracao_veracidade') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('declaracao_veracidade'))
                                             <x-botao-enviar-documento documento="declaracao_veracidade"/>
                                         @endif
                                         @if ($inscricao->arquivo('declaracao_veracidade'))
@@ -479,7 +479,7 @@
                                 @endif
                                 @if ($documentos->contains('certificado_conclusao'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('certificado_conclusao') || !$inscricao->isArquivoAvaliado('certificado_conclusao')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('certificado_conclusao') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('certificado_conclusao'))
                                             <x-botao-enviar-documento documento="certificado_conclusao"/>
                                         @endif
                                         @if ($inscricao->arquivo('certificado_conclusao'))
@@ -500,7 +500,7 @@
                                 @endif
                                 @if($documentos->contains('historico'))
                                     <div class="mt-2">
-                                        @if ((($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('historico') || !$inscricao->isArquivoAvaliado('historico')))) || (!$inscricao->isArquivoEnviado('historico') || !$inscricao->isArquivoAvaliado('historico')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('historico') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('historico'))
                                             @if (in_array($declaracoes['historico'], [null, '']))
                                                 <x-botao-enviar-documento documento="historico"/>
                                             @endif
@@ -530,7 +530,7 @@
                                 @endif
                                 @if($documentos->contains('nascimento_ou_casamento'))
                                     <div class="mt-2">
-                                        @if ((($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('nascimento_ou_casamento') || !$inscricao->isArquivoAvaliado('nascimento_ou_casamento')))) || (!$inscricao->isArquivoEnviado('nascimento_ou_casamento') || !$inscricao->isArquivoAvaliado('nascimento_ou_casamento')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('nascimento_ou_casamento') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('nascimento_ou_casamento'))
                                             @if (in_array($declaracoes['nascimento_ou_casamento'], [null, '']))
                                                 <x-botao-enviar-documento documento="nascimento_ou_casamento"/>
                                             @endif
@@ -558,7 +558,7 @@
                                 @endif
                                 @if($documentos->contains('rg'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('rg') || !$inscricao->isArquivoAvaliado('rg')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('rg') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('rg'))
                                             <x-botao-enviar-documento documento="rg"/>
                                         @endif
                                         @if ($inscricao->arquivo('rg'))
@@ -578,7 +578,7 @@
                                 @endif
                                 @if($documentos->contains('cpf'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('cpf') || !$inscricao->isArquivoAvaliado('cpf')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('cpf') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('cpf'))
                                             <x-botao-enviar-documento documento="cpf"/>
                                         @endif
                                         @if ($inscricao->arquivo('cpf'))
@@ -598,7 +598,7 @@
                                 @endif
                                 @if($documentos->contains('quitacao_eleitoral'))
                                     <div class="mt-2">
-                                        @if ((($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_eleitoral') || !$inscricao->isArquivoAvaliado('quitacao_eleitoral')))) || (!$inscricao->isArquivoEnviado('quitacao_eleitoral') || !$inscricao->isArquivoAvaliado('quitacao_eleitoral')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_eleitoral') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('quitacao_eleitoral'))
                                             @if (in_array($declaracoes['quitacao_eleitoral'], [null, '']))
                                                 <x-botao-enviar-documento documento="quitacao_eleitoral"/>
                                             @endif
@@ -633,7 +633,7 @@
                                 @endif
                                 @if($documentos->contains('quitacao_militar'))
                                     <div class="mt-2">
-                                        @if ((($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || ($inscricao->isDocumentoAceitosComPendencias() && ($inscricao->isArquivoNaoEnviado('quitacao_militar') || !$inscricao->isArquivoAvaliado('quitacao_militar')))) || (!$inscricao->isArquivoEnviado('quitacao_militar') || !$inscricao->isArquivoAvaliado('quitacao_militar')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('quitacao_militar') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('quitacao_militar'))
                                             @if (in_array($declaracoes['quitacao_militar'], [null, '']))
                                                 <x-botao-enviar-documento documento="quitacao_militar"/>
                                             @endif
@@ -663,7 +663,7 @@
                                 @endif
                                 @if($documentos->contains('foto'))
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('foto') || !$inscricao->isArquivoAvaliado('foto')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('foto') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('foto'))
                                             <x-botao-enviar-documento documento="foto"/>
                                         @endif
                                         @if ($inscricao->arquivo('foto'))
@@ -684,7 +684,7 @@
                                         <div class="subtexto2 my-1">Para concorrer a uma vaga nas cotas, também é necessário o envio destes documentos.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('declaracao_cotista') || !$inscricao->isArquivoAvaliado('declaracao_cotista')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('declaracao_cotista') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('declaracao_cotista'))
                                             <x-botao-enviar-documento documento="declaracao_cotista"/>
                                         @endif
                                         @if ($inscricao->arquivo('declaracao_cotista'))
@@ -715,7 +715,7 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('heteroidentificacao') || !$inscricao->isArquivoAvaliado('heteroidentificacao')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('heteroidentificacao') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('heteroidentificacao'))
                                             <x-botao-enviar-documento documento="heteroidentificacao"/>
                                         @endif
                                         @if ($inscricao->arquivo('heteroidentificacao'))
@@ -730,7 +730,7 @@
                                         <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('fotografia') || !$inscricao->isArquivoAvaliado('fotografia')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('fotografia'))
                                             <x-botao-enviar-documento documento="fotografia"/>
                                         @endcan
                                         @if ($inscricao->arquivo('fotografia'))
@@ -754,7 +754,7 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota de renda, portanto deve enviar o documento de renda familiar bruta mensal per capita.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('comprovante_renda') || !$inscricao->isArquivoAvaliado('comprovante_renda')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('comprovante_renda') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('comprovante_renda'))
                                             <x-botao-enviar-documento documento="comprovante_renda"/>
                                         @endif
                                         @if ($inscricao->arquivo('comprovante_renda'))
@@ -779,7 +779,7 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota indígena, portanto deve enviar o respectivo comprovante.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('rani') || !$inscricao->isArquivoAvaliado('rani')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('rani') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('rani'))
                                             <x-botao-enviar-documento documento="rani"/>
                                         @endif
                                         @if ($inscricao->arquivo('rani'))
@@ -810,7 +810,7 @@
                                         <div class="subtexto2 my-1">Você está concorrendo a uma vaga para pessoas com deficiência, portanto deve enviar o respectivo comprovante.</div>
                                     </div>
                                     <div class="mt-2">
-                                        @if (($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados()) || (!$inscricao->isArquivoEnviado('laudo_medico') || !$inscricao->isArquivoAvaliado('laudo_medico')))
+                                        @if (($inscricao->isArquivoRecusadoOuReenviado('laudo_medico') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('laudo_medico'))
                                             <x-botao-enviar-documento documento="laudo_medico"/>
                                         @endif
                                         @if ($inscricao->arquivo('laudo_medico'))
