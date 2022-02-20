@@ -33,33 +33,23 @@
         @component('layouts.nav_bar')@endcomponent
         <div class="fundo px-5 py-5">
             @can('isCandidato', \App\Models\User::class)
-                @if(auth()->user()->candidato->inscricoes->last()->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first() != null)
-                    @if($edicao_atual != null && auth()->user()->candidato->inscricoes->last()->sisu == $edicao_atual && date('d/m/Y', strtotime(now())) <= date('d/m/Y', strtotime(auth()->user()->candidato->inscricoes->last()->chamada->datasChamada()->where('tipo', \App\Models\DataChamada::TIPO_ENUM['reenvio'])->first()->data_fim)))
-                        @if(auth()->user()->candidato->inscricoes->last()->retificacao != null)
-                            @php
-                                if(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']){
-                                    $doc = 'heteroidentificação foi';
-                                    $banca = 'banca de heteroidenficação';
-                                    $invalidada = 'INVALIDADA';
-                                }elseif(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']){
-                                    $doc = 'laudo médico e exames foram';
-                                    $banca = 'equipe médica';
-                                    $invalidada = 'INVALIDADOS';
-                                }else{
-                                    $doc = 'heteroidentificação, laudo médico e exames foram';
-                                    $banca = 'banca de heteroidenficação e equipe médica';
-                                    $invalidada = 'INVALIDADOS';
-                                }
-                            @endphp
-                            <div class="row justify-content-center">
-                                <div class="col-md-8">
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>Sua documentação de {{$doc}} <strong>{{$invalidada}}</strong>. Se deseja interpor recurso em relação ao parecer da {{$banca}}, siga os trâmites descritos no Edital.
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
+                @if($edicao_atual != null && auth()->user()->candidato->inscricoes->last()->sisu == $edicao_atual)
+                    @if(auth()->user()->candidato->inscricoes->last()->retificacao != null)
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                                        @if(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'])
+                                            Sua documentação de heteroidentificação foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao paracer da banca de heteroidentificação siga os trâmites descritos no Edital.
+                                        @elseif(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'])
+                                            Sua documentação referente ao laudo médico e exames foi <strong>INVALIDADA</strong>.
+                                        @else
+                                            Sua documentação de heteroidentificação, laudo médico e exames foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao paracer da banca de heteroidentificação siga os trâmites descritos no Edital.
+                                        @endif
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                     @endif
                 @endif
             @endcan
