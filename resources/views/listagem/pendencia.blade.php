@@ -182,8 +182,7 @@
                                                         @if ($fotografia->avaliacao != null && $fotografia->avaliacao->comentario != null && $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'])
                                                             <span style="font-weight: bold">{{$fotografia->getNomeDoc()}}</span>: {!!str_replace(['<p>', '</p>'], "", $fotografia->avaliacao->comentario)!!}.<br>
                                                         @endif
-                                                        @if($heteroidentificacao->avaliacao != null && $heteroidentificacao->avaliacao->comentario != null && $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'] && 
-                                                            $fotografia->avaliacao != null && $fotografia->avaliacao->comentario != null && $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])
+                                                        @if($heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'] && $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])
                                                                 Documentação aceita.<br>
                                                         @endif
                                                     @endif
@@ -194,7 +193,7 @@
                                                         PARECER DA EQUIPE MÉDICA - 
                                                         @if ($medico->avaliacao != null && $medico->avaliacao->comentario != null)
                                                             <span style="font-weight: bold">{{$medico->getNomeDoc()}}</span>: {!!str_replace(['<p>', '</p>'], "", $medico->avaliacao->comentario)!!}.<br>
-                                                        @elseif($medico->avaliacao != null && $medico->avaliacao->comentario != null && $medico->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])
+                                                        @elseif($medico->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])
                                                             Documentação aceita.<br>
                                                         @endif
                                                     @endif
