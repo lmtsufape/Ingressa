@@ -8,7 +8,8 @@
 </head>
 <body style="color: black;">
     <p>
-        Comprovante de envio dos documentos em {{now()->format('d-m-Y às H:m:s')}} para a inscrição de nº {{$inscricao->id}}.
+        Comprovante de envio dos documentos para a inscrição de nº {{$inscricao->id}}.
+        Envio realizado em {{date('d/m/Y', strtotime($inscricao->updated_at))}} às {{date('H:i:s', strtotime($inscricao->updated_at))}}.
         <br>Documentos:
     </p>
     <p>
