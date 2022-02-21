@@ -408,7 +408,7 @@
                                     <div class="col-md-4">
                                         <div class="d-flex justify-content-end">
                                             <button type="submit"
-                                                class="btn botaoVerde my-2 py-1"
+                                                class="btn botaoVerde my-2 py-1 submeterFormBotao"
                                                 data-bs-dismiss="modal"
                                                 form="enviar-documentos">
                                                 <span class="px-4">Confirmar</span>
@@ -887,7 +887,7 @@
                                         <div class="col-md-4">
                                             <div class="d-flex justify-content-end">
                                                 <button type="submit"
-                                                    class="btn botaoVerde my-2 py-1"
+                                                    class="btn botaoVerde my-2 py-1 submeterFormBotao"
                                                     data-bs-dismiss="modal"
                                                     form="enviar-documentos">
                                                     <span class="px-4">Confirmar</span>
