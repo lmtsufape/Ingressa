@@ -28,6 +28,7 @@
 
         <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/main.css')}}">
+        <link rel="icon" type="imagem/png" href="{{asset('img/logo-icon.png')}}">
     </head>
     <body class="">
         @component('layouts.nav_bar')@endcomponent
