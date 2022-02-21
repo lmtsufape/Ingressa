@@ -273,6 +273,8 @@ class EnviarDocumentos extends Component
                     Storage::delete($arquivo->caminho);
                 }
                 $value->storeAs($path, $nome);
+                $arquivo->caminho = $path.$nome;
+                $arquivo->save();
                 if($arquivo->avaliacao != null)
                 {
                     $avaliacao = $arquivo->avaliacao;

@@ -729,6 +729,7 @@
                                             processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
                                         <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                     </div>
+                                    <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
                                     <div class="mt-2">
                                         @if (($inscricao->isArquivoRecusadoOuReenviado('fotografia') && $inscricao->isDocumentosInvalidados()) || $inscricao->isArquivoNaoEnviadoOrNaoAvaliado('fotografia'))
                                             <x-botao-enviar-documento documento="fotografia"/>
@@ -744,8 +745,8 @@
                                             seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
                                         <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                                     </div>
+                                    <x-show-analise-documento :inscricao="$inscricao" documento="fotografia"/>
                                 </li>
-                                <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
                             @endif
                             @if ($documentos->contains('comprovante_renda'))
                                 <li class="mt-4 px-1 align-middle">
