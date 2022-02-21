@@ -15,16 +15,18 @@ class EmailCandidatoNotification extends Notification
 
     public $assunto = null;
     public $conteudo = null;
+    public $inscricao;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($assunto, $conteudo)
+    public function __construct($assunto, $conteudo, $inscricao)
     {
         $this->assunto = $assunto;
         $this->conteudo = $conteudo;
+        $this->inscricao = $inscricao;
     }
 
     /**
@@ -46,9 +48,13 @@ class EmailCandidatoNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->subject($this->assunto)
-                    ->line($this->conteudo);
+        return (new MailMessage)->markdown(
+            'mail.candidato',
+            [
+                'inscricao' => $this->inscricao,
+                'conteudo' => $this->conteudo,
+            ]
+        )->subject($this->assunto);
     }
 
     /**

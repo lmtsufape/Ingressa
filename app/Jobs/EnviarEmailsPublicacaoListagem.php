@@ -37,7 +37,7 @@ class EnviarEmailsPublicacaoListagem implements ShouldQueue
     {
         $inscricoes = $this->listagem->chamada->inscricoes;
 
-        foreach ($inscricoes as $inscricao) {
+        /*foreach ($inscricoes as $inscricao) {
             $user = $inscricao->candidato->user;
 
             if ($user->email != null) {
@@ -46,6 +46,6 @@ class EnviarEmailsPublicacaoListagem implements ShouldQueue
                 $user_inscrito = User::gerar_user_inscricao($inscricao);
                 Notification::send($user_inscrito, new EmailDivulgacaoListagemNotification($this->listagem, $user));
             }
-        }
+        }*/
     }
 }

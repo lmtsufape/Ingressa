@@ -177,7 +177,7 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-analista"><span class="px-4" style="font-weight: bolder;">Salvar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="criar-analista"><span class="px-4" style="font-weight: bolder;">Salvar</span></button>
                     </div>
                 </div>
             </div>
@@ -244,7 +244,7 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-analista"><span class="px-4" style="font-weight: bolder;" >Salvar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="editar-analista"><span class="px-4" style="font-weight: bolder;" >Salvar</span></button>
                     </div>
                 </div>
             </div>
@@ -256,7 +256,7 @@
         <div class="modal fade" id="modalStaticDeletarUser_{{$user->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content modalFundo p-3">
-                    <div class="col-md-12 tituloModal">Excluir analista</div>
+                    <div class="col-md-12 tituloModal">Deletar analista</div>
 
                     <form id="deletar-user-form-{{$user->id}}" method="POST" action="{{route('usuarios.destroy', ['usuario' => $user])}}">
                         @csrf
@@ -270,7 +270,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Voltar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-user-form-{{$user->id}}" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Excluir</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="deletar-user-form-{{$user->id}}" style="background-color: #FC605F;"><span class="px-4" style="font-weight: bolder;" >Deletar</span></button>
                         </div>
                     </div>
                 </div>

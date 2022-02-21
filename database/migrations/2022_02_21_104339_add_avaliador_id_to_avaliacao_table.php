@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRetificacaoToInscricaosTable extends Migration
+class AddAvaliadorIdToAvaliacaoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddRetificacaoToInscricaosTable extends Migration
      */
     public function up()
     {
-        Schema::table('inscricaos', function (Blueprint $table) {
-            $table->integer('retificacao')->nullable();
+        Schema::table('avaliacaos', function (Blueprint $table) {
+            $table->unsignedBigInteger('avaliador_id')->nullable();
+            $table->foreign('avaliador_id')->references('id')->on('users');
         });
     }
 
@@ -25,8 +26,8 @@ class AddRetificacaoToInscricaosTable extends Migration
      */
     public function down()
     {
-        Schema::table('inscricaos', function (Blueprint $table) {
-            $table->dropColumn('retificacao');
+        Schema::table('avaliacaos', function (Blueprint $table) {
+            $table->dropColumn('avaliador_id');
         });
     }
 }

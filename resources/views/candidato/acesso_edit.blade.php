@@ -60,7 +60,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="text-center">
-                                <button type="submit" class="btn botaoEntrar col-md-10" form="primeiro-acesso-form" style="width: 100%;">Confirmar</button> 
+                                <button type="submit" class="btn botaoEntrar col-md-10 submeterFormBotao" form="primeiro-acesso-form" style="width: 100%;">Confirmar</button> 
                             </div>
                         </div>
                     </div>

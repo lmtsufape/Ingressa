@@ -181,7 +181,7 @@
                 <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
             </div>
             <div class="col-md-4">
-                <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-sisu"><span class="px-4">Publicar</span></button>
+                <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="criar-sisu"><span class="px-4">Publicar</span></button>
             </div>
           </div>
 
@@ -211,7 +211,7 @@
                                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-sisu-form-{{$sisu->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
+                                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="deletar-sisu-form-{{$sisu->id}}" style="background-color: #FC605F;"><span class="px-4">Deletar</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
                                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-sisu-form-{{$sisu->id}}"><span class="px-4">Editar</span></button>
+                                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="editar-sisu-form-{{$sisu->id}}"><span class="px-4">Editar</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -287,7 +287,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}-espera" id="submeterFormBotao"><span class="px-4">Importar</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="importar-candidatos-sisu-form-{{$sisu->id}}-espera" id="submeterFormBotao"><span class="px-4">Importar</span></button>
                         </div>
                     </div>
 
@@ -316,7 +316,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="importar-candidatos-sisu-form-{{$sisu->id}}" id="submeterFormBotao"><span class="px-4">Importar</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="importar-candidatos-sisu-form-{{$sisu->id}}" id="submeterFormBotao"><span class="px-4">Importar</span></button>
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,8 @@
 </head>
 <body style="color: black;">
     <p>
-        Comprovante de envio dos documentos em {{now()->format('d-m-Y às H:m:s')}} para a inscrição de nº {{$inscricao->id}}.
+        Comprovante de envio dos documentos para a inscrição de nº {{$inscricao->id}}.
+        Envio realizado em {{date('d/m/Y', strtotime($inscricao->updated_at))}} às {{date('H:i:s', strtotime($inscricao->updated_at))}}.
         <br>Documentos:
     </p>
     <p>
@@ -87,6 +88,12 @@
     </p>
     <p>
         Protocolo do comprovante - {{$protocolo}}
+    </p><br>
+    <p>
+        Atenciosamente,<br><br>
+        Ingressa - Sistema de Gestão de Matrículas do SiSU<br>
+        Laboratório Multidisciplinar de Tecnologias Sociais<br>
+        Universidade Federal do Agreste de Pernambuco
     </p>
 </body>
 </html>

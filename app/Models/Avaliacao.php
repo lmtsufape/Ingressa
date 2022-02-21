@@ -17,7 +17,7 @@ class Avaliacao extends Model
 
     protected $fillable = [
         'arquivo_id',
-        'user_avaliador_id',
+        'avaliador_id',
         'avaliacao',
         'comentario',
     ];
@@ -25,6 +25,11 @@ class Avaliacao extends Model
     public function arquivo()
     {
         return $this->belongsTo(Arquivo::class, 'arquivo_id');
+    }
+
+    public function avaliador()
+    {
+        return $this->belongsTo(User::class, 'avaliador_id');
     }
 
     public function isRecusado()

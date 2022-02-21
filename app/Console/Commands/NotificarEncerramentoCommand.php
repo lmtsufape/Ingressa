@@ -68,7 +68,7 @@ class NotificarEncerramentoCommand extends Command
      */
     private function enviarEmails(DataChamada $data)
     {
-        if ($data->ehDataDeEnvio()) {
+        /*if ($data->ehDataDeEnvio()) {
             $inscricoes = $data->chamada->inscricoes;
             foreach ($inscricoes as $inscricao) {
                 $user = $inscricao->candidato->user;
@@ -80,6 +80,6 @@ class NotificarEncerramentoCommand extends Command
                     Notification::send($user_inscricao, new EmailDataEncerramentoNotification($data, $user_inscricao, 'Notificação automática ' . env('APP_NAME')));
                 }
             }
-        }
+        }*/
     }
 }

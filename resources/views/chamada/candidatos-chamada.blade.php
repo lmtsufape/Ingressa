@@ -7,7 +7,7 @@
                         <span class="align-middle titulo">Candidatos por curso</span>
                         <div class="col-md-4" style="text-align: right">
                             <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
-                            <a class="btn btn-primary" id="submeterFormBotao" href="{{route('chamadas.candidatos.aprovar', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}">Efetivar candidatos</a>
+                            {{--<a class="btn btn-primary" id="submeterFormBotao" href="{{route('chamadas.candidatos.aprovar', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}">Efetivar candidatos</a>--}}
                         </div>
                     </div>
                 </div>
