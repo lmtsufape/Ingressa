@@ -284,7 +284,7 @@
                             <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-data-form"><span class="px-4" >Publicar</span></button>
+                            <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="criar-data-form"><span class="px-4" >Publicar</span></button>
                         </div>
                     </div>
                 </div>
@@ -312,7 +312,7 @@
                                 <button type="button" class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#editarData"> <span class="px-4">Voltar</span></button>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-data-form-{{$data->id}}" style="background-color: #FC605F;"><span class="px-4" >Excluir</span></button>
+                                <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="deletar-data-form-{{$data->id}}" style="background-color: #FC605F;"><span class="px-4" >Excluir</span></button>
                             </div>
                         </div>
                     </div>
@@ -414,7 +414,7 @@
                                 <button type="button" class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#editarData"> <span class="px-4">Voltar</span></button>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn botaoVerde my-2 py-1" form="editar-data-form-{{$data->id}}"><span class="px-4">Salvar</span></button>
+                                <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="editar-data-form-{{$data->id}}"><span class="px-4">Salvar</span></button>
                             </div>
                         </div>
                     </div>
@@ -558,7 +558,7 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-listagem-form"><span class="px-4">Publicar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="criar-listagem-form"><span class="px-4">Publicar</span></button>
                     </div>
                 </div>
                 {{-- <div class="modal-footer">
@@ -587,7 +587,7 @@
                                 <button type="button" class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#editarListagem"> <span class="px-4">Voltar</span></button>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn botaoVerde my-2 py-1" form="deletar-listagem-form-{{$listagem->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
+                                <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="deletar-listagem-form-{{$listagem->id}}" style="background-color: #FC605F;"><span class="px-4">Excluir</span></button>
                             </div>
                         </div>
                     </div>
