@@ -314,6 +314,7 @@
                                 De acordo com as especificações e o roteiro descritos no edital do
                                 processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
                         </div>
+                        <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
                         <div class="mt-2">
                             @if ($inscricao->arquivo('fotografia'))
                                 <a wire:click="baixar('fotografia')"
@@ -333,8 +334,8 @@
                                 heteroidentificação. Conforme especificado no edital do processo de
                                 seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022">www.ufape.edu.br/sisu-2022</a></span>
                         </div>
+                        <x-show-analise-documento :inscricao="$inscricao" documento="fotografia"/>
                     </li>
-                    <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
                 @endif
                 @if ($documentos->contains('comprovante_renda'))
                     <li class="mt-4 px-1 align-middle">
