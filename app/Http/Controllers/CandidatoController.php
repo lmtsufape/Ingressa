@@ -66,13 +66,13 @@ class CandidatoController extends Controller
 
         $user = $inscricao->candidato->user;
         if ($user->email != null) {
-            Notification::send($user, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));
+            Notification::send($user, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo'), $inscricao));
+        }else{
+            $user_inscricao = User::gerar_user_inscricao($inscricao);
+            Notification::send($user_inscricao, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo'), $inscricao));
         }
 
-        $user_inscricao = User::gerar_user_inscricao($inscricao);
-        Notification::send($user_inscricao, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo')));
-
-        return redirect(route('inscricao.show.analisar.documentos', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->candidato->id]))->with(['success' => 'E-mail enviado com sucesso!']);
+        return redirect(route('inscricao.show.analisar.documentos', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id]))->with(['success' => 'E-mail enviado com sucesso!']);
     }
 
     public function update(Candidato $candidato, Inscricao $inscricao, UpdateCandidatoRequest $request)
