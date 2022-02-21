@@ -131,6 +131,8 @@
                             <div id="motivo-aprovacao" style="display: none" class="col-md-12 alert alert-success" role="alert">
                             </div>
 
+                            <div id="user-avaliador" style="display: none; font-weight: bold;" class="col-md-12">
+                            </div>
                             <div id="avaliarDoc" style="display: none">
                                 <div class="col-md-12 px-3 pt-5">
                                     <div class="row justify-content-between">
@@ -749,6 +751,7 @@
                 document.getElementById("documento_indice").value = indice;
                 document.getElementById("motivo-reprovacao").style.display = "none";
                 document.getElementById("motivo-aprovacao").style.display = "none";
+                document.getElementById("user-avaliador").style.display = "none";
                 if(documento.id == null){
                     if($("#mensagemVazia").is(":hidden")){
                         if(documento.nome == "Aguardando o envio do documento."){
@@ -773,6 +776,7 @@
                     btnReprovar = document.getElementById("raprovarBotao");
                     document.getElementById("motivo-reprovacao").style.display = "none";
                     document.getElementById("motivo-aprovacao").style.display = "none";
+                    document.getElementById("user-avaliador").style.display = "none";
                     if(documento.avaliacao == "1"){
                         btnAprovar.innerText  = "Aprovado";
                         if(documento.comentario != null){
@@ -789,6 +793,10 @@
                     if(documento.analisaGeral == true && (documento_nome == "heteroidentificacao" || documento_nome == "fotografia" || documento_nome == "laudo_medico")){
                         btnAprovar.disabled = true;
                         btnReprovar.disabled = true;
+                    }
+                    if(documento.avaliador != null){
+                        document.getElementById("user-avaliador").innerHTML = documento.avaliador;
+                        document.getElementById("user-avaliador").style.display = "block";
                     }
                     $('#documentoPDF').on("load", function() {
                         $("#avaliarDoc").show();

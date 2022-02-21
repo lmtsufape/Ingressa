@@ -222,12 +222,14 @@ class InscricaoController extends Controller
                 $arquivoAvaliacao->comentario = $request->comentario;
             }
             $arquivoAvaliacao->avaliacao = $avaliacao;
+            $arquivoAvaliacao->avaliador_id = auth()->user()->id;
             $arquivoAvaliacao->update();
         }else{
             Avaliacao::create([
                 'arquivo_id'  => $arquivo->id,
                 'avaliacao'  =>  $avaliacao,
                 'comentario' => $request->comentario,
+                'avaliador_id'=> auth()->user()->id,
             ]);
         }
 
@@ -454,6 +456,11 @@ class InscricaoController extends Controller
                     'comentario' => $arquivo->avaliacao->comentario,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
                 ];
+                if($arquivo->avaliacao->avaliador != null){
+                    $documento['avaliador'] = "Avaliado por: ".$arquivo->avaliacao->avaliador->name;
+                }else{
+                    $documento['avaliador'] = null;
+                }
             }else{
                 $documento = [
                     'id' => $arquivo->id,
@@ -462,6 +469,11 @@ class InscricaoController extends Controller
                     'comentario' => null,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
                 ];
+                if($arquivo->avaliacao->avaliador != null){
+                    $documento['avaliador'] = "Avaliado por: ".$arquivo->avaliacao->avaliador->name;
+                }else{
+                    $documento['avaliador'] = null;
+                }
             }
         }else{
             $documento = [
