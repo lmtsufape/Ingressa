@@ -210,7 +210,7 @@
                     <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4">Voltar</span></button>
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn botaoVerde my-2 py-1" form="criar-chamada" ><span class="px-4">Publicar</span></button>
+                    <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="criar-chamada" ><span class="px-4">Publicar</span></button>
                 </div>
             </div>
         </div>

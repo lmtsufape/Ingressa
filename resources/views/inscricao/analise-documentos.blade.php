@@ -517,7 +517,7 @@
                             @endforeach
                         </div>
                         @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                            @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                            @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'] || $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
                                 <button disabled type="button" class="btn botaoVerde mt-4 py-1 col-md-12"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
                             @else
                                 <button @if(($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] && $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])) disabled @endif id="efetivarBotao2" type="button" class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span class="px-4">@if($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])Validar Cadastro @else Cadastro Validado @endif</span></button>
@@ -627,10 +627,10 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
                     <div id ="reprovarCandidatoButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="aprovar-reprovar-candidato"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Invalidar</span></button>
                     </div>
                     <div id ="aprovarCandidatoButtonForm" class="col-md-4">
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="aprovar-reprovar-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="aprovar-reprovar-candidato" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Validar</span></button>
                     </div>
                 </div>
             </div>
@@ -700,10 +700,10 @@
                         <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                     </div>
                     <div id ="reprovarButtonForm" class="col-md-6" >
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Recusar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="avaliar-documentos"style="background-color: #FC605F; float: right;"><span class="px-4" style="font-weight: bolder;" >Reprovar</span></button>
                     </div>
                     <div id ="aprovarButtonForm" class="col-md-6" >
-                        <button type="submit" class="btn botaoVerde my-2 py-1" form="avaliar-documentos" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="avaliar-documentos" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Aprovar</span></button>
                     </div>
                 </div>
             </div>

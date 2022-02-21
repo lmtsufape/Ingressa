@@ -469,11 +469,7 @@ class InscricaoController extends Controller
                     'comentario' => null,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
                 ];
-                if($arquivo->avaliacao->avaliador != null){
-                    $documento['avaliador'] = "Avaliado por: ".$arquivo->avaliacao->avaliador->name;
-                }else{
                     $documento['avaliador'] = null;
-                }
             }
         }else{
             $documento = [
