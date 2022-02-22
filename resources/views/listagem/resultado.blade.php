@@ -154,6 +154,8 @@
                                         <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
                                         @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
                                             <th>VALIDADO</th>
+                                        @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                            <th>INVALIDADO<br>MOTIVO: Documentação não enviada</th>
                                         @else
                                             <th>INVALIDADO<br>MOTIVO(S): 
                                                 <div style="font-weight: normal;">
