@@ -73,7 +73,7 @@
                             Integral
                             @break
                     @endswitch </a>
-                > </span> <span style="color: #24CEE8; font-size: 17px; font-weight: 600;">{{$inscricao->candidato->user->name}} - {{$inscricao->cota->cod_cota}}</span>
+                > </span> <span style="color: #24CEE8; font-size: 17px; font-weight: 600;">{{$inscricao->candidato->no_inscrito}} - {{$inscricao->cota->cod_cota}}</span>
             </div>
             <div class="row justify-content-between">
                 <div class="col-md-8">
@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="">
                                     <div class="tituloDocumento mx-3">
-                                        Nome: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->user->name}}</p>
+                                        Nome: <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->no_inscrito}}</p>
                                     </div>
                                     {{--<div class="tituloDocumento mx-3 pt-1">
                                         CEP: {{$inscricao->nu_cep}}
