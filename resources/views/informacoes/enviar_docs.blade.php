@@ -9,7 +9,7 @@
 
             <p>Para digitalização dos documentos sugerimos os aplicativos Adobe Scan (versão gratuita) ou o CamScanner, disponíveis Play Store e App Store: veja o Adobe Scan na prática em: <a href="https://acrobat.adobe.com/br/pt/mobile/scanner-app.html#adobeTv18742t1" target="_blank">https://acrobat.adobe.com/br/pt/mobile/scanner-app.html#adobeTv18742t1</a> (se não abrir automaticamente com o click, copie o endereço e cole na barra de endereços do seu navegador).</p>
 
-            <p>Os documentos deverão ser enviados em “.pdf” com, no máximo, 5 MB, como indicado adiante. Para o procedimento de heteroidentificação, os candidatos beneficiários da reserva de vagas para autodeclarados negros (preto e pardos), deverão enviar, além dos documentos, um vídeo com uma das seguintes extensões ".mp4", ".avi", ".wmv", ".mjpeg", ".flv" ou ".mov" com, no máximo, 120 MB, e uma fotografia com uma das seguintes extensões ".png", ".jpg", ".jpeg" ou ".bmp" com, no máximo, 90 MB, conforme especificações do Edital 02/2022.</p>
+            <p>Os documentos deverão ser enviados em “.pdf” com, no máximo, 5 MB, como indicado adiante. Para o procedimento de heteroidentificação, os candidatos beneficiários da reserva de vagas para autodeclarados negros (preto e pardos), deverão enviar, além dos documentos, um vídeo com uma das seguintes extensões ".mp4", ".avi", ".wmv", ".mjpeg" ou ".flv" com, no máximo, 120 MB, e uma fotografia com uma das seguintes extensões ".png", ".jpg", ".jpeg" ou ".bmp" com, no máximo, 90 MB, conforme especificações do Edital 02/2022.</p>
 
             <p>Caso tenha dúvidas, preparamos alguns canais de informação, que devem ser acessados na seguinte ordem:</p>
 
