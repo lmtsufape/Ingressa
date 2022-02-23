@@ -14,6 +14,8 @@ use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 use App\Notifications\ComprovanteEnvioDocumentosNotification;
+use App\Rules\ArquivoEnviado;
+use App\Rules\ArquivoNaoObrigatorioEnviado;
 use Illuminate\Validation\Validator;
 
 class EnviarDocumentos extends Component
@@ -212,6 +214,22 @@ class EnviarDocumentos extends Component
         return $rules;
     }
 
+    private function rulesSubmit()
+    {
+        $rules = [];
+        $rules['termos.vinculo'] = ['required', 'accepted'];
+        $rules['termos.prouni'] = ['required', 'accepted'];
+        $rules['termos.confirmacaovinculo'] = ['required', 'accepted'];
+        foreach ($this->documentos as $documento) {
+            if ($this->arquivoNaoObrigatorio($documento)) {
+                $rules['arquivos.'.$documento] = [new ArquivoNaoObrigatorioEnviado($this->inscricao, $documento, $this->declaracoes[$documento])];
+            } else {
+                $rules['arquivos.'.$documento] = [new ArquivoEnviado($this->inscricao, $documento)];
+            }
+        }
+        return $rules;
+    }
+
     public function render()
     {
         return view('livewire.enviar-documentos');
@@ -228,7 +246,7 @@ class EnviarDocumentos extends Component
                     'title' => 'Erro ao enviar os arquivos, verifique os campos inválidos!'
                 ]);
             }
-        })->validate();
+        })->validate($this->rulesSubmit());
         if ($this->inscricao->isDocumentoAceitosComPendencias()) {
             foreach ($this->documentos as $documento) {
                 if ($this->inscricao->isArquivoEnviado($documento) && !$this->inscricao->isArquivoAvaliado($documento))
