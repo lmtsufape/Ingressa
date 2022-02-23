@@ -9,7 +9,7 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-    
+
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
@@ -19,11 +19,18 @@
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="https://unpkg.com/@popperjs/core@2" defer></script>
-        <script src="{{asset('bootstrap/js/bootstrap.js')}}" defer></script>        
+        <script src="{{asset('bootstrap/js/bootstrap.js')}}" defer></script>
         <script src="{{asset('js/jquery-3.6.0.min.js')}}"></script>
         <script src="{{asset('js/jquery.mask.min.js')}}"></script>
     </head>
-    <body>
+    <body class="font-sans antialiased">
+        <div id="barra-brasil" style="background:#7F7F7F; height: 20px; padding:0 0 0 10px;display:block;">
+            <ul id="menu-barra-temp" style="list-style:none;">
+                <li style="display:inline; float:left;padding-right:10px; margin-right:10px; border-right:1px solid #EDEDED">
+                    <a href="http://brasil.gov.br" style="font-family:sans,sans-serif; text-decoration:none; color:white;">Portal do Governo Brasileiro</a>
+                </li>
+            </ul>
+        </div>
         @component('layouts.nav_bar')@endcomponent
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
@@ -44,5 +51,6 @@
                 }
             })
         </script>
+        <script defer="defer" src="//barra.brasil.gov.br/barra_2.0.js" type="text/javascript"></script>
     </body>
 </html>
