@@ -382,10 +382,10 @@ class ListagemController extends Controller
 
                 if($request->ordenacao == "nome"){
                     $primeiroSemestre = $primeiroSemestre->sortBy(function($candidato){
-                        return $candidato->candidato->user->name;
+                        return $candidato->candidato->no_inscrito;
                     });
                     $segundoSemestre = $segundoSemestre->sortBy(function($candidato){
-                        return $candidato->candidato->user->name;
+                        return $candidato->candidato->no_inscrito;
                     });
                 }else{
                     $primeiroSemestre = $primeiroSemestre->sortByDesc(function($candidato){
@@ -404,7 +404,7 @@ class ListagemController extends Controller
 
             if($request->ordenacao == "nome"){
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortBy(function($candidato){
-                    return $candidato->candidato->user->name;
+                    return $candidato->candidato->no_inscrito;
                 });
             }else{
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortByDesc(function($candidato){
@@ -419,7 +419,7 @@ class ListagemController extends Controller
             $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso);
             if($request->ordenacao == "nome"){
                 $candidatosReservaCurso = $candidatosReservaCurso->sortBy(function($candidato){
-                    return $candidato->candidato->user->name;
+                    return $candidato->candidato->no_inscrito;
                 });
             }else{
                 $candidatosReservaCurso = $candidatosReservaCurso->sortByDesc(function($candidato){
@@ -451,7 +451,7 @@ class ListagemController extends Controller
                     return [
                         $value->candidato->nu_cpf_inscrito,
                         $value->nu_rg,
-                        $this->removeAcentos($value->candidato->user->name),
+                        $this->removeAcentos($value->candidato->no_inscrito),
                         $this->getCodProgramaForm($value->curso),
                         $this->getPeriodo($value->curso),
                         $value->sisu->edicao,

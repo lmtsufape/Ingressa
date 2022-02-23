@@ -157,7 +157,7 @@
                                         <th>{{$cont}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
                                         <th>{{$inscricao->cota->cod_cota}}</th>
-                                        <th class="esquerda">{{$inscricao->candidato->user->name}}</th>
+                                        <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
                                         <th>
                                             @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] || $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
                                                 Sem pendências

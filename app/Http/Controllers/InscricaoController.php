@@ -378,18 +378,18 @@ class InscricaoController extends Controller
             }
             $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'];
             $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
-            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro invalidado.";
+            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro invalidado.";
         }else if(($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'] && $request->efetivar == 'true') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'true')) {
             /*if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
             }*/
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
-            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
+            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
         }else if($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'] && $request->efetivar == 'true'){
             $cota_curso->vagas_ocupadas += 1;
             $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
-            $message .= "Candidato {$inscricao->candidato->user->name} teve o cadastro validado.";
+            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
         }
         $inscricao->update();
         $cota_curso->update();
@@ -515,7 +515,7 @@ class InscricaoController extends Controller
         if(is_null($inscricao->arquivos->first())){
             return redirect()->back()->withErrors(['error' => 'Não há documentos para download.']);
         }
-        $nomeCandidato = $inscricao->candidato->user->name;
+        $nomeCandidato = $inscricao->candidato->no_inscrito;
 
         $filename = $nomeCandidato.'.zip';
         $zip = new ZipArchive();
