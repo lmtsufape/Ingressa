@@ -126,7 +126,7 @@ class InscricaoController extends Controller
     public function showDocumento($inscricao_id, $documento_nome)
     {
         $inscricao = Inscricao::find($inscricao_id);
-        $this->authorize('isCandidatoDono', $inscricao);
+        $this->authorize('isCandidatoDonoOrAnalista', $inscricao);
         $arquivo = Arquivo::where([['inscricao_id', $inscricao_id], ['nome', $documento_nome]])->first();
         return Storage::disk()->exists($arquivo->caminho) ? response()->file(storage_path('app/'.$arquivo->caminho)) : abort(404);
     }

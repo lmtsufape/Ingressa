@@ -31,4 +31,10 @@ class InscricaoPolicy
             return false;
         }
     }
+
+    public function isCandidatoDonoOrAnalista(User $user, Inscricao $inscricao)
+    {
+        $userPolicy = new UserPolicy();
+        return $this->isCandidatoDono($user, $inscricao) || $userPolicy->isAnalista($user);
+    }
 }
