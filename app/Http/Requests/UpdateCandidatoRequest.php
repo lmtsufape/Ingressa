@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCandidatoRequest extends FormRequest
@@ -25,7 +26,7 @@ class UpdateCandidatoRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->candidato->id == request()->candidato->id;
+        return auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->candidato->id == request()->candidato->id;
     }
 
     /**
