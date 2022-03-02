@@ -117,6 +117,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::put('/curso/info', [CursoController::class, 'updateAjax'])->name('cursos.update.ajax');
 
     Route::get('/curso/info', [CursoController::class, 'infoCurso'])->name('cursos.info.ajax');
+    Route::get('/cursos/{curso_id}/chamada/{chamada_id}/download-documentos', [CursoController::class, 'downloadDocumentosTodosCandidatos'])->name('baixar.documentos.candidatos.curso');
+
     Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
 
