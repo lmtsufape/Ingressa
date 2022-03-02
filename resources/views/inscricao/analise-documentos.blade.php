@@ -719,6 +719,45 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modificar-comentario-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modalFundo p-3">
+                <div class="col-md-12 tituloModal">Modificar comentário</div>
+                <div class="pt-3 pb-2 textoModal">
+                    <form method="POST" id="modificar-comentario" action="{{route('inscricao.modificar.comentario', $inscricao->id)}}">
+                        @csrf
+                        <input type="hidden" name="inscricao_id" value="{{$inscricao->id}}">
+                        <input type="hidden" name="documento_id" value="" id="documento_modificar">
+                        <div class="pt-3">
+                            Modifique o comentário feito pelo analista
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 pt-3 textoModal">
+                                <label class="pb-2" for="comentarioM">Motivo:</label>
+                                <textarea id="comentarioM" class="form-control campoDeTexto ckeditor-editor @error('comentarioM') is-invalid @enderror" name="comentarioM" placeholder="Insira o motivo para recusar o documento"></textarea>
+
+                                @error('comentarioM')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-6">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span class="px-4" style="font-weight: bolder;">Cancelar</span></button>
+                    </div>
+                    <div class="col-md-6" >
+                        <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="modificar-comentario" style="float: right;"><span class="px-4" style="font-weight: bolder;" >Modificar</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </x-app-layout>
 
 <script>
@@ -792,6 +831,14 @@
                         if(documento.comentario != null){
                             document.getElementById("motivo-aprovacao").innerHTML = documento.comentario;
                             document.getElementById("motivo-aprovacao").style.display = "block";
+                            if(documento.avaliador != null){
+                                document.getElementById("documento_modificar").value = documento.id;
+                                var html = `<div class="col-md-12" style="text-align: right">
+                                                <button data-bs-toggle="modal" data-bs-target="#modificar-comentario-modal" class="btn botaoVerde my-2 py-1 col-md-5"><span class="px-3 text-center" >Modificar comentário</span></button>
+                                            </div>`;
+                                CKEDITOR.instances.comentarioM.setData(documento.comentario);
+                                $('#motivo-aprovacao').append(html);
+                            }
                         }
                         btnAprovar.disabled = true;
                     }else if(documento.avaliacao == "2"){
@@ -799,6 +846,14 @@
                         document.getElementById("motivo-reprovacao").innerHTML = documento.comentario;
                         document.getElementById("motivo-reprovacao").style.display = "block";
                         btnReprovar.disabled = true;
+                        if(documento.avaliador != null){
+                            document.getElementById("documento_modificar").value = documento.id;
+                            var html = `<div class="col-md-12" style="text-align: right">
+                                                <button data-bs-toggle="modal" data-bs-target="#modificar-comentario-modal" class="btn botaoVerde my-2 py-1 col-md-5"><span class="px-3 text-center" >Modificar comentário</span></button>
+                                            </div>`;
+                            CKEDITOR.instances.comentarioM.setData(documento.comentario);
+                            $('#motivo-reprovacao').append(html);
+                        }
                     }
                     if(documento.analisaGeral == true && (documento_nome == "heteroidentificacao" || documento_nome == "fotografia" || documento_nome == "laudo_medico")){
                         btnAprovar.disabled = true;
