@@ -363,8 +363,15 @@
                                     Qual o valor da sua renda total? <p class="nomeDocumento" style="display: inline">{{$inscricao->candidato->valor_renda}}</p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                            <div class="row content-justify-between">
+                                <div class="col-md-6">
+                                    <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                                </div>
+                                <div class="col-md-6" style="text-align: right">
+                                    @can('isAdmin', \App\Models\User::class)
+                                        <a href="{{route('candidato.edit', ['candidato' => $inscricao->candidato, 'inscricao' => $inscricao]) }}" class="btn botao my-2 py-1"> <span class="px-4">Modificar ficha</span></a>
+                                    @endcan
+                                </div>
                             </div>
                         </div>
                     </div>
