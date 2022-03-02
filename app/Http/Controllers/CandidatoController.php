@@ -82,14 +82,21 @@ class CandidatoController extends Controller
         $candidato->fill($validated);
         $candidato->atualizar_dados = false;
         $inscricao->fill($validated);
+        if($inscricao->nu_rg != $request->nu_rg && !is_null($request->nu_rg)){
+            $inscricao->nu_rg = $request->nu_rg;
+        }
         $candidato->save();
         $inscricao->save();
-        return redirect(route('inscricaos.index'));
+        if(auth()->user()->role == User::ROLE_ENUM['admin']){
+            return redirect()->back()->with(['success' => "Dados atualizados!']);"]);
+        }else{
+            return redirect(route('inscricaos.index'))->with(['success' => 'Dados atualizados!']);
+        }
     }
 
     public function edit(Candidato $candidato, Inscricao $inscricao)
     {
-        $this->authorize('isCandidatoDono', $inscricao);
+        $this->authorize('canAtualizarFicha', $inscricao);
         $cores_racas = Candidato::COR_RACA;
         return view('candidato.atualizar_dados', compact('candidato', 'inscricao', 'cores_racas'));
     }

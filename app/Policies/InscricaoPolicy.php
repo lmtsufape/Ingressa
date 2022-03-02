@@ -37,4 +37,16 @@ class InscricaoPolicy
         $userPolicy = new UserPolicy();
         return $this->isCandidatoDono($user, $inscricao) || $userPolicy->isAnalista($user);
     }
+
+    public function canAtualizarFicha(User $user, Inscricao $inscricao)
+    {
+        $userPolicy = new UserPolicy();
+        if($userPolicy->isAdmin($user)) {
+            return true;
+        }elseif($userPolicy->isCandidato($user) && $inscricao->candidato->user->id == $user->id && $inscricao->candidato->atualizar_dados){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

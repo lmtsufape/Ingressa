@@ -6,6 +6,20 @@
                     <div class="data bordinha">
                         Atualização dos dados
                     </div>
+                    @if(session('success'))
+                        <div class="col-md-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </symbol>
+                            </svg>
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    @endif
                     <div class="mt-2 subtexto">
                         Confira se seus dados cadastrais estão corretos. Caso tenha algum dado incorreto, pedimos que corrija, visto que essas são informações fundamentais para seu ingresso na Universidade. Solicitamos também, que preencha alguns dados adicionais.
                     </div>
@@ -21,10 +35,11 @@
                                     <div class="form-group col-md-3 textoInput">
                                         <label for="nu_rg">{{ __('RG') }}</label>
                                         <input id="nu_rg"
-                                            disabled
+                                            @can('isAdmin', \App\Models\User::class) @else disabled @endcan
                                             class="form-control form-control-sm caixaDeTexto"
                                             type="text"
-                                            value="{{$inscricao->nu_rg}}">
+                                            name="nu_rg"
+                                            value="{{old('nu_rg', $inscricao->nu_rg)}}">
                                     </div>
                                     <div class="form-group col-md-3 textoInput">
                                         <label for="orgao_expedidor"><span style="color: red; font-weight: bold;">*</span> {{ __('Orgão expedidor (Sigla)') }}</label>
@@ -417,7 +432,7 @@
                                             type="text"
                                             placeholder="Cidade/UF"
                                             name="reside"
-                                            value="{{old('reside')}}">
+                                            value="{{old('reside', $candidato->reside)}}">
                                         @error('reside')
                                             <div id="validationServer03Feedback"
                                                 class="invalid-feedback">
@@ -520,11 +535,11 @@
                                                 class="form-control form-control-sm caixaDeTexto @error('modalidade') is-invalid @enderror"
                                                 name="modalidade">
                                             <option value="" disabled selected>-- Selecione --</option>
-                                            <option value="{{old('modalidade', 'regular')}}">Regular</option>
-                                            <option value="{{old('modalidade', 'tecnico_integrado')}}">Técnico Integrado</option>
-                                            <option value="{{old('modalidade', 'eja')}}">EJA</option>
-                                            <option value="{{old('modalidade', 'certificacao_enem_encceja')}}">Certificação Enem/Encceja</option>
-                                            <option value="{{old('modalidade', 'outro')}}">Outro</option>
+                                            <option value="{{old('modalidade', 'regular')}}" @if(old('modalidade', $candidato->modalidade) == 'regular') selected @endif >Regular</option>
+                                            <option value="{{old('modalidade', 'tecnico_integrado')}}" @if(old('modalidade', $candidato->modalidade) == 'tecnico_integrado') selected @endif>Técnico Integrado</option>
+                                            <option value="{{old('modalidade', 'eja')}}" @if(old('modalidade', $candidato->modalidade) == 'eja') selected @endif>EJA</option>
+                                            <option value="{{old('modalidade', 'certificacao_enem_encceja')}}" @if(old('modalidade', $candidato->modalidade) == 'certificacao_enem_encceja') selected @endif>Certificação Enem/Encceja</option>
+                                            <option value="{{old('modalidade', 'outro')}}" @if(old('modalidade', $candidato->modalidade) == 'outro') selected @endif>Outro</option>
                                         </select>
 
                                         @error('modalidade')
@@ -697,7 +712,8 @@
                         <div class="col-md-6"
                             style="margin-bottom: 10px;">
                             <div class="text-center">
-                                <a href="{{ route('index') }}"
+                                <a @can('isAdmin', \App\Models\User::class) href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id])}}"
+                                    @else href="{{ route('index') }}" @endcan
                                     type="text"
                                     class="btn botaoEntrar col-md-10"
                                     style="width: 100%;">Voltar</a>
