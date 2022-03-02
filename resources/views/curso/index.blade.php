@@ -12,7 +12,7 @@
                 <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                     <span class="align-middle titulo">Cursos</span>
                     <span class="aling-middle">
-                        <a href="{{route('dashboard')}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
+                        <a href="{{route('index')}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                         <button title="Adicionar novo curso" onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#criar-curso" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1666.svg')}}" alt="Icone de adicionar um novo curso"></button>
                         <button title="Editar um curso existente" onclick="limparValidacao()" data-bs-toggle="modal" data-bs-target="#editarCurso" style="cursor: pointer;"><img class="m-1" width="40" src="{{asset('img/Grupo 1667.svg')}}"alt="Icone de editar curso"> </button>
                     </span>
