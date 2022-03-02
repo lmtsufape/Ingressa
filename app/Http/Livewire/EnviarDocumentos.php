@@ -14,6 +14,8 @@ use Livewire\Component;
 use Livewire\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 use App\Notifications\ComprovanteEnvioDocumentosNotification;
+use App\Rules\ArquivoEnviado;
+use App\Rules\ArquivoNaoObrigatorioEnviado;
 use Illuminate\Validation\Validator;
 
 class EnviarDocumentos extends Component
@@ -217,6 +219,22 @@ class EnviarDocumentos extends Component
         return view('livewire.enviar-documentos');
     }
 
+    private function rulesSubmit()
+    {
+        $rules = [];
+        $rules['termos.vinculo'] = ['required', 'accepted'];
+        $rules['termos.prouni'] = ['required', 'accepted'];
+        $rules['termos.confirmacaovinculo'] = ['required', 'accepted'];
+        foreach ($this->documentos as $documento) {
+            if ($this->arquivoNaoObrigatorio($documento)) {
+                $rules['arquivos.'.$documento] = [new ArquivoNaoObrigatorioEnviado($this->inscricao, $documento, $this->declaracoes[$documento])];
+            } else {
+                $rules['arquivos.'.$documento] = [new ArquivoEnviado($this->inscricao, $documento)];
+            }
+        }
+        return $rules;
+    }
+
     public function submit()
     {
         $this->rules();
@@ -228,7 +246,7 @@ class EnviarDocumentos extends Component
                     'title' => 'Erro ao enviar os arquivos, verifique os campos inválidos!'
                 ]);
             }
-        })->validate();
+        })->validate($this->rulesSubmit());
         if ($this->inscricao->isDocumentoAceitosComPendencias()) {
             foreach ($this->documentos as $documento) {
                 if ($this->inscricao->isArquivoEnviado($documento) && !$this->inscricao->isArquivoAvaliado($documento))
@@ -247,14 +265,17 @@ class EnviarDocumentos extends Component
     public function updated($documento, $value)
     {
         $this->attributes();
-        $this->authorize('dataEnvio', $this->inscricao->chamada);
+        if(auth()->user()->role != User::ROLE_ENUM['admin']){
+            $this->authorize('dataEnvio', $this->inscricao->chamada);
+        }
         if (
             explode('.', $documento)[0] == 'arquivos'
             && is_null($this->inscricao->retificacao)
             && ($this->inscricao->isDocumentosRequeridos()
             || $this->inscricao->isArquivoRecusadoOuReenviado(explode('.', $documento)[1])
             || $this->inscricao->isDocumentoAceitosComPendencias()
-            || $this->arquivoNaoObrigatorio(explode('.', $documento)[1]))
+            || $this->arquivoNaoObrigatorio(explode('.', $documento)[1])
+            || auth()->user()->role == User::ROLE_ENUM['admin'])
         ) {
             $this->withValidator(function (Validator $validator) {
                 if ($validator->fails()) {
@@ -308,25 +329,41 @@ class EnviarDocumentos extends Component
 
     public function apagar($documento)
     {
-        $this->authorize('periodoEnvio', $this->inscricao->chamada);
-        if ($this->inscricao->arquivo($documento) == null)
+        if(auth()->user()->role != User::ROLE_ENUM['admin']){
+            $this->authorize('periodoEnvio', $this->inscricao->chamada);
+            if ($this->inscricao->arquivo($documento) == null)
             if($this->inscricao->isDocumentosRequeridos() || ($this->inscricao->isArquivoRecusadoOuReenviado($documento) && $this->inscricao->isDocumentosInvalidados()))
-            {
-                $this->dispatchBrowserEvent('swal:fire', [
-                    'icon' => 'error',
-                    'title' => 'Não é possível deletar este arquivo!'
-                ]);
-                return;
+                {
+                    $this->dispatchBrowserEvent('swal:fire', [
+                        'icon' => 'error',
+                        'title' => 'Não é possível deletar este arquivo!'
+                    ]);
+                    return;
+                }
+            $arquivo = $this->inscricao->arquivo($documento);
+            if (Storage::exists($arquivo->caminho)) {
+                Storage::delete($arquivo->caminho);
             }
-        $arquivo = $this->inscricao->arquivo($documento);
-        if (Storage::exists($arquivo->caminho)) {
-            Storage::delete($arquivo->caminho);
+            $arquivo->delete();
+            $this->dispatchBrowserEvent('swal:fire', [
+                'icon' => 'success',
+                'title' => 'Arquivo deletado com sucesso.'
+            ]);
+        }else{
+            $arquivo = $this->inscricao->arquivo($documento);
+            if (Storage::exists($arquivo->caminho)) {
+                Storage::delete($arquivo->caminho);
+            }
+            if(!is_null($arquivo->avaliacao)){
+                $arquivo->avaliacao->delete();
+            }
+            $arquivo->delete();
+            $this->dispatchBrowserEvent('swal:fire', [
+                'icon' => 'success',
+                'title' => 'Arquivo deletado com sucesso.'
+            ]);
         }
-        $arquivo->delete();
-        $this->dispatchBrowserEvent('swal:fire', [
-            'icon' => 'success',
-            'title' => 'Arquivo deletado com sucesso.'
-        ]);
+
     }
 
     protected function cleanupOldUploads()

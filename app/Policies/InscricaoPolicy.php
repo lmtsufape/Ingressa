@@ -23,12 +23,18 @@ class InscricaoPolicy
     public function isCandidatoDono(User $user, Inscricao $inscricao)
     {
         $userPolicy = new UserPolicy();
-        if ($userPolicy->isAdminOrAnalista($user)) {
+        if ($userPolicy->isAdmin($user)) {
             return true;
         }elseif($userPolicy->isCandidato($user) && $inscricao->candidato->user->id == $user->id){
             return true;
         }else{
             return false;
         }
+    }
+
+    public function isCandidatoDonoOrAnalista(User $user, Inscricao $inscricao)
+    {
+        $userPolicy = new UserPolicy();
+        return $this->isCandidatoDono($user, $inscricao) || $userPolicy->isAnalista($user);
     }
 }

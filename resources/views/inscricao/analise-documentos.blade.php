@@ -376,6 +376,9 @@
                                     <div class="d-flex align-items-center">
                                         <span class="tituloTipoDoc">Documentação básica</span>
                                     </div>
+                                    <a title="Anexar documentos"  href="{{route('inscricao.documentacao', $inscricao->id)}}">
+                                        <img width="35" src="{{asset('img/enviar-arquivos.svg')}}" alt="Icone de anexar documentos"></a>
+                                    </a>
                                     <a title="Baixar todos os documentos do candidato" href="{{route('baixar.documentos.candidato', $inscricao->id)}}">
                                         <img width="35" src="{{asset('img/download1.svg')}}" alt="Icone de baixar todos os documentos"></a>
                                     </a>
