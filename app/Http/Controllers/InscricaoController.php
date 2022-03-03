@@ -478,6 +478,7 @@ class InscricaoController extends Controller
                     'avaliacao' => $arquivo->avaliacao->avaliacao,
                     'comentario' => $arquivo->avaliacao->comentario,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
+                    'admin' => $userPolicy->isAdmin(auth()->user()),
                 ];
                 if($arquivo->avaliacao->avaliador != null){
                     $documento['avaliador'] = "Avaliado por: ".$arquivo->avaliacao->avaliador->name;
@@ -491,6 +492,7 @@ class InscricaoController extends Controller
                     'avaliacao' => null,
                     'comentario' => null,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
+                    'admin' => $userPolicy->isAdmin(auth()->user()),
                 ];
                     $documento['avaliador'] = null;
             }

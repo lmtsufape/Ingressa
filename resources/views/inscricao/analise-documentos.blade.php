@@ -831,7 +831,7 @@
                         if(documento.comentario != null){
                             document.getElementById("motivo-aprovacao").innerHTML = documento.comentario;
                             document.getElementById("motivo-aprovacao").style.display = "block";
-                            if(documento.avaliador != null){
+                            if(documento.admin == true){
                                 document.getElementById("documento_modificar").value = documento.id;
                                 var html = `<div class="col-md-12" style="text-align: right">
                                                 <button data-bs-toggle="modal" data-bs-target="#modificar-comentario-modal" class="btn botaoVerde my-2 py-1 col-md-5"><span class="px-3 text-center" >Modificar comentário</span></button>
@@ -846,7 +846,7 @@
                         document.getElementById("motivo-reprovacao").innerHTML = documento.comentario;
                         document.getElementById("motivo-reprovacao").style.display = "block";
                         btnReprovar.disabled = true;
-                        if(documento.avaliador != null){
+                        if(documento.admin == true){
                             document.getElementById("documento_modificar").value = documento.id;
                             var html = `<div class="col-md-12" style="text-align: right">
                                                 <button data-bs-toggle="modal" data-bs-target="#modificar-comentario-modal" class="btn botaoVerde my-2 py-1 col-md-5"><span class="px-3 text-center" >Modificar comentário</span></button>
