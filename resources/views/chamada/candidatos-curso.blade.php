@@ -8,6 +8,14 @@
                     </div>
                 </div>
             </div>--}}
+            @if(session('error'))
+                <div class="col-md-12">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('error')}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endif
             <div class="row justify-content-between">
                 <div class="col-md-9">
                     <div class="col-md-12 shadow-sm">
@@ -67,6 +75,11 @@
                                             <a id="link-ordem-status" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id])}}?ordem=status"></a>
                                           </div>
                                       </ul>
+                                      @can('isAdmin', \App\Models\User::Class)
+                                        <a title="Baixar todos os documentos de todos os candidatos" href="{{route('baixar.documentos.candidatos.curso', ['curso_id' => $curso->id, 'chamada_id' => $chamada->id])}}">
+                                            <img width="35" src="{{asset('img/download4.svg')}}" alt="Baixar todos os documentos de todos os candidatos"></a>
+                                        </a>
+                                      @endcan
                                     </div>
                                 </div>
 

@@ -99,6 +99,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::post('/inscricaos/{inscricao_id}/enviar-documentos', [InscricaoController::class, 'enviarDocumentos'])->name('inscricao.enviar.documentos');
     Route::post('/inscricaos/{inscricao_id}/analisar-documentos', [InscricaoController::class, 'analisarDocumentos'])->name('inscricao.analisar.documentos');
     Route::post('/inscricaos/{inscricao_id}/avaliar-documento', [InscricaoController::class, 'avaliarDocumento'])->name('inscricao.avaliar.documento');
+    Route::post('/inscricaos/{inscricao_id}/modificar-comentario', [InscricaoController::class, 'modificarComentario'])->name('inscricao.modificar.comentario');
+
     Route::get('/inscricaos/{inscricao_id}/ver-documento/{documento_nome}', [InscricaoController::class, 'showDocumento'])->name('inscricao.arquivo');
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/inscricao/{inscricao_id}', [InscricaoController::class, 'showAnalisarDocumentos'])
     ->name('inscricao.show.analisar.documentos');
@@ -115,6 +117,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::put('/curso/info', [CursoController::class, 'updateAjax'])->name('cursos.update.ajax');
 
     Route::get('/curso/info', [CursoController::class, 'infoCurso'])->name('cursos.info.ajax');
+    Route::get('/cursos/{curso_id}/chamada/{chamada_id}/download-documentos', [CursoController::class, 'downloadDocumentosTodosCandidatos'])->name('baixar.documentos.candidatos.curso');
+
     Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
 

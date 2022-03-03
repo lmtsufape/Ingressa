@@ -66,7 +66,7 @@
                                 Nenhum analista cadastrado no sistema.
                             </div>
                         @endif
-                        <a href="{{route('dashboard')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
+                        <a href="{{route('index')}}" class="btn botao my-2 py-1"> <span class="px-4">Voltar</span></a>
                     </div>
                 </div>
             </div>

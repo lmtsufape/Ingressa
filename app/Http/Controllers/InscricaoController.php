@@ -278,6 +278,29 @@ class InscricaoController extends Controller
         return redirect()->back()->with(['success' => 'Documento '. $nome .' avaliado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
     }
 
+    public function modificarComentario(Request $request)
+    {
+        $this->authorize('isAdmin', User::class);
+        $inscricao = Inscricao::find($request->inscricao_id);
+        $arquivo = Arquivo::find($request->documento_id);
+
+        if($arquivo->avaliacao != null){
+            $arquivo->avaliacao->comentario = $request->comentarioM;
+            $arquivo->avaliacao->update();
+        }
+
+        $documentosRequisitos = $this->documentosRequisitados($inscricao->id);
+
+        foreach($documentosRequisitos as $indice => $doc){
+            if($doc == $arquivo->nome){
+                break;
+            }
+        }
+
+        $nome = InscricaoController::getNome($arquivo->nome);
+        return redirect()->back()->with(['success' => 'Comentário do documento '. $nome .' modificado com sucesso!', 'inscricao' => $inscricao->id, 'indice' => $indice, 'nomeDoc' => $arquivo->nome]);
+    }
+
     public function analisarDocumentos(Request $request)
     {
         $this->authorize('isAdminOrAnalista', User::class);
@@ -455,6 +478,7 @@ class InscricaoController extends Controller
                     'avaliacao' => $arquivo->avaliacao->avaliacao,
                     'comentario' => $arquivo->avaliacao->comentario,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
+                    'admin' => $userPolicy->isAdmin(auth()->user()),
                 ];
                 if($arquivo->avaliacao->avaliador != null){
                     $documento['avaliador'] = "Avaliado por: ".$arquivo->avaliacao->avaliador->name;
@@ -468,6 +492,7 @@ class InscricaoController extends Controller
                     'avaliacao' => null,
                     'comentario' => null,
                     'analisaGeral' => $userPolicy->ehAnalistaGeral(auth()->user()),
+                    'admin' => $userPolicy->isAdmin(auth()->user()),
                 ];
                     $documento['avaliador'] = null;
             }
