@@ -182,9 +182,9 @@ class InscricaoController extends Controller
     private function corrigirStatusInscritos($chamada_id)
     {
         $chamada = Chamada::find($chamada_id);
-        $documentosAceitos = true;
-        $necessitaAvaliar = false;
         foreach($chamada->inscricoes as $inscricao){
+            $documentosAceitos = true;
+            $necessitaAvaliar = false;
             foreach($inscricao->arquivos as $arqui){
                 if(!is_null($arqui->avaliacao)){
                     if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
