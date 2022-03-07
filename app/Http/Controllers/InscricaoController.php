@@ -131,6 +131,97 @@ class InscricaoController extends Controller
         return Storage::disk()->exists($arquivo->caminho) ? response()->file(storage_path('app/'.$arquivo->caminho)) : abort(404);
     }
 
+    public function todosDocsRequisitados($id)
+    {
+        $inscricao = Inscricao::find($id);
+        $documentos = collect();
+
+        $documentos->push('declaracao_veracidade');
+        $documentos->push('certificado_conclusao');
+        $documentos->push('historico');
+        $documentos->push('nascimento_ou_casamento');
+        $documentos->push('cpf');
+        $documentos->push('rg');
+        $documentos->push('quitacao_eleitoral');
+        if($inscricao->tp_sexo == 'M'){
+            $documentos->push('quitacao_militar');
+        }
+        $documentos->push('foto');
+        if($inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->cor_raca == 5){
+            $documentos->push('rani');
+            $documentos->push('declaracao_cotista');
+        }
+        if($inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->cor_raca, [2, 3])){
+            $documentos->push('heteroidentificacao');
+            $documentos->push('fotografia');
+            if(!$documentos->contains('declaracao_cotista')){
+                $documentos->push('declaracao_cotista');
+            }
+        }
+        if($inscricao->st_lei_renda == 'S'){
+            $documentos->push('comprovante_renda');
+            if(!$documentos->contains('declaracao_cotista')){
+                $documentos->push('declaracao_cotista');
+            }
+        }
+        if(str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')){
+            $documentos->push('laudo_medico');
+            if(!$documentos->contains('declaracao_cotista')){
+                $documentos->push('declaracao_cotista');
+            }
+        }
+        if($inscricao->cota->cod_cota == 'L5' || $inscricao->cota->cod_cota == 'L6'){
+            if(!$documentos->contains('declaracao_cotista')){
+                $documentos->push('declaracao_cotista');
+            }
+        }
+
+        return $documentos;
+    }
+
+    private function corrigirStatusInscritos($chamada_id)
+    {
+        $chamada = Chamada::find($chamada_id);
+        $documentosAceitos = true;
+        $necessitaAvaliar = false;
+        foreach($chamada->inscricoes as $inscricao){
+            foreach($inscricao->arquivos as $arqui){
+                if(!is_null($arqui->avaliacao)){
+                    if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
+                        $documentosAceitos = false;
+                    }elseif($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['reenviado']){
+                        $documentosAceitos = false;
+                        $necessitaAvaliar = true;
+                        break;
+                    }
+                }else{
+                    $documentosAceitos = false;
+                    $necessitaAvaliar = true;
+                    break;
+                }
+            }
+            if($documentosAceitos){
+                $diferenca = array_diff($this->todosDocsRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
+                if(count($diferenca) == 0){
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+                }else{
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'];
+                }
+            }else{
+                if($necessitaAvaliar == true && $documentosAceitos == false){
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+                }else{
+                    if($necessitaAvaliar == true){
+                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
+                    }else{
+                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                    }
+                }
+            }
+            $inscricao->update();
+        }
+    }
+
     public function documentosRequisitados($id)
     {
         $inscricao = Inscricao::find($id);
@@ -239,6 +330,10 @@ class InscricaoController extends Controller
             if(!is_null($arqui->avaliacao)){
                 if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
                     $documentosAceitos = false;
+                }elseif($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['reenviado']){
+                    $documentosAceitos = false;
+                    $necessitaAvaliar = true;
+                    break;
                 }
             }else{
                 $documentosAceitos = false;
@@ -247,7 +342,7 @@ class InscricaoController extends Controller
             }
         }
         if($documentosAceitos){
-            $diferenca = array_diff($this->documentosRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
+            $diferenca = array_diff($this->todosDocsRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
             if(count($diferenca) == 0){
                 $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
             }else{
