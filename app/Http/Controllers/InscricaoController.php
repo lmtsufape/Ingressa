@@ -179,49 +179,6 @@ class InscricaoController extends Controller
         return $documentos;
     }
 
-    private function corrigirStatusInscritos($chamada_id)
-    {
-        $chamada = Chamada::find($chamada_id);
-        foreach($chamada->inscricoes as $inscricao){
-            $documentosAceitos = true;
-            $necessitaAvaliar = false;
-            foreach($inscricao->arquivos as $arqui){
-                if(!is_null($arqui->avaliacao)){
-                    if($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']){
-                        $documentosAceitos = false;
-                    }elseif($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['reenviado']){
-                        $documentosAceitos = false;
-                        $necessitaAvaliar = true;
-                        break;
-                    }
-                }else{
-                    $documentosAceitos = false;
-                    $necessitaAvaliar = true;
-                    break;
-                }
-            }
-            if($documentosAceitos){
-                $diferenca = array_diff($this->todosDocsRequisitados($inscricao->id)->toArray(), $inscricao->arquivos->pluck('nome')->toArray());
-                if(count($diferenca) == 0){
-                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
-                }else{
-                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'];
-                }
-            }else{
-                if($necessitaAvaliar == true && $documentosAceitos == false){
-                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
-                }else{
-                    if($necessitaAvaliar == true){
-                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_enviados'];
-                    }else{
-                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
-                    }
-                }
-            }
-            $inscricao->update();
-        }
-    }
-
     public function documentosRequisitados($id)
     {
         $inscricao = Inscricao::find($id);
