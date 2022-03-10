@@ -340,6 +340,9 @@
                                     @enderror
                                     <div class="pb-2 pt-2">Selecione o curso:</div>
                                     @foreach ($cursos as $i => $curso)
+                                        @php
+                                            $contTotal = 0;
+                                        @endphp
                                         <div class="form-check">
                                             <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="checkbox" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
                                             <div class="form-check-label" for="cota_{{$curso->id}}">
@@ -352,6 +355,9 @@
                                             </div>
                                             <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
                                                 @foreach ($curso->cotas as $cota)
+                                                    @php
+                                                        $contTotal += $cota->pivot->vagas_ocupadas;
+                                                    @endphp
                                                     @if($cota->cod_cota != "B4342")
                                                         <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
                                                             {{$cota->cod_cota}}
@@ -386,6 +392,9 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
+                                                <div class="form-row col-md-12">
+                                                    <span style="font-weight: normal;">Total de vagas:</span> {{$curso->vagas}} <span style="font-weight: normal;">- Total de validados:</span> {{$contTotal}}
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
