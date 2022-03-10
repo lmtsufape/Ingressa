@@ -92,7 +92,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::resource('listagems', ListagemController::class);
 
     Route::get('/listagem/{chamada}/export', [ListagemController::class, 'exportarCSV'])->name('exportar-ingressantes');
-    Route::get('/listagem/{chamada}/export-sisu-getsao', [ListagemController::class, 'exportarCSVSisuGestao'])->name('exportar-sisu-gestao');
+    Route::get('/chamada/{chamada}/export-sisu-getsao', [ChamadaController::class, 'exportarCSVSisuGestao'])->name('exportar-sisu-gestao');
 
     Route::resource('inscricaos', InscricaoController::class);
     Route::get('/inscricaos/{inscricao_id}/documentacao', [InscricaoController::class, 'showInscricaoDocumentacao'])->name('inscricao.documentacao');

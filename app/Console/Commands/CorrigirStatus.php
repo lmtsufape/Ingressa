@@ -68,6 +68,9 @@ class CorrigirStatus extends Command
                     break;
                 }
             }
+
+            //Vamos deixar guardado o status do candidato para uma correcao
+            $statusInicial = $inscricao->status;
             
             //Apos essa verificacao dos status dos documentos
 
@@ -98,6 +101,15 @@ class CorrigirStatus extends Command
                     //caso contrario os documentos foram invalidos, ja que nao foram aceitos e nao precisa avaliar mais nada ainda
                     $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
                 }
+            }
+
+            /*Caso o candidato tenha tido problemas no envio dos documentos e tenha so anexado, ele nao saiu do estado de pendentes
+            e pode ainda possuir documentos obrigatorios nao enviados. Sendo assim, deve permanecer nesse estado ate que faca o envio dos
+            documentos submetendo o formulario*/
+
+            //Então, verificamos qual era o status inicial do candidato para que se caso for pendentes, que ele permaneça nesse estado
+            if($statusInicial == Inscricao::STATUS_ENUM['documentos_pendentes']){
+                $inscricao->status = Inscricao::STATUS_ENUM['documentos_pendentes'];
             }
 
             $inscricao->update();

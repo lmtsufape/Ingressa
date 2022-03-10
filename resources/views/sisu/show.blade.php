@@ -83,6 +83,7 @@
                                             </div>
                                             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                                                 <a title="Datas e listagens da chamada" href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="Icone de exibir datas e listagens"></a>
+                                                <a href="{{route('exportar-sisu-gestao', $chamada)}}" title ="Exportar SiSU Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar"></a>
                                                 <button title="Editar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar chamada"></button>
                                                 <button title="Deletar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar chamada"></button>
                                             @endif
@@ -117,6 +118,14 @@
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1681.svg')}}" alt="Icone de datas e listagens da chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Datas e listagens da chamada
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Exportar ingressantes" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="33" src="{{asset('img/export_siga.svg')}}" alt="Icone de Exportar ingressantes">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Exportar SiSU Gestão
                                         </div>
                                     </div>
                                 </li>
@@ -340,6 +349,9 @@
                                     @enderror
                                     <div class="pb-2 pt-2">Selecione o curso:</div>
                                     @foreach ($cursos as $i => $curso)
+                                        @php
+                                            $contTotal = 0;
+                                        @endphp
                                         <div class="form-check">
                                             <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="checkbox" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
                                             <div class="form-check-label" for="cota_{{$curso->id}}">
@@ -352,6 +364,9 @@
                                             </div>
                                             <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
                                                 @foreach ($curso->cotas as $cota)
+                                                    @php
+                                                        $contTotal += $cota->pivot->vagas_ocupadas;
+                                                    @endphp
                                                     @if($cota->cod_cota != "B4342")
                                                         <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
                                                             {{$cota->cod_cota}}
@@ -386,6 +401,9 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
+                                                <div class="form-row col-md-12">
+                                                    <span style="font-weight: normal;">Total de vagas:</span> {{$curso->vagas}} <span style="font-weight: normal;">- Total de validados:</span> {{$contTotal}}
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach

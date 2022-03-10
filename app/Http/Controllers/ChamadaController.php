@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SisuGestaoExport;
 use App\Http\Requests\ChamadaRequest;
 use App\Jobs\CadastroListaEsperaCandidato;
 use App\Jobs\CadastroRegularCandidato;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ChamadaController extends Controller
 {
@@ -1338,5 +1340,43 @@ class ChamadaController extends Controller
 
         return [$vagasCota, $chamados];
 
+    }
+
+    public function exportarCSVSisuGestao(Request $request)
+    {
+        $chamada = Chamada::find($request->chamada);
+
+        $validados = Inscricao::where([['chamada_id', $chamada->id], ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])
+        ->get()->map(function ($candidato) {
+            return [
+                $candidato->co_inscricao_enem,
+                'M',
+            ];
+        })->collect();
+        
+        $candidatos = Inscricao::where('chamada_id', $chamada->id)
+            ->whereIn('status', [Inscricao::STATUS_ENUM['documentos_pendentes'], Inscricao::STATUS_ENUM['documentos_invalidados']])
+            ->get()->map(function ($candidato) {
+                return [
+                    $candidato->co_inscricao_enem,
+                    $this->situacaoMatricula($candidato->status),
+                ];
+            })->collect();
+        
+        return Excel::download(
+            new SisuGestaoExport($validados->merge($candidatos)),
+            'sisu_gestao_export_'.$chamada->nome.'.csv',
+            \Maatwebsite\Excel\Excel::CSV,
+            ['Content-Type' => 'text/csv']
+        );
+    }
+
+    private function situacaoMatricula($status)
+    {
+        $matriculas = [
+            Inscricao::STATUS_ENUM['documentos_pendentes'] => 'N',
+            Inscricao::STATUS_ENUM['documentos_invalidados'] => 'R',
+        ];
+        return $matriculas[$status];
     }
 }
