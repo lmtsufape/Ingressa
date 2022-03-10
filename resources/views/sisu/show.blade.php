@@ -83,6 +83,7 @@
                                             </div>
                                             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                                                 <a title="Datas e listagens da chamada" href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="Icone de exibir datas e listagens"></a>
+                                                <a href="{{route('exportar-sisu-gestao', $chamada)}}" title ="Exportar SiSU Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar"></a>
                                                 <button title="Editar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar chamada"></button>
                                                 <button title="Deletar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar chamada"></button>
                                             @endif
@@ -117,6 +118,14 @@
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1681.svg')}}" alt="Icone de datas e listagens da chamada">
                                         <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                             Datas e listagens da chamada
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Exportar ingressantes" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="33" src="{{asset('img/export_siga.svg')}}" alt="Icone de Exportar ingressantes">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Exportar SiSU Gestão
                                         </div>
                                     </div>
                                 </li>
