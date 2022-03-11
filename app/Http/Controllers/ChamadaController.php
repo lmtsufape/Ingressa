@@ -1158,6 +1158,7 @@ class ChamadaController extends Controller
         $primeira = true;
         $candidatos = collect();
         $chamados = collect();
+        $candidatosCPF = collect();
 
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
             if($primeira){
@@ -1261,8 +1262,9 @@ class ChamadaController extends Controller
 
             //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
 
-            $retorno = $this->fazerCadastro($A0, null, $curs, $candidatosCurso, $vagasCotaA0, $chamados, $chamada);
+            $retorno = $this->fazerCadastro($A0, null, $curs, $candidatosCurso, $vagasCotaA0, $chamados, $chamada, $candidatosCPF);
             $chamados = $retorno[1];
+            $candidatosCPF = $retorno[2];
 
             foreach($curs->cotas as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
@@ -1283,9 +1285,10 @@ class ChamadaController extends Controller
                         }
                     }
                     if(!is_null($modalidadeDaCotaIndex)){
-                        $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
+                        $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada, $candidatosCPF);
                         $vagasCota = $retorno[0];
                         $chamados = $retorno[1];
+                        $candidatosCPF = $retorno[2];
                     }
 
                     if($vagasCota > 0){
@@ -1302,9 +1305,10 @@ class ChamadaController extends Controller
                                 }
                             }
                             if(!is_null($modalidadeDaCotaIndex)){
-                                $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
+                                $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada, $candidatosCPF);
                                 $vagasCota = $retorno[0];
                                 $chamados = $retorno[1];
+                                $candidatosCPF = $retorno[2];
                             }
                             if($vagasCota == 0){
                                 break;
@@ -1354,7 +1358,7 @@ class ChamadaController extends Controller
 
     }
 
-    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados, $chamada)
+    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados, $chamada, $candidatosCPF)
     {
         $ehNull = $cotaRemanejamento;
         foreach($porModalidade as $inscrito){
@@ -1378,7 +1382,8 @@ class ChamadaController extends Controller
 
                 $candidatoExistente = Candidato::where('nu_cpf_inscrito', $inscrito['nu_cpf_inscrito'])->first();
                 if($candidatoExistente == null){
-                    if(!$chamados->contains($inscricao)){
+                    if(!$candidatosCPF->contains($inscrito['nu_cpf_inscrito'])){
+                        $candidatosCPF->push($inscrito['nu_cpf_inscrito']);
                         $chamados->push($inscricao);
                     }else{
                         $vagasCota += 1;
@@ -1392,7 +1397,8 @@ class ChamadaController extends Controller
                         }
                     }
                     if(!$chamado){
-                        if(!$chamados->contains($inscricao)){
+                        if(!$candidatosCPF->contains($inscrito['nu_cpf_inscrito'])){
+                            $candidatosCPF->push($inscrito['nu_cpf_inscrito']);
                             $chamados->push($inscricao);
                         }
                     }else{
@@ -1406,7 +1412,7 @@ class ChamadaController extends Controller
             }
         }
 
-        return [$vagasCota, $chamados];
+        return [$vagasCota, $chamados, $candidatosCPF];
 
     }
 
