@@ -153,12 +153,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($inscricoes as $k =>  $inscricao)
+                                    @php
+                                        $k = -1;
+                                    @endphp
+                                    @foreach ($inscricoes as $inscricao)
                                         @php
                                             $candidato = new App\Models\Candidato([
                                                 'nu_cpf_inscrito' => $inscricao['nu_cpf_inscrito'],
                                             ]);
                                             $cpf = $candidato->getCpfPDF();
+                                            $k += 1;
                                         @endphp
                                         <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                             <th>{{$k+1}}</th>
