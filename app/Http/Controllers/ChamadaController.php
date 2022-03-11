@@ -141,9 +141,21 @@ class ChamadaController extends Controller
         $this->authorize('isAdmin', User::class);
         $chamada = Chamada::find($id);
         if($chamada->inscricoes()->count() > 0){
+            /*foreach($chamada->inscricoes as $inscricao){
+                $inscricao->delete();
+                $inscricao->candidato->delete();
+                $inscricao->candidato->user->delete();
+            }*/
             return redirect()->back()->with(['error' => 'Não foi possível deletar esta chamada, há inscrições de candidatos nela.']);
+        }elseif($chamada->listagem()->count() > 0){
+            return redirect()->back()->with(['error' => 'Não foi possível deletar esta chamada, há listagens criadas para ela.']);
         }
         $sisu = Sisu::find($chamada->sisu_id);
+        $multiplicadores = MultiplicadorVaga::where('chamada_id', $chamada->id)->get();
+        foreach($multiplicadores as $multiplicador){
+            $multiplicador->delete();
+        }
+
         $chamada->delete();
 
         return redirect(route('sisus.show', ['sisu' => $sisu->id]))->with(['success' => 'Chamada deletada com sucesso!']);
@@ -313,13 +325,14 @@ class ChamadaController extends Controller
     public function cadastrarCandidatosEspera($chamada)
     {
         $this->authorize('isAdmin', User::class);
-        $dados = fopen('storage/'.$chamada->caminho_import_sisu_gestao, "r");
-        $primeira = true;
         ini_set('max_execution_time', 300);
+        ini_set('auto_detect_line_endings', true);
+        $dados = fopen(storage_path('app'.DIRECTORY_SEPARATOR.$chamada->sisu->caminho_import_espera), "r");
+        $primeira = true;
         $candidatos = collect();
         $cont = 0;
         while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
-            /*if($cont > 200){
+            /*if($cont > 30){
                 break;
             }*/
             if($primeira){
@@ -423,14 +436,14 @@ class ChamadaController extends Controller
                         $cotaCOD->push($modalidade[0]['no_modalidade_concorrencia']);
                     }
                     $modalidade = $modalidade->sortBy(function($candidato){
-                        return $candidato['nu_nota_candidato'];
+                        return $candidato['nu_classificacao'];
                     });
                     $modalidades->push($modalidade);
                 }
             }
             //ordenamos os inscritos da modalidade daquele curso pela nota
             $ampla = $ampla->sortByDesc(function($candidato){
-                return $candidato['nu_nota_candidato'];
+                return $candidato['nu_classificacao'];
             });
             $modalidades->push($ampla);
             $cursos->push($modalidades);
@@ -468,6 +481,27 @@ class ChamadaController extends Controller
 
             //E recuperamos a instancia do curso do banco de dados
             $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
+
+            $candidatosCurso = collect();
+            foreach($cursos[$indexCurso] as $modalidadeAtual){
+                $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
+            }
+
+            $candidatosCurso = $candidatosCurso->sortBy(function($candidato){
+                return $candidato['nu_nota_candidato'];
+            });
+
+            $A0 = Cota::where('cod_cota', 'A0')->first();
+            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->first()->pivot;
+            $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
+            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
+            $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
+            if($multiplicador != null){
+                $vagasCotaA0 *= $multiplicador->multiplicador;
+            }
+
+            $candidatosCurso = $candidatosCurso->slice($vagasCotaA0);
+
 
             //Varremos todas as cotas do curso
             foreach($curs->cotas as $cota){
@@ -1203,49 +1237,78 @@ class ChamadaController extends Controller
 
             $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
 
+            /*Para a nova regra de chamadas da lista de espera, e necessario preencher o restante de vagas da ampla concorrencia
+            com os candidatos com as maiores notas  daquele curso*/
+
+            $candidatosCurso = collect();
+            foreach($cursos[$indexCurso] as $modalidadeAtual){
+                $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
+            }
+
+            $candidatosCurso = $candidatosCurso->sortByDesc(function($candidato){
+                return $candidato['nu_nota_candidato'];
+            });
+
+            $A0 = Cota::where('cod_cota', 'A0')->first();
+            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->first()->pivot;
+            $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
+            
+            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
+            $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
+            if($multiplicador != null){
+                $vagasCotaA0 *= $multiplicador->multiplicador;
+            }
+
+            //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
+
+            $retorno = $this->fazerCadastro($A0, null, $curs, $candidatosCurso, $vagasCotaA0, $chamados, $chamada);
+            $chamados = $retorno[1];
+
             foreach($curs->cotas as $cota){
-                $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
-                $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
-                $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
-                if(!is_null($multiplicador)){
-                    $vagasCota *= $multiplicador->multiplicador;
-                }
-
-                $cursoAtual = $cotasCursosCOD[$indexCurso];
-                $modalidadeDaCotaIndex = null;
-
-                foreach($cursoAtual as $index => $modalidadeCursoAtual){
-                    if($modalidadeCursoAtual == $cota->descricao){
-                        $modalidadeDaCotaIndex = $index;
-                        break;
+                if($cota->cod_cota != $A0->cod_cota){
+                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
+                    $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
+                    $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
+                    if(!is_null($multiplicador)){
+                        $vagasCota *= $multiplicador->multiplicador;
                     }
-                }
-                if(!is_null($modalidadeDaCotaIndex)){
-                    $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
-                    $vagasCota = $retorno[0];
-                    $chamados = $retorno[1];
-                }
 
-                if($vagasCota > 0){
-                    foreach($cota->remanejamentos as $remanejamento){
-                        $cotaRemanejamento = $remanejamento->proximaCota;
-                        $cursoAtual = $cotasCursosCOD[$indexCurso];
+                    $cursoAtual = $cotasCursosCOD[$indexCurso];
+                    $modalidadeDaCotaIndex = null;
 
-                        $modalidadeDaCotaIndex = null;
+                    foreach($cursoAtual as $index => $modalidadeCursoAtual){
+                        if($modalidadeCursoAtual == $cota->descricao){
+                            $modalidadeDaCotaIndex = $index;
+                            break;
+                        }
+                    }
+                    if(!is_null($modalidadeDaCotaIndex)){
+                        $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
+                        $vagasCota = $retorno[0];
+                        $chamados = $retorno[1];
+                    }
 
-                        foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
-                            if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
-                                $modalidadeDaCotaIndex = $indexRemanejamento;
+                    if($vagasCota > 0){
+                        foreach($cota->remanejamentos as $remanejamento){
+                            $cotaRemanejamento = $remanejamento->proximaCota;
+                            $cursoAtual = $cotasCursosCOD[$indexCurso];
+
+                            $modalidadeDaCotaIndex = null;
+
+                            foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
+                                if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
+                                    $modalidadeDaCotaIndex = $indexRemanejamento;
+                                    break;
+                                }
+                            }
+                            if(!is_null($modalidadeDaCotaIndex)){
+                                $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
+                                $vagasCota = $retorno[0];
+                                $chamados = $retorno[1];
+                            }
+                            if($vagasCota == 0){
                                 break;
                             }
-                        }
-                        if(!is_null($modalidadeDaCotaIndex)){
-                            $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada);
-                            $vagasCota = $retorno[0];
-                            $chamados = $retorno[1];
-                        }
-                        if($vagasCota == 0){
-                            break;
                         }
                     }
                 }
@@ -1260,8 +1323,8 @@ class ChamadaController extends Controller
         }
         foreach($porCurso as $i => $curso){
             foreach($curso as $j => $modalidade){
-                $modalidade = $modalidade->sortBy(function($candidato){
-                    return $candidato['nu_classificacao'];
+                $modalidade = $modalidade->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
                 });
                 $porCurso[$i][$j] = $modalidade;
             }
@@ -1293,8 +1356,12 @@ class ChamadaController extends Controller
 
     private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados, $chamada)
     {
+        $ehNull = $cotaRemanejamento;
         foreach($porModalidade as $inscrito){
             if($vagasCota > 0){
+                if($ehNull == null){
+                    $cotaRemanejamento = $this->getCotaModalidade($inscrito['no_modalidade_concorrencia']);
+                }
                 $inscricao = array(
                     'co_ies_curso' => $inscrito['co_ies_curso'],
                     'ds_turno' => $inscrito['ds_turno'],
@@ -1369,6 +1436,35 @@ class ChamadaController extends Controller
             \Maatwebsite\Excel\Excel::CSV,
             ['Content-Type' => 'text/csv']
         );
+    }
+
+    private function getCotaModalidade($modalidade)
+    {
+        switch($modalidade){
+            case 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.':
+                return Cota::where('cod_cota', 'A0')->first();
+            case 'AMPLA CONCORRÊNCIA':
+                return Cota::where('cod_cota', 'A0')->first();
+            case 'Ampla concorrência':
+                return Cota::where('cod_cota', 'A0')->first();
+            case 'Candidatos com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L1')->first();
+            case 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L2')->first();
+            case 'Candidatos que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L5')->first();
+            case 'Candidatos autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L6')->first();
+            case 'Candidatos com deficiência que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L9')->first();
+            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas, que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)':
+                return Cota::where('cod_cota', 'L10')->first();
+            case 'Candidatos com deficiência que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L13')->first();
+            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
+                return Cota::where('cod_cota', 'L14')->first();
+        }
+
     }
 
     private function situacaoMatricula($status)
