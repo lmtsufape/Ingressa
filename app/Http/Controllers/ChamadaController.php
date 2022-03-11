@@ -1372,6 +1372,7 @@ class ChamadaController extends Controller
                     'no_inscrito' => $inscrito['no_inscrito'],
                     'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
                     'cota_id' => $cotaRemanejamento->id,
+                    'cota_classificacao' => $cota->id,
                     'curso_id' => $curs->id,
                 );
 

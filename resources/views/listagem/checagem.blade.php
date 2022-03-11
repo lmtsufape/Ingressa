@@ -147,6 +147,7 @@
                                     <tr class="esquerda">
                                         <th>Seq.</th>
                                         <th>CPF</th>
+                                        <th>Cota de classificação</th>
                                         <th>Nome do candidato</th>
                                         <th>Nota</th>
                                         <th>AF</th>
@@ -163,10 +164,13 @@
                                             ]);
                                             $cpf = $candidato->getCpfPDF();
                                             $k += 1;
+
+                                            $cotaClassificacao = App\Models\Cota::find($inscricao['cota_classificacao']);
                                         @endphp
                                         <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                             <th>{{$k+1}}</th>
                                             <th>{{$cpf}}</th>
+                                            <th>{{$cotaClassificacao->cod_cota}}</th>
                                             <th class="esquerda">{{$inscricao['no_inscrito']}}</th>
                                             <th>{{$inscricao['nu_nota_candidato']}}</th>
                                             @if($inscricao['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.')
