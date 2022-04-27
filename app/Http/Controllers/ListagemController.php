@@ -303,7 +303,7 @@ class ListagemController extends Controller
                     [
                         ['sisu_id', $sisu->id],
                         ['curso_id', $curso->id],
-                        ['cota_id', $cota->id],
+                        ['cota_vaga_ocupada_id', $cota->id],
                         ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                     ]
                 )->get();
