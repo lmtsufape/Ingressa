@@ -27,19 +27,18 @@
         .titulo {
             position: relative;
             top: -70px;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: bolder;
             color: #03284d;
         }
         .subtitulo {
             font-weight: normal;
-            position: inherit;
-            font-size: 16px;
+            position: fixed;
+            top: 135px;
+            font-size: 12px;
             color: #03284d;
-            text-align: center;
-            margin: -18px;
-            margin-bottom: 5px;
-            padding: 0px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .quebrar_pagina {
             page-break-after: always;
@@ -55,7 +54,7 @@
         }
         table th {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 12px;
         }
         table thead {
             border-top: 1px solid rgb(126, 126, 126);
@@ -95,8 +94,9 @@
             background-color: #d1e7fd;
         }
         .acao_afirmativa {
+            font-size: 12px;
             text-align: justify;
-            margin: 15px;
+            margin: 12px;
             position: relative;
             left: 5px;
         }
@@ -167,7 +167,8 @@
                                 <tr class="esquerda">
                                     <th>Seq.</th>
                                     <th>CPF</th>
-                                    <th>AF</th>
+                                    <th>Cota de classificação</th>
+                                    <th>Cota de inscrição</th>
                                     <th>Nome</th>
                                     <th>Nota</th>
                                 </tr>
@@ -183,6 +184,7 @@
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$k+1}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
+                                        <th>{{$inscricao->cotaRemanejada->cod_cota}}</th>
                                         <th>{{$inscricao->cota->cod_cota}}</th>
                                         <th>{{$inscricao->candidato->no_inscrito}}</th>
                                         <th>{{$inscricao->nu_nota_candidato}}</th>
@@ -236,7 +238,8 @@
                             <tr class="esquerda">
                                 <th>Seq.</th>
                                 <th>CPF</th>
-                                <th>AF</th>
+                                <th>Cota de classificação</th>
+                                <th>Cota de inscrição</th>
                                 <th>Nome</th>
                                 <th>Situação</th>
                                 <th>Nota</th>
@@ -253,6 +256,7 @@
                                 <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                     <th>{{$k+1}}</th>
                                     <th>{{$inscricao->candidato->getCpfPDF()}}</th>
+                                    <th>{{$inscricao->cotaRemanejada->cod_cota}}</th>
                                     <th>{{$inscricao->cota->cod_cota}}</th>
                                     <th>{{$inscricao->candidato->no_inscrito}}</th>
                                     <th>RESERVA</th>
