@@ -186,7 +186,7 @@
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
                                         <th>{{$inscricao->cotaRemanejada->cod_cota}}</th>
                                         <th>{{$inscricao->cota->cod_cota}}</th>
-                                        <th>{{$inscricao->candidato->no_inscrito}}</th>
+                                        <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
                                         <th>{{$inscricao->nu_nota_candidato}}</th>
                                     </tr>
                                     @php
@@ -258,7 +258,7 @@
                                     <th>{{$inscricao->candidato->getCpfPDF()}}</th>
                                     <th>{{$inscricao->cotaRemanejada->cod_cota}}</th>
                                     <th>{{$inscricao->cota->cod_cota}}</th>
-                                    <th>{{$inscricao->candidato->no_inscrito}}</th>
+                                    <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
                                     <th>RESERVA</th>
                                     <th>{{$inscricao->nu_nota_candidato}}</th>
                                 </tr>
