@@ -72,6 +72,9 @@
                                                 @if($sisu->chamadas->first() != null)
                                                     <a href="{{route('exportar-ingressantes', $sisu->chamadas->first())}}" title ="Exportar ingressantes SIGA" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1700.svg')}}"  alt="Icone de exportar ingressantes siga"></a>
                                                 @endif
+                                                @if($sisu->chamadas->count() >= 2)
+                                                    <a href="{{route('exportar-ingressantes-reserva', $sisu->chamadas->first())}}" title ="Exportar ingressantes das listas de espera" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1701.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
+                                                @endif
                                             @endif
                                             <button title="Deletar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar edicao"></button>
                                             <button title="Editar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticEditarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar edicao"></button>
@@ -112,6 +115,14 @@
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1700.svg')}}" alt="Icone de Exportar ingressantes">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Exportar ingressantes do SIGA
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Exportar ingressantes da espera" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <img class="aling-middle" width="33" src="{{asset('img/Grupo 1701.svg')}}" alt="Icone de Exportar ingressantes">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Exportar ingressantes das listas de espera
                                     </div>
                                 </div>
                             </li>
