@@ -149,7 +149,7 @@
                                                                 @endswitch</span> --}}
                                                             </div>
                                                             <div class="row px-1 link">
-                                                                <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none;"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
+                                                                <a href="{{asset('storage/' . $listagem->caminho_listagem)}}" target="blanck" style="text-decoration: none; word-break: break-all"><img width="13" src="{{asset('img/Icon feather-link.svg')}}">{{asset('storage/' . $listagem->caminho_listagem)}}</a>
                                                             </div>
                                                         </div>
                                                     </div>
