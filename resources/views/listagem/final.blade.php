@@ -27,19 +27,18 @@
         .titulo {
             position: relative;
             top: -70px;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: bolder;
             color: #03284d;
         }
         .subtitulo {
             font-weight: normal;
-            position: inherit;
-            font-size: 16px;
+            position: fixed;
+            top: 125px;
+            font-size: 11px;
             color: #03284d;
-            text-align: center;
-            margin: -18px;
-            margin-bottom: 5px;
-            padding: 0px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .quebrar_pagina {
             page-break-after: always;
@@ -55,7 +54,7 @@
         }
         table th {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 10px;
         }
         table thead {
             border-top: 1px solid rgb(126, 126, 126);
@@ -95,8 +94,9 @@
             background-color: #d1e7fd;
         }
         .acao_afirmativa {
+            font-size: 12px;
             text-align: justify;
-            margin: 15px;
+            margin: 12px;
             position: relative;
             left: 5px;
         }
@@ -106,9 +106,6 @@
 <body>
     <header>
         <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
-        <span class="titulo">
-            RELAÇÃO DOS CANDIDATOS INGRESSANTES<br><span style="font-weight: normal; text-transform:uppercase;" >SISU {{$chamada->sisu->edicao}}</span><br>
-        </span>
     </header>
     <div>
         @php
@@ -123,39 +120,45 @@
                     @php
                         $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                     @endphp
-                    <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
-                        @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                            Matutino
-                            @break
-                        @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                            Vespertino
-                            @break
-                        @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                            Noturno
-                            @break
-                        @case(App\Models\Curso::TURNO_ENUM['integral'])
-                            Integral
-                            @break
-                        @endswitch @if(!is_null($inscricao->curso->semestre))
-                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/{{$inscricao->curso->semestre}})
-                                        </span>
-                                        @php
-                                            $semestre = "indefinido";
-                                        @endphp
-                                    @elseif($semestre == "indefinido")
-                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/1)
-                                        </span>
-                                        @php
-                                            $semestre = "1";
-                                        @endphp
-                                    @elseif($semestre == "1")
-                                        <span style="text-align: right;">(Ingressantes de {{$chamada->sisu->edicao}}/2)
-                                        </span>
-                                        @php
-                                            $semestre = "indefinido";
-                                        @endphp
-                                    @endif</h3>
-
+                    <h3 class="subtitulo" style="text-align: center">
+                        <span style="font-weight: bold; word-break: keep-all" >
+                            RELAÇÃO DOS CANDIDATOS INGRESSANTES - CADASTRO EFETIVADO
+                        </span><br>
+                        <span style="font-weight: bold;">
+                            @if(!is_null($inscricao->curso->semestre))
+                                Semestre de ingresso: {{$chamada->sisu->edicao}}.{{$inscricao->curso->semestre}}
+                                @php
+                                    $semestre = "indefinido";
+                                @endphp
+                            @elseif($semestre == "indefinido")
+                                Semestre de ingresso: {{$chamada->sisu->edicao}}.1
+                                @php
+                                    $semestre = "1";
+                                @endphp
+                            @elseif($semestre == "1")
+                                Semestre de ingresso: {{$chamada->sisu->edicao}}.2
+                                @php
+                                    $semestre = "indefinido";
+                                @endphp
+                            @endif
+                        </span><br>
+                        <span>
+                            Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
+                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                                Matutino
+                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                                Vespertino
+                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                                Noturno
+                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                                Integral
+                                @break
+                            @endswitch
+                        </span>
+                    </h3>
                     @php
                         $exibirNomeCurso = false;
                     @endphp
@@ -167,8 +170,10 @@
                                 <tr class="esquerda">
                                     <th>Seq.</th>
                                     <th>CPF</th>
-                                    <th>AF</th>
+                                    <th>Cota de classificação</th>
+                                    <th>Cota de inscrição</th>
                                     <th>Nome</th>
+                                    <th>Situação</th>
                                     <th>Nota</th>
                                 </tr>
                             </thead>
@@ -183,8 +188,10 @@
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$k+1}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
+                                        <th>{{$inscricao->cotaRemanejada->cod_cota}}</th>
                                         <th>{{$inscricao->cota->cod_cota}}</th>
-                                        <th>{{$inscricao->candidato->no_inscrito}}</th>
+                                        <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
+                                        <th>MATRICULADO</th>
                                         <th>{{$inscricao->nu_nota_candidato}}</th>
                                     </tr>
                                     @php
@@ -209,22 +216,27 @@
                 @php
                     $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
-                <h3 class="subtitulo">Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
-                    @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                        Matutino
-                        @break
-                    @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                        Vespertino
-                        @break
-                    @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                        Noturno
-                        @break
-                    @case(App\Models\Curso::TURNO_ENUM['integral'])
-                        Integral
-                        @break
-                    @endswitch
-                <span style="text-align: right;">(Reservas)
-                </span></h3>
+                <h3 class="subtitulo" style="text-align: center; top: 135px;">
+                    <span style="font-weight: bold;">
+                        RELAÇÃO DE CANDIDATOS - CADASTRO RESERVA (SUPLENTES)
+                    </span><br>
+                    <span>
+                        Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
+                        @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            Matutino
+                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            Vespertino
+                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            Noturno
+                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            Integral
+                            @break
+                        @endswitch
+                    </span>
+                </h3>
                 @php
                     $exibirNomeCurso = false;
                 @endphp
@@ -236,7 +248,8 @@
                             <tr class="esquerda">
                                 <th>Seq.</th>
                                 <th>CPF</th>
-                                <th>AF</th>
+                                <th>Cota de classificação</th>
+                                <th>Cota de inscrição</th>
                                 <th>Nome</th>
                                 <th>Situação</th>
                                 <th>Nota</th>
@@ -253,8 +266,9 @@
                                 <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                     <th>{{$k+1}}</th>
                                     <th>{{$inscricao->candidato->getCpfPDF()}}</th>
+                                    <th>{{$inscricao->cotaRemanejada->cod_cota}}</th>
                                     <th>{{$inscricao->cota->cod_cota}}</th>
-                                    <th>{{$inscricao->candidato->no_inscrito}}</th>
+                                    <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
                                     <th>RESERVA</th>
                                     <th>{{$inscricao->nu_nota_candidato}}</th>
                                 </tr>
