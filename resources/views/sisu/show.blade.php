@@ -83,7 +83,7 @@
                                             </div>
                                             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                                                 <a title="Datas e listagens da chamada" href="{{route('chamadas.show', ['chamada' => $chamada])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1681.svg')}}"  alt="Icone de exibir datas e listagens"></a>
-                                                <a href="{{route('exportar-sisu-gestao', $chamada)}}" title ="Exportar SiSU Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar"></a>
+                                                <a @if($chamada->regular) href="{{route('exportar-sisu-gestao', $chamada)}}" style="cursor: pointer;" @else style="cursor: not-allowed; pointer-events: all !important;" @endif  title ="Exportar SiSU Gestão"><img class="m-1 " width="30" src="{{asset('img/export_siga.svg')}}"  alt="Icone de exportar"></a>
                                                 <button title="Editar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticEditarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1675.svg')}}"  alt="Icone de editar chamada"></button>
                                                 <button title="Deletar chamada" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarChamada_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar chamada"></button>
                                             @endif
