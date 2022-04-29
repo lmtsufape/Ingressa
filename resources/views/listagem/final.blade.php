@@ -284,9 +284,7 @@
                     </table>
                 </div>
             </div>
-            @if ($i != $curso->count() - 1)
-                <br/><div class="quebrar_pagina"></div>
-            @endif
+            <br/><div class="quebrar_pagina"></div>
         @endforeach
     </div>
 </body>
