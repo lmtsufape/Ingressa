@@ -603,7 +603,6 @@ class ListagemController extends Controller
                     $value = Inscricao::find($value['id']);
                     if(!$value->chamada->regular){
                         return [
-                            $this->removeAcentos($value->candidato->no_inscrito),
                             $value->co_inscricao_enem,
                             'M',
                         ];
@@ -626,7 +625,6 @@ class ListagemController extends Controller
             ->get()->map(function ($candidato) {
                 if(!$candidato->chamada->regular){
                     return [
-                        $this->removeAcentos($candidato->candidato->no_inscrito),
                         $candidato->co_inscricao_enem,
                         $this->situacaoMatricula($candidato->status),
                     ];
