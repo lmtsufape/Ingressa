@@ -419,11 +419,11 @@ class ListagemController extends Controller
                 $segundoSemestre = $retorno[1];
 
                 $primeiroSemestre = $primeiroSemestre->sortBy(function($candidato){
-                    return $candidato['cota_id'];
+                    return $candidato['cota_vaga_ocupada_id'];
                 });
 
                 $segundoSemestre = $segundoSemestre->sortBy(function($candidato){
-                    return $candidato['cota_id'];
+                    return $candidato['cota_vaga_ocupada_id'];
                 });
 
                 $primeiroSemestre1 = collect();
@@ -431,14 +431,14 @@ class ListagemController extends Controller
 
                 if($request->ordenacao == "nome"){
                     
-                    $primeiroSemestre = $primeiroSemestre->groupBy('cota_id');
+                    $primeiroSemestre = $primeiroSemestre->groupBy('cota_vaga_ocupada_id');
                     foreach($primeiroSemestre as $candidatos){
                         $candidatos = $candidatos->sortBy(function($candidato){
                             return $candidato->candidato->no_inscrito;
                         });
                         $primeiroSemestre1 = $primeiroSemestre1->concat($candidatos);
                     }
-                    $segundoSemestre = $segundoSemestre->groupBy('cota_id');
+                    $segundoSemestre = $segundoSemestre->groupBy('cota_vaga_ocupada_id');
                     foreach($segundoSemestre as $candidatos){
                         $candidatos = $candidatos->sortBy(function($candidato){
                             return $candidato->candidato->no_inscrito;
@@ -446,14 +446,14 @@ class ListagemController extends Controller
                         $segundoSemestre1 = $segundoSemestre1->concat($candidatos);
                     }
                 }else{
-                    $primeiroSemestre = $primeiroSemestre->groupBy('cota_id');
+                    $primeiroSemestre = $primeiroSemestre->groupBy('cota_vaga_ocupada_id');
                     foreach($primeiroSemestre as $candidatos){
                         $candidatos = $candidatos->sortByDesc(function($candidato){
                             return $candidato['nu_nota_candidato'];
                         });
                         $primeiroSemestre1 = $primeiroSemestre1->concat($candidatos);
                     }
-                    $segundoSemestre = $segundoSemestre->groupBy('cota_id');
+                    $segundoSemestre = $segundoSemestre->groupBy('cota_vaga_ocupada_id');
                     foreach($segundoSemestre as $candidatos){
                         $candidatos = $candidatos->sortByDesc(function($candidato){
                             return $candidato['nu_nota_candidato'];
@@ -472,7 +472,7 @@ class ListagemController extends Controller
             $candidatosReservaCurso1 = collect();
 
             if($request->ordenacao == "nome"){
-                $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_id');
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_vaga_ocupada_id');
                 foreach($candidatosIngressantesCurso as $candidatos){
                     $candidatos = $candidatos->sortBy(function($candidato){
                         return $candidato->candidato->no_inscrito;
@@ -480,7 +480,7 @@ class ListagemController extends Controller
                     $candidatosIngressantesCurso1 = $candidatosIngressantesCurso1->concat($candidatos);
                 }
             }else{
-                $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_id');
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_vaga_ocupada_id');
                 foreach($candidatosIngressantesCurso as $candidatos){
                     $candidatos = $candidatos->sortByDesc(function($candidato){
                         return $candidato['nu_nota_candidato'];
@@ -494,7 +494,7 @@ class ListagemController extends Controller
 
             $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso1);
             if($request->ordenacao == "nome"){
-                $candidatosReservaCurso = $candidatosReservaCurso->groupBy('cota_id');
+                $candidatosReservaCurso = $candidatosReservaCurso->groupBy('cota_vaga_ocupada_id');
                 foreach($candidatosReservaCurso as $candidatos){
                     $candidatos = $candidatos->sortBy(function($candidato){
                         return $candidato->candidato->no_inscrito;
@@ -502,7 +502,7 @@ class ListagemController extends Controller
                     $candidatosReservaCurso1 = $candidatosReservaCurso1->concat($candidatos);
                 }
             }else{
-                $candidatosReservaCurso = $candidatosReservaCurso->groupBy('cota_id');
+                $candidatosReservaCurso = $candidatosReservaCurso->groupBy('cota_vaga_ocupada_id');
                 foreach($candidatosReservaCurso as $candidatos){
                     $candidatos = $candidatos->sortByDesc(function($candidato){
                         return $candidato['nu_nota_candidato'];
@@ -726,7 +726,7 @@ class ListagemController extends Controller
     private function divirPorSemestre($cotas, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, $deficiente)
     {
         foreach($cotas as $cota){
-            $porCota = $candidatosIngressantesCurso->where('cota_id', $cota->id)->sortByDesc(function($candidato){
+            $porCota = $candidatosIngressantesCurso->where('cota_vaga_ocupada_id', $cota->id)->sortByDesc(function($candidato){
                 return $candidato['nu_nota_candidato'];
             });
             if($deficiente){
