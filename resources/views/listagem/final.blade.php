@@ -183,7 +183,9 @@
                                 @endphp
                                 @foreach ($curso as $inscricao)
                                     @php
+                                        $ocupada = $inscricao['cota_vaga_ocupada_id'];
                                         $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                        $inscricao->cota_vaga_ocupada_id = $ocupada;
                                     @endphp
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$k+1}}</th>
@@ -261,7 +263,9 @@
                             @endphp
                             @foreach ($curso as $inscricao)
                                 @php
+                                    $ocupada = $inscricao['cota_vaga_ocupada_id'];
                                     $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                    $inscricao->cota_vaga_ocupada_id = $ocupada;
                                 @endphp
                                 <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                     <th>{{$k+1}}</th>
