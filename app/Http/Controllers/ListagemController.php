@@ -693,6 +693,9 @@ class ListagemController extends Controller
             'BRASIL' => 'BRA',
             null => '',
         ];
+        if(str_contains(strtoupper($nacionalidade), "BRA")){
+            $nacionalidade = "BRASIL";
+        }
         return $nacionalidades[strtoupper($nacionalidade)];
     }
 
