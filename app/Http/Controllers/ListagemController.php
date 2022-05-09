@@ -696,7 +696,9 @@ class ListagemController extends Controller
         if(str_contains(strtoupper($nacionalidade), "BRA")){
             $nacionalidade = "BRASIL";
         }
-        return $nacionalidades[strtoupper($nacionalidade)];
+        //return $nacionalidades[strtoupper($nacionalidade)];
+        //COLOCAR TODOS COM BRA PARA NACIONALIDADE (TEMPORARIO)
+        return 'BRA';
     }
 
     private function getCodProgramaForm($curso)
