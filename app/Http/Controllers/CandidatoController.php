@@ -88,7 +88,7 @@ class CandidatoController extends Controller
         $candidato->save();
         $inscricao->save();
         if(auth()->user()->role == User::ROLE_ENUM['admin']){
-            return redirect()->back()->with(['success' => "Dados atualizados!']);"]);
+            return redirect()->back()->with(['success' => "Dados atualizados!"]);
         }else{
             return redirect(route('inscricaos.index'))->with(['success' => 'Dados atualizados!']);
         }
