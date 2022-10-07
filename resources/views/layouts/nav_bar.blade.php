@@ -21,6 +21,9 @@
                                 <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.index')}}">{{ __('SiSU') }}</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link mx-3 @if(request()->routeIs('edicoes.*')) active @endif" href="{{route('edicoes')}}">{{ __('Edições') }}</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('cursos.*')) active @endif" href="{{route('cursos.index')}}">{{ __('Cursos') }}</a>
                             </li>
                             <li class="nav-item">
@@ -33,9 +36,15 @@
                             <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.show', ['sisu' => $sisu->id])}}">{{ __('SiSU') }}</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link mx-3 @if(request()->routeIs('edicoes.*')) active @endif" href="{{route('edicoes')}}">{{ __('Edições') }}</a>
+                            </li>
                         @elseif(auth()->user()->role == \App\Models\User::ROLE_ENUM['candidato'])
                             <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('inscricaos.*')) active @endif" href="{{route('inscricaos.index')}}">{{ __('Minhas Inscrições') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mx-3 @if(request()->routeIs('edicoes.*')) active @endif" href="{{route('edicoes')}}">{{ __('Edições') }}</a>
                             </li>
                         @endif
                         <li class="nav-item mx-3 dropdown">
@@ -64,6 +73,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link mx-3" href="{{route('sobre')}}">Sobre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-3" href="{{route('edicoes')}}">Edições</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link mx-3" href="{{route('logar')}}">Entrar</a>

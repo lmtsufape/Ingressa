@@ -14,10 +14,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $intervalo_inicio = now()->subMonth(3);
-        $intervalo_fim = now()->addMonth(2);
-        
-        $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->first();
+        $edicao_atual = $this->getEdicaoAtual();
         
         if($edicao_atual != null){
             $chamadas = $edicao_atual->chamadas()->orderBy('created_at', 'DESC')->get();
@@ -28,6 +25,15 @@ class WelcomeController extends Controller
         $checagem_chamada = $this->listas_a_serem_exibidas($chamadas);
 
         return view('welcome', compact('chamadas', 'edicao_atual', 'checagem_chamada'))->with(['tipos_data' => DataChamada::TIPO_ENUM, ['tipos_listagem' => Listagem::TIPO_ENUM]]);
+    }
+
+    private function getEdicaoAtual() {
+        $intervalo_inicio = now()->subMonth(3);
+        $intervalo_fim = now()->addMonth(2);
+        
+        $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->first();
+        
+        return $edicao_atual;
     }
 
     public function login()
@@ -43,6 +49,23 @@ class WelcomeController extends Controller
     public function contato()
     {
         return view('contact');
+    }
+
+    public function edicoes() {
+        $edicoes = Sisu::all();
+        $edicao_atual = $this->getEdicaoAtual();
+
+        if($edicoes->count() > 0 && $edicao_atual != null){
+            $edicoes->pop();
+        }
+        return view('historico_chamadas.index', compact('edicoes'));
+    }
+
+    public function showEdicao($id) {
+        $sisu = Sisu::find($id);
+        $tipos_data = DataChamada::TIPO_ENUM;
+        $tipos_listagem = Listagem::TIPO_ENUM;
+        return view('historico_chamadas.show', compact('sisu', 'tipos_data', 'tipos_listagem'));
     }
 
     public function enviarMensagem(Request $request)
