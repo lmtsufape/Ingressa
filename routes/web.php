@@ -27,6 +27,8 @@ include "fortify.php";
 Route::get('/', [WelcomeController::class, 'index'])->name('index');
 Route::get('/login', [WelcomeController::class, 'login'])->name('logar');
 Route::get('/sobre', [WelcomeController::class, 'sobre'])->name('sobre');
+Route::get('/edicoes', [WelcomeController::class, 'edicoes'])->name('edicoes');
+Route::get('/edicoes/{id}', [WelcomeController::class, 'showEdicao'])->name('edicoes.show');
 Route::get('/contato', [WelcomeController::class, 'contato'])->name('contato');
 Route::post('/contato/enviar', [WelcomeController::class, 'enviarMensagem'])->name('enviar.mensagem');
 Route::get('/informacoes/enviar-docs', [WelcomeController::class, 'envio_docs'])->name('envio.docs');
