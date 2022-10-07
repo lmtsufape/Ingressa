@@ -63,7 +63,7 @@
                 <div class="col-md-12 mt-4 p-2 caixa shadow">
                     @foreach ($sisu->chamadas as $chamada)
                         <ul class="list-group mx-2 list-unstyled">
-                            @foreach ($chamada->listagem as $listagem)
+                            @foreach ($chamada->listagemAnteriores as $listagem)
                                 @if($listagem->publicada)
                                     <li>
                                         <div class="d-flex align-items-center listagemLista my-2 pt-1 pb-3">

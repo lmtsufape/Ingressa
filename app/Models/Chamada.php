@@ -45,6 +45,11 @@ class Chamada extends Model
         return $this->hasMany(Listagem::class, 'chamada_id')->orderBy('created_at', 'DESC');
     }
 
+    public function listagemAnteriores()
+    {
+        return $this->hasMany(Listagem::class, 'chamada_id')->orderBy('created_at');
+    }
+
     /**
      * Retorna o nome da chamada respeitando a posição e se é regular ou não.
      *
