@@ -52,7 +52,7 @@ class WelcomeController extends Controller
     }
 
     public function edicoes() {
-        $edicoes = Sisu::all();
+        $edicoes = Sisu::orderBy('created_at')->get();
         $edicao_atual = $this->getEdicaoAtual();
 
         if($edicoes->count() > 0 && $edicao_atual != null){
