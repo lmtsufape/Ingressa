@@ -296,6 +296,12 @@ class ListagemController extends Controller
         $candidatosReservaCursos = collect();
         $A0 = Cota::where('cod_cota', 'A0')->first();
 
+        //Retirar e reorganizar prioridade de remanejamento
+        $l9 = $cotas->pull(5);
+        $l13 = $cotas->pull(7);
+        $cotas->splice(1, 0,  [$l9]);
+        $cotas->splice(2, 0,  [$l13]);
+
         foreach($cursos as $curso){
             $cpfs = collect();
             //$nomes = collect();
