@@ -6,6 +6,7 @@ use App\Http\Requests\SisuRequest;
 use App\Models\Chamada;
 use App\Models\Cota;
 use App\Models\Curso;
+use App\Models\Inscricao;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;

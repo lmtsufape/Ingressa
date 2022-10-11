@@ -120,6 +120,11 @@ class Inscricao extends Model
         return $this->belongsTo(Cota::class, 'cota_vaga_ocupada_id');
     }
 
+    public function cotaClassificacao()
+    {
+        return $this->belongsTo(Cota::class, 'cota_classificacao_id');
+    }
+
     public function sisu()
     {
         return $this->belongsTo(Sisu::class, 'sisu_id');

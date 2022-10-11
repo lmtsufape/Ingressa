@@ -16,6 +16,7 @@ use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\EnviarEmailsPublicacaoListagem;
+use App\Models\Sisu;
 use Illuminate\Support\Facades\Log;
 
 class ListagemController extends Controller
@@ -622,6 +623,89 @@ class ListagemController extends Controller
             }
         }
         return ['ingressantes' => $candidatosIngressantesCursos, 'reservas' => $candidatosReservaCursos];
+    }
+
+    /**
+     *
+     * @param  \App\Models\Sisu  $sisu
+     * @return \Illuminate\Http\Response
+     */
+    public function listaPersonalizada($id, Request $request)
+    {
+        $this->authorize('isAdmin', User::class);
+
+        $sisu = Sisu::find($id);
+
+        if (! $sisu->lista_personalizada) {
+            $request['chamada'] = $sisu->chamadas->first()->id;
+            $sisu->lista_personalizada = true;
+            $inscricoes = $this->getInscricoesIngressantesReservas($request);
+            $candidatosIngressantesCursos = $inscricoes['ingressantes']
+            ->filter(function ($value, $key) {
+                return $value->count() <= 40;
+            });
+
+            $curso_atual = null;
+            $curso_anterior = null;
+            foreach ($candidatosIngressantesCursos as $curso) {
+                $curso_atual = Inscricao::find($curso[0]['id'])->curso;
+                foreach ($curso as $i => $insc) {
+                    $inscricao = Inscricao::find($insc['id']);
+                    $inscricao->cota_classificacao_id = $insc['cota_vaga_ocupada_id'];
+                    if ($curso_atual->semestre != null){
+                        $inscricao->semestre_entrada = $curso_atual->semestre;
+                    } else {
+                        if ($curso_anterior == $curso_atual) {
+                            $inscricao->semestre_entrada = 2;
+                        } else {
+                            $inscricao->semestre_entrada = 1;
+                        }
+                    }
+                    $inscricao->update();
+                }
+                $curso_anterior = $curso_atual;
+            }
+            $sisu->update();
+        }
+
+        $cursos = Curso::orderBy('nome')->get();
+        $turnos = Curso::TURNO_ENUM;
+        $graus = Curso::GRAU_ENUM;
+        return view('sisu.lista_personalizada_cursos', compact('sisu', 'turnos', 'cursos', 'graus'));
+    }
+
+    /**
+     *
+     * @param  \App\Models\Sisu  $sisu
+     * @param  \App\Models\Curso  $curso
+     * @return \Illuminate\Http\Response
+     */
+    public function listaPersonalizadaCurso($sisu_id, $curso_id, Request $request)
+    {
+        $this->authorize('isAdmin', User::class);
+        $curso = Curso::find($curso_id);
+        $turno = $curso->getTurno();
+        $candidatosIngressantes = Inscricao::where(
+            [
+                ['sisu_id', $sisu_id],
+                ['curso_id', $curso_id],
+                ['semestre_entrada', '!=', null],
+                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+            ]
+        )->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+
+        $candidatosReserva = Inscricao::where(
+            [
+                ['sisu_id', $sisu_id],
+                ['curso_id', $curso_id],
+                ['semestre_entrada', '=', null],
+                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+            ]
+        )->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+
+
+        return view('sisu.lista_personalizada', compact('curso', 'turno', 'candidatosIngressantes', 'candidatosReserva'));
+
     }
 
     public function exportarCSV(Request $request)

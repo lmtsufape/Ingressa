@@ -86,6 +86,12 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada-aprovar', [ChamadaController::class, 'aprovarCandidatosChamada'])
     ->name('chamadas.candidatos.aprovar');
 
+    Route::get('/sisus/{sisu_id}/lista-personalizada-cursos', [ListagemController::class, 'listaPersonalizada'])
+        ->name('lista.personalizada');
+
+    Route::get('/sisus/{sisu_id}/lista-personalizada-cursos/{curso_id}', [ListagemController::class, 'listaPersonalizadaCurso'])
+        ->name('lista.personalizada.curso');
+
     Route::resource('cursos', CursoController::class);
 
     Route::resource('cotas', CotaController::class);
