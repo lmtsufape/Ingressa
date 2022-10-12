@@ -314,13 +314,13 @@ class ListagemController extends Controller
             if ($cota_curso_quantidade == 40) {
                 $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, true);
                 $primeiroSemestre = $retorno['ingressantes'];
-                $primeiroSemestre = $this->ordenarCurso($request->ordenacao, $primeiroSemestre);
+                $primeiroSemestre = $this->ordenarCurso($request->ordenacao, $primeiroSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($primeiroSemestre);
 
                 $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, false);
                 $segundoSemestre = $retorno['ingressantes'];
-                $segundoSemestre = $this->ordenarCurso($request->ordenacao, $segundoSemestre);
+                $segundoSemestre = $this->ordenarCurso($request->ordenacao, $segundoSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($segundoSemestre);
 
@@ -332,7 +332,7 @@ class ListagemController extends Controller
             } else {
                 $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false, true);
                 $curso = $retorno['ingressantes'];
-                $curso = $this->ordenarCurso($request->ordenacao, $curso);
+                $curso = $this->ordenarCurso($request->ordenacao, $curso, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($curso);
 
@@ -342,7 +342,7 @@ class ListagemController extends Controller
             }
 
             $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso);
-            $candidatosReservaCurso = $this->ordenarCurso($request->ordenacao, $candidatosReservaCurso);
+            $candidatosReservaCurso = $this->ordenarCurso($request->ordenacao, $candidatosReservaCurso, 'cota_id');
            
             $candidatosReservaCurso = $candidatosReservaCurso->map->only(['id', 'cota_vaga_ocupada_id']);
             if($candidatosReservaCurso->first() != null){
@@ -464,12 +464,12 @@ class ListagemController extends Controller
 
     }
 
-    private function ordenarCurso($ordenacao, $curso)
+    private function ordenarCurso($ordenacao, $curso, $grupo)
     {
         $retorno = collect();
         if($ordenacao == "nome"){
                     
-            $curso = $curso->groupBy('cota_vaga_ocupada_id');
+            $curso = $curso->groupBy($grupo);
             foreach($curso as $candidatos){
                 $candidatos = $candidatos->sortBy(function($candidato){
                     return $candidato->candidato->no_inscrito;
@@ -477,7 +477,7 @@ class ListagemController extends Controller
                 $retorno = $retorno->concat($candidatos);
             }
         }else{
-            $curso = $curso->groupBy('cota_vaga_ocupada_id');
+            $curso = $curso->groupBy($grupo);
             foreach($curso as $candidatos){
                 $candidatos = $candidatos->sortByDesc(function($candidato){
                     return $candidato['nu_nota_candidato'];

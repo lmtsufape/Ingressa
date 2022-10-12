@@ -68,7 +68,7 @@
                                             @if($inscricao->semestre_entrada == 1)
                                                 <tr>
                                                     <th class="align-middle">{{$k}}</th>
-                                                    <td class="align-middle">{{$inscricao->candidato->getCpfPDF()}}</td>
+                                                    <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
                                                     <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
                                                     <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
                                                     <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
@@ -127,7 +127,7 @@
                                     @if($inscricao->semestre_entrada == 2)
                                         <tr>
                                             <th class="align-middle"> {{$k}}</th>
-                                            <td class="align-middle">{{$inscricao->candidato->getCpfPDF()}}</td>
+                                            <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
                                             <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
                                             <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
                                             <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
@@ -182,7 +182,7 @@
                                 @foreach ($candidatosReserva as $inscricao)
                                     <tr>
                                         <th class="align-middle"> {{$k}}</th>
-                                        <td class="align-middle">{{$inscricao->candidato->getCpfPDF()}}</td>
+                                        <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
                                         <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
                                         <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
                                         <td class="align-middle">RESERVA</td>
