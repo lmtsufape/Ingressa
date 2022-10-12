@@ -528,6 +528,17 @@ class ListagemController extends Controller
                 }
                 $curso_anterior = $curso_atual;
             }
+
+            $candidatosReserva = $inscricoes['reservas'];
+            foreach ($candidatosReserva as $curso) {
+                foreach ($curso as $i => $insc) {
+                    $inscricao = Inscricao::find($insc['id']);
+                    $inscricao->cota_classificacao_id = null;
+                    $inscricao->semestre_entrada = null;
+                    $inscricao->update();
+                }
+            }
+
             $sisu->update();
         }
 
@@ -564,7 +575,7 @@ class ListagemController extends Controller
                 ['semestre_entrada', '=', null],
                 ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
             ]
-        )->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+        )->orderBy('cota_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
 
 
         return view('sisu.lista_personalizada', compact('curso', 'turno', 'candidatosIngressantes', 'candidatosReserva'));
