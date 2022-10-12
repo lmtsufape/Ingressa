@@ -292,337 +292,200 @@ class ListagemController extends Controller
         $chamada = Chamada::find($request->chamada);
         $sisu = $chamada->sisu;
         $cursos = Curso::all();
-        $cotas = Cota::all();
         $candidatosIngressantesCursos = collect();
         $candidatosReservaCursos = collect();
         $A0 = Cota::where('cod_cota', 'A0')->first();
-        $l9 = Cota::where('cod_cota', 'L9')->first();
-        $l13 = Cota::where('cod_cota', 'L13')->first();
 
         foreach($cursos as $curso){
-            $vagas_restantes = array();
             $cpfs = collect();
-            //$nomes = collect();
-
             $candidatosIngressantesCurso = collect();
 
-            //APLICAR REGRA DE MAIORES NOTAS OCUPAREM A A0
             $candidatosCurso = Inscricao::where(
                 [
                     ['sisu_id', $sisu->id],
                     ['curso_id', $curso->id],
                     ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                 ]
-            )->get();
-
-            $candidatosCurso = $candidatosCurso->sortByDesc(function($candidato){
-                return $candidato['nu_nota_candidato'];
-            });
-
+            )->orderBy('nu_nota_candidato', 'DESC')->get();
 
             $cota_curso_quantidade = $curso->cotas()->where('cota_id', $A0->id)->first()->pivot->quantidade_vagas;
-            $curso80 = false;
 
-            if($cota_curso_quantidade == 40) {
-                $cota_curso_quantidade = 20;
-                $curso80 = true;
+            //se o curso for de 80 vagas, logo A0 tem 40 vagas
+            if ($cota_curso_quantidade == 40) {
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, true);
+                $primeiroSemestre = $retorno['ingressantes'];
+                $primeiroSemestre = $this->ordenarCurso($request->ordenacao, $primeiroSemestre);
+                $cpfs = $retorno['cpfs'];
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($primeiroSemestre);
+
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, false);
+                $segundoSemestre = $retorno['ingressantes'];
+                $segundoSemestre = $this->ordenarCurso($request->ordenacao, $segundoSemestre);
+                $cpfs = $retorno['cpfs'];
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($segundoSemestre);
+
+                $primeiroSemestre = $primeiroSemestre->map->only(['id', 'cota_vaga_ocupada_id']);
+                $segundoSemestre = $segundoSemestre->map->only(['id', 'cota_vaga_ocupada_id']);
+
+                $candidatosIngressantesCursos->push($primeiroSemestre);
+                $candidatosIngressantesCursos->push($segundoSemestre);
+            } else {
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false, true);
+                $curso = $retorno['ingressantes'];
+                $curso = $this->ordenarCurso($request->ordenacao, $curso);
+                $cpfs = $retorno['cpfs'];
+                $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($curso);
+
+                $curso = $curso->map->only(['id', 'cota_vaga_ocupada_id']);
+
+                $candidatosIngressantesCursos->push($curso);
             }
 
-            foreach ($candidatosCurso as $candidato) {
-                if ($cota_curso_quantidade > 0) {
-                    if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                        $candidato->cota_vaga_ocupada_id = $A0->id;
-                        $candidatosIngressantesCurso->push($candidato);
-                        $cota_curso_quantidade -= 1;
-                        $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                        //$nomes->push($candidato->candidato->no_inscrito.' '.$candidato->cotaRemanejada->cod_cota);
-                    }
-                }
-            }
-
-            foreach($cotas as $cota){
-                if ($cota->cod_cota == $l9->cod_cota || $cota->cod_cota == $l13->cod_cota) {
-                    $candidatosCotaCurso = Inscricao::where(
-                        [
-                            ['sisu_id', $sisu->id],
-                            ['curso_id', $curso->id],
-                            ['cota_id', $cota->id],
-                            ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
-                        ]
-                    )->get();
-
-                    $candidatosCotaCurso = $candidatosCotaCurso->sortByDesc(function ($candidato) {
-                        return $candidato['nu_nota_candidato'];
-                    });
-    
-                    $cota_curso_quantidade = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot->quantidade_vagas;
-    
-                    foreach ($candidatosCotaCurso as $candidato) {
-                        if ($cota_curso_quantidade > 0) {
-                            if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                                $candidato->cota_vaga_ocupada_id = $cota->id;
-                                $candidatosIngressantesCurso->push($candidato);
-                                $cota_curso_quantidade -= 1;
-                                $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                            }
-                        }
-                    }
-    
-                    if ($cota_curso_quantidade > 0) {
-                        foreach ($cota->remanejamentos as $remanejamento) {
-                            $cotaRemanejamento = $remanejamento->proximaCota;
-                            $candidatosCotaCursoRemanejamento = Inscricao::where(
-                                [
-                                        ['sisu_id', $sisu->id],
-                                        ['curso_id', $curso->id],
-                                        ['cota_id', $cotaRemanejamento->id],
-                                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
-                                    ]
-                            )->get();
-        
-                            $candidatosCotaCursoRemanejamento = $candidatosCotaCursoRemanejamento->sortByDesc(function ($candidato) {
-                                return $candidato['nu_nota_candidato'];
-                            });
-        
-                            $continua = false;
-        
-                            foreach ($candidatosCotaCursoRemanejamento as $candidato) {
-                                if ($cota_curso_quantidade > 0) {
-                                    if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                                        $candidato->cota_vaga_ocupada_id = $cota->id;
-                                        $candidatosIngressantesCurso->push($candidato);
-                                        $cota_curso_quantidade -= 1;
-                                        $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                                    }
-                                } else {
-                                    $continua = true;
-                                    break;
-                                }
-                            }
-                            if ($continua) {
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            $vagas_restantes = array_fill(0, 8, 0);
-            if ($curso80) {
-                $cota_curso_quantidade = 20;
-                foreach ($candidatosCurso as $candidato) {
-                    if ($cota_curso_quantidade > 0) {
-                        if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                            $candidato->cota_vaga_ocupada_id = $A0->id;
-                            $candidatosIngressantesCurso->push($candidato);
-                            $cota_curso_quantidade -= 1;
-                            $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                            //$nomes->push($candidato->candidato->no_inscrito.' '.$candidato->cotaRemanejada->cod_cota);
-                        }
-                    }
-                }
-            }
-
-            //dd($nomes);
-
-            foreach($cotas as $i => $cota){
-                if ($cota->cod_cota != $A0->cod_cota && $cota->cod_cota != $l9->cod_cota && $cota->cod_cota != $l13->cod_cota) {
-                    $candidatosCotaCurso = Inscricao::where(
-                        [
-                            ['sisu_id', $sisu->id],
-                            ['curso_id', $curso->id],
-                            ['cota_id', $cota->id],
-                            ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
-                        ]
-                    )->get();
-
-                    $candidatosCotaCurso = $candidatosCotaCurso->sortByDesc(function ($candidato) {
-                        return $candidato['nu_nota_candidato'];
-                    });
-
-                    $cota_curso_quantidade = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot->quantidade_vagas;
-
-                    foreach ($candidatosCotaCurso as $candidato) {
-                        if ($cota_curso_quantidade > 0) {
-                            if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                                $candidato->cota_vaga_ocupada_id = $cota->id;
-                                $candidatosIngressantesCurso->push($candidato);
-                                $cota_curso_quantidade -= 1;
-                                $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                            }
-                        }
-                    }
-
-                    $vagas_restantes[$i] = $cota_curso_quantidade;
-                }
-            }
-
-            //remanejamento depois
-            foreach($cotas as $i => $cota){
-                if ($cota->cod_cota != $A0->cod_cota && $cota->cod_cota != $l9->cod_cota && $cota->cod_cota != $l13->cod_cota) {
-                    $cota_curso_quantidade = $vagas_restantes[$i];
-                    if ($cota_curso_quantidade > 0) {
-                        foreach ($cota->remanejamentos as $key => $remanejamento) {
-                            $cotaRemanejamento = $remanejamento->proximaCota;
-                            $candidatosCotaCursoRemanejamento = Inscricao::where(
-                                [
-                                        ['sisu_id', $sisu->id],
-                                        ['curso_id', $curso->id],
-                                        ['cota_id', $cotaRemanejamento->id],
-                                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
-                                    ]
-                            )->get();
-
-                            $candidatosCotaCursoRemanejamento = $candidatosCotaCursoRemanejamento->sortByDesc(function ($candidato) {
-                                return $candidato['nu_nota_candidato'];
-                            });
-
-                            $continua = false;
-
-                            foreach ($candidatosCotaCursoRemanejamento as $candidato) {
-                                if ($cota_curso_quantidade > 0) {
-                                    if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                                        $candidato->cota_vaga_ocupada_id = $cota->id;
-                                        $candidatosIngressantesCurso->push($candidato);
-                                        $cota_curso_quantidade -= 1;
-                                        $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                                        Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
-                                    }
-                                } else {
-                                    $continua = true;
-                                    break;
-                                }
-                            }
-                            if ($continua) {
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if($candidatosIngressantesCurso->count() > 40){
-                $primeiroSemestre = collect();
-                $segundoSemestre = collect();
-
-                $cotasL9L13 = Cota::whereIn('cod_cota', ['L9', 'L13'])->get();
-                $retorno = $this->divirPorSemestre($cotasL9L13, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, true);
-                $primeiroSemestre = $retorno[0];
-                $segundoSemestre = $retorno[1];
-
-                $cotasL10L14 = Cota::whereIn('cod_cota', ['L10', 'L14'])->get();
-                $retorno = $this->divirPorSemestre($cotasL10L14, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, true);
-                $primeiroSemestre = $retorno[0];
-                $segundoSemestre = $retorno[1];
-
-                $cotasNaoDeficientes = Cota::whereIn('cod_cota', ['A0', 'L1', 'L2', 'L5', 'L6'])->get();
-                $retorno = $this->divirPorSemestre($cotasNaoDeficientes, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, false);
-                $primeiroSemestre = $retorno[0];
-                $segundoSemestre = $retorno[1];
-
-                $primeiroSemestre = $primeiroSemestre->sortBy(function($candidato){
-                    return $candidato['cota_vaga_ocupada_id'];
-                });
-
-                $segundoSemestre = $segundoSemestre->sortBy(function($candidato){
-                    return $candidato['cota_vaga_ocupada_id'];
-                });
-
-                $primeiroSemestre1 = collect();
-                $segundoSemestre1 = collect();
-
-                if($request->ordenacao == "nome"){
-                    
-                    $primeiroSemestre = $primeiroSemestre->groupBy('cota_vaga_ocupada_id');
-                    foreach($primeiroSemestre as $candidatos){
-                        $candidatos = $candidatos->sortBy(function($candidato){
-                            return $candidato->candidato->no_inscrito;
-                        });
-                        $primeiroSemestre1 = $primeiroSemestre1->concat($candidatos);
-                    }
-                    $segundoSemestre = $segundoSemestre->groupBy('cota_vaga_ocupada_id');
-                    foreach($segundoSemestre as $candidatos){
-                        $candidatos = $candidatos->sortBy(function($candidato){
-                            return $candidato->candidato->no_inscrito;
-                        });
-                        $segundoSemestre1 = $segundoSemestre1->concat($candidatos);
-                    }
-                }else{
-                    $primeiroSemestre = $primeiroSemestre->groupBy('cota_vaga_ocupada_id');
-                    foreach($primeiroSemestre as $candidatos){
-                        $candidatos = $candidatos->sortByDesc(function($candidato){
-                            return $candidato['nu_nota_candidato'];
-                        });
-                        $primeiroSemestre1 = $primeiroSemestre1->concat($candidatos);
-                    }
-                    $segundoSemestre = $segundoSemestre->groupBy('cota_vaga_ocupada_id');
-                    foreach($segundoSemestre as $candidatos){
-                        $candidatos = $candidatos->sortByDesc(function($candidato){
-                            return $candidato['nu_nota_candidato'];
-                        });
-                        $segundoSemestre1 = $segundoSemestre1->concat($candidatos);
-                    }
-                }
-                $primeiroSemestre1 = $primeiroSemestre1->map->only(['id', 'cota_vaga_ocupada_id']);
-                $segundoSemestre1 = $segundoSemestre1->map->only(['id', 'cota_vaga_ocupada_id']);
-
-                $candidatosIngressantesCursos->push($primeiroSemestre1);
-                $candidatosIngressantesCursos->push($segundoSemestre1);
-            }
-
-            $candidatosIngressantesCurso1 = collect();
-            $candidatosReservaCurso1 = collect();
-
-            $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortBy(function($candidato){
-                return $candidato->cota_vaga_ocupada_id;
-            });
-            
-            if($request->ordenacao == "nome"){
-                $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_vaga_ocupada_id');
-                foreach($candidatosIngressantesCurso as $candidatos){
-                    $candidatos = $candidatos->sortBy(function($candidato){
-                        return $candidato->candidato->no_inscrito;
-                    });
-                    $candidatosIngressantesCurso1 = $candidatosIngressantesCurso1->concat($candidatos);
-                }
-            }else{
-                $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_vaga_ocupada_id');
-                foreach($candidatosIngressantesCurso as $candidatos){
-                    $candidatos = $candidatos->sortByDesc(function($candidato){
-                        return $candidato['nu_nota_candidato'];
-                    });
-                    $candidatosIngressantesCurso1 = $candidatosIngressantesCurso1->concat($candidatos);
-                }
-            }
-
-            $candidatosCurso = Inscricao::where([['sisu_id', $sisu->id], ['curso_id', $curso->id],
-            ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]])->get();
-
-            $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso1);
-            if($request->ordenacao == "nome"){
-                $candidatosReservaCurso = $candidatosReservaCurso->groupBy('cota_vaga_ocupada_id');
-                foreach($candidatosReservaCurso as $candidatos){
-                    $candidatos = $candidatos->sortBy(function($candidato){
-                        return $candidato->candidato->no_inscrito;
-                    });
-                    $candidatosReservaCurso1 = $candidatosReservaCurso1->concat($candidatos);
-                }
-            }else{
-                $candidatosReservaCurso = $candidatosReservaCurso->groupBy('cota_vaga_ocupada_id');
-                foreach($candidatosReservaCurso as $candidatos){
-                    $candidatos = $candidatos->sortByDesc(function($candidato){
-                        return $candidato['nu_nota_candidato'];
-                    });
-                    $candidatosReservaCurso1 = $candidatosReservaCurso1->concat($candidatos);
-                }
-            }
-            $candidatosReservaCurso1 = $candidatosReservaCurso1->map->only(['id', 'cota_vaga_ocupada_id']);
-            $candidatosIngressantesCurso1 = $candidatosIngressantesCurso1->map->only(['id', 'cota_vaga_ocupada_id']);
-
-            $candidatosIngressantesCursos->push($candidatosIngressantesCurso1);
-            if($candidatosReservaCurso1->first() != null){
-                $candidatosReservaCursos->push($candidatosReservaCurso1);
+            $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso);
+            $candidatosReservaCurso = $this->ordenarCurso($request->ordenacao, $candidatosReservaCurso);
+           
+            $candidatosReservaCurso = $candidatosReservaCurso->map->only(['id', 'cota_vaga_ocupada_id']);
+            if($candidatosReservaCurso->first() != null){
+                $candidatosReservaCursos->push($candidatosReservaCurso);
             }
         }
         return ['ingressantes' => $candidatosIngressantesCursos, 'reservas' => $candidatosReservaCursos];
+    }
+
+    private function definirIngressantes(Sisu $sisu, Curso $curso, $candidatosCurso, $cpfs, $eh80, $primeira)
+    {
+        $cotas = Cota::all();
+        $A0 = Cota::where('cod_cota', 'A0')->first();
+        $vagas_restantes = array_fill(0, $cotas->count(), 0);
+
+        $candidatosIngressantesCurso = collect();
+
+        if ($eh80) {
+            if ($primeira) {
+                $qtndPorCota = $this->quantidadePorCota(true, true);
+            } else {
+                $qtndPorCota = $this->quantidadePorCota(true, false);
+            }
+        } else {
+            $qtndPorCota = $this->quantidadePorCota(false, true);
+        }
+
+        $qntdA0 = $qtndPorCota["A0"];
+
+        foreach ($candidatosCurso as $candidato) {
+            if ($qntdA0 > 0) {
+                if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
+                    $candidato->cota_vaga_ocupada_id = $A0->id;
+                    $candidatosIngressantesCurso->push($candidato);
+                    $qntdA0 -= 1;
+                    $cpfs->push($candidato->candidato->nu_cpf_inscrito);
+                }
+            }
+        }
+
+        foreach($cotas as $i => $cota){
+            if ($cota->cod_cota != $A0->cod_cota) {
+                $candidatosCotaCurso = Inscricao::where(
+                    [
+                        ['sisu_id', $sisu->id],
+                        ['curso_id', $curso->id],
+                        ['cota_id', $cota->id],
+                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                    ]
+                )->orderBy('nu_nota_candidato', 'DESC')->get();
+
+                $cota_curso_quantidade = $qtndPorCota[$cota->cod_cota];
+
+                foreach ($candidatosCotaCurso as $candidato) {
+                    if ($cota_curso_quantidade > 0) {
+                        if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
+                            $candidato->cota_vaga_ocupada_id = $cota->id;
+                            $candidatosIngressantesCurso->push($candidato);
+                            $cota_curso_quantidade -= 1;
+                            $cpfs->push($candidato->candidato->nu_cpf_inscrito);
+                        }
+                    }
+                }
+
+                $vagas_restantes[$i] = $cota_curso_quantidade;
+            }
+        }
+
+        foreach($cotas as $i => $cota){
+            if ($cota->cod_cota != $A0->cod_cota) {
+                $cota_curso_quantidade = $vagas_restantes[$i];
+                if ($cota_curso_quantidade > 0) {
+                    foreach ($cota->remanejamentos as $remanejamento) {
+                        $cotaRemanejamento = $remanejamento->proximaCota;
+                        $candidatosCotaCursoRemanejamento = Inscricao::where(
+                            [
+                                    ['sisu_id', $sisu->id],
+                                    ['curso_id', $curso->id],
+                                    ['cota_id', $cotaRemanejamento->id],
+                                    ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                                ]
+                        )->orderBy('nu_nota_candidato', 'DESC')->get();
+
+                        $continua = false;
+
+                        foreach ($candidatosCotaCursoRemanejamento as $candidato) {
+                            if ($cota_curso_quantidade > 0) {
+                                if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
+                                    $candidato->cota_vaga_ocupada_id = $cota->id;
+                                    $candidatosIngressantesCurso->push($candidato);
+                                    $cota_curso_quantidade -= 1;
+                                    $cpfs->push($candidato->candidato->nu_cpf_inscrito);
+                                    Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
+                                }
+                            } else {
+                                $continua = true;
+                                break;
+                            }
+                        }
+                        if ($continua) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return ['ingressantes' => $candidatosIngressantesCurso, 'cpfs' => $cpfs];
+    }
+
+    private function quantidadePorCota($eh80, $primeira)
+    {
+        if ($eh80) {
+            if ($primeira) {
+                return ['A0' => 20, 'L1' => 3, 'L2' => 6, 'L5' => 3, 'L6' => 6, 'L9' => 1, 'L10' => 0, 'L13' => 1, 'L14' => 0];
+            }
+            return ['A0' => 20, 'L1' => 3, 'L2' => 6, 'L5' => 3, 'L6' => 6, 'L9' => 0, 'L10' => 1, 'L13' => 0, 'L14' => 1];
+        }
+        return ['A0' => 20, 'L1' => 2, 'L2' => 6, 'L5' => 2, 'L6' => 6, 'L9' => 1, 'L10' => 1, 'L13' => 1, 'L14' => 1];
+
+    }
+
+    private function ordenarCurso($ordenacao, $curso)
+    {
+        $retorno = collect();
+        if($ordenacao == "nome"){
+                    
+            $curso = $curso->groupBy('cota_vaga_ocupada_id');
+            foreach($curso as $candidatos){
+                $candidatos = $candidatos->sortBy(function($candidato){
+                    return $candidato->candidato->no_inscrito;
+                });
+                $retorno = $retorno->concat($candidatos);
+            }
+        }else{
+            $curso = $curso->groupBy('cota_vaga_ocupada_id');
+            foreach($curso as $candidatos){
+                $candidatos = $candidatos->sortByDesc(function($candidato){
+                    return $candidato['nu_nota_candidato'];
+                });
+                $retorno = $retorno->concat($candidatos);
+            }
+        }
+        return $retorno;
     }
 
     /**
