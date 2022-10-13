@@ -100,6 +100,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::resource('listagems', ListagemController::class);
 
     Route::get('/listagem/{chamada}/export', [ListagemController::class, 'exportarCSV'])->name('exportar-ingressantes');
+    Route::get('/sisus/{id}/export-siga', [ListagemController::class, 'exportarSigaPersonalizado'])->name('exportar-ingressantes-personalizado');
+    Route::get('/sisus/{id}/lista-final', [ListagemController::class, 'gerarListagemFinalPersonalizada'])->name('gerar-lista-final-personalizada');
     Route::get('/chamada/{chamada}/export-sisu-getsao', [ChamadaController::class, 'exportarCSVSisuGestao'])->name('exportar-sisu-gestao');
     Route::get('/chamada/{chamada}/exportar-ingressantes-reserva', [ListagemController::class, 'exportarIngressantesEspera'])->name('exportar-ingressantes-reserva');
 
@@ -134,4 +136,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::get('/usuario/info', [UserController::class, 'infoUser'])->name('usuario.info.ajax');
 
     Route::get('/listagens/publicar', [ListagemController::class, 'publicar'])->name('publicar.listagem');
+
+    Route::post('/inscricaos/{inscricao_id}/editar-situacao-lista', [InscricaoController::class, 'editarSituacao'])->name('inscricao.situacao.update');
+
 });

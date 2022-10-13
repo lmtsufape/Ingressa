@@ -559,6 +559,8 @@ class ListagemController extends Controller
         $this->authorize('isAdmin', User::class);
         $curso = Curso::find($curso_id);
         $turno = $curso->getTurno();
+        $cotas = Cota::all();
+        $sisu = Sisu::find($sisu_id);
         $candidatosIngressantes = Inscricao::where(
             [
                 ['sisu_id', $sisu_id],
@@ -578,7 +580,7 @@ class ListagemController extends Controller
         )->orderBy('cota_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
 
 
-        return view('sisu.lista_personalizada', compact('curso', 'turno', 'candidatosIngressantes', 'candidatosReserva'));
+        return view('sisu.lista_personalizada', compact('curso', 'sisu', 'turno', 'cotas', 'candidatosIngressantes', 'candidatosReserva'));
 
     }
 
@@ -649,6 +651,150 @@ class ListagemController extends Controller
             \Maatwebsite\Excel\Excel::CSV,
             ['Content-Type' => 'text/csv']
         );
+    }
+
+    public function exportarSigaPersonalizado(Request $request, $id)
+    {
+        $this->authorize('isAdmin', User::class);
+        $this->periodos = [
+            '118468' => 0,
+            '118466' => 0,
+            '118470' => 0,
+        ];
+
+        $candidatosIngressantes = Inscricao::where(
+            [
+                ['sisu_id', $id],
+                ['semestre_entrada', '!=', null],
+                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+            ]
+        )->orderBy('curso_id', 'ASC')->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+
+        $retorno = $candidatosIngressantes
+            ->map(function ($value, $key) {
+                    return [
+                        $value->candidato->nu_cpf_inscrito,
+                        $value->nu_rg,
+                        $this->removeAcentos($value->candidato->no_inscrito),
+                        $this->getCodProgramaForm($value->curso),
+                        $value->semestre_entrada,
+                        $value->sisu->edicao,
+                        $this->getTurno($value->curso),
+                        2, //presencial
+                        15, //sisu
+                        $this->removeAcentos($value->no_mae),
+                        $this->removeAcentos($value->candidato->pai),
+                        $value->tp_sexo,
+                        $this->getNacionalidade($value->candidato->pais_natural),
+                        date('d/m/Y', strtotime($value->candidato->dt_nascimento)),
+                        $value->candidato->estado_civil,
+                        $this->removeAcentos($value->candidato->cidade_natal),
+                        $value->nu_cep,
+                        $this->getNumeroEndereco($value->nu_endereco),
+                        $this->removeAcentos($value->ds_complemento),
+                        date('d/m/Y', strtotime($value->candidato->data_expedicao)),
+                        $value->candidato->orgao_expedidor,
+                        $value->candidato->uf_rg,
+                        'BRA',
+                        $value->candidato->user->email,
+                        //passaporte
+                        $value->nu_nota_candidato,
+                        //INSCRICAOVEST
+                        //NOTAVEST
+                        //CLASSVEST
+                        $value->candidato->ano_conclusao,
+                        $value->cotaClassificacao->cod_cota,
+                        154575, //POLO DE RECIFE??
+                        $value->candidato->cor_raca,
+                        $value->candidato->titulo,
+                        $value->candidato->zona_eleitoral,
+                        $value->candidato->secao_eleitoral,
+                        $value->nu_fone1,
+                        $value->nu_fone2,
+                        $this->removeAcentos($value->candidato->escola_ens_med),
+                        //escolaridade mae
+                        //escolaridade pai
+                        $value->candidato->necessidades,
+                    ];
+            })->collect();
+        return Excel::download(
+            new AprovadosExport($retorno),
+            'ingressantes.csv',
+            \Maatwebsite\Excel\Excel::CSV,
+            ['Content-Type' => 'text/csv']
+        );
+    }
+
+    public function gerarListagemFinalPersonalizada(Request $request, $sisu_id)
+    {
+        $this->authorize('isAdmin', User::class);
+
+        $sisu = Sisu::find($sisu_id);
+        $cursos = Curso::all();
+        $listagem = new Listagem();
+
+        $request['tipo'] = Listagem::TIPO_ENUM['final'];
+        $request['chamada'] = $sisu->chamadas->last()->id;
+
+        $listagem->setAtributes($request);
+        $listagem->caminho_listagem = 'caminho';
+        $listagem->save();
+
+        $candidatosIngressantes = collect();
+        $candidatosReserva = collect();
+
+        foreach ($cursos as $curso) {
+            if($curso->semestre != null){
+                $candidatosIngressantesCurso = Inscricao::where(
+                    [
+                        ['sisu_id', $sisu_id],
+                        ['semestre_entrada', '!=', null],
+                        ['curso_id', $curso->id],
+                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                    ]
+                )->orderBy('cota_classificacao_id', 'ASC')->get();
+
+                $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
+            } else {
+                $candidatosIngressantesCurso = Inscricao::where(
+                    [
+                        ['sisu_id', $sisu_id],
+                        ['semestre_entrada', '=', 1],
+                        ['curso_id', $curso->id],
+                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                    ]
+                )->orderBy('cota_classificacao_id', 'ASC')->get();
+                $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
+
+                $candidatosIngressantesCurso = Inscricao::where(
+                    [
+                        ['sisu_id', $sisu_id],
+                        ['semestre_entrada', '=', 2],
+                        ['curso_id', $curso->id],
+                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                    ]
+                )->orderBy('cota_classificacao_id', 'ASC')->get();
+                $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
+
+            }
+
+            $candidatosReservaCurso = Inscricao::where(
+                [
+                    ['sisu_id', $sisu_id],
+                    ['semestre_entrada', '=', null],
+                    ['curso_id', $curso->id],
+                    ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                ]
+            )->orderBy('cota_id', 'ASC')->get();
+            $candidatosReserva->push($this->ordenarCurso('nu_nota_candidato', $candidatosReservaCurso, 'cota_id')->map->only(['id']));
+        }
+
+        $pdf = PDF::loadView('listagem.final_personalizada', ['candidatosIngressantesCursos' => $candidatosIngressantes, 'candidatosReservaCursos' => $candidatosReserva, 'sisu' => $sisu]);
+
+        $listagem->caminho_listagem = $this->salvarListagem($listagem, $pdf->stream());
+        $listagem->update();
+
+        return redirect()->route('chamadas.show', ['chamada' => $sisu->chamadas->last()])->with(['success_listagem' => 'Listagem criada com sucesso']);
     }
 
     public function exportarIngressantesEspera(Request $request)
