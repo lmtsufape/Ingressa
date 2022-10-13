@@ -74,6 +74,7 @@
                                                 @endif
                                                 @if($sisu->chamadas->count() >= 2)
                                                     <a href="{{route('exportar-ingressantes-reserva', $sisu->chamadas->first())}}" title ="Exportar ingressantes da lista de espera Sisu Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1701.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
+                                                    <a href="{{route('lista.personalizada', $sisu)}}" title ="Listar/personalizar candidatos ingressantes e reservas" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1654.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
                                                 @endif
                                             @endif
                                             <button title="Deletar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar edicao"></button>
@@ -123,6 +124,14 @@
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1701.svg')}}" alt="Icone de Exportar ingressantes">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Exportar ingressantes da lista de espera para o SiSU Gestão
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Lista de ingressantes personalizada" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <img class="aling-middle" width="38" src="{{asset('img/Grupo 1654.svg')}}" alt="Icone de listar candidatos">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Listar/personalizar candidatos ingressantes e reservas
                                     </div>
                                 </div>
                             </li>

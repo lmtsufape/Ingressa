@@ -732,4 +732,20 @@ class InscricaoController extends Controller
         $inscricao->update();
         return redirect()->back()->with(['success' => $message]);
     }
+
+    public function editarSituacao($id, Request $request){
+        $inscricao = Inscricao::find($id);
+
+        if ($request->cota_classificacao && $request->semestre != null) {
+            $inscricao->cota_classificacao_id = $request->cota_classificacao;
+            $inscricao->semestre_entrada = $request->semestre;
+        } else {
+            $inscricao->cota_classificacao_id = null;
+            $inscricao->semestre_entrada = null;
+        }
+
+        $inscricao->update();
+
+        return redirect()->back()->with(['success' => "Situação do(a) candidato(a) ". $inscricao->candidato->user->name ." editada com sucesso!"]);
+    }
 }
