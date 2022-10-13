@@ -74,7 +74,7 @@
                                                 @endif
                                                 @if($sisu->chamadas->count() >= 2)
                                                     <a href="{{route('exportar-ingressantes-reserva', $sisu->chamadas->first())}}" title ="Exportar ingressantes da lista de espera Sisu Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1701.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
-                                                    <a href="{{route('lista.personalizada', $sisu)}}" title =c" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1654.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
+                                                    <a href="{{route('lista.personalizada', $sisu)}}" title ="Listar/personalizar candidatos ingressantes e reservas" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1654.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
                                                 @endif
                                             @endif
                                             <button title="Deletar edição do sisu" data-bs-toggle="modal" data-bs-target="#modalStaticDeletarSisu_{{$sisu->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}"  alt="Icone de deletar edicao"></button>
