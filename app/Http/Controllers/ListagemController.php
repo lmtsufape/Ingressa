@@ -703,7 +703,7 @@ class ListagemController extends Controller
                         //NOTAVEST
                         //CLASSVEST
                         $value->candidato->ano_conclusao,
-                        $value->cotaClassificacao->cod_cota,
+                        $this->getCotaFinal($value->cota, $value->cotaRemanejada),
                         154575, //POLO DE RECIFE??
                         $value->candidato->cor_raca,
                         $value->candidato->titulo,
