@@ -9,6 +9,7 @@
                         <a href="{{route('sisus.index')}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                         <a href="{{route('exportar-ingressantes-personalizado', $sisu->id)}}" title ="Exportar ingressantes SIGA" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1700.svg')}}"  alt="Icone de exportar ingressantes siga"></a>
                         <a data-bs-toggle="modal" data-bs-target="#modalCriarListaFinal" title ="Gerar lista final" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1654.svg')}}"  alt="Icone de listagem"></a>
+                        <a data-bs-toggle="modal" data-bs-target="#modalResetarLista" title ="Resetar lista personalizada" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/reset-red.svg')}}"  alt="Icone de resetar"></a>
                     </span>
                 </div>
             </div>
@@ -83,6 +84,33 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="gerar-lista-final"><span class="px-4">Criar</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalResetarLista" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modalFundo p-3">
+                <div class="col-md-12 tituloModal">Resetar alterações da lista personalizada</div>
+                    <div class="pt-3 pb-2 textoModal">
+                        <form method="POST" id="resetar-lista" action="{{route('resetar.lista.personalizada', $sisu->id)}}">
+                            @csrf
+                            <h6><strong>
+                                Tem certeza que deseja resetar todas as alterações manuais feitas na lista de ingressantes e reservas?
+                            </strong></h6>
+                        </form>
+                        <div class="row justify-content-between mt-4">
+                            <div class="col-md-3">
+                                <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"><span class="px-4">Cancelar</span></button>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn botaoVerde my-2 py-1 submeterFormBotao" form="resetar-lista"><span class="px-4">Resetar</span></button>
                             </div>
                         </div>
                     </div>

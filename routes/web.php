@@ -92,6 +92,9 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::get('/sisus/{sisu_id}/lista-personalizada-cursos/{curso_id}', [ListagemController::class, 'listaPersonalizadaCurso'])
         ->name('lista.personalizada.curso');
 
+    Route::post('/sisus/{sisu_id}/resetar-lista-personalizada', [ListagemController::class, 'resetarListaPersonalizada'])
+        ->name('resetar.lista.personalizada');
+
     Route::resource('cursos', CursoController::class);
 
     Route::resource('cotas', CotaController::class);

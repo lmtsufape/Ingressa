@@ -797,6 +797,16 @@ class ListagemController extends Controller
         return redirect()->route('chamadas.show', ['chamada' => $sisu->chamadas->last()])->with(['success_listagem' => 'Listagem criada com sucesso']);
     }
 
+    public function resetarListaPersonalizada($id)
+    {
+        $this->authorize('isAdmin', User::class);
+        $sisu = Sisu::find($id);
+        $sisu->lista_personalizada = false;
+        $sisu->update();
+        
+        return redirect()->route('sisus.index')->with(['success' => 'Lista personalizada resetada com sucesso']);
+    }
+
     public function exportarIngressantesEspera(Request $request)
     {
         $chamada = Chamada::find($request->chamada);
