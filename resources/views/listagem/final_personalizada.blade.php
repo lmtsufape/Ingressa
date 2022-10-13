@@ -109,7 +109,6 @@
     </header>
     <div>
         @foreach ($candidatosIngressantesCursos as $i => $curso)
-            @if($curso->count() <= 40)
                 @php
                     $exibirNomeCurso = true;
                 @endphp
@@ -187,7 +186,6 @@
                 @if ($i != $curso->count() - 1)
                     <br/><div class="quebrar_pagina"></div>
                 @endif
-            @endif
         @endforeach
 
         @foreach ($candidatosReservaCursos as $i => $curso)
