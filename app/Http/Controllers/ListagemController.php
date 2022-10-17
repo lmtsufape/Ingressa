@@ -343,7 +343,7 @@ class ListagemController extends Controller
 
             $candidatosReservaCurso = $candidatosCurso->diff($candidatosIngressantesCurso);
             $candidatosReservaCurso = $this->ordenarCurso($request->ordenacao, $candidatosReservaCurso, 'cota_id');
-           
+
             $candidatosReservaCurso = $candidatosReservaCurso->map->only(['id', 'cota_vaga_ocupada_id']);
             if($candidatosReservaCurso->first() != null){
                 $candidatosReservaCursos->push($candidatosReservaCurso);
@@ -468,7 +468,7 @@ class ListagemController extends Controller
     {
         $retorno = collect();
         if($ordenacao == "nome"){
-                    
+
             $curso = $curso->groupBy($grupo);
             foreach($curso as $candidatos){
                 $candidatos = $candidatos->sortBy(function($candidato){
@@ -786,7 +786,9 @@ class ListagemController extends Controller
                     ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                 ]
             )->orderBy('cota_id', 'ASC')->get();
-            $candidatosReserva->push($this->ordenarCurso('nu_nota_candidato', $candidatosReservaCurso, 'cota_id')->map->only(['id']));
+            if ($candidatosReservaCurso->first() != null) {
+                $candidatosReserva->push($this->ordenarCurso('nu_nota_candidato', $candidatosReservaCurso, 'cota_id')->map->only(['id']));
+            }
         }
 
         $pdf = PDF::loadView('listagem.final_personalizada', ['candidatosIngressantesCursos' => $candidatosIngressantes, 'candidatosReservaCursos' => $candidatosReserva, 'sisu' => $sisu]);
@@ -803,7 +805,7 @@ class ListagemController extends Controller
         $sisu = Sisu::find($id);
         $sisu->lista_personalizada = false;
         $sisu->update();
-        
+
         return redirect()->route('sisus.index')->with(['success' => 'Lista personalizada resetada com sucesso']);
     }
 
@@ -828,7 +830,7 @@ class ListagemController extends Controller
             })->collect();
 
         $ingressantes = collect();
-        
+
         foreach($retorno as $curso){
             foreach($curso as $ingressante){
                 if($ingressante != null){
@@ -836,7 +838,7 @@ class ListagemController extends Controller
                 }
             }
         }
-        
+
         $candidatos = Inscricao::where('sisu_id', $chamada->sisu->id)
             ->whereIn('status', [Inscricao::STATUS_ENUM['documentos_pendentes'], Inscricao::STATUS_ENUM['documentos_invalidados']])
             ->get()->map(function ($candidato) {
@@ -847,7 +849,7 @@ class ListagemController extends Controller
                     ];
                 }
             })->collect();
-        
+
         $candidatos = $candidatos->filter();
         return Excel::download(
             new SisuGestaoExport($ingressantes->merge($candidatos)),
