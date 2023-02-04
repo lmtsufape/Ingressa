@@ -37,6 +37,7 @@ class UpdateCandidatoRequest extends FormRequest
     public function rules()
     {
         return [
+            'nu_rg' => ['required', 'string'],
             'orgao_expedidor' => ['required', 'string', 'max:5'],
             'uf_rg' => ['required', 'string'],
             'data_expedicao' => ['required', 'date'],

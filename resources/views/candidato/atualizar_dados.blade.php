@@ -33,9 +33,8 @@
                                 @method('PUT')
                                 <div class="row pt-2">
                                     <div class="form-group col-md-3 textoInput">
-                                        <label for="nu_rg">{{ __('RG') }}</label>
+                                        <label for="nu_rg"><span style="color: red; font-weight: bold;">*</span> {{ __('RG') }}</label>
                                         <input id="nu_rg"
-                                            @can('isAdmin', \App\Models\User::class) @else disabled @endcan
                                             class="form-control form-control-sm caixaDeTexto"
                                             type="text"
                                             name="nu_rg"
