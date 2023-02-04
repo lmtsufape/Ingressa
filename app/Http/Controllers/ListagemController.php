@@ -9,6 +9,7 @@ use App\Http\Requests\ListagemRequest;
 use App\Models\Listagem;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
+use App\Models\Candidato;
 use App\Models\Cota;
 use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -908,16 +909,10 @@ class ListagemController extends Controller
 
     private function getNacionalidade($nacionalidade)
     {
-        $nacionalidades = [
-            'BRASIL' => 'BRA',
-            null => '',
-        ];
-        if(str_contains(strtoupper($nacionalidade), "BRA")){
-            $nacionalidade = "BRASIL";
+        if (array_key_exists($nacionalidade, Candidato::PAISES_ESTRANGEIROS)) {
+            return $nacionalidade;
         }
-        //return $nacionalidades[strtoupper($nacionalidade)];
-        //COLOCAR TODOS COM BRA PARA NACIONALIDADE (TEMPORARIO)
-        return 'BRA';
+        return "BRA";
     }
 
     private function getCodProgramaForm($curso)
