@@ -705,6 +705,21 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="form-check mt-2 @error('edital') is-invalid @enderror">
+                                    <input class="form-check-input" type="checkbox" value="true" id="checkEdital" name="edital" @if (old('edital')) checked @endif>
+                                    <label class="form-check-label subtexto3" for="checkEdital">
+                                        DECLARO que li o Edital e estou de acordo com os termos e condições.
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">@error('edital'){{$message}}@enderror</div>
+
+                                <div class="form-check mt-2 @error('vinculo') is-invalid @enderror">
+                                    <input class="form-check-input" type="checkbox" value="true" id="checkVinculo" name="vinculo" @if (old('vinculo')) checked @endif>
+                                    <label class="form-check-label subtexto3" for="checkVinculo">
+                                        Estou ciente que não posso ter vínculo com mais de uma Instituição de Ensino Superior pública.
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">@error('vinculo'){{$message}}@enderror</div>
                             </form>
                         </div>
                     </div>
