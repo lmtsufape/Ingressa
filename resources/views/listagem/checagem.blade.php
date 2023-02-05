@@ -7,49 +7,46 @@
     <title>Listagem</title>
     <style type="text/css">
         @page {
-            margin: 120px 50px 80px 50px;
+            margin: 0px;
         }
-        #head {
-            background-repeat: no-repeat;
+        body {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 80px;
+            margin-top: 6.4cm;
+        }
+
+        header {
             text-align: center;
-            width: 100%;
             position: fixed;
-            top: -120px;
-            left: 0px;
-            right: -15px;
+            top: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 4.5cm;
         }
-        #head img {
-			width: 115%;
-		}
         .titulo {
             position: relative;
-            top: -70px;
-            font-size: 18px;
+            top: 5px;
+            font-size: 12px;
             font-weight: bolder;
             color: #393c47;
             font-family: 'Times New Roman', Times, serif;
         }
         .subtitulo {
             font-weight: normal;
-            position: inherit;
-            font-size: 18px;
+            position: fixed;
+            top: 210px;
+            font-size: 12px;
             color: #393c47;
             font-family: 'Times New Roman', Times, serif;
-            text-align: center;
-            margin: -18px;
-            margin-bottom: 10px;
-            padding: 0px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .quebrar_pagina {
             page-break-after: always;
         }
-        #body{
-            position: relative;
-            top: 60px;
-        }
         table{
             margin-top: 10px;
-            margin-bottom: 10px;
             padding-bottom: 0px;
             border-collapse: collapse;
             width: 100%;
@@ -57,7 +54,7 @@
         }
         table th {
             font-weight: 100;
-            font-size: 14px;
+            font-size: 12px;
         }
         table thead {
             background-color: #393c47;
@@ -76,24 +73,25 @@
         #modalidade {
             border: solid 1px rgb(126, 126, 126);
             border-radius: 5px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
             margin-top: 10px;
             margin-bottom: 10px;
-            padding-bottom: 10px;
+            padding-bottom: 0px;
         }
         .esquerda {
             text-align: left;
             float: left;
         }
-        
+
         .back-color-1 {
             background-color: white;
         }
         .back-color-2 {
             background-color: #d3d5dc;
         }
-        .body {
-        }
         .acao_afirmativa {
+            font-size: 12px;
             text-align: justify;
             margin: 12px;
             position: relative;
@@ -102,14 +100,14 @@
     </style>
 
 </head>
-<body>
-    <div id="head">        
-        <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
+<body style="font-family: Arial, Helvetica, sans-serif;">
+    <header>
+        <img src="{{public_path('img/cabeçalhoSISU5.fw.png')}}" width="100%" alt="">
         <span class="titulo">
             LISTA DE CONVOCADOS<br><span style="font-weight: normal; text-transform:uppercase;" >{{$chamada->nome}}</span><br>
         </span>
-    </div>
-    <div id="body">
+    </header>
+    <div>
         @foreach ($collect_inscricoes as $i => $collect)
             @if ($collect->count() > 0)
                 @php

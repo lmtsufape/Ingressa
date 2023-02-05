@@ -13,7 +13,7 @@
             margin-right: 50px;
             margin-left: 50px;
             margin-bottom: 80px;
-            margin-top: 4.5cm;
+            margin-top: 6.4cm;
         }
 
         header {
@@ -26,7 +26,7 @@
         }
         .titulo {
             position: relative;
-            top: -70px;
+            top: 5px;
             font-size: 12px;
             font-weight: bolder;
             color: #393c47;
@@ -35,7 +35,7 @@
         .subtitulo {
             font-weight: normal;
             position: fixed;
-            top: 135px;
+            top: 210px;
             font-size: 12px;
             color: #393c47;
             font-family: 'Times New Roman', Times, serif;
@@ -102,7 +102,7 @@
 </head>
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <header>
-        <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
+        <img src="{{public_path('img/cabeçalhoSISU5.fw.png')}}" width="100%" alt="">
         <span class="titulo">
             LISTA DE CONVOCADOS<br><span style="font-weight: normal; text-transform:uppercase;" >{{$chamada->nome}}</span><br>
         </span>

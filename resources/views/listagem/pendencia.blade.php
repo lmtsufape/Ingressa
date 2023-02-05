@@ -102,7 +102,7 @@
 </head>
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <div id="head">
-        <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
+        <img src="{{public_path('img/cabeçalhoSISU5.fw.png')}}" width="100%" alt="">
     </div>
     <div id="body">
         @foreach ($collect_inscricoes as $i => $curso)

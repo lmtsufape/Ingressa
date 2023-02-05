@@ -13,7 +13,7 @@
             margin-right: 50px;
             margin-left: 50px;
             margin-bottom: 80px;
-            margin-top: 4.5cm;
+            margin-top: 6.4cm;
         }
 
         header {
@@ -26,7 +26,7 @@
         }
         .titulo {
             position: relative;
-            top: -70px;
+            top: -20px;
             font-size: 12px;
             font-weight: bolder;
             color: #393c47;
@@ -35,7 +35,7 @@
         .subtitulo {
             font-weight: normal;
             position: fixed;
-            top: 125px;
+            top: 185px;
             font-size: 11px;
             color: #393c47;
             font-family: 'Times New Roman', Times, serif;
@@ -99,7 +99,7 @@
 </head>
 <body>
     <header>
-        <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
+        <img src="{{public_path('img/cabeçalhoSISU5.fw.png')}}" width="100%" alt="">
     </header>
     <div>
         @php
@@ -212,7 +212,7 @@
                 @php
                     $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
-                <h3 class="subtitulo" style="text-align: center; top: 135px;">
+                <h3 class="subtitulo" style="text-align: center; top: 185px;">
                     <span style="font-weight: bold;">
                         RELAÇÃO DE CANDIDATOS - CADASTRO RESERVA (SUPLENTES)
                     </span><br>
