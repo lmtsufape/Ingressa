@@ -26,13 +26,15 @@
             top: -70px;
             font-size: 12px;
             font-weight: bolder;
-            color: #03284d;
+            color: #393c47;
+            font-family: 'Times New Roman', Times, serif;
         }
         .subtitulo {
             font-weight: normal;
             position: inherit;
             font-size: 12px;
-            color: #03284d;
+            color: #393c47;
+            font-family: 'Times New Roman', Times, serif;
             text-align: center;
             margin: -18px;
             margin-bottom: 10px;
@@ -52,25 +54,17 @@
             border-collapse: collapse;
             width: 100%;
             position: relative;
-            border: solid 1px rgb(126, 126, 126);
-            border-radius: 5px;
         }
         table th {
             font-weight: 100;
             font-size: 12px;
         }
         table thead {
-            border-top: 1px solid rgb(126, 126, 126);
-            border-bottom: 1px solid rgb(126, 126, 126);
-            background-color: #021c35;
+            background-color: #393c47;
             color: white;
         }
         tr {
             border: none;
-        }
-        td {
-            border-right: solid 1px #03284d;
-            border-left: solid 1px #03284d;
         }
         #footer {
             position: fixed;
@@ -90,7 +84,7 @@
             background-color: white;
         }
         .back-color-2 {
-            background-color: #d1e7fd;
+            background-color: #d3d5dc;
         }
         .body {
         }
@@ -138,8 +132,8 @@
                                     <th>Seq.</th>
                                     <th>CPF</th>
                                     <th>AF</th>
-                                    <th>NOME</th>
-                                    <th>RESULTADO</th>
+                                    <th>Nome</th>
+                                    <th>Resultado</th>
                                 </tr>
                             </thead>
                             <tbody>

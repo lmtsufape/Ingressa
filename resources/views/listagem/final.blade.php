@@ -29,14 +29,16 @@
             top: -70px;
             font-size: 12px;
             font-weight: bolder;
-            color: #03284d;
+            color: #393c47;
+            font-family: 'Times New Roman', Times, serif;
         }
         .subtitulo {
             font-weight: normal;
             position: fixed;
             top: 125px;
             font-size: 11px;
-            color: #03284d;
+            color: #393c47;
+            font-family: 'Times New Roman', Times, serif;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -49,25 +51,17 @@
             border-collapse: collapse;
             width: 100%;
             position: relative;
-            border: solid 1px rgb(126, 126, 126);
-            border-radius: 5px;
         }
         table th {
             font-weight: 100;
             font-size: 10px;
         }
         table thead {
-            border-top: 1px solid rgb(126, 126, 126);
-            border-bottom: 1px solid rgb(126, 126, 126);
-            background-color: #021c35;
+            background-color: #393c47;
             color: white;
         }
         tr {
             border: none;
-        }
-        td {
-            border-right: solid 1px #03284d;
-            border-left: solid 1px #03284d;
         }
         #footer {
             position: fixed;
@@ -91,7 +85,7 @@
             background-color: white;
         }
         .back-color-2 {
-            background-color: #d1e7fd;
+            background-color: #d3d5dc;
         }
         .acao_afirmativa {
             font-size: 12px;
