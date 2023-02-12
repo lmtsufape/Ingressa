@@ -58,7 +58,7 @@
                 </div>
             @endcan
             <div class="pb-3">
-                <span style="color: #373737; font-size: 17px; font-weight: 700;" > <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;">  Chamada</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Cursos</a> >  <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" style="text-decoration: none; color: #373737;"> {{$inscricao->curso->nome}} -
+                <span style="color: #373737; font-size: 17px; font-weight: 700;" ><a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</a> > <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" style="text-decoration: none; color: #373737;"> Curso: {{$inscricao->curso->nome}} -
                     @switch($inscricao->curso->turno)
                         @case(App\Models\Curso::TURNO_ENUM['matutino'])
                             Matutino
