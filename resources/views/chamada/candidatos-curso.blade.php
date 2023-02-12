@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
-            <div class="row tituloBorda justify-content-between">
+            <div class="row tituloBorda justify-content-between mb-4">
                 <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                     <span class="align-middle titulo"> <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</span>
                     <div class="col-md-4" style="text-align: right">
