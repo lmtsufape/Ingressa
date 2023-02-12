@@ -70,13 +70,17 @@ class UpdateCandidatoRequest extends FormRequest
             'sg_uf_inscrito' => ['required', 'string'],
             'nu_fone1' => ['required', 'string'],
             'nu_fone2' => ['nullable', 'string'],
+            'edital' => ['required', 'accepted'],
+            'vinculo' => ['required', 'accepted'],
         ];
     }
 
     public function messages()
     {
         return [
-            'necessidades.max' => 'Não é permitido selecionar a opção "Nenhuma" e outra.'
+            'necessidades.max' => 'Não é permitido selecionar a opção "Nenhuma" e outra.',
+            'edital.required' => 'O termo acima é obrigatório.',
+            'vinculo.required' => 'O termo acima é obrigatório.'
         ];
     }
 }
