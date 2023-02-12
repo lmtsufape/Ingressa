@@ -13,7 +13,7 @@
             margin-right: 50px;
             margin-left: 50px;
             margin-bottom: 80px;
-            margin-top: 4.5cm;
+            margin-top: 6.4cm;
         }
 
         header {
@@ -26,17 +26,19 @@
         }
         .titulo {
             position: relative;
-            top: -70px;
+            top: 5px;
             font-size: 12px;
             font-weight: bolder;
-            color: #03284d;
+            color: #393c47;
+            font-family: 'Times New Roman', Times, serif;
         }
         .subtitulo {
             font-weight: normal;
             position: fixed;
-            top: 135px;
+            top: 210px;
             font-size: 12px;
-            color: #03284d;
+            color: #393c47;
+            font-family: 'Times New Roman', Times, serif;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -49,17 +51,13 @@
             border-collapse: collapse;
             width: 100%;
             position: relative;
-            border: solid 1px rgb(126, 126, 126);
-            border-radius: 5px;
         }
         table th {
             font-weight: 100;
             font-size: 12px;
         }
         table thead {
-            border-top: 1px solid rgb(126, 126, 126);
-            border-bottom: 1px solid rgb(126, 126, 126);
-            background-color: #021c35;
+            background-color: #393c47;
             color: white;
         }
         #footer {
@@ -90,7 +88,7 @@
             background-color: white;
         }
         .back-color-2 {
-            background-color: #d1e7fd;
+            background-color: #d3d5dc;
         }
         .acao_afirmativa {
             font-size: 12px;
@@ -104,7 +102,7 @@
 </head>
 <body style="font-family: Arial, Helvetica, sans-serif;">
     <header>
-        <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
+        <img src="{{public_path('img/cabeçalhoSISU5.fw.png')}}" width="100%" alt="">
         <span class="titulo">
             LISTA DE CONVOCADOS<br><span style="font-weight: normal; text-transform:uppercase;" >{{$chamada->nome}}</span><br>
         </span>
@@ -143,7 +141,7 @@
                                         <th>Seq.</th>
                                         <th>CPF</th>
                                         <th>Cota de classificação</th>
-                                        <th>Nome do candidato</th>
+                                        <th>Nome</th>
                                         <th>Nota</th>
                                         <th>AF</th>
                                     </tr>
