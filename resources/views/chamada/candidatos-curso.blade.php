@@ -1,13 +1,14 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
-            {{--<div class="col-sm-12">
-                <div class="row">
-                    <div class="col-md-12" style="text-align: right">
-                        <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></a>
+            <div class="row tituloBorda justify-content-between">
+                <div class="d-flex align-items-center justify-content-between mx-0 px-0">
+                    <span class="align-middle titulo"> <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</span>
+                    <div class="col-md-4" style="text-align: right">
+                        <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                     </div>
                 </div>
-            </div>--}}
+            </div>
             @if(session('error'))
                 <div class="col-md-12">
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
