@@ -17,7 +17,7 @@
                     <div class="col-md-12" style="margin-bottom: 1rem;"> 
                         <div class="row justify-content-center" >
                             <div class="col-md-2"> 
-                                <a href="http://ufape.edu.br/" target="_blank"><img src="{{ asset('img/logo_ufape_blue.png') }}" alt="Logo" width="30px;"></a>
+                                <a href="http://ufape.edu.br/" target="_blank"><img src="{{ asset('img/logo_ufape_2023.png') }}" alt="Logo" width="60px;"></a>
                             </div>
                             <div class="col-md-5"> 
                                 <a href="http://lmts.uag.ufrpe.br/" target="_blank"><img src="{{ asset('img/logo_ufape_color.png') }}" alt="Logo" width="160px;" style="border-left: 1px rgba(0, 0, 255, 0.274) solid; padding-left: 15px;"></a>
