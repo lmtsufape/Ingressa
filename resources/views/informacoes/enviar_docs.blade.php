@@ -9,37 +9,37 @@
 
             <p>Para digitalização dos documentos sugerimos os aplicativos Adobe Scan (versão gratuita) ou o CamScanner, disponíveis Play Store e App Store: veja o Adobe Scan na prática em: <a style="word-break: break-all" href="https://acrobat.adobe.com/br/pt/mobile/scanner-app.html#adobeTv18742t1" target="_blank">https://acrobat.adobe.com/br/pt/mobile/scanner-app.html#adobeTv18742t1</a> (se não abrir automaticamente com o click, copie o endereço e cole na barra de endereços do seu navegador).</p>
 
-            <p>Os documentos deverão ser enviados em “.pdf” com, no máximo, 5 MB, como indicado adiante. Para o procedimento de heteroidentificação, os candidatos beneficiários da reserva de vagas para autodeclarados negros (preto e pardos), deverão enviar, além dos documentos, um vídeo com uma das seguintes extensões ".mp4", ".avi", ".wmv", ".mjpeg" ou ".flv" com, no máximo, 120 MB, e uma fotografia com uma das seguintes extensões ".png", ".jpg", ".jpeg" ou ".bmp" com, no máximo, 90 MB, conforme especificações do Edital 02/2022.</p>
+            <p>Os documentos deverão ser enviados em “.pdf” com, no máximo, 5 MB, como indicado adiante. Para o procedimento de heteroidentificação, os candidatos beneficiários da reserva de vagas para autodeclarados negros (preto e pardos), deverão enviar, além dos documentos, um vídeo com uma das seguintes extensões ".mp4", ".avi", ".wmv", ".mjpeg" ou ".flv" com, no máximo, 120 MB, e uma fotografia com uma das seguintes extensões ".png", ".jpg", ".jpeg" ou ".bmp" com, no máximo, 90 MB, conforme especificações do Edital 02/2023.</p>
 
             <p>Caso tenha dúvidas, preparamos alguns canais de informação, que devem ser acessados na seguinte ordem:</p>
 
-            <p>1) Tutoriais - Antes de iniciar a postagem dos documentos é importante que você leia os documentos e assista aos vídeos de orientação, disponíveis no tópico abaixo. Leia os documentos e assista os vídeos quantas vezes quiser, antes de enviar a sua documentação, para evitar erros no processo. Esse é o primeiro passo que você deve realizar antes de buscar informações em outros canais, caso seja necessário.</p>
+            <p>Tutoriais - Antes de iniciar a postagem dos documentos é importante que você leia os documentos e assista aos vídeos de orientação, disponíveis no tópico abaixo. Leia os documentos e assista os vídeos quantas vezes quiser, antes de enviar a sua documentação, para evitar erros no processo. Esse é o primeiro passo que você deve realizar antes de buscar informações em outros canais, caso seja necessário.</p>
             <ul>
-                <li>Edital 02/2022 da UFAPE -  <a style="word-break: break-all" href="http://www.ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/Edital%20UFAPE%20002_2022_SISU.pdf" target="_blank">http://www.ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/Edital%20UFAPE%20002_2022_SISU.pdf</a></li>
-                <li>Documentos a serem apresentados por modalidade de concorrência - <a style="word-break: break-all" href="http://www.ufape.edu.br/sisu-2022" target="_blank">http://www.ufape.edu.br/sisu-2022</a></li>
-                <li>Como escanear documentos em PDF - <a style="word-break: break-all" href="https://www.youtube.com/watch?v=qX4QEfzx55Y" target="_blank">https://www.youtube.com/watch?v=qX4QEfzx55Y</a></li>
+                <li>Edital 02/2023 da UFAPE -  <a style="word-break: break-all" href="http://ufape.edu.br/sites/default/files/2023-02/Edital%20PREG%2002_2023_SiSU_0.pdf" target="_blank">http://ufape.edu.br/sites/default/files/2023-02/Edital%20PREG%2002_2023_SiSU_0.pdf</a></li>
+                <li>Documentos a serem apresentados por modalidade de concorrência - <a style="word-break: break-all" href="http://ufape.edu.br/documentossisu2023" target="_blank">http://ufape.edu.br/documentossisu2023</a></li>
+                <li>Como escanear documentos em PDF - <a style="word-break: break-all" href="https://www.youtube.com/watch?v=pvrbr5Wx8hM" target="_blank">https://www.youtube.com/watch?v=pvrbr5Wx8hM</a></li>
                 <li>Como juntar vários documentos em um único PDF - <a style="word-break: break-all" href="https://www.youtube.com/watch?v=ePNHl1-QSEQ" target="_blank">https://www.youtube.com/watch?v=ePNHl1-QSEQ</a></li>
                 <li>Como assinar no .PDF - <a style="word-break: break-all" href="https://www.youtube.com/watch?v=qfYjsUlYhN8" target="_blank">https://www.youtube.com/watch?v=qfYjsUlYhN8</a></li>
-                <li>Tutorial INGRESSA (como enviar documentos, fazer primeiro acesso e outros) - <a style="word-break: break-all" href="http://ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/Tutorial%20INGRESSA%20-%20Candidatos.pdf" target="_blank">http://ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/Tutorial%20INGRESSA%20-%20Candidatos.pdf</a></li>
-                <li>Dúvidas frequentes - <a style="word-break: break-all" href="http://ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/PERGUNTAS%20FREQUENTES.pdf" target="_blank">http://ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/PERGUNTAS%20FREQUENTES.pdf</a></li>
-                <li>Como acessar o Whereby - <a style="word-break: break-all" href="http://ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/Tutorial%20Whereby%20-%20Candidatos%20.pdf" target="_blank">http://ufape.edu.br/sites/temaunidades.ufrpe.br/files/comissoes/Tutorial%20Whereby%20-%20Candidatos%20.pdf</a></li>
+                <li>Tutorial INGRESSA (como enviar documentos, fazer primeiro acesso e outros) - <a style="word-break: break-all" href="http://ufape.edu.br/sites/default/files/2023-02/MANUAL%20INGRESSA%20-%20Candidatos.docx.pdf" target="_blank">http://ufape.edu.br/sites/default/files/2023-02/MANUAL%20INGRESSA%20-%20Candidatos.docx.pdf</a></li>
+                <li>Dúvidas frequentes - <a style="word-break: break-all" href="http://ufape.edu.br/sites/default/files/2023-02/Perguntas%20Frequentes%20-%202023.docx%20%281%29.pdf" target="_blank">http://ufape.edu.br/sites/default/files/2023-02/Perguntas%20Frequentes%20-%202023.docx%20%281%29.pdf</a></li>
+                <li>Como acessar o Whereby - <a style="word-break: break-all" href="http://ufape.edu.br/sites/default/files/2023-02/Tutorial%20Whereby%20-%20Candidatos%20.pdf" target="_blank">http://ufape.edu.br/sites/default/files/2023-02/Tutorial%20Whereby%20-%20Candidatos%20.pdf</a></li>
             </ul>
 
-            <p><strong>2) Atendimento Virtual</strong> - Nos dias descritos abaixo nossa equipe estará disponível para atendê-lo, online, no seguinte endereço: <a href="https://whereby.com/sisu-2022-ufape" target="_blank">https://whereby.com/sisu-2022-ufape</a>.</p>
+            <p><strong>Atendimento Virtual</strong> - Nos dias descritos abaixo nossa equipe estará disponível para atendê-lo, online, no seguinte endereço: <a href="https://whereby.com/sisu-2023-ufape" target="_blank">https://whereby.com/sisu-2023-ufape</a>.</p>
             <p>Chamada Regular:</p>
             <ul>
-                <li>• Dias 23 e 24 de fevereiro de 2022 de 14h às 16h</li>
-                <li>• Dia 07 de março de 2022 de 09h às 11h</li>
+                <li>• 03/03/2023 de 9h às 11h</li>
+                <li>• 08/03/2023 de 14h30min às 16h</li>
             </ul>
             <p>1ª Chamada da Lista de Espera:</p>
             <ul>
-                <li>• Dias 17 e 18 de março de 2022 de 14h às 16h</li>
-                <li>• Dias 29 e 30 de março de 2022 de 14h às 16h</li>
+                <li>• 17/03/2023 de 9h às 11h</li>
+                <li>• 22/03/2023 de 14h30min às 16h</li>
             </ul>
             <p>2ª Chamada da Lista de Espera:</p>
             <ul>
-                <li>• Dia 13 de abril de 2022 de 09h às 11h</li>
-                <li>• Dia 19 de abril de 2022 de 09h às 11h</li>
+                <li>• 03/04/2023 de 9h às 11h</li>
+                <li>• 10/04/2023 de 14h30min às 16h</li>
             </ul>
         </div>
 
