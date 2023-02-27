@@ -82,11 +82,10 @@ class CandidatoController extends Controller
         $candidato->fill($validated);
         $candidato->atualizar_dados = false;
         $inscricao->fill($validated);
-        if($inscricao->nu_rg != $request->nu_rg && !is_null($request->nu_rg)){
-            $inscricao->nu_rg = $request->nu_rg;
-        }
+
         $candidato->save();
         $inscricao->save();
+
         if(auth()->user()->role == User::ROLE_ENUM['admin']){
             return redirect()->back()->with(['success' => "Dados atualizados!"]);
         }else{

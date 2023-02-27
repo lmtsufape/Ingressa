@@ -33,9 +33,8 @@
                                 @method('PUT')
                                 <div class="row pt-2">
                                     <div class="form-group col-md-3 textoInput">
-                                        <label for="nu_rg">{{ __('RG') }}</label>
+                                        <label for="nu_rg"><span style="color: red; font-weight: bold;">*</span> {{ __('RG') }}</label>
                                         <input id="nu_rg"
-                                            @can('isAdmin', \App\Models\User::class) @else disabled @endcan
                                             class="form-control form-control-sm caixaDeTexto"
                                             type="text"
                                             name="nu_rg"
@@ -218,12 +217,16 @@
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="pais_natural"><span style="color: red; font-weight: bold;">*</span> {{ __('Nacionalidade') }}</label>
-                                        <input id="pais_natural"
+                                        <select id="pais_natural"
                                             class="form-control form-control-sm caixaDeTexto @error('pais_natural') is-invalid @enderror"
-                                            type="text"
-                                            placeholder="Insira o país onde nasceu"
-                                            name="pais_natural"
-                                            value="{{old('pais_natural', $candidato->pais_natural)}}">
+                                            name="pais_natural">
+                                            <option value="" selected disabled>-- Selecione o país onde nasceu --</option>
+                                            <option value="BRA" @if(old('pais_natural', $candidato->pais_natural) == "BRA")) selected @endif>Brasil</option>
+                                            <option disabled>────────────────────────────</option>
+                                            @foreach (\App\Models\Candidato::PAISES_ESTRANGEIROS as $valor => $pais_natural)
+                                                <option value="{{$valor}}" @if(old('pais_natural', $candidato->pais_natural) == $valor)) selected @endif>{{$pais_natural}}</option>
+                                            @endforeach
+                                        </select>
                                         @error('pais_natural')
                                             <div id="validationServer03Feedback"
                                                 class="invalid-feedback">
