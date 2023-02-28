@@ -33,6 +33,9 @@
                                 <a class="nav-link mx-3 @if(request()->routeIs('cotas.*')) active @endif" href="{{route('cotas.index')}}">{{ __('Cotas') }}</a>
                             </li>
                         @elseif(auth()->user()->role == \App\Models\User::ROLE_ENUM['analista'])
+                            <li>
+                                @livewire('candidato-search-bar')
+                            </li>
                             @php
                                 $sisu = \App\Models\Sisu::latest()->first();
                             @endphp
