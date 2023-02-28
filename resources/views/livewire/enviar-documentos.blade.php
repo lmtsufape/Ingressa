@@ -20,7 +20,7 @@
                                     <img src="{{ asset('img/download3.svg') }}" width="30">
                                 @endif
                                 <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
-                                    Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
+                                    Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>)
                                 </span>
                                 <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
                             </div>
@@ -136,7 +136,7 @@
                                 <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                     Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
                                     quitação eleitoral. <b>OBS.</b>:  Essa certidão poderá ser emitida no
-                                    <a href="https://www.tse.jus.br/eleitor/certidoes/certidao-de-quitacao-eleitoral" target="_blank" rel="noopener noreferrer">
+                                    <a href="https://www.tse.jus.br/servicos-eleitorais/titulo-eleitoral/quitacao-de-multas#consulta-de-d-bitos-do-eleitor" target="_blank" rel="noopener noreferrer">
                                     site do Tribunal Superior Eleitoral.</a> Caso a certidão de quitação eleitoral não possa ser emitida em função de
                                     pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
                                     tela) do relatório de quitação de débitos do eleitor (quitação de multas,
@@ -201,7 +201,7 @@
                                     prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                     devidamente assinada e preenchida, conforme a modalidade de
                                     concorrência (preencher e assinar modelo disponível em:
-                                    <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
+                                    <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>)
                                 </span>
                                 <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
                             </div>
@@ -228,7 +228,7 @@
                                 <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                     Vídeo individual e recente para procedimento de heteroidentificação.
                                     De acordo com as especificações e o roteiro descritos no edital do
-                                    processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
+                                    processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a></span>
                                 <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                             </div>
                             <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
@@ -243,7 +243,7 @@
                                 <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                     Fotografia individual e recente para procedimento de
                                     heteroidentificação. Conforme especificado no edital do processo de
-                                    seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
+                                    seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a></span>
                                 <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                             </div>
                             <x-show-analise-documento :inscricao="$inscricao" documento="fotografia"/>
@@ -320,7 +320,7 @@
                                 <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                     Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                     para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                    SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                                    SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                                 </span>
                                 <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
                             </div>
@@ -384,7 +384,7 @@
                                             <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
-                                            Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
+                                            Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>)
                                         </span>
                                         <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
                                     </div>
@@ -512,7 +512,7 @@
                                         <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                             Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
                                             quitação eleitoral. <b>OBS.</b>:  Essa certidão poderá ser emitida no
-                                            <a href="https://www.tse.jus.br/eleitor/certidoes/certidao-de-quitacao-eleitoral" target="_blank" rel="noopener noreferrer">
+                                            <a href="https://www.tse.jus.br/servicos-eleitorais/titulo-eleitoral/quitacao-de-multas#consulta-de-d-bitos-do-eleitor" target="_blank" rel="noopener noreferrer">
                                             site do Tribunal Superior Eleitoral.</a> Caso a certidão de quitação eleitoral não possa ser emitida em função de
                                             pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
                                             tela) do relatório de quitação de débitos do eleitor (quitação de multas,
@@ -592,7 +592,7 @@
                                             prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                             devidamente assinada e preenchida, conforme a modalidade de
                                             concorrência (preencher e assinar modelo disponível em:
-                                            <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
+                                            <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>)
                                         </span>
                                         <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
                                     </div>
@@ -618,7 +618,7 @@
                                         <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                             Vídeo individual e recente para procedimento de heteroidentificação.
                                             De acordo com as especificações e o roteiro descritos no edital do
-                                            processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
+                                            processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a></span>
                                         <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                     </div>
                                     <div class="mt-2">
@@ -632,7 +632,7 @@
                                         <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                             Fotografia individual e recente para procedimento de
                                             heteroidentificação. Conforme especificado no edital do processo de
-                                            seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
+                                            seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a></span>
                                         <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                                     </div>
                                 </li>
@@ -706,7 +706,7 @@
                                         <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                             Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                             para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                            SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                                            SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                                         </span>
                                         <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
                                     </div>
@@ -732,7 +732,7 @@
                         <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
                             <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
                             <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                                DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                                DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                             </label>
                         </div>
                         <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
@@ -834,7 +834,7 @@
                                                 <img src="{{ asset('img/download3.svg') }}" width="30">
                                             @endif
                                             <span class="subtexto3 @error('arquivos.declaracao_veracidade') is-invalid text-danger @enderror">
-                                                Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
+                                                Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>)
                                             </span>
                                             <div class="invalid-feedback">@error('arquivos.declaracao_veracidade'){{$message}}@enderror</div>
                                         </div>
@@ -974,7 +974,7 @@
                                             <span class="subtexto3 @error('arquivos.quitacao_eleitoral') is-invalid text-danger @enderror">
                                                 Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
                                                 quitação eleitoral. <b>OBS.</b>:  Essa certidão poderá ser emitida no
-                                                <a href="https://www.tse.jus.br/eleitor/certidoes/certidao-de-quitacao-eleitoral" target="_blank" rel="noopener noreferrer">
+                                                <a href="https://www.tse.jus.br/servicos-eleitorais/titulo-eleitoral/quitacao-de-multas#consulta-de-d-bitos-do-eleitor" target="_blank" rel="noopener noreferrer">
                                                 site do Tribunal Superior Eleitoral.</a> Caso a certidão de quitação eleitoral não possa ser emitida em função de
                                                 pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
                                                 tela) do relatório de quitação de débitos do eleitor (quitação de multas,
@@ -1060,7 +1060,7 @@
                                                 prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                                 devidamente assinada e preenchida, conforme a modalidade de
                                                 concorrência (preencher e assinar modelo disponível em:
-                                                <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>)
+                                                <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>)
                                             </span>
                                             <div class="invalid-feedback">@error('arquivos.declaracao_cotista'){{$message}}@enderror</div>
                                         </div>
@@ -1089,7 +1089,7 @@
                                             <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                                 Vídeo individual e recente para procedimento de heteroidentificação.
                                                 De acordo com as especificações e o roteiro descritos no edital do
-                                                processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
+                                                processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a></span>
                                             <div class="invalid-feedback">@error('arquivos.heteroidentificacao'){{$message}}@enderror</div>
                                         </div>
                                         <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
@@ -1105,7 +1105,7 @@
                                             <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                                 Fotografia individual e recente para procedimento de
                                                 heteroidentificação. Conforme especificado no edital do processo de
-                                                seleção SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a></span>
+                                                seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a></span>
                                             <div class="invalid-feedback">@error('arquivos.fotografia'){{$message}}@enderror</div>
                                         </div>
                                         <x-show-analise-documento :inscricao="$inscricao" documento="fotografia"/>
@@ -1185,7 +1185,7 @@
                                             <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                                 Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                                 para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                                SiSU 2022 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                                                SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                                             </span>
                                             <div class="invalid-feedback">@error('arquivos.laudo_medico'){{$message}}@enderror</div>
                                         </div>
@@ -1212,7 +1212,7 @@
                             <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
                                 <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
                                 <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                                    DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2022 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/sisu-2022" target="_blank">www.ufape.edu.br/sisu-2022</a>
+                                    DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                                 </label>
                             </div>
                             <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
