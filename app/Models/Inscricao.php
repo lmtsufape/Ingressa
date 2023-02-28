@@ -187,6 +187,11 @@ class Inscricao extends Model
         return false;
     }
 
+    public function pertenceAoSisuAtual()
+    {
+        return $this->sisu->id == Sisu::orderBy('created_at', 'DESC')->first()->id;
+    }
+
     public function arquivo($nome)
     {
         return $this->arquivos()->where('nome', $nome)->first();
