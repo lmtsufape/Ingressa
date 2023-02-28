@@ -14,6 +14,9 @@
                             <a class="nav-link mx-3 @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                         </li>--}}
                         @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
+                            <li>
+                                @livewire('candidato-search-bar')
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('usuarios.*')) active @endif" href="{{route('usuarios.index')}}">{{ __('Analistas') }}</a>
                             </li>
