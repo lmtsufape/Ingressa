@@ -9,6 +9,7 @@ use App\Models\Chamada;
 use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Inscricao;
+use App\Models\Sisu;
 use App\Models\User;
 use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
@@ -415,6 +416,10 @@ class InscricaoController extends Controller
     public function updateStatusEfetivado(Request $request)
     {
         $inscricao = Inscricao::find($request->inscricaoID);
+
+        if($inscricao->sisu != Sisu::orderByDesc('created_at')->first()){
+            return redirect()->back()->withErrors(['error' => 'Não é possível validar ou invalidar inscrições de edições passadas.']);
+        }
 
         if($request->justificativa == null && $request->efetivar == 'false'){
             return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
