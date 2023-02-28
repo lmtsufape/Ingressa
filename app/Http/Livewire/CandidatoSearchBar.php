@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Cota;
 use App\Models\Inscricao;
+use App\Policies\UserPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
@@ -12,9 +14,19 @@ class CandidatoSearchBar extends Component
     public $inscricoes;
     public $highlightIndex;
     public $links;
+    public $cotas;
 
     public function mount()
     {
+        $userPolicy = new UserPolicy();
+        if ($userPolicy->isAdminOrAnalistaGeral(auth()->user()))
+            $this->cotas = Cota::pluck('id')->all();
+        elseif ($userPolicy->soEhAnalistaHeteroidentificacao(auth()->user()))
+            $this->cotas = Cota::whereIn('cod_cota', ['L2', 'L6', 'L10', 'L14'])->pluck('id')->all();
+        elseif ($userPolicy->soEhAnalistaMedico(auth()->user()))
+            $this->cotas = Cota::whereIn('cod_cota', ['L9', 'L10', 'L13', 'L14'])->pluck('id')->all();
+        elseif ($userPolicy->ehAnalistaHeteroidentificacaoEMedico(auth()->user()))
+            $this->cotas = Cota::whereIn('cod_cota', ['L2','L6','L9','L10','L13','L14'])->pluck('id')->all();
         $this->limpar();
     }
 
@@ -37,10 +49,13 @@ class CandidatoSearchBar extends Component
     public function updatedTexto()
     {
         $texto = $this->texto;
-        $this->inscricoes = Inscricao::whereHas('candidato', function (Builder $query) use ($texto) {
-            $query->where('no_inscrito', 'ilike', '%'.$texto.'%')
-                ->orWhere('nu_cpf_inscrito', 'like', '%'.$texto.'%');
-            })
+        $cotas = $this->cotas;
+        $this->inscricoes = Inscricao::whereHas('candidato', function (Builder $query) use ($texto, $cotas) {
+            $query->where(function($qry) use ($texto) {
+                $qry->where('no_inscrito', 'ilike', '%'.$texto.'%')
+                    ->orWhere('nu_cpf_inscrito', 'like', '%'.$texto.'%');
+            })->whereIn('cota_id', $cotas);
+        })
             ->get();
         $this->links = $this->inscricoes->map(function ($item) {
             $dados = ['sisu_id' => $item->sisu->id, 'chamada_id' => $item->chamada->id, 'curso_id' => $item->curso->id, 'inscricao_id' => $item->id];
