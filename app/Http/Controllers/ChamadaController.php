@@ -65,6 +65,7 @@ class ChamadaController extends Controller
         $chamada->sisu_id = $request->sisu;
 
         if($request->regular == "true"){
+            $chamada->confirmacao = false;
             $chamada->regular = true;
         }else{
             $chamada->confirmacao = true;
