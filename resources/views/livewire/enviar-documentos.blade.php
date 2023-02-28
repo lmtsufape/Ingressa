@@ -732,7 +732,7 @@
                         <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
                             <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
                             <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                                DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
+                                DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                             </label>
                         </div>
                         <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
@@ -1212,7 +1212,7 @@
                             <div class="form-check mt-2 @error('termos.confirmacaovinculo') is-invalid @enderror">
                                 <input class="form-check-input" type="checkbox" value="true" id="checkConfirmacaoVinculo" wire:model="termos.confirmacaovinculo">
                                 <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                                    DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="https://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
+                                    DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
                                 </label>
                             </div>
                             <div class="invalid-feedback">@error('termos.confirmacaovinculo'){{$message}}@enderror</div>
