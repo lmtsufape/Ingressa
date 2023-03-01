@@ -10,7 +10,7 @@
         @click.outside="if ($wire.texto != '') $wire.limpar()"
     />
     @if(!empty($texto))
-    <div class="dropdown-menu d-block">
+    <div class="dropdown-menu d-block overflow-auto" style="max-height: 75vh;">
         @if(!empty($inscricoes))
         @foreach($inscricoes as $i => $inscricao)
         <a href="{{ $links->get($i) }}" class="dropdown-item">{{ $inscricao->candidato->no_inscrito }} - {{$inscricao->sisu->edicao}}</a>
