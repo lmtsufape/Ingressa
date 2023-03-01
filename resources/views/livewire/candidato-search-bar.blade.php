@@ -7,7 +7,7 @@
         wire:keydown.escape="limpar"
         wire:keydown.tab="limpar"
         wire:keydown.enter="selecionarCandidato"
-        @click.outside="$wire.limpar()"
+        @click.outside="if ($wire.texto != '') $wire.limpar()"
     />
     @if(!empty($texto))
     <div class="dropdown-menu d-block">
