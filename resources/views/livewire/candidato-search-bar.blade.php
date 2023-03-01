@@ -1,9 +1,9 @@
 <div x-data>
-    <input 
+    <input
         type="text"
         class="form-control campoDeTexto"
         placeholder="Procurar Candidato..."
-        wire:model="texto"
+        wire:model.debounce.500ms="texto"
         wire:keydown.escape="limpar"
         wire:keydown.tab="limpar"
         wire:keydown.enter="selecionarCandidato"
