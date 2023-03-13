@@ -225,6 +225,9 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
             $vagasCota = $this->fazerCadastro($A0, null, $curs, $candidatosCurso, $vagasCotaA0);
 
+            $vagasCotaCollection = collect();
+            $vagasCotaCollection->push(0);
+
             //Varremos todas as cotas do curso
             foreach($curs->cotas as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
@@ -253,7 +256,14 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     if(!is_null($modalidadeDaCotaIndex)){
                         $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
                     }
+                    $vagasCotaCollection->push($vagasCota);
 
+                }
+            }
+            //Varremos todas as cotas do curso
+            foreach($curs->cotas as $indice => $cota){
+                if($cota->cod_cota != $A0->cod_cota){
+                    $vagasCota = $vagasCotaCollection[$indice];
                     //Caso restem vagas, faremos o remanejamento
                     if($vagasCota > 0){
                         foreach($cota->remanejamentos as $remanejamento){

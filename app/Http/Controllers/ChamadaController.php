@@ -1267,6 +1267,9 @@ class ChamadaController extends Controller
             $chamados = $retorno[1];
             $candidatosCPF = $retorno[2];
 
+            $vagasCotaCollection = collect();
+            $vagasCotaCollection->push(0);
+
             foreach($curs->cotas as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
                     $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
@@ -1291,7 +1294,13 @@ class ChamadaController extends Controller
                         $chamados = $retorno[1];
                         $candidatosCPF = $retorno[2];
                     }
+                    $vagasCotaCollection->push($vagasCota);
 
+                }
+            }
+            foreach($curs->cotas as $indice => $cota){
+                if($cota->cod_cota != $A0->cod_cota){
+                    $vagasCota = $vagasCotaCollection[$indice];
                     if($vagasCota > 0){
                         foreach($cota->remanejamentos as $remanejamento){
                             $cotaRemanejamento = $remanejamento->proximaCota;
