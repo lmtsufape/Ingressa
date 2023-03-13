@@ -1401,6 +1401,8 @@ class ChamadaController extends Controller
                         if(!$candidatosCPF->contains($inscrito['nu_cpf_inscrito'])){
                             $candidatosCPF->push($inscrito['nu_cpf_inscrito']);
                             $chamados->push($inscricao);
+                        }else{
+                            $vagasCota += 1;
                         }
                     }else{
                         $vagasCota += 1;
