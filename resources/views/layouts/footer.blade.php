@@ -28,7 +28,7 @@
             </div>
 
             <div class="col-md-4 text-center pb-4">
-                <span class="textoRodape">Redes sociais do lmts</span>
+                <span class="textoRodape">Redes sociais do LMTS</span>
                 <div class="row justify-content-center text-center">
                     <a href="https://www.instagram.com/lmts_ufape/" target="_blank" class="col-md-1 p-0"> <img height="30" src="{{asset('img/Icon awesome-instagram.svg')}}"></a>
                     <a href="https://www.facebook.com/LMTSUFAPE/" target="_blank" class="col-md-1 p-0"> <img height="30" src="{{asset('img/Icon awesome-facebook.svg')}}"></a>
