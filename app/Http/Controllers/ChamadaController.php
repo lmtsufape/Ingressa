@@ -179,7 +179,7 @@ class ChamadaController extends Controller
                 if ($sisu->caminho_import_espera == null) {
                     return redirect()->back()->withErrors(['error_espera' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
                 }
-    
+
                 $this->salvarMultiplicadores($chamada, $request);
                 $this->gerarListagemConfirmacao($chamada);
                 $chamada->confirmacao = false;
@@ -1133,14 +1133,8 @@ class ChamadaController extends Controller
             }else{
                 $cota = $candidato->cota;
             }
-            if($cota == null){
-                dd($candidato->no_modalidade_concorrencia);
-            }
 
             $curso = $candidato->curso;
-            if($curso == null){
-                dd($candidato->cod_ies_curso);
-            }
 
             $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
             $cota_curso->vagas_ocupadas += 1;
@@ -1185,7 +1179,7 @@ class ChamadaController extends Controller
         foreach($grouped as $i => $curso){
             $porCurso->push($curso->groupBy('no_modalidade_concorrencia'));
         }
-        
+
         $cursos = collect();
         $cotasCursosCOD = collect();
 
@@ -1222,7 +1216,7 @@ class ChamadaController extends Controller
             if($cotaAmpla){
                 $cotaCOD->push(Cota::COD_COTA_ENUM['A0']);
             }
-            $cotasCursosCOD->push($cotaCOD);    
+            $cotasCursosCOD->push($cotaCOD);
         }
 
         foreach($cursos as $indexCurso => $curso){
@@ -1254,7 +1248,7 @@ class ChamadaController extends Controller
             $A0 = Cota::where('cod_cota', 'A0')->first();
             $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->first()->pivot;
             $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
-            
+
             //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
             $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
             if($multiplicador != null){
@@ -1439,7 +1433,7 @@ class ChamadaController extends Controller
                 'M',
             ];
         })->collect();
-        
+
         $candidatos = Inscricao::where('chamada_id', $chamada->id)
             ->whereIn('status', [Inscricao::STATUS_ENUM['documentos_pendentes'], Inscricao::STATUS_ENUM['documentos_invalidados']])
             ->get()->map(function ($candidato) {
@@ -1448,7 +1442,7 @@ class ChamadaController extends Controller
                     $this->situacaoMatricula($candidato->status),
                 ];
             })->collect();
-        
+
         return Excel::download(
             new SisuGestaoExport($validados->merge($candidatos)),
             'sisu_gestao_export_'.$chamada->nome.'.csv',
