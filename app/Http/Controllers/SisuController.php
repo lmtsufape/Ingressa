@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SisuRequest;
+use App\Library\Utilitario;
 use App\Models\Chamada;
-use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Sisu;
 use Illuminate\Http\Request;
@@ -49,15 +49,7 @@ class SisuController extends Controller
         $sisu->setAtributes($request);
         $sisu->save();
 
-        $cursos = Curso::all();
-        $cotas = Cota::all();
-        foreach($cursos as $curso){
-            foreach($cotas as $cota){
-                $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
-                $cota_curso->vagas_ocupadas = 0;
-                $cota_curso->update();
-            }
-        }
+        Utilitario::criarCotaCurso($sisu);
 
         return redirect(route('sisus.index'))->with(['success' => 'Edição cadastrada com sucesso!']);
     }
@@ -136,14 +128,14 @@ class SisuController extends Controller
 
         return redirect(route('sisus.index'))->with(['success' => 'Edição deletada com sucesso!']);
     }
-    
+
     public function importarPlanilhasRegular(Request $request, $sisu_id)
     {
         $this->authorize('isAdmin', User::class);
         $sisu = Sisu::find($sisu_id);
 
         $sisu->salvar_import_regular($request->arquivoRegular);
-        
+
         return redirect(route('sisus.index'))->with(['success' => 'Arquivo da lista regular importado com sucesso!']);
     }
 
