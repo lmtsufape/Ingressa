@@ -1136,7 +1136,7 @@ class ChamadaController extends Controller
 
             $curso = $candidato->curso;
 
-            $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
+            $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
             $cota_curso->vagas_ocupadas += 1;
 
             $candidato->update();

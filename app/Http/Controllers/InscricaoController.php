@@ -447,7 +447,7 @@ class InscricaoController extends Controller
             $cota = $cotaRemanejamento;
         }
         $curso = Curso::find($request->curso);
-        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
+        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->where('sisu_id', $inscricao->sisu->id)->first()->pivot;
         if(($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] && $request->efetivar == 'false') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'false')){
             if($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']){
                 $cota_curso->vagas_ocupadas -= 1;
