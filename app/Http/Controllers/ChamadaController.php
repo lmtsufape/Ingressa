@@ -493,7 +493,7 @@ class ChamadaController extends Controller
             });
 
             $A0 = Cota::where('cod_cota', 'A0')->first();
-            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->first()->pivot;
+            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
             $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
             //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
             $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
@@ -508,7 +508,7 @@ class ChamadaController extends Controller
             foreach($curs->cotas as $cota){
 
                 //recuperamos informações da quantidade que iremos chamar
-                $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
+                $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
 
                 $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
                 //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
@@ -1246,7 +1246,7 @@ class ChamadaController extends Controller
             });
 
             $A0 = Cota::where('cod_cota', 'A0')->first();
-            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->first()->pivot;
+            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
             $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
 
             //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
@@ -1266,7 +1266,7 @@ class ChamadaController extends Controller
 
             foreach($curs->cotas as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
-                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
+                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
                     $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
                     $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
                     if(!is_null($multiplicador)){
