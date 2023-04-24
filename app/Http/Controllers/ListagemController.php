@@ -309,7 +309,7 @@ class ListagemController extends Controller
                 ]
             )->orderBy('nu_nota_candidato', 'DESC')->get();
 
-            $cota_curso_quantidade = $curso->cotas()->where('cota_id', $A0->id)->first()->pivot->quantidade_vagas;
+            $cota_curso_quantidade = $curso->cotas()->where('cota_id', $A0->id)->where('sisu_id', $sisu->id)->first()->pivot->quantidade_vagas;
 
             //se o curso for de 80 vagas, logo A0 tem 40 vagas
             if ($cota_curso_quantidade == 40) {

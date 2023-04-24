@@ -417,10 +417,6 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($request->inscricaoID);
 
-        if($inscricao->sisu != Sisu::orderByDesc('created_at')->first()){
-            return redirect()->back()->withErrors(['error' => 'Não é possível validar ou invalidar inscrições de edições passadas.']);
-        }
-
         if($request->justificativa == null && $request->efetivar == 'false'){
             return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
         }
@@ -451,7 +447,7 @@ class InscricaoController extends Controller
             $cota = $cotaRemanejamento;
         }
         $curso = Curso::find($request->curso);
-        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->first()->pivot;
+        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->where('sisu_id', $inscricao->sisu->id)->first()->pivot;
         if(($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] && $request->efetivar == 'false') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'false')){
             if($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']){
                 $cota_curso->vagas_ocupadas -= 1;
