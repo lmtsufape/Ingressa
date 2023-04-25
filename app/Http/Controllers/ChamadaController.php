@@ -1294,28 +1294,30 @@ class ChamadaController extends Controller
             }
             foreach($curs->cotas as $indice => $cota){
                 if($cota->cod_cota != $A0->cod_cota){
-                    $vagasCota = $vagasCotaCollection[$indice];
-                    if($vagasCota > 0){
-                        foreach($cota->remanejamentos as $remanejamento){
-                            $cotaRemanejamento = $remanejamento->proximaCota;
-                            $cursoAtual = $cotasCursosCOD[$indexCurso];
+                    if ($vagasCotaCollection->has($indice)) {
+                        $vagasCota = $vagasCotaCollection[$indice];
+                        if($vagasCota > 0){
+                            foreach($cota->remanejamentos as $remanejamento){
+                                $cotaRemanejamento = $remanejamento->proximaCota;
+                                $cursoAtual = $cotasCursosCOD[$indexCurso];
 
-                            $modalidadeDaCotaIndex = null;
+                                $modalidadeDaCotaIndex = null;
 
-                            foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
-                                if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
-                                    $modalidadeDaCotaIndex = $indexRemanejamento;
+                                foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
+                                    if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
+                                        $modalidadeDaCotaIndex = $indexRemanejamento;
+                                        break;
+                                    }
+                                }
+                                if(!is_null($modalidadeDaCotaIndex)){
+                                    $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada, $candidatosCPF);
+                                    $vagasCota = $retorno[0];
+                                    $chamados = $retorno[1];
+                                    $candidatosCPF = $retorno[2];
+                                }
+                                if($vagasCota == 0){
                                     break;
                                 }
-                            }
-                            if(!is_null($modalidadeDaCotaIndex)){
-                                $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada, $candidatosCPF);
-                                $vagasCota = $retorno[0];
-                                $chamados = $retorno[1];
-                                $candidatosCPF = $retorno[2];
-                            }
-                            if($vagasCota == 0){
-                                break;
                             }
                         }
                     }
