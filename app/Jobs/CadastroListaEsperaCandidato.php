@@ -231,7 +231,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             $vagasCotaCollection->push(0);
 
             //Varremos todas as cotas do curso
-            foreach($curs->cotas as $cota){
+            foreach($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
                     //recuperamos informações da quantidade que iremos chamar
                     $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $this->chamada->sisu->id)->first()->pivot;
@@ -263,7 +263,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 }
             }
             //Varremos todas as cotas do curso
-            foreach($curs->cotas as $indice => $cota){
+            foreach($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $indice => $cota){
                 if($cota->cod_cota != $A0->cod_cota){
                     $vagasCota = $vagasCotaCollection[$indice];
                     //Caso restem vagas, faremos o remanejamento

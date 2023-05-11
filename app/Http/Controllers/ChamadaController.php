@@ -505,7 +505,7 @@ class ChamadaController extends Controller
 
 
             //Varremos todas as cotas do curso
-            foreach($curs->cotas as $cota){
+            foreach($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota){
 
                 //recuperamos informações da quantidade que iremos chamar
                 $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
@@ -1264,7 +1264,7 @@ class ChamadaController extends Controller
             $vagasCotaCollection = collect();
             $vagasCotaCollection->push(0);
 
-            foreach($curs->cotas as $cota){
+            foreach($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
                     $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
                     $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
@@ -1292,7 +1292,7 @@ class ChamadaController extends Controller
 
                 }
             }
-            foreach($curs->cotas as $indice => $cota){
+            foreach($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $indice => $cota){
                 if($cota->cod_cota != $A0->cod_cota){
                     if ($vagasCotaCollection->has($indice)) {
                         $vagasCota = $vagasCotaCollection[$indice];
