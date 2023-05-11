@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class CadastroListaEsperaCandidato implements ShouldQueue
 {
@@ -53,6 +54,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             }*/
             if($primeira){
                 $primeira = false;
+                Log::info(print_r($dados, true));
             }else{
                 //Armazenamos as informações de cada candidato
                 $inscricao = array(
@@ -212,9 +214,9 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             });
 
             $A0 = Cota::where('cod_cota', 'A0')->first();
-            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->first()->pivot;
+            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->where('sisu_id', $this->chamada->sisu->id)->first()->pivot;
             $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
-            
+
             //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
             $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
             if($multiplicador != null){
@@ -232,7 +234,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             foreach($curs->cotas as $cota){
                 if($cota->cod_cota != $A0->cod_cota){
                     //recuperamos informações da quantidade que iremos chamar
-                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->first()->pivot;
+                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $this->chamada->sisu->id)->first()->pivot;
 
                     $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
                     //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
