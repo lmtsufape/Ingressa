@@ -208,7 +208,7 @@ class ChamadaController extends Controller
             $cotas = $data['cotas_id_'.$curso->id];
 
             foreach($multiplicadores as $i => $multiplicador){
-                $cota_curso = $curso->cotas->where('id', $cotas[$i])->first()->pivot;
+                $cota_curso = $curso->cotas()->where('cota_id', $cotas[$i])->where('sisu_id', $chamada->sisu->id)->first()->pivot;
                 $multi = new MultiplicadorVaga();
                 $multi->chamada_id = $chamada->id;
                 $multi->cota_curso_id = $cota_curso->id;
