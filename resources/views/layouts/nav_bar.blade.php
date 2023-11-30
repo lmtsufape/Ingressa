@@ -21,7 +21,7 @@
                                 <a class="nav-link mx-3 @if(request()->routeIs('usuarios.*')) active @endif" href="{{route('usuarios.index')}}">{{ __('Analistas') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.index')}}">{{ __('SISU') }}</a>
+                                <a class="nav-link mx-3 @if(request()->routeIs('sisus.*')) active @endif" href="{{route('sisus.index')}}">{{ __('SiSU') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('edicoes.*')) active @endif" href="{{route('edicoes')}}">{{ __('Edições') }}</a>
