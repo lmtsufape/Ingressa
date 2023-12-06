@@ -44,6 +44,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->get('/dashbo
 
 Route::put('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'update'])->name('candidato.atualizar');
 Route::get('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'edit'])->name('candidato.edit');
+
+Route::get('todos/{sisu_id}/candidatos/{chamada_id}', [ChamadaController::class, 'todos_ingressantes'])->name('todos.ingressantes');
 Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function() {
 
     Route::resource('usuarios', UserController::class);

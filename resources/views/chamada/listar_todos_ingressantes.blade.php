@@ -1,82 +1,223 @@
 <x-app-layout>
-    <div class="fundo px-5 py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-11 pt-0">
-                <div class="row tituloBorda justify-content-between">
+    <div class="fundo2 px-5">
+        <div class="container">
+            <div class="row">
+                <div class="row tituloBorda justify-content-between mb-4">
                     <div class="d-flex align-items-center justify-content-between mx-0 px-0">
-                        <span class="align-middle titulo"> <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > Candidatos da {{$chamada->nome}}</span>
+                        <span class="align-middle titulo"> <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</span>
                         <div class="col-md-4" style="text-align: right">
-                            <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
-                            {{--<a class="btn btn-primary" id="submeterFormBotao" href="{{route('chamadas.candidatos.aprovar', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}">Efetivar candidatos</a>--}}
+                            <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                         </div>
                     </div>
                 </div>
-                @if(session('success'))
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                </symbol>
-                            </svg>
-
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
+                @if(session('error'))
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('error')}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                 @endif
-                @php
-                    $count = 0;
-                    $controle = true;
-                @endphp
-                @while ($controle)
-                    @if(($count+1) % 3 == 1)
-                        <div class="row justify-content-between">
-                    @endif
-                    @if (array_key_exists($count, $cursos->toArray()))
-                        <a title="Listar candidatos do curso {{$cursos[$count]->nome}}" style="text-decoration: none" href="{{route('chamadas.candidatos.curso', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $cursos[$count]->id])}}" class="col-md-3 caixa mt-5 shadow py-4 text-center" >
-                            <img src="{{asset('storage/'.$cursos[$count]->icone)}}" width="100" class="img-fluid">
-                            <div class="textoagronomia" style="color: {{$cursos[$count]->cor_padrao != null ? $cursos[$count]->cor_padrao : 'black'}}">{{$cursos[$count]->nome}}</div>
-                            <div class="subtitulo">(@switch($cursos[$count]->grau_academico)
-                                @case($graus['bacharelado']){{"Bacharelado"}}@break
-                                @case($graus['licenciatura']){{"Licenciatura"}}@break
-                                @case($graus['tecnologo']){{"Tecnólogo"}}@break
-                            @endswitch -<strong>
-                            @switch($cursos[$count]->turno)
-                                @case($turnos['matutino']){{"Matutino"}}@break
-                                @case($turnos['vespertino']){{"Vespertino"}}@break
-                                @case($turnos['noturno']){{"Noturno"}}@break
-                                @case($turnos['integral']){{"Integral"}}@break
-                            @endswitch)</strong>
+                <div class="row justify-content-between">
+                    <div class="col-md-9">
+                        <div class="col-md-12 shadow-sm">
+                            <div class="row justify-content-center">
+                                <div class="row justify-content-between">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            
+                                            
+                                            <div class="ps-1 mt-0 pt-0" style="font-size: 14px; color: white;">
+                                                <span style="font-weight: bolder;">Ordenação:
+                                                    @switch($ordem)
+                                                        @case('name')
+                                                            Nome do candidato
+                                                            @break
+                                                        @case('cota')
+                                                            Cota
+                                                            @break
+                                                        @case('status')
+                                                            Status da inscrição
+                                                            @break
+                                                        @default
+                                                            Nome do candidato
+                                                            @break
+                                                    @endswitch
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        
+                            
+                                    </div>
+                                </div>
+
+                                </div>
+                                
                             </div>
-                            <div class="subtitulo" style="width: 100%">
-                                <strong>{{"Concluídos: "}}</strong>{{$concluidos[$count]}}<br>
-                                @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                                    <strong>{{"Concluídos (pendências): "}}</strong>{{$concluidosPendentes[$count]}}<br>
-                                @endcan
-                                <strong>{{"Enviados: "}}</strong>{{$enviados[$count]}}<br>
-                                <strong>{{"Pendentes: "}}</strong>{{$naoEnviados[$count]}}<br>
-                                <strong>{{"Invalidados: "}}</strong>{{$invalidados[$count]}}
+
+                            <div class="row justify-content-center">
+                                <div class="col-md-12 corpo p-2 px-3">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Nome</th>
+                                                <th scope="col">Curso</th>
+                                                <th class="text-center">Cota</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($inscricoes as $i => $inscricao)
+                                                <tr>
+                                                    <th class="align-middle"> {{$loop->iteration}}</th>
+                                                    <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
+                                                    <td class="align-middle">{{$inscricao->curso->nome}}</td>
+                                                    <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
+                                                    <td class="align-middle text-center">
+                                                        <div class="btn-group">
+                                                            @if($inscricao->candidato->user->email != null)
+                                                                <img src="{{asset('img/g830.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Primeiro acesso do candidato realizado">
+                                                            @else
+                                                                <img src="{{asset('img/Icon ionic-ios-person.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Primeiro acesso do candidato não realizado">
+                                                            @endif
+                                                            @can('isAdminOrAnalistaGeral', auth()->user())
+                                                                @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
+                                                                    <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                                @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
+                                                                    <img src="{{asset('img/g1193.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos com pendências">
+                                                                @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])
+                                                                    <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
+                                                                @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                                    <img src="{{asset('img/g1949.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                                                @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                                    <img src="{{asset('img/g2201.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
+                                                                @endif
+                                                            @endcan
+                                                            @can('ehAnalistaHeteroidentificacaoOuMedico', auth()->user())
+                                                                @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
+                                                                        <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                                @elseif($concluidos->contains($candidato->id))
+                                                                    <img src="{{asset('img/g1365.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos aceitos">
+                                                                @elseif($invalidados->contains($candidato->id))
+                                                                    <img src="{{asset('img/g1697.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos invalidados">
+                                                                @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                                                    <img src="{{asset('img/g1949.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos enviados">
+                                                                @elseif($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                                    <img src="{{asset('img/g2201.svg')}}" alt="..." width="25px" data-toggle="tooltip" data-placement="top" title="Documentos pendentes">
+                                                                @endif
+                                                            @endcan
+                                                        </div>
+                                                    </td>
+                                                    @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                        @can('isAdmin', auth()->user())
+                                                            <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                        @else
+                                                            <td class="align-middle text-center"><button class="btn btn-sm" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;" disabled>Avaliar</button></td>
+                                                        @endcan
+                                                    @else
+                                                        <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                    @endif
+                                                    
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></a>
+                                </div>
                             </div>
-                        </a>
-                    @else
-                        <div class="col-md-3  mt-4  p-3 text-center"></div>
-                    @endif
-                    @if(($count+1) % 3 == 0)
                         </div>
-                        @if (!(array_key_exists($count, $cursos->toArray())))
-                            @php
-                                $controle = false;
-                            @endphp
-                        @endif
-                    @endif
-                    @php
-                        $count++;
-                    @endphp
-                @endwhile
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-md-12 shadow-sm p-2 px-3" style="background-color: white; border-radius: 00.5rem;">
+                            <div style="font-size: 21px;" class="tituloModal">
+                                Status
+                            </div>
+                            <ul class="list-group list-unstyled">
+                                <li>
+                                    <div title="Primeiro acesso do candidato realizado" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/g830.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
+                                            Primeiro acesso do candidato realizado
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Primeiro acesso do candidato não realizado" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/Icon ionic-ios-person.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                            Primeiro acesso do candidato não realizado
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Documentos aceitos sem pendências" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/g1365.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
+                                            Documentos aceitos sem pendências
+                                        </div>
+                                    </div>
+                                </li>
+                                @can('isAdminOrAnalistaGeral', auth()->user())
+                                <li>
+                                    <div title="Documentos aceitos com pendências" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/g1193.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
+                                            Documentos aceitos com pendências
+                                        </div>
+                                    </div>
+                                </li>
+                                @endcan
+                                <li>
+                                    <div title="Documentos enviados" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/g1949.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
+                                            Documentos enviados
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Documentos pendentes" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/g2201.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
+                                            Documentos pendentes
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div title="Documentos invalidados" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                        <img class="aling-middle" width="30" src="{{asset('img/g1697.svg')}}" alt="icone-busca">
+                                        <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
+                                            Documentos invalidados
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    $('#confirmModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Botão que acionou o modal
+        var recipient = button.data('id')
+        var texto = button.data('texto')
+        var nome = button.data('nome')
+        var modal = $(this)
+        modal.find('.modal-title').text('Deseja ' + texto + nome)
+        modal.find('.modal-body input').val(recipient)
+    });
+
+    $('.link-ordenacao').click(function() {
+        link = this.children[2].href;
+        window.location = link;
+    });
+</script>

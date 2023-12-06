@@ -645,9 +645,6 @@ class ChamadaController extends Controller
         ->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
-    public function listarTodosCandChamada(){
-        
-    }
     private function inscricoesHeteroidentificacao($chamada, $curso, $cotas, $arquivos)
     {
         $retorno = [];
@@ -1492,5 +1489,16 @@ class ChamadaController extends Controller
             Inscricao::STATUS_ENUM['documentos_invalidados'] => 'R',
         ];
         return $matriculas[$status];
+    }
+
+    public function todos_ingressantes($sisu_id, $chamada_id){
+        $inscricoes = Inscricao::where('chamada_id', $chamada_id)->get();
+        $candidatos = Inscricao::where('chamada_id', $chamada_id)->with('candidato')->get();
+        $cursos = Inscricao::where('chamada_id', $chamada_id)->with('curso')->get();
+        $chamada = Chamada::findOrFail($chamada_id);
+        $sisu = Sisu::findOrFail($sisu_id);
+        $ordem = 'name';
+
+        return view('chamada.listar_todos_ingressantes', compact(['chamada', 'candidatos', 'cursos', 'sisu', 'ordem', 'inscricoes']));
     }
 }
