@@ -58,21 +58,13 @@
                 </div>
             @endcan
             <div class="pb-3">
-                <span style="color: #373737; font-size: 17px; font-weight: 700;" ><a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</a> > <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" style="text-decoration: none; color: #373737;"> Curso: {{$inscricao->curso->nome}} -
-                    @switch($inscricao->curso->turno)
-                        @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                            Matutino
-                            @break
-                        @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                            Vespertino
-                            @break
-                        @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                            Noturno
-                            @break
-                        @case(App\Models\Curso::TURNO_ENUM['integral'])
-                            Integral
-                            @break
-                    @endswitch </a>
+                @if($origem == false)
+                    <span style="color: #373737; font-size: 17px; font-weight: 700;" ><a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</a> > <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" style="text-decoration: none; color: #373737;"> Curso: {{$inscricao->curso->nome}} -
+                @else
+                    <span style="color: #373737; font-size: 17px; font-weight: 700;" ><a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('todos.ingressantes', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Listagem</a>
+                    
+                @endif
+                 
                 > </span> <span style="color: #24CEE8; font-size: 17px; font-weight: 600;">{{$inscricao->candidato->no_inscrito}} - {{$inscricao->cota->cod_cota}}</span>
             </div>
             <div class="row justify-content-between">
