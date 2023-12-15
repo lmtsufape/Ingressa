@@ -1,61 +1,88 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
-            <div class="row">
-                <div class="row tituloBorda justify-content-between mb-4">
-                    <div class="d-flex align-items-center justify-content-between mx-0 px-0">
-                        <span class="align-middle titulo"> <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</span>
-                        <div class="col-md-4" style="text-align: right">
-                            <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
-                        </div>
+            <div class="row tituloBorda justify-content-between mb-4">
+                <div class="d-flex align-items-center justify-content-between mx-0 px-0">
+                    <span class="align-middle titulo"> <a href="{{route('sisus.show', ['sisu' => $chamada->sisu->id])}}" style="text-decoration: none; color: #373737;"> SiSU {{$chamada->sisu->edicao}}</a> > <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" style="text-decoration: none; color: #373737;"> Candidatos da {{$chamada->nome}}</span>
+                    <div class="col-md-4" style="text-align: right">
+                        <a href="{{route('sisus.show', ['sisu' => $sisu->id])}}" title="Voltar" style="cursor: pointer;"><img class="m-1 " width="40" src="{{asset('img/Grupo 1687.svg')}}" alt="Icone de voltar"></a>
                     </div>
                 </div>
-                @if(session('error'))
-                    <div class="col-md-12">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('error')}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+            </div>
+            @if(session('error'))
+                <div class="col-md-12">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('error')}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                @endif
-                <div class="row justify-content-between">
-                    <div class="col-md-9">
-                        <div class="col-md-12 shadow-sm">
-                            <div class="row justify-content-center">
-                                <div class="row justify-content-between">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            
-                                            
-                                            <div class="ps-1 mt-0 pt-0" style="font-size: 14px; color: white;">
-                                                <span style="font-weight: bolder;">Ordenação:
-                                                    @switch($ordem)
-                                                        @case('name')
-                                                            Nome do candidato
-                                                            @break
-                                                        @case('cota')
-                                                            Cota
-                                                            @break
-                                                        @case('status')
-                                                            Status da inscrição
-                                                            @break
-                                                        @default
-                                                            Nome do candidato
-                                                            @break
-                                                    @endswitch
-                                                </span>
-                                            </div>
+                </div>
+            @endif
+            <div class="row justify-content-between">
+                <div class="col-md-9">
+                    <div class="col-md-12 shadow-sm">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 cabecalhoCurso p-2 px-3 align-items-center" style="background-color:black}}">
+                              <div class="row justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                      <img style="border:2px solid white; border-radius: 50%;"
+                                        alt="" width="45" class="img-flex">
+                                      <div>
+                                        <div class="ps-1 mt-0 pt-0" style="font-size: 14px; color: white;">
+                                            <span style="font-weight: bolder;">Ordenação:
+                                                @switch($ordem)
+                                                    @case('name')
+                                                        Nome do candidato
+                                                        @break
+                                                    @case('cota')
+                                                        Cota
+                                                        @break
+                                                    @case('status')
+                                                        Status da inscrição
+                                                        @break
+                                                    @default
+                                                        Nome do candidato
+                                                        @break
+                                                @endswitch
+                                            </span>
                                         </div>
+                                      </div>
                                     </div>
                                     <div>
-                                        
-                            
+                                      <button title="Ordenar candidatos" class="" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img width="35" src="{{asset('img/Subtração 2.svg')}}" alt="Icone de ordenação de candidatos">
+                                      </button>
+                                      <ul class="dropdown-menu px-2" aria-labelledby="dropdownMenu2">
+                                        <div class="form-check link-ordenacao">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" @if($ordem == null || $ordem == 'name') checked @endif>
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Nome do candidato
+                                            </label>
+                                        </div>
+                                        <div class="form-check link-ordenacao">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  @if($ordem == 'cota') checked @endif>
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Cota
+                                            </label>
+                                        </div>
+                                        <div class="form-check link-ordenacao">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  @if($ordem == 'status') checked @endif>
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Status da inscrição
+                                            </label>
+                                          </div>
+                                      </ul>
+                                      {{-- @can('isAdmin', \App\Models\User::Class)
+                                        <a title="Baixar todos os documentos de todos os candidatos" href="{{route('baixar.documentos.candidatos.curso', ['curso_id' => $curso->id, 'chamada_id' => $chamada->id])}}">
+                                            <img width="35" src="{{asset('img/download4.svg')}}" alt="Baixar todos os documentos de todos os candidatos"></a>
+                                        </a>
+                                      @endcan verificar depois--}}
                                     </div>
                                 </div>
 
-                                </div>
-                                
+                              </div>
                             </div>
+                        </div>
 
                             <div class="row justify-content-center">
                                 <div class="col-md-12 corpo p-2 px-3">
@@ -114,19 +141,19 @@
                                                     </td>
                                                     @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
                                                         @can('isAdmin', auth()->user())
-                                                            <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                            <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id, 'origem' => true])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
                                                         @else
                                                             <td class="align-middle text-center"><button class="btn btn-sm" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;" disabled>Avaliar</button></td>
                                                         @endcan
                                                     @else
-                                                        <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
+                                                        <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id, 'origem' => true])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
                                                     @endif
                                                     
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <a href="{{route('chamadas.candidatos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id])}}" class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></a>
+                                    <a href="{{route('sisus.show', ['sisu' => $sisu->id])}}" class="btn botao my-2 py-1" type="submit"> <span class="px-4">Voltar</span></a>
                                 </div>
                             </div>
                         </div>

@@ -114,14 +114,16 @@ class InscricaoController extends Controller
         return view('inscricao.envio-documentos', compact('inscricao', 'documentos'));
     }
 
-    public function showAnalisarDocumentos($sisu_id, $chamada_id, $curso_id, $inscricao_id)
+    public function showAnalisarDocumentos($sisu_id, $chamada_id, $curso_id, $inscricao_id, Request $request)
     {
+        $origem = $request->get('origem', false);
+
         $inscricao = Inscricao::find($inscricao_id);
         $this->authorize('isAdminOrAnalista', User::class);
         $documentos = $this->documentosRequisitados($inscricao_id);
         $chamada = Chamada::find($chamada_id);
         $curso = Curso::find($curso_id);
-        return view('inscricao.analise-documentos', compact('inscricao', 'documentos', 'chamada', 'curso'));
+        return view('inscricao.analise-documentos', compact('inscricao', 'documentos', 'chamada', 'curso', 'origem'));
     }
 
     public function showDocumento($inscricao_id, $documento_nome)
