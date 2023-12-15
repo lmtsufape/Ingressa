@@ -288,14 +288,21 @@ class EnviarDocumentos extends Component
             $documento = explode('.', $documento)[1];
             $path = 'documentos/inscricaos/'. $this->inscricao->id . '/';
             $nome = $documento . '.' . $value->getClientOriginalExtension();
-            $arquivo = Arquivo::where([['inscricao_id', $this->inscricao->id], ['nome', $documento]])->first();
+            $arquivo = Arquivo::where([['inscricao_id', $this->inscricao->id], ['nome', $documento]])->latest('versao')->first();
             if($arquivo != null){
                 if (Storage::exists($arquivo->caminho)) {
-                    Storage::delete($arquivo->caminho);
+                    $nome_com_versao = $documento . '_v'. ($arquivo->versao + 1). '.' . $value->getClientOriginalExtension();
+                    $value->storeAs($path, $nome_com_versao);
+
+                    $novo_doc = new Arquivo([
+                        'inscricao_id' => $arquivo->inscricao_id,
+                        'nome' => $arquivo->nome,
+                        'caminho' => $path.$nome,
+                    ]);
+                    $novo_doc->versao = $arquivo->versao + 1;
+                    $novo_doc->save();
                 }
-                $value->storeAs($path, $nome);
-                $arquivo->caminho = $path.$nome;
-                $arquivo->save();
+                
                 if($arquivo->avaliacao != null)
                 {
                     $avaliacao = $arquivo->avaliacao;
