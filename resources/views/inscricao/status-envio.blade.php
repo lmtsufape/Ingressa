@@ -181,7 +181,7 @@
                                     width="30">
                             @endif
                             <span class="subtexto3">
-                                Comprovante de quitação com o Serviço Eleitoral no último turno de votação ou Certidão de
+                                Comprovante de quitação com a Justiça Eleitoral ou Certidão de
                                 quitação eleitoral. <b>OBS.</b>:  Essa certidão poderá ser emitida no
                                 <a href="https://www.tse.jus.br/servicos-eleitorais/titulo-eleitoral/quitacao-de-multas#consulta-de-d-bitos-do-eleitor" target="_blank" rel="noopener noreferrer">
                                 site do Tribunal Superior Eleitoral.</a> Caso a certidão de quitação eleitoral não possa ser emitida em função de

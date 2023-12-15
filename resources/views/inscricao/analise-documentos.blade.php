@@ -479,7 +479,7 @@
                                             </div>
                                         @elseif($documento == 'quitacao_eleitoral')
                                             <div class="col-md-10" style="cursor:pointer;">
-                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com o Serviço Eleitoral no último turno de votação;</button>
+                                                <button id="nomeDocumento{{$indice}}" class="nomeDocumento ps-3" style="display:inline-block; text-align: left;"  for="{{$documento}}" onclick="carregarDocumento({{$inscricao->id}}, '{{$documento}}', {{$indice}})">Comprovante de quitação com a Justiça Eleitoral;</button>
                                             </div>
                                         @elseif($documento == 'quitacao_militar')
                                             <div class="col-md-10" style="cursor:pointer;">
