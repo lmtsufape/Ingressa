@@ -357,7 +357,11 @@
                             </div>
                             <div class="row content-justify-between">
                                 <div class="col-md-6">
-                                    <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                                    @if($origem == false)
+                                        <a href="{{route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                                    @else
+                                        <a href="{{route('todos.ingressantes', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id])}}" class="btn botao my-2 py-1 col-md-5"> <span class="px-4">Voltar</span></a>
+                                    @endif
                                 </div>
                                 <div class="col-md-6" style="text-align: right">
                                     @can('isAdmin', \App\Models\User::class)
@@ -687,7 +691,7 @@
                             <div class="col-md-12 pt-3 textoModal">
                                 <label class="pb-2" for="comentario">Motivo:</label>
                                 <textarea id="comentario" class="form-control campoDeTexto ckeditor-editor @error('comentario') is-invalid @enderror" name="comentario" placeholder="Insira o motivo para recusar o documento">{{old('comentario')}}</textarea>
-
+                                
                                 @error('comentario')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
