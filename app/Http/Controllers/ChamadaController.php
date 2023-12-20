@@ -1491,14 +1491,29 @@ class ChamadaController extends Controller
         return $matriculas[$status];
     }
 
-    public function todos_ingressantes($sisu_id, $chamada_id){
+    public function todos_ingressantes($sisu_id, $chamada_id, Request $request){
         $inscricoes = Inscricao::where('chamada_id', $chamada_id)->get();
         $candidatos = Inscricao::where('chamada_id', $chamada_id)->with('candidato')->get();
         $cursos = Inscricao::where('chamada_id', $chamada_id)->with('curso')->get();
         $chamada = Chamada::findOrFail($chamada_id);
         $sisu = Sisu::findOrFail($sisu_id);
-        $ordem = 'name';
-
+        $ordem = $request->get('ordem', 'name');
+        
+        switch ($ordem) {
+            case 'name':
+                $inscricoes = $inscricoes->sortBy('candidato.user.name');
+                break;
+            case 'cota':
+                $inscricoes = $inscricoes->sortBy('cota_id');
+                break;
+            case 'status':
+                $inscricoes = $inscricoes->sortBy('status');
+                break;
+            default:
+                $inscricoes = $inscricoes->sortBy('candidato.user.name');
+                break;
+            }
+            
         return view('chamada.listar_todos_ingressantes', compact(['chamada', 'candidatos', 'cursos', 'sisu', 'ordem', 'inscricoes']));
     }
 }

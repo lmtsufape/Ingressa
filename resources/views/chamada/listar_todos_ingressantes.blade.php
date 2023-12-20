@@ -22,65 +22,67 @@
                     <div class="col-md-12 shadow-sm">
                         <div class="row justify-content-center">
                             <div class="col-md-12 cabecalhoCurso p-2 px-3 align-items-center" style="background-color:black}}">
-                              <div class="row justify-content-between">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                      <img style="border:2px solid white; border-radius: 50%;"
-                                        alt="" width="45" class="img-flex">
-                                      <div>
-                                        <div class="ps-1 mt-0 pt-0" style="font-size: 14px; color: white;">
-                                            <span style="font-weight: bolder;">Ordenação:
-                                                @switch($ordem)
-                                                    @case('name')
-                                                        Nome do candidato
-                                                        @break
-                                                    @case('cota')
-                                                        Cota
-                                                        @break
-                                                    @case('status')
-                                                        Status da inscrição
-                                                        @break
-                                                    @default
-                                                        Nome do candidato
-                                                        @break
-                                                @endswitch
-                                            </span>
+                                <div class="row justify-content-between">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img style="border:2px solid white; border-radius: 50%;"
+                                                alt="" width="45" class="img-flex">
+                                            <div>
+                                                <div class="ps-1 mt-0 pt-0" style="font-size: 14px; color: white;">
+                                                    <span style="font-weight: bolder;">Ordenação:
+                                                        @switch($ordem)
+                                                            @case('name')
+                                                                Nome do candidato
+                                                                @break
+                                                            @case('cota')
+                                                                Cota
+                                                                @break
+                                                            @case('status')
+                                                                Status da inscrição
+                                                                @break
+                                                            @default
+                                                                Nome do candidato
+                                                                @break
+                                                        @endswitch
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <button title="Ordenar candidatos" class="" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img width="35" src="{{asset('img/Subtração 2.svg')}}" alt="Icone de ordenação de candidatos">
-                                      </button>
-                                      <ul class="dropdown-menu px-2" aria-labelledby="dropdownMenu2">
-                                        <div class="form-check link-ordenacao">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" @if($ordem == null || $ordem == 'name') checked @endif>
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                Nome do candidato
-                                            </label>
+                                        <div>
+                                            <button title="Ordenar candidatos" class="" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img width="35" src="{{ asset('img/Subtração 2.svg') }}" alt="Icone de ordenação de candidatos">
+                                            </button>
+                                        
+                                            <ul class="dropdown-menu px-2" aria-labelledby="dropdownMenu2">
+                                                <li>
+                                                    <form method="get" action="{{ route('todos.ingressantes',  ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id]) }}">
+                                                        @csrf
+                                                        <div class="form-check link-ordenacao">
+                                                            <input class="form-check-input" type="radio" name="ordem" id="flexRadioDefault1" value="name" {{ ($ordem == null || $ordem == 'name') ? 'checked' : '' }} onchange="document.getElementById('ordenacaoSubmitButton').click()">
+                                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                                Nome do candidato
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check link-ordenacao">
+                                                            <input class="form-check-input" type="radio" name="ordem" id="flexRadioDefault2" value="cota" {{ ($ordem == 'cota') ? 'checked' : '' }} onchange="document.getElementById('ordenacaoSubmitButton').click()">
+                                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                                Cota
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check link-ordenacao">
+                                                            <input class="form-check-input" type="radio" name="ordem" id="flexRadioDefault3" value="status" {{ ($ordem == 'status') ? 'checked' : '' }} onchange="document.getElementById('ordenacaoSubmitButton').click()">
+                                                            <label class="form-check-label" for="flexRadioDefault3">
+                                                                Status da inscrição
+                                                            </label>
+                                                        </div>
+                                                        <!-- Botão de submissão oculto -->
+                                                        <button type="submit" id="ordenacaoSubmitButton" style="display:none;"></button>
+                                                    </form>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div class="form-check link-ordenacao">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  @if($ordem == 'cota') checked @endif>
-                                            <label class="form-check-label" for="flexRadioDefault2">
-                                                Cota
-                                            </label>
-                                        </div>
-                                        <div class="form-check link-ordenacao">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  @if($ordem == 'status') checked @endif>
-                                            <label class="form-check-label" for="flexRadioDefault2">
-                                                Status da inscrição
-                                            </label>
-                                          </div>
-                                      </ul>
-                                      {{-- @can('isAdmin', \App\Models\User::Class)
-                                        <a title="Baixar todos os documentos de todos os candidatos" href="{{route('baixar.documentos.candidatos.curso', ['curso_id' => $curso->id, 'chamada_id' => $chamada->id])}}">
-                                            <img width="35" src="{{asset('img/download4.svg')}}" alt="Baixar todos os documentos de todos os candidatos"></a>
-                                        </a>
-                                      @endcan verificar depois--}}
                                     </div>
                                 </div>
-
-                              </div>
                             </div>
                         </div>
 
