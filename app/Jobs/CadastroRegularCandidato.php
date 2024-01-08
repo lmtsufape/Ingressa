@@ -44,7 +44,7 @@ class CadastroRegularCandidato implements ShouldQueue
         ini_set('auto_detect_line_endings', true);
         $dados = fopen(storage_path('app'.DIRECTORY_SEPARATOR.$this->chamada->sisu->caminho_import_regular), "r");
         $primeira = true;
-        while ( ($data = fgetcsv($dados,";",';') ) !== FALSE ) {
+        while ( ($data = fgetcsv($dados, 0,';') ) !== FALSE ) {
             if($primeira){
                 $primeira = false;
             }else{
