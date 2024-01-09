@@ -87,6 +87,14 @@
                                     </div>
                                 </div>
                             </li>
+                            <li>
+                                <div title="Editar remanejamento" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <img class="aling-middle" width="33" src="{{asset('img/icons-document-blue.png')}}" alt="Icone de editar remanejamento">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Editar remanejamento
+                                    </div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
