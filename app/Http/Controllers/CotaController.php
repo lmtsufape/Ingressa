@@ -7,6 +7,7 @@ use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\Remanejamento;
 use App\Http\Requests\CotaRequest;
+use Illuminate\Database\QueryException;
 
 class CotaController extends Controller
 {
@@ -155,7 +156,11 @@ class CotaController extends Controller
         }
         $cota = Cota::find($id);
 
-        $this->vincularOrdem($request, $cota);
+        try {
+            $this->vincularOrdem($request, $cota);
+        } catch (QueryException $e) {
+            return redirect()->back()->withErrors(['error' => 'Há duplicações na ordem de remanejamento!']);
+        }
 
         return redirect(route('cotas.index'))->with(['success' => 'Ordem de remanejamento salva com sucesso!']);
     }

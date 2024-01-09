@@ -18,7 +18,9 @@
                         </div>
                         @error('error')
                             <div class="alert alert-danger" role="alert">
-                                {{$message}}
+                                <span>
+                                    <strong>{{$message}}</strong>
+                                </span>
                             </div>
                         @enderror
                         <form id="criar-curso-form" method="POST" action="{{route('cotas.remanejamento.update', ['cota' => $cota])}}">
