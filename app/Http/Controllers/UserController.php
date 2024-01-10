@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Curso;
+use App\Models\Cota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
@@ -22,7 +24,9 @@ class UserController extends Controller
         $this->authorize('isAdmin', User::class);
         $users = User::where('role', User::ROLE_ENUM['analista'])->paginate(15);
         $tipos = TipoAnalista::all();
-        return view('user.index', compact('users', 'tipos'));
+        $cursos = Curso::distinct()->orderBy('nome')->pluck('cod_curso','nome');
+        $cotas = Cota::all();
+        return view('user.index', compact('users', 'tipos', 'cursos', 'cotas'));
     }
 
     /**
@@ -55,6 +59,11 @@ class UserController extends Controller
         foreach($request->tipos_analista as $tipo_id){
             $user->tipo_analista()->attach(TipoAnalista::find($tipo_id));
         }
+        foreach($request->cursos_analista as $cod_curso){
+            $user->analistaCursos()->attach(Curso::where('cod_curso', $cod_curso)->get());
+        }
+        $user->analistaCotas()->attach(Cota::find($request->cotas_analista));
+
         return redirect(route('usuarios.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
     }
 
@@ -114,6 +123,8 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required','string','email','max:255','unique:users,email,'.$user->id,],
             'tipos_analista_edit' => 'required',
+            'cotas_analista_edit' => 'required|exists:cotas,id',
+            'cursos_analista_edit' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -132,6 +143,11 @@ class UserController extends Controller
             }
         }
 
+        $cursos = Curso::whereIn('cod_curso', $request->cursos_analista_edit)->pluck('id');
+        
+        $user->analistaCursos()->sync($cursos);
+        $user->analistaCotas()->sync($request->cotas_analista_edit);
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->update();
@@ -148,6 +164,8 @@ class UserController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'cargos' => $user->tipo_analista,
+            'cursos' => $user->analistaCursos,
+            'cotas' => $user->analistaCotas,
         ];
 
         return response()->json($userInfo);

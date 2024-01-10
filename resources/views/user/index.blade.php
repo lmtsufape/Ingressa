@@ -170,6 +170,38 @@
                             </div>
                         @enderror
                     </div>
+                    
+                    <div class="col-md-12 pt-3 textoModal">
+                        <label class="pb-2 pt-2" for="tipo">{{__('Selecione o(s) curso(s) do analista:')}}</label>
+                        <input type="hidden" class="checkbox_tipo @error('cursos_analista_store') is-invalid @enderror">
+                        @foreach ($cursos as $curso => $codigo)
+                            <div class="form-check">
+                                <input class="form-check-input form-check-cursos" type="checkbox" name="cursos_analista[]" value="{{$codigo}}" id="cursos_analista_store_{{$codigo}}">
+                                <label class="form-check-label" for="cursos_analista_store_{{$codigo}}">{{$curso}}</label>
+                            </div>
+                        @endforeach
+                        @error('cursos_analista_store')
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-12 pt-3 textoModal">
+                        <label class="pb-2 pt-2" for="tipo">{{__('Selecione a(s) cota(s) do analista:')}}</label>
+                        <input type="hidden" class="checkbox_tipo @error('cotas_analista_store') is-invalid @enderror">
+                        @foreach ($cotas as $cota)
+                            <div class="form-check">
+                                <input class="form-check-input form-check-cursos" type="checkbox" name="cotas_analista[]" value="{{$cota->id}}" id="cotas_analista_store_{{$cota->id}}">
+                                <label class="form-check-label" for="cotas_analista_store_{{$cota->id}}">{{$cota->cod_cota}}</label>
+                            </div>
+                        @endforeach
+                        @error('cotas_analista_store')
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
                 </form>
 
                 <div class="row justify-content-between mt-4">
@@ -232,6 +264,38 @@
                                 </div>
                             @endforeach
                             @error('tipos_analista_edit')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-12 pt-3 textoModal">
+                            <label class="pb-2 pt-2" for="tipo">{{__('Selecione o(s) curso(s) do analista:')}}</label>
+                            <input type="hidden" class="checkbox_tipo @error('cursos_analista_edit') is-invalid @enderror">
+                            @foreach ($cursos as $curso => $codigo)
+                                <div class="form-check">
+                                    <input class="form-check-input form-check-cursos" type="checkbox" name="cursos_analista_edit[]" value="{{$codigo}}" id="cursos_analista_{{$codigo}}">
+                                    <label class="form-check-label" for="cursos_analista_{{$codigo}}">{{$curso}}</label>
+                                </div>
+                            @endforeach
+                            @error('cursos_analista_edit')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-12 pt-3 textoModal">
+                            <label class="pb-2 pt-2" for="tipo">{{__('Selecione a(s) cota(s) do analista:')}}</label>
+                            <input type="hidden" class="checkbox_tipo @error('cotas_analista_edit') is-invalid @enderror">
+                            @foreach ($cotas as $cota)
+                                <div class="form-check">
+                                    <input class="form-check-input form-check-cursos" type="checkbox" name="cotas_analista_edit[]" value="{{$cota->id}}" id="cotas_analista_{{$cota->id}}">
+                                    <label class="form-check-label" for="cotas_analista_{{$cota->id}}">{{$cota->cod_cota}}</label>
+                                </div>
+                            @endforeach
+                            @error('cotas_analista_edit')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -311,6 +375,12 @@
                 document.getElementById('email-edit').value = user.email;
                 for(var i = 0; i < user.cargos.length; i++){
                     $('#tipo_edit_'+user.cargos[i].id).attr('checked', true);
+                }
+                for(var i = 0; i < user.cursos.length; i++){
+                    $('#cursos_analista_'+user.cursos[i].cod_curso).attr('checked', true);
+                }
+                for(var i = 0; i < user.cotas.length; i++){
+                    $('#cotas_analista_'+user.cotas[i].id).attr('checked', true);
                 }
             }
         });
