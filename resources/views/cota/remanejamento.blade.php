@@ -45,7 +45,7 @@
                                         <br>
                                         <div class="col-md-2 form-group">
                                             <label for="ordem-{{ $prox_cota->id }}">{{ __('Ordem na fila') }}</label>
-                                            <input type="number" name="ordem[]" id="ordem-{{ $prox_cota->id }}"
+                                            <input type="text" name="ordem[]" id="ordem-{{ $prox_cota->id }}"
                                                 class="form-control @error('ordem.' . $i) is-invalid @enderror"
                                                 value="{{ $cota->remanejamentos->contains('id_prox_cota', $prox_cota->id)? old('ordem.' . $i,$cota->remanejamentos()->where('id_prox_cota', $prox_cota->id)->first()->ordem): old('ordem.' . $i) }}"
                                                 disabled>
@@ -149,11 +149,17 @@
 
                     // Atualizar a ordem dos inputs
                     updateOrder();
+
+                    // Definir valor "Sem ordem" para checkboxes desmarcadas
+                    unmarkedItems.forEach(function(item) {
+                        var checkbox = item.querySelector('[type="checkbox"]');
+                        var orderInput = item.querySelector('[name="ordem[]"]');
+                        if (!checkbox.checked) {
+                            orderInput.value = "Sem ordem";
+                        }
+                    });
                 }
             });
         </script>
     @endpush
-
-
-
 </x-app-layout>
