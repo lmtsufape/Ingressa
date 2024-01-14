@@ -8,6 +8,7 @@ use App\Models\Curso;
 use App\Models\Remanejamento;
 use App\Http\Requests\CotaRequest;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class CotaController extends Controller
 {
@@ -150,16 +151,15 @@ class CotaController extends Controller
     public function remanejamentoUpdate(Request $request, $id)
     {
         $this->authorize('isAdmin', User::class);
-        $validated = $this->validarOpcionalObrigatorioRemanejamento($request);
-        if ($validated != null) {
-            return $validated;
-        }
         $cota = Cota::find($id);
 
         try {
             $this->vincularOrdem($request, $cota);
         } catch (QueryException $e) {
-            return redirect()->back()->withErrors(['error' => 'Há duplicações na ordem de remanejamento!']);
+            if ($e->getCode() === '23505') {
+                return redirect()->back()->withErrors(['error' => 'Há duplicações na ordem de remanejamento!']);
+            }
+            throw $e;
         }
 
         return redirect(route('cotas.index'))->with(['success' => 'Ordem de remanejamento salva com sucesso!']);
@@ -174,75 +174,15 @@ class CotaController extends Controller
     private function vincularOrdem(Request $request, Cota $cota)
     {
         $this->authorize('isAdmin', User::class);
-        switch ($request->modo) {
-            case 'create':
-                foreach ($request->cotas as $i => $valor) {
-                    if ($valor != null) {
-                        $prox_cota = Cota::find($valor);
-                        if ($prox_cota != null) {
-                            $this->criarRemanejamento($request->ordem[$i], $cota, $prox_cota);
-                        }
-                    }
-                }
-                break;
-            case 'edit':
-                // Deletando desmarcados
-                $remanejamentos_excluidos = collect();
-                foreach ($cota->remanejamentos as $remanejamento) {
-                    if (!in_array($remanejamento->id_prox_cota, $request->cotas)) {
-                        $remanejamentos_excluidos->push($remanejamento);
-                    }
-                }
-                foreach ($remanejamentos_excluidos as $remanejamento) {
-                    $remanejamento->delete();
-                }
+        DB::transaction(function () use ($cota, $request) {
+            Remanejamento::where('cota_id', $cota->id)->delete();
 
-                // Atualizando marcados e criando novos marcados
-                foreach ($request->cotas as $i => $valor) {
-                    if ($cota->remanejamentos->contains('id_prox_cota', $valor)) {
-                        $prox_cota = Cota::find($valor);
-                        $remanejamento = $cota->remanejamentos()->where('id_prox_cota', $valor)->first();
-                        $remanejamento->setAtributes($request->ordem[$i], $cota, $prox_cota);
-                        $remanejamento->update();
-                    } else {
-                        $prox_cota = Cota::find($valor);
-                        if ($prox_cota != null) {
-                            $this->criarRemanejamento($request->ordem[$i], $cota, $prox_cota);
-                        }
-                    }
+            foreach ($request->cotas as $i => $proxCota) {
+                if ($proxCota != null) {
+                    Remanejamento::Create(['ordem' => $i + 1, 'cota_id' => $cota->id, 'id_prox_cota' => $proxCota]);
                 }
-                break;
-        }
-    }
-
-    /**
-     *  Cria um remanejamento com os valores passados.
-     * @param  int $ordem
-     * @param  App\Models\Cota  $cota
-     * @param  App\Models\Cota  $prox_cota
-     * @return void
-     */
-    private function criarRemanejamento($ordem, Cota $cota, Cota $prox_cota)
-    {
-        $this->authorize('isAdmin', User::class);
-        $remanejamento = new Remanejamento();
-        $remanejamento->setAtributes($ordem, $cota, $prox_cota);
-        $remanejamento->save();
-    }
-
-    /**
-     * Checa se um checkbox foi marcado mais faltou o preenchimento do campo da ordem.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    private function validarOpcionalObrigatorioRemanejamento(Request $request)
-    {
-        foreach ($request->cotas as $i => $valor) {
-            if ($valor != null && $request->ordem[$i] == null) {
-                return redirect()->back()->withErrors(['ordem.'.$i => 'O campo de ordem é obrigatório caso a cota esteja marcada.'])->withInput($request->all());
             }
-        }
+        });
     }
 
     /**
@@ -255,7 +195,7 @@ class CotaController extends Controller
     {
         foreach ($request->cursos as $i => $valor) {
             if ($valor != null && $request->quantidade[$i] == null) {
-                return redirect()->back()->withErrors(['quantidade.'.$i => 'O campo de quantidade é obrigatório caso o curso esteja marcado.'])->withInput($request->all());
+                return redirect()->back()->withErrors(['quantidade.' . $i => 'O campo de quantidade é obrigatório caso o curso esteja marcado.'])->withInput($request->all());
             }
         }
     }
