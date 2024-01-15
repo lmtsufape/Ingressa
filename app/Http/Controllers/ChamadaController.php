@@ -569,7 +569,7 @@ class ChamadaController extends Controller
         $naoEnviados = collect();
         $invalidados = collect();
 
-        $cursos = auth()->user()->analistaCursos()->sortBy('nome');
+        $cursos = auth()->user()->analistaCursos->sortBy('nome');
         $userPolicy = new UserPolicy();
 
         $L2 = Cota::where('cod_cota', 'L2')->first();
@@ -833,6 +833,7 @@ class ChamadaController extends Controller
         $sisu = Sisu::find($sisu_id);
         $turno = $curso->getTurno();
         $ordem = $request->ordem;
+        $cotas = auth()->user()->analistaCotas->pluck('id');
 
         $userPolicy = new UserPolicy();
         $concluidos = collect();
@@ -840,6 +841,7 @@ class ChamadaController extends Controller
         if ($userPolicy->isAdminOrAnalistaGeral(auth()->user())) {
             $query = Inscricao::select('inscricaos.*')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
+                ->whereIn('cota_id', $cotas)
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
                 ->join('users', 'users.id', '=', 'candidatos.user_id');
         } elseif ($userPolicy->soEhAnalistaHeteroidentificacao(auth()->user())) {
