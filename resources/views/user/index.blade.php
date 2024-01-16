@@ -437,6 +437,26 @@
 @endif
 
 <script>
+    // Adiciona um ouvinte de eventos para as checkboxes de tipo de analista (para criar e editar)
+    document.querySelectorAll('.form-check-tipos').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            var modalId = checkbox.closest('.modal').id; // Obtém o ID do modal
+            atualizarVisibilidadeCotas(modalId);
+        });
+    });
+
+    // Chama a função inicialmente para configurar a visibilidade correta
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adiciona um ouvinte de eventos para os modais serem mostrados
+        $('#criar-user-modal, #editar-user-modal').on('shown.bs.modal', function() {
+            // Obtém o ID do modal
+            var modalId = $(this).attr('id');
+            // Chama a função para configurar a visibilidade correta
+            atualizarVisibilidadeCotas(modalId);
+        });
+    });
+
+
     function atualizarVisibilidadeCotas(modalId) {
         // Verifica se a checkbox de tipo medico e heteroidentificacao está desmarcada
         var heteroCheckbox = document.getElementById('tipo-' + modalId + '-2');
@@ -452,19 +472,6 @@
         }
     }
 
-    // Adiciona um ouvinte de eventos para as checkboxes de tipo de analista (para criar e editar)
-    document.querySelectorAll('.form-check-tipos').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            var modalId = checkbox.closest('.modal').id; // Obtém o ID do modal
-            atualizarVisibilidadeCotas(modalId);
-        });
-    });
-
-    // Chama a função inicialmente para configurar a visibilidade correta
-    document.addEventListener('DOMContentLoaded', function() {
-        atualizarVisibilidadeCotas('criar-user-modal');
-        atualizarVisibilidadeCotas('editar-user-modal');
-    });
 
     function editarAnalista(id, tipos) {
         for (var i = 0; i < tipos.length; i++) {
