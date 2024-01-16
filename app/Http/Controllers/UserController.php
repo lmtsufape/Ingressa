@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Curso;
+use App\Models\Cota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
@@ -22,7 +24,9 @@ class UserController extends Controller
         $this->authorize('isAdmin', User::class);
         $users = User::where('role', User::ROLE_ENUM['analista'])->paginate(15);
         $tipos = TipoAnalista::all();
-        return view('user.index', compact('users', 'tipos'));
+        $cursos = Curso::distinct()->orderBy('nome')->pluck('cod_curso', 'nome');
+        $cotas = Cota::all();
+        return view('user.index', compact('users', 'tipos', 'cursos', 'cotas'));
     }
 
     /**
@@ -52,9 +56,16 @@ class UserController extends Controller
         $user->email_verified_at = now();
         $user->primeiro_acesso = false;
         $user->save();
-        foreach($request->tipos_analista as $tipo_id){
+        foreach ($request->tipos_analista as $tipo_id) {
             $user->tipo_analista()->attach(TipoAnalista::find($tipo_id));
         }
+        foreach ($request->cursos_analista as $cod_curso) {
+            $user->analistaCursos()->attach(Curso::where('cod_curso', $cod_curso)->get());
+        }
+        if (!$user->tipo_analista()->whereIn('tipo', [TipoAnalista::TIPO_ENUM['heteroidentificacao'], TipoAnalista::TIPO_ENUM['medico']])->exists()) {
+            $user->analistaCotas()->attach(Cota::find($request->cotas_analista));
+        }
+
         return redirect(route('usuarios.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
     }
 
@@ -89,8 +100,8 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'email' => ['required','string','email','max:255','unique:users'],
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password'         => 'required',
             'password_confirmation' => 'required|same:password',
         ]);
@@ -110,26 +121,26 @@ class UserController extends Controller
     public function updateAnalista(Request $request)
     {
         $user = User::find($request->user_id);
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required','string','email','max:255','unique:users,email,'.$user->id,],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id,],
             'tipos_analista_edit' => 'required',
+            'cotas_analista_edit' => 'required|exists:cotas,id',
+            'cursos_analista_edit' => 'required|exists:cursos,cod_curso',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-        foreach($request->tipos_analista_edit as $tipo_id){
-            $tipo = TipoAnalista::find($tipo_id);
-            if(!$user->tipo_analista->contains($tipo)){
-                $user->tipo_analista()->attach($tipo);
-            }
-        }
-        foreach($user->tipo_analista as $tipo){
-            if(!in_array($tipo->id, $request->tipos_analista_edit)){
-                $user->tipo_analista()->detach($tipo);
-            }
+        $user->tipo_analista()->sync($request->tipos_analista_edit);
+
+        $cursos = Curso::whereIn('cod_curso', $request->cursos_analista_edit)->pluck('id');
+
+        $user->analistaCursos()->sync($cursos);
+
+        if (!$user->tipo_analista()->whereIn('tipo', [TipoAnalista::TIPO_ENUM['heteroidentificacao'], TipoAnalista::TIPO_ENUM['medico']])->exists()) {
+            $user->analistaCotas()->sync($request->cotas_analista_edit);
         }
 
         $user->name = $request->name;
@@ -148,6 +159,8 @@ class UserController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'cargos' => $user->tipo_analista,
+            'cursos' => $user->analistaCursos,
+            'cotas' => $user->analistaCotas,
         ];
 
         return response()->json($userInfo);
@@ -163,7 +176,7 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $user = User::find($id);
-        foreach($user->tipo_analista()->get() as $tipo){
+        foreach ($user->tipo_analista()->get() as $tipo) {
             $tipo->pivot->delete();
         }
         $user->delete();

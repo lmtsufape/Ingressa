@@ -89,4 +89,9 @@ class Curso extends Model
         $this->icone = $path . $name;
         $this->update();
     }
+
+    public function analistas()
+    {
+        return $this->belongsToMany(User::class, 'curso_user', 'curso_id', 'user_id');
+    }
 }

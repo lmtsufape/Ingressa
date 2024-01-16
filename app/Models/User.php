@@ -115,12 +115,20 @@ class User extends Authenticatable
         return $heteroidentificacao;
     }
 
-    
-
     public static function gerar_user_inscricao(Inscricao $inscricao) 
     {
         $user = $inscricao->candidato->user;
         $user->email = $inscricao->ds_email;
         return $user;
+    }
+
+    public function analistaCursos()
+    {
+        return $this->belongsToMany(Curso::class, 'curso_user', 'user_id', 'curso_id');
+    }
+
+    public function analistaCotas()
+    {
+        return $this->belongsToMany(Cota::class, 'cota_user', 'user_id', 'cota_id');
     }
 }

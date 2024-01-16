@@ -81,4 +81,9 @@ class Cota extends Model
     {
         return $this::COD_COTA_ENUM[$this->cod_cota];
     }
+
+    public function analistas()
+    {
+        return $this->belongsToMany(User::class, 'cota_user', 'cota_id', 'user_id');
+    }
 }
