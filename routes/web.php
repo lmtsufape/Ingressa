@@ -35,8 +35,8 @@ Route::get('/informacoes/enviar-docs', [WelcomeController::class, 'envio_docs'])
 
 Route::get('/primeiro-acesso', [CandidatoController::class, 'prepararAdicionar'])->name('primeiro.acesso');
 Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('primeiroAcesso.verificacao');
-Route::get('/editar', [CandidatoController::class , 'editarAcesso'])->name('primeiroAcesso.editar');
-Route::post('/atualizar', [UserController::class , 'update'])->name('primeiroAcesso.atualizar');
+Route::get('/editar', [CandidatoController::class, 'editarAcesso'])->name('primeiroAcesso.editar');
+Route::post('/atualizar', [UserController::class, 'update'])->name('primeiroAcesso.atualizar');
 
 Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->get('/dashboard', function () {
     return view('dashboard');
@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->get('/dashbo
 
 Route::put('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'update'])->name('candidato.atualizar');
 Route::get('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'edit'])->name('candidato.edit');
-Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function() {
+Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function () {
 
     Route::resource('usuarios', UserController::class);
     Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])
@@ -60,31 +60,31 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
         ->name('chamadas.create');
 
     Route::post('/sisus/{sisu_id}/importar-candidatos/{chamada_id}', [ChamadaController::class, 'importarCandidatos'])
-    ->name('chamadas.importar.candidatos');
+        ->name('chamadas.importar.candidatos');
 
     Route::post('/sisus/{sisu_id}/importa-planilha-regular', [SisuController::class, 'importarPlanilhasRegular'])
-    ->name('chamadas.importar.planilhas.regular');
+        ->name('chamadas.importar.planilhas.regular');
 
     Route::post('/sisus/{sisu_id}/importa-planilha-espera', [SisuController::class, 'importarPlanilhasEspera'])
-    ->name('chamadas.importar.planilhas.espera');
+        ->name('chamadas.importar.planilhas.espera');
 
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada', [ChamadaController::class, 'candidatosChamada'])
-    ->name('chamadas.candidatos');
+        ->name('chamadas.candidatos');
 
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}', [ChamadaController::class, 'candidatosCurso'])
-    ->name('chamadas.candidatos.curso');
+        ->name('chamadas.candidatos.curso');
 
-    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/efetivar', [InscricaoController::class , 'updateStatusEfetivado'])
+    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/efetivar', [InscricaoController::class, 'updateStatusEfetivado'])
         ->name('inscricao.status.efetivado');
 
-    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/bloquear', [InscricaoController::class , 'bloquearInscricao'])
+    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/bloquear', [InscricaoController::class, 'bloquearInscricao'])
         ->name('inscricao.bloquear.inscricao');
 
-    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/confirmar-invalidacao', [InscricaoController::class , 'confirmarInvalidacao'])
+    Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/confirmar-invalidacao', [InscricaoController::class, 'confirmarInvalidacao'])
         ->name('inscricao.confirmar.invalidacao');
 
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada-aprovar', [ChamadaController::class, 'aprovarCandidatosChamada'])
-    ->name('chamadas.candidatos.aprovar');
+        ->name('chamadas.candidatos.aprovar');
 
     Route::get('/sisus/{sisu_id}/lista-personalizada-cursos', [ListagemController::class, 'listaPersonalizada'])
         ->name('lista.personalizada');
@@ -117,7 +117,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
 
     Route::get('/inscricaos/{inscricao_id}/ver-documento/{documento_nome}', [InscricaoController::class, 'showDocumento'])->name('inscricao.arquivo');
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/inscricao/{inscricao_id}', [InscricaoController::class, 'showAnalisarDocumentos'])
-    ->name('inscricao.show.analisar.documentos');
+        ->name('inscricao.show.analisar.documentos');
     Route::post('/enviar/email/candidato', [CandidatoController::class, 'enviarEmail'])->name('enviar.email.candidato');
 
     Route::get('/inscricao/get-documento', [InscricaoController::class, 'inscricaoDocumentoAjax'])->name('inscricao.documento.ajax');
@@ -141,5 +141,4 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::get('/listagens/publicar', [ListagemController::class, 'publicar'])->name('publicar.listagem');
 
     Route::post('/inscricaos/{inscricao_id}/editar-situacao-lista', [InscricaoController::class, 'editarSituacao'])->name('inscricao.situacao.update');
-
 });
