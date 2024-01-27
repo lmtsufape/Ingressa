@@ -15,6 +15,8 @@
                                 <h5 class="card-title">Ordem de remanejamento para a cota {{ $cota->cod_cota }} -
                                     {{ $cota->nome }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Cotas > Remanejamento de cota</h6>
+                                <h6 class="card-subtitle mb-2" style="color: #2A5EDC">*Os cards podem ser reordenados
+                                    arrastando com o mouse.</h6>
                             </div>
                         </div>
                         @error('error')
@@ -32,7 +34,7 @@
                             <div id="sortable-list">
                                 @foreach ($cotas as $i => $prox_cota)
                                     <div class="form-row drag-handle" data-id="{{ $prox_cota->id }}"
-                                        style="border: 1px solid rgb(156, 156, 156); border-radius: 5px; margin-top: 10px; margin-bottom: 10px; padding:10px;">
+                                        style="border: 1px solid rgb(156, 156, 156); border-radius: 5px; margin-top: 10px; margin-bottom: 10px; padding:10px; cursor: grab;">
                                         <div class="col-md-12 form-group drag-handle">
                                             <input id="cota-input-{{ $prox_cota->id }}" type="hidden" name="cotas[]"
                                                 value="{{ $cota->remanejamentos->contains('id_prox_cota', $prox_cota->id) ? old('cotas.' . $i, $prox_cota->id) : old('cotas.' . $i) }}">
@@ -43,18 +45,29 @@
                                                 {{ $prox_cota->nome }}</label>
                                         </div>
                                         <br>
-                                        <div class="col-md-2 form-group">
-                                            <label for="ordem-{{ $prox_cota->id }}">{{ __('Ordem na fila') }}</label>
-                                            <input type="text" name="ordem[]" id="ordem-{{ $prox_cota->id }}"
-                                                class="form-control @error('ordem.' . $i) is-invalid @enderror"
-                                                value="{{ $cota->remanejamentos->contains('id_prox_cota', $prox_cota->id)? old('ordem.' . $i,$cota->remanejamentos()->where('id_prox_cota', $prox_cota->id)->first()->ordem): old('ordem.' . $i) }}"
-                                                disabled>
+                                        <div class="row justify-content-between row align-items-end">
+                                            <div class="col-md-2 form-group">
+                                                <label
+                                                    for="ordem-{{ $prox_cota->id }}">{{ __('Ordem na fila') }}</label>
+                                                <input type="text" name="ordem[]" id="ordem-{{ $prox_cota->id }}"
+                                                    class="form-control-plaintext @error('ordem.' . $i) is-invalid @enderror"
+                                                    value="{{ $cota->remanejamentos->contains('id_prox_cota', $prox_cota->id)? old('ordem.' . $i,$cota->remanejamentos()->where('id_prox_cota', $prox_cota->id)->first()->ordem): old('ordem.' . $i) }}"
+                                                    disabled readonly>
 
-                                            @error('ordem.' . $i)
-                                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                                @error('ordem.' . $i)
+                                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-auto">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16"
+                                                    class="align-self-bottom" style="color: #2A5EDC">
+                                                    <path fill-rule="evenodd"
+                                                        d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
