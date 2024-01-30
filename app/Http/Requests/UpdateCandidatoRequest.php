@@ -8,11 +8,11 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateCandidatoRequest extends FormRequest
 {
 
-    protected function getValidatorInstance(){
+    protected function getValidatorInstance()
+    {
         $validator = parent::getValidatorInstance();
 
-        $validator->sometimes('necessidades', 'required|array|max:1', function($input)
-        {
+        $validator->sometimes('necessidades', 'required|array|max:1', function ($input) {
             return in_array('nenhuma', $input->necessidades);
         });
 
@@ -57,7 +57,6 @@ class UpdateCandidatoRequest extends FormRequest
             'modalidade' => ['required', 'string'],
             'concluiu_publica' => ['required', 'boolean'],
             'necessidades' => ['required', 'array'],
-            'cor_raca' => ['required', 'string'],
             'etnia' => ['required', 'string'],
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],

@@ -650,8 +650,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })
             ->whereIn('inscricaos.id', function ($qry) use ($arquivos) {
                 $qry->select('inscricaos.id')
@@ -672,8 +672,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })->get();
 
         $retorno['candidatosNaoEnviado'] = Inscricao::select('inscricaos.*')
@@ -682,8 +682,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })->get();
 
         $retorno['candidatosEnviado'] = Inscricao::select('inscricaos.*')
@@ -692,8 +692,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })
             ->whereNotIn('inscricaos.id', function ($qry) use ($arquivos) {
                 $qry->select('inscricaos.id')
@@ -714,8 +714,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })
             ->whereIn('inscricaos.id', function ($qry) use ($arquivos) {
                 $qry->select('inscricaos.id')
@@ -855,8 +855,8 @@ class ChamadaController extends Controller
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 });
             $concluidos = Inscricao::select('inscricaos.id')
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
@@ -864,8 +864,8 @@ class ChamadaController extends Controller
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
@@ -880,8 +880,8 @@ class ChamadaController extends Controller
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1, 2])
@@ -954,8 +954,8 @@ class ChamadaController extends Controller
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->get();
             $concluidos = Inscricao::select('inscricaos.id')
@@ -964,8 +964,8 @@ class ChamadaController extends Controller
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('cota_id', [$L2->id, $L6->id])
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
@@ -980,8 +980,8 @@ class ChamadaController extends Controller
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L2->id, $L6->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1, 2])
@@ -1004,8 +1004,8 @@ class ChamadaController extends Controller
                 ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L10->id, $L14->id])
@@ -1019,8 +1019,8 @@ class ChamadaController extends Controller
                 ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L10->id, $L14->id])
