@@ -17,32 +17,30 @@ class CandidatoController extends Controller
     {
         $cpf = preg_replace('/[^0-9]/', '', $request->cpf);
         $dt_nasc = $request->dt_nasc;
-        $candidato = Candidato::where([
-            ['nu_cpf_inscrito', '=', $cpf],
-            ['dt_nascimento', '=', $dt_nasc]]
+        $candidato = Candidato::where(
+            [
+                ['nu_cpf_inscrito', '=', $cpf],
+                ['dt_nascimento', '=', $dt_nasc]
+            ]
         )->first();
 
-        if ($candidato == null){
+        if ($candidato == null) {
             return redirect(route('primeiro.acesso'))
                 ->withErrors(['cpf' => 'Dados incorretos.'])
                 ->withInput();
-        }
-        else{
+        } else {
 
-            $user = User::where('id','=',$candidato->user_id)->first();
+            $user = User::where('id', '=', $candidato->user_id)->first();
 
-            if ($user->primeiro_acesso == true){
+            if ($user->primeiro_acesso == true) {
 
                 return view('candidato.acesso_edit', compact('user'));
-            }
-            else{
+            } else {
                 return redirect(route('primeiro.acesso'))
                     ->withErrors(['cpf' => 'Primeiro acesso já realizado!'])
                     ->withInput();
             }
-
         }
-
     }
 
     public static function prepararAdicionar()
@@ -67,7 +65,7 @@ class CandidatoController extends Controller
         $user = $inscricao->candidato->user;
         if ($user->email != null) {
             Notification::send($user, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo'), $inscricao));
-        }else{
+        } else {
             $user_inscricao = User::gerar_user_inscricao($inscricao);
             Notification::send($user_inscricao, new EmailCandidatoNotification($request->assunto, $request->input('conteúdo'), $inscricao));
         }
@@ -86,9 +84,9 @@ class CandidatoController extends Controller
         $candidato->save();
         $inscricao->save();
 
-        if(auth()->user()->role == User::ROLE_ENUM['admin']){
+        if (auth()->user()->role == User::ROLE_ENUM['admin']) {
             return redirect()->back()->with(['success' => "Dados atualizados!"]);
-        }else{
+        } else {
             return redirect(route('inscricaos.index'))->with(['success' => 'Dados atualizados!']);
         }
     }
@@ -96,8 +94,7 @@ class CandidatoController extends Controller
     public function edit(Candidato $candidato, Inscricao $inscricao)
     {
         $this->authorize('canAtualizarFicha', $inscricao);
-        $cores_racas = Candidato::COR_RACA;
+        $cores_racas = Candidato::ETNIA_E_COR;
         return view('candidato.atualizar_dados', compact('candidato', 'inscricao', 'cores_racas'));
     }
-
 }
