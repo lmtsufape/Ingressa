@@ -226,6 +226,7 @@ class ChamadaController extends Controller
         $invalidados = collect();
 
         $cursos = auth()->user()->analistaCursos->sortBy('nome');
+        $cursos = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Curso::all() : $cursos;
         $userPolicy = new UserPolicy();
 
         $L2 = Cota::where('cod_cota', 'L2')->first();
@@ -236,6 +237,7 @@ class ChamadaController extends Controller
         $L14 = Cota::where('cod_cota', 'L14')->first();
 
         $cotas = auth()->user()->analistaCotas()->pluck('cota_id')->toArray();
+        $cotas = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Cota::pluck('id') : $cotas;
 
         foreach ($cursos as $curso) {
             if ($userPolicy->isAdminOrAnalistaGeral(auth()->user())) {
@@ -293,6 +295,7 @@ class ChamadaController extends Controller
             $naoEnviados->push(count($candidatosNaoEnviado));
             $invalidados->push(count($candidatosInvalidados));
         }
+
         return view('chamada.candidatos-chamada', compact('chamada', 'cursos', 'concluidos', 'concluidosPendentes', 'enviados', 'naoEnviados', 'invalidados'))
             ->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
@@ -490,6 +493,8 @@ class ChamadaController extends Controller
         $turno = $curso->getTurno();
         $ordem = $request->ordem;
         $cotas = auth()->user()->analistaCotas->pluck('id');
+        $cotas = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Cota::pluck('id') : $cotas;
+
 
         $userPolicy = new UserPolicy();
         $concluidos = collect();
@@ -808,7 +813,7 @@ class ChamadaController extends Controller
         $chamados = collect();
         $candidatosCPF = collect();
 
-        while (($data = fgetcsv($dados, ";", ';')) !== FALSE) {
+        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
             if ($primeira) {
                 $primeira = false;
             } else {

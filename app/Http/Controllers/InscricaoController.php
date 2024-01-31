@@ -33,7 +33,6 @@ class InscricaoController extends Controller
         $inscricoes = $user->candidato->inscricoes()->orderBy('created_at', 'desc')->get();
         $cursos = collect();
 
-        //dd($inscricoes);
         foreach ($inscricoes as $inscricao) {
             $cursos->push($inscricao->curso);
         }
