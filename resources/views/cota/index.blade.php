@@ -48,7 +48,7 @@
                                 @foreach ($cotas as $i => $cota)
                                 <tr>
                                     <th class="align-middle">{{$i+1}}</th>
-                                    <td class="align-middle">{{$cota->cod_cota}}</td>
+                                    <td class="align-middle">{{$cota->cod_novo}}</td>
                                     <td class="align-middle text-center">
                                     <button title="Deletar cota" id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota"></button>
                                     <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar cota"></button>

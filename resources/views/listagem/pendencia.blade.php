@@ -150,7 +150,7 @@
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$cont}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
-                                        <th>{{$inscricao->cota->cod_cota}}</th>
+                                        <th>{{$inscricao->cota->cod_novo}}</th>
                                         <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
                                         <th>
                                             @if($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] || $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])

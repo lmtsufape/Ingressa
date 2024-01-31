@@ -144,7 +144,7 @@
                                     <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
                                         <th>{{$k+1}}</th>
                                         <th>{{$inscricao->candidato->getCpfPDF()}}</th>
-                                        <th>{{$inscricao->cota->cod_cota}}</th>
+                                        <th>{{$inscricao->cota->cod_novo}}</th>
                                         <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
                                         @if($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
                                             <th>VALIDADO</th>
