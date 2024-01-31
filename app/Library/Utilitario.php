@@ -15,6 +15,7 @@ class Utilitario {
         $cursos = Curso::all();
         foreach ($cursos as $curso) {
             foreach ($cotas as $i => $cota) {
+                $quantidade = 0;
                 if ($curso->vagas == 20) {
                     switch ($cota->cod_novo) {
                         case 'AC':
