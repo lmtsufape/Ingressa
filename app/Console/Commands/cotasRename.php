@@ -44,6 +44,7 @@ class cotasRename extends Command
 
         $nome = 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).';
         Cota::where('cod_cota', 'L2')->update(['cod_novo' => 'LB_PPI'], ['nome' => $nome], ['descricao' => $nome]);
+        
         $nome = 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).';
         Cota::where('cod_cota', 'L9')->update(['cod_novo' => 'LB_PCD'], ['nome' => $nome], ['descricao' => $nome]);
 
