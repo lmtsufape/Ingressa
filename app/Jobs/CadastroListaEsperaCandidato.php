@@ -462,29 +462,6 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
     private function getCotaModalidade($modalidade)
     {
-        switch ($modalidade) {
-            case 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'AMPLA CONCORRÊNCIA':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'Ampla concorrência':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'Candidatos com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L1')->first();
-            case 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L2')->first();
-            case 'Candidatos que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L5')->first();
-            case 'Candidatos autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L6')->first();
-            case 'Candidatos com deficiência que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L9')->first();
-            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas, que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)':
-                return Cota::where('cod_cota', 'L10')->first();
-            case 'Candidatos com deficiência que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L13')->first();
-            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L14')->first();
-        }
+        return Cota::where('nome', $modalidade)->first();
     }
 }
