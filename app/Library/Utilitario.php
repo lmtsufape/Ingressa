@@ -15,70 +15,94 @@ class Utilitario {
         $cursos = Curso::all();
         foreach ($cursos as $curso) {
             foreach ($cotas as $i => $cota) {
-                if ($curso->vagas == 40) {
-                    switch ($i) {
-                        case 0:
-                            $quantidade = 20;
+                if ($curso->vagas == 20) {
+                    switch ($cota->cod_novo) {
+                        case 'AC':
+                            $quantidade = 7;
                             break;
-                        case 1:
-                            $quantidade = 2;
+                        case 'LB_PPI':
+                            $quantidade = 4;
                             break;
-                        case 2:
-                            $quantidade = 6;
-                            break;
-                        case 3:
-                            $quantidade = 2;
-                            break;
-                        case 4:
-                            $quantidade = 6;
-                            break;
-                        case 5:
+                        case 'LB_Q':
                             $quantidade = 1;
                             break;
-                        case 6:
+                        case 'LB_PCD':
                             $quantidade = 1;
                             break;
-                        case 7:
+                        case 'LB_EP':
                             $quantidade = 1;
                             break;
-                        case 8:
-                            $quantidade = 1;
+                        case 'LI_PPI':
+                            $quantidade = 4;
                             break;
-                        case 9:
+                        case 'LI_Q':
                             $quantidade = 0;
+                            break;
+                        case 'LI_PCD':
+                            $quantidade = 1;
+                            break;
+                        case 'LI_EP':
+                            $quantidade = 1;
                             break;
                     }
-                }else{
-                    switch($i){
-                        case 0:
+                } else if ($curso->vagas == 60) {
+                    switch ($cota->cod_novo) {
+                        case 'AC':
+                            $quantidade = 30;
+                            break;
+                        case 'LB_PPI':
+                            $quantidade = 10;
+                            break;
+                        case 'LB_Q':
+                            $quantidade = 1;
+                            break;
+                        case 'LB_PCD':
+                            $quantidade = 2;
+                            break;
+                        case 'LB_EP':
+                            $quantidade = 2;
+                            break;
+                        case 'LI_PPI':
+                            $quantidade = 10;
+                            break;
+                        case 'LI_Q':
+                            $quantidade = 0;
+                            break;
+                        case 'LI_PCD':
+                            $quantidade = 2;
+                            break;
+                        case 'LI_EP':
+                            $quantidade = 3;
+                            break;
+                    }
+                } else if ($curso->vagas == 80) {
+                    switch ($cota->cod_novo) {
+                        case 'AC':
                             $quantidade = 40;
                             break;
-                        case 1:
-                            $quantidade = 6;
+                        case 'LB_PPI':
+                            $quantidade = 14;
                             break;
-                        case 2:
-                            $quantidade = 12;
-                            break;
-                        case 3:
-                            $quantidade = 6;
-                            break;
-                        case 4:
-                            $quantidade = 12;
-                            break;
-                        case 5:
+                        case 'LB_Q':
                             $quantidade = 1;
                             break;
-                        case 6:
-                            $quantidade = 1;
+                        case 'LB_PCD':
+                            $quantidade = 2;
                             break;
-                        case 7:
-                            $quantidade = 1;
+                        case 'LB_EP':
+                            $quantidade = 3;
                             break;
-                        case 8:
-                            $quantidade = 1;
+                        case 'LI_PPI':
+                            $quantidade = 14;
                             break;
-                        case 9:
+                        case 'LI_Q':
                             $quantidade = 0;
+                            break;
+                        case 'LI_PCD':
+                            $quantidade = 2;
+                            break;
+                        case 'LI_EP':
+                            $quantidade = 4;
                             break;
                     }
                 }

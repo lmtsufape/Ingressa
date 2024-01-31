@@ -185,7 +185,6 @@ class CotaSeeder extends Seeder
                             break;
                     }
                 }
-
                 $cota->cursos()->attach($curso, ['vagas_ocupadas' => 0, 'quantidade_vagas' => $quantidade]);
             }
         }
