@@ -361,7 +361,7 @@
                                         name="cotas_analista_edit[]" value="{{ $cota->id }}"
                                         id="cotas_analista_{{ $cota->id }}">
                                     <label class="form-check-label"
-                                        for="cotas_analista_{{ $cota->id }}">{{ $cota->cod_cota }}</label>
+                                        for="cotas_analista_{{ $cota->id }}">{{ $cota->cod_novo }}</label>
                                 </div>
                             @endforeach
                             @error('cotas_analista_edit')

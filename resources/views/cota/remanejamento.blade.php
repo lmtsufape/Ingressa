@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-12">
-                                <h5 class="card-title">Ordem de remanejamento para a cota {{ $cota->cod_cota }} -
+                                <h5 class="card-title">Ordem de remanejamento para a cota {{ $cota->cod_novo }} -
                                     {{ $cota->nome }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Cotas > Remanejamento de cota</h6>
                                 <h6 class="card-subtitle mb-2" style="color: #2A5EDC">*Os cards podem ser reordenados
@@ -41,7 +41,7 @@
                                             <input id="cota-{{ $prox_cota->id }}" type="checkbox"
                                                 onclick="alocarValue(this, {{ $prox_cota->id }})"
                                                 @if (old('cotas.' . $i, $cota->remanejamentos->contains('id_prox_cota', $prox_cota->id))) checked @endif>
-                                            <label for="cota-{{ $prox_cota->id }}">{{ $prox_cota->cod_cota }} -
+                                            <label for="cota-{{ $prox_cota->id }}">{{ $prox_cota->cod_novo }} -
                                                 {{ $prox_cota->nome }}</label>
                                         </div>
                                         <br>

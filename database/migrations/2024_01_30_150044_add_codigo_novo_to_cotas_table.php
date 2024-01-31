@@ -26,7 +26,7 @@ class AddCodigoNovoToCotasTable extends Migration
     public function down()
     {
         Schema::table('cotas', function (Blueprint $table) {
-            $table->dropColumn('codigo_novo');
+            $table->dropColumn('cod_novo');
         });
     }
 }
