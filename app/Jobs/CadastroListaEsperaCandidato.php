@@ -112,6 +112,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'st_lei_renda' => strval($data[46]),
                     'st_lei_etnia_p' => strval($data[47]),
                     'st_lei_etnia_i' => strval($data[48]),
+                    'de_acordo_lei_cota' => strval($data[49]),
+                    'ensino_medio' => strval($data[50]),
+                    'etnia_e_cor' => strval($data[51]),
+                    'quilombola' => strval($data[52]),
+                    'deficiente' => strval($data[53]),
+                    'modalidade_escolhida' => strval($data[54]),
+                    'tipo_concorrencia' => strval($data[55]),
                 );
                 $candidatos->push($inscricao);
                 $cont += 1;
@@ -354,6 +361,12 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'st_lei_renda' => $inscrito['st_lei_renda'],
                     'st_lei_etnia_p' => $inscrito['st_lei_etnia_p'],
                     'st_lei_etnia_i' => $inscrito['st_lei_etnia_i'],
+                    'de_acordo_lei_cota' => $inscrito['de_acordo_lei_cota'],
+                    'ensino_medio' => $inscrito['ensino_medio'],
+                    'quilombola' => $inscrito['quilombola'],
+                    'deficiente' => $inscrito['deficiente'],
+                    'modalidade_escolhida' => $inscrito['modalidade_escolhida'],
+                    'tipo_concorrencia' => $inscrito['tipo_concorrencia'],
                 ]);
 
                 //recuperamos se o inscrito possui um usuário no sistema
@@ -386,6 +399,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                             'dt_nascimento' => $inscrito['dt_nascimento'],
                         ]);
                     }
+                    $candidato->etnia_e_cor = $inscrito['etnia_e_cor'];
 
                     $candidato->user_id = $user->id;
                     $candidato->save();
@@ -419,6 +433,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         }else{
                             $candidatoExistente->user->name = $inscrito['no_inscrito'];
                         }
+                        $candidatoExistente->etnia_e_cor = $inscrito['etnia_e_cor'];
                         $candidatoExistente->update();
                         $candidatoExistente->user->update();
 
