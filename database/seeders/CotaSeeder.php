@@ -47,8 +47,8 @@ class CotaSeeder extends Seeder
                 'cod_novo' => 'LI_PPI'
             ],
             [
-                'nome' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)',
+                'descricao' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)',
                 'cod_cota' => 'L9',
                 'cod_novo' => 'LB_PCD'
             ],
@@ -59,8 +59,8 @@ class CotaSeeder extends Seeder
             //     'cod_novo' => 'L10'
             // ],
             [
-                'nome' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'descricao' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
                 'cod_cota' => 'L13',
                 'cod_novo' => 'LI_PCD'
             ],
@@ -186,7 +186,7 @@ class CotaSeeder extends Seeder
                             break;
                     }
                 }
-                $cota->cursos()->attach($curso, ['vagas_ocupadas' => 0, 'quantidade_vagas' => $quantidade]);
+                $cota->cursos()->attach($curso, ['vagas_ocupadas' => 0, 'quantidade_vagas' => $quantidade, 'sisu_id' => 1]);
             }
         }
     }

@@ -311,13 +311,13 @@ class ListagemController extends Controller
 
             //se o curso for de 80 vagas, logo A0 tem 40 vagas
             if ($cota_curso_quantidade == 40) {
-                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, true);
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true);
                 $primeiroSemestre = $retorno['ingressantes'];
                 $primeiroSemestre = $this->ordenarCurso($request->ordenacao, $primeiroSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($primeiroSemestre);
 
-                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, false);
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false);
                 $segundoSemestre = $retorno['ingressantes'];
                 $segundoSemestre = $this->ordenarCurso($request->ordenacao, $segundoSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
@@ -329,7 +329,7 @@ class ListagemController extends Controller
                 $candidatosIngressantesCursos->push($primeiroSemestre);
                 $candidatosIngressantesCursos->push($segundoSemestre);
             } else {
-                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false, true);
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs);
                 $curso = $retorno['ingressantes'];
                 $curso = $this->ordenarCurso($request->ordenacao, $curso, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
@@ -351,7 +351,7 @@ class ListagemController extends Controller
         return ['ingressantes' => $candidatosIngressantesCursos, 'reservas' => $candidatosReservaCursos];
     }
 
-    private function definirIngressantes(Sisu $sisu, Curso $curso, $candidatosCurso, $cpfs, $eh80, $primeira)
+    private function definirIngressantes(Sisu $sisu, Curso $curso, $candidatosCurso, $cpfs, $primeira = false)
     {
         $cotas = Cota::all();
         $A0 = Cota::where('cod_cota', 'A0')->first();
@@ -359,15 +359,7 @@ class ListagemController extends Controller
 
         $candidatosIngressantesCurso = collect();
 
-        if ($eh80) {
-            if ($primeira) {
-                $qtndPorCota = $this->quantidadePorCota(true, true);
-            } else {
-                $qtndPorCota = $this->quantidadePorCota(true, false);
-            }
-        } else {
-            $qtndPorCota = $this->quantidadePorCota(false, true);
-        }
+        $qtndPorCota = $this->quantidadePorCota($curso, $sisu, $primeira);
 
         $qntdA0 = $qtndPorCota["A0"];
 
@@ -451,15 +443,19 @@ class ListagemController extends Controller
         return ['ingressantes' => $candidatosIngressantesCurso, 'cpfs' => $cpfs];
     }
 
-    private function quantidadePorCota($eh80, $primeira)
+    private function quantidadePorCota(Curso $curso, Sisu $sisu, $primeira)
     {
-        if ($eh80) {
+        if ($curso->vagas == 80) {
             if ($primeira) {
-                return ['A0' => 20, 'L1' => 3, 'L2' => 6, 'L5' => 3, 'L6' => 6, 'L9' => 1, 'L10' => 0, 'L13' => 1, 'L14' => 0];
+                return ['A0' => 10, 'L1' => 1, 'L2' => 2, 'L5' => 1, 'L6' => 3, 'L9' => 1, 'L13' => 1, 'LB_Q' => 1, 'LI_Q' => 0];
+            } else {
+                return ['A0' => 30, 'L1' => 2, 'L2' => 12, 'L5' => 3, 'L6' => 11, 'L9' => 1, 'L13' => 1, 'LB_Q' => 0, 'LI_Q' => 0];
             }
-            return ['A0' => 20, 'L1' => 3, 'L2' => 6, 'L5' => 3, 'L6' => 6, 'L9' => 0, 'L10' => 1, 'L13' => 0, 'L14' => 1];
         }
-        return ['A0' => 20, 'L1' => 2, 'L2' => 6, 'L5' => 2, 'L6' => 6, 'L9' => 1, 'L10' => 1, 'L13' => 1, 'L14' => 1];
+        
+        $qntdPorCota = $curso->cotas()->withPivot(['quantidade_vagas'])->where('sisu_id', $sisu->id)->pluck('pivot.quantidade_vagas', 'cod_cota');
+
+        return $qntdPorCota;
     }
 
     private function ordenarCurso($ordenacao, $curso, $grupo)

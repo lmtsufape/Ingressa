@@ -54,7 +54,6 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             }*/
             if ($primeira) {
                 $primeira = false;
-                Log::info(print_r($dados, true));
             } else {
                 //Armazenamos as informações de cada candidato
                 $inscricao = array(

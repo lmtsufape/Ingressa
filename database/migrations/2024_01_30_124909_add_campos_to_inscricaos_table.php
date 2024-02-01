@@ -14,12 +14,12 @@ class AddCamposToInscricaosTable extends Migration
     public function up()
     {
         Schema::table('inscricaos', function (Blueprint $table) {
-            $table->char('de_acordo_lei_cota')->default('x');
-            $table->char('ensino_medio')->default('x');
-            $table->char('quilombola')->default('x');
-            $table->char('deficiente')->default('x');
-            $table->string('modalidade_escolhida', 4000)->default('x');
-            $table->string('tipo_concorrencia', 6)->default('x');
+            $table->string('de_acordo_lei_cota', 1)->nullable();
+            $table->string('ensino_medio', 1)->nullable();
+            $table->string('quilombola', 1)->nullable();
+            $table->string('deficiente', 1)->nullable();
+            $table->string('modalidade_escolhida', 4000)->nullable();
+            $table->string('tipo_concorrencia', 6)->nullable();
         });
     }
 
