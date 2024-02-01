@@ -11,11 +11,11 @@ class Candidato extends Model
     use HasFactory;
 
     public const ETNIA_E_COR = [
-        1 => 'branca',
-        2 => 'preta',
-        3 => 'parda',
-        4 => 'amarela',
-        5 => 'indígena',
+        1 => 'BRANCA',
+        2 => 'PRETA',
+        3 => 'PARDA',
+        4 => 'AMARELA',
+        5 => 'INDÍGENA',
     ];
 
     public const NECESSIDADES = [
