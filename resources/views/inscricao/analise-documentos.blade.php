@@ -453,6 +453,17 @@
                                         </p>
                                     @endisset
                                 </div>
+                                <div class="col-md-4 tituloDocumento">
+                                    Quilombola: @if($inscricao->quilombola == 'S')
+                                        <p class="nomeDocumento" style="display: inline">
+                                            Sim
+                                        </p>
+                                        @else
+                                        <p class="nomeDocumento" style="display: inline">
+                                            Não
+                                        </p>
+                                    @endisset
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 py-3 px-3">
