@@ -25,7 +25,7 @@
                                     width="30">
                             @endif
                             <span class="subtexto3">
-                                Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/documentossisu2023">www.ufape.edu.br/documentossisu2023</a>)
+                                Declaração de Veracidade (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
                             </span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="declaracao_veracidade"/>
@@ -279,7 +279,7 @@
                                 prevista pela Lei nº 12.711/2012, alterada pela Lei nº 13.409/2016,
                                 devidamente assinada e preenchida, conforme a modalidade de
                                 concorrência (preencher e assinar modelo disponível em:
-                                <a href="http://www.ufape.edu.br/documentossisu2023">www.ufape.edu.br/documentossisu2023</a>)
+                                <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
                             </span>
                         </div>
                     </li>
@@ -312,7 +312,7 @@
                             <span class="subtexto3">
                                 Vídeo individual e recente para procedimento de heteroidentificação.
                                 De acordo com as especificações e o roteiro descritos no edital do
-                                processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023">www.ufape.edu.br/documentossisu2023</a></span>
+                                processo de seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a></span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
                         <div class="mt-2">
@@ -332,7 +332,7 @@
                             <span class="subtexto3">
                                 Fotografia individual e recente para procedimento de
                                 heteroidentificação. Conforme especificado no edital do processo de
-                                seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023">www.ufape.edu.br/documentossisu2023</a></span>
+                                seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a></span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="fotografia"/>
                     </li>
@@ -452,7 +452,7 @@
                             <span class="subtexto3">
                                 Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                 para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023">www.ufape.edu.br/documentossisu2023</a>
+                                SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
                             </span>
                         </div>
                     </li>
@@ -477,7 +477,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" checked disabled id="checkConfirmacaoVinculo">
                     <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                        DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>
+                        DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>
                     </label>
                 </div>
             @endempty
