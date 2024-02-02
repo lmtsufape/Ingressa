@@ -554,6 +554,17 @@
                                         </div>
                                     </div>
                                 </div>
+                            @elseif($documento == 'declaracao_quilombola')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
+                                                reserva de
+                                                vaga para candidato autodeclarado quilombola</span>
+                                        </div>
+                                    </div>
+                                </div>
                             @elseif($documento == 'heteroidentificacao')
                                 <div class="row">
                                     <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
@@ -699,6 +710,16 @@
                                                 for="{{ $documento }}"
                                                 onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro
                                                 Administrativo de Nascimento de Indígena ou equivalente;</button>
+                                        </div>
+                                    @elseif($documento == 'declaracao_quilombola')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Declaração
+                                                da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de
+                                                Vínculo com Comunidade Quilombola assinada por 03 (três)
+                                                lideranças da Comunidade.</button>
                                         </div>
                                     @elseif($documento == 'declaracao_cotista')
                                         <div class="col-md-10" style="cursor:pointer;">
@@ -1336,6 +1357,8 @@
             return "Declaração de Veracidade";
         } else if ($documento == 'rani') {
             return "Declaração Indígena";
+        } else if ($documento == 'declaracao_quilombola') {
+            return "Declaração Quilombola";
         } else if ($documento == 'heteroidentificacao') {
             return "Vídeo de Heteroidentificação";
         } else if ($documento == 'fotografia') {
