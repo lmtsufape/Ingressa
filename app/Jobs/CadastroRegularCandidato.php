@@ -88,7 +88,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'nu_notacorte_concorrida' => floatval(str_replace(',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => strval($data[39]),
-                    'dt_operacao' => DateTime::createFromFormat('d/m/Y H:i', $data[40])->format('Y/m/d'),
+                    'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $data[40])->format('Y/m/d'),
                     'co_ies' => strval($data[41]),
                     'no_ies' => strval($data[42]),
                     'sg_ies' => strval($data[43]),
@@ -151,7 +151,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     }
                     $candidato->no_inscrito = strval($data[8]);
                     $candidato->nu_cpf_inscrito = strval($data[10]);
-                    $candidato->dt_nascimento = DateTime::createFromFormat('d/m/Y H:i', $data[11])->format('Y-m-d');
+                    $candidato->dt_nascimento = DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d');
                     $candidato->etnia_e_cor = strval(array_search($data[51], Candidato::ETNIA_E_COR));
                     $candidato->user_id = $user->id;
                     $candidato->save();
