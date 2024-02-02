@@ -399,6 +399,34 @@
                     </li>
                     <x-show-analise-documento :inscricao="$inscricao" documento="rani"/>
                 @endif
+                @if ($documentos->contains('declaracao_quilombola'))
+                    <li class="mt-4 px-1 align-middle">
+                        <div class="col-md-12">
+                            <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
+                                vaga para candidato autodeclarado quilombola</div>
+                            <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.</div>
+                        </div>
+                        <div class="mt-2">
+                            @if ($inscricao->arquivo('declaracao_quilombola'))
+                                <a wire:click="baixar('declaracao_quilombola')"
+                                    title="Baixar documento"
+                                    target="_blank"
+                                    style="cursor:pointer;">
+                                    <img src="{{asset('img/download2.svg')}}"
+                                        alt="arquivo atual"
+                                        width="30"
+                                        class="img-flex"></a>
+                            @else
+                                <img src="{{ asset('img/download3.svg') }}"
+                                    width="30">
+                            @endif
+                            <span class="subtexto3">
+                                Declaração da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de Vínculo com Comunidade Quilombola assinada por 03 (três) lideranças da Comunidade.
+                            </span>
+                        </div>
+                    </li>
+                    <x-show-analise-documento :inscricao="$inscricao" documento="declaracao_quilombola"/>
+                @endif
                 @if ($documentos->contains('laudo_medico'))
                     <li class="mt-4 px-1 align-middle">
                         <div class="col-md-12">
