@@ -67,8 +67,8 @@
                                             <tr>
                                                 <th class="align-middle"> {{$k}}</th>
                                                 <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                                <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
-                                                <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
+                                                <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_novo}}</td>
+                                                <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
                                                 <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
                                                 <td class="align-middle">MATRICULADO</td>
                                                 <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
@@ -87,8 +87,8 @@
                                                 <tr>
                                                     <th class="align-middle">{{$k}}</th>
                                                     <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                                    <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
-                                                    <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
+                                                    <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_novo}}</td>
+                                                    <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
                                                     <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
                                                     <td class="align-middle">MATRICULADO</td>
                                                     <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
@@ -148,8 +148,8 @@
                                         <tr>
                                             <th class="align-middle"> {{$k}}</th>
                                             <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                            <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
-                                            <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
+                                            <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_novo}}</td>
+                                            <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
                                             <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
                                             <td class="align-middle">MATRICULADO</td>
                                             <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
@@ -205,7 +205,7 @@
                                     <tr>
                                         <th class="align-middle"> {{$k}}</th>
                                         <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                        <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
+                                        <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
                                         <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
                                         <td class="align-middle">RESERVA</td>
                                         <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
@@ -238,7 +238,7 @@
                                             <label class="pb-2" for="v">{{ __('Cota de classificação:') }}</label>
                                             <select name="cota_classificacao" id="cota_classificacao" class="form-control campoDeTexto @error('cota_classificacao') is-invalid @enderror">
                                                 @foreach ($cotas as $cota)
-                                                    <option @if(old('cota_classificacao') == $cota->id || $inscricao->cotaClassificacao->id == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_cota}}</option>
+                                                    <option @if(old('cota_classificacao') == $cota->id || $inscricao->cotaClassificacao->id == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_novo}}</option>
                                                 @endforeach
                                             </select>
             
@@ -321,7 +321,7 @@
                                             <select name="cota_classificacao" id="cota_classificacao" class="form-control campoDeTexto @error('cota_classificacao') is-invalid @enderror">
                                                 <option value="" selected disabled>-- Selecione a cota de classificação --</option>
                                                 @foreach ($cotas as $cota)
-                                                    <option @if(old('cota_classificacao') == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_cota}}</option>
+                                                    <option @if(old('cota_classificacao') == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_novo}}</option>
                                                 @endforeach
                                             </select>
             
