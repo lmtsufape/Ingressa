@@ -35,11 +35,11 @@ class Candidato extends Model
         2016 => 'Transtorno Desintegrativo da Infância',
     ];
 
-    public const ETNIA = [
-        'indigena' => 'Indígena',
-        'quilombola' => 'Quilombola',
-        'outros' => 'Outros',
-    ];
+    // public const ETNIA = [
+    //     'indigena' => 'Indígena',
+    //     'quilombola' => 'Quilombola',
+    //     'outros' => 'Outros',
+    // ];
 
     public const ESTADO_CIVIL = [
         1 => 'Solteiro(a)',
@@ -327,7 +327,6 @@ class Candidato extends Model
         'concluiu_publica',
         'necessidades',
         'etnia_e_cor',
-        'etnia',
         'trabalha',
         'grupo_familiar',
         'valor_renda',

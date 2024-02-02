@@ -16,7 +16,7 @@
             <p>Tutoriais - Antes de iniciar a postagem dos documentos é importante que você leia os documentos e assista aos vídeos de orientação, disponíveis em <a href="http://www.ufape.edu.br/sisu" target="_blank" >www.ufape.edu.br/sisu</a>. Leia os documentos e assista os vídeos quantas vezes quiser, antes de enviar a sua documentação, para evitar erros no processo. Esse é o primeiro passo que você deve realizar antes de buscar informações em outros canais, caso seja necessário.</p>
            
             <p>Demais informações: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a><br>
-                matriculas.sisu@ufape.edu.br</p>
+                E-mail: matriculas.sisu@ufape.edu.br</p>
             
         </div>
 

@@ -767,25 +767,6 @@
                                             </div>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-4 textoInput">
-                                        <label for="etnia"><span style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Etnia') }}</label>
-                                        <select id="etnia"
-                                            class="form-control form-control-sm caixaDeTexto @error('etnia') is-invalid @enderror"
-                                            name="etnia">
-                                            <option value="" disabled selected>-- Selecione --</option>
-                                            @foreach (\App\Models\Candidato::ETNIA as $valor => $etnia)
-                                                <option value="{{ $valor }}"
-                                                    @if (old('etnia', $candidato->etnia) == $valor) ) selected @endif>
-                                                    {{ $etnia }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('etnia')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-6 textoInput">

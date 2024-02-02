@@ -57,7 +57,6 @@ class UpdateCandidatoRequest extends FormRequest
             'modalidade' => ['required', 'string'],
             'concluiu_publica' => ['required', 'boolean'],
             'necessidades' => ['required', 'array'],
-            'etnia' => ['required', 'string'],
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],
             'valor_renda' => ['required', 'numeric'],
