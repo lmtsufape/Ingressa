@@ -437,7 +437,7 @@
                 success: function(cota) {
                     document.getElementById('cota-edit').value = cota.id;
                     document.getElementById('nome-edit').value = cota.nome;
-                    document.getElementById('codigo-edit').value = cota.cod_cota;
+                    document.getElementById('codigo-edit').value = cota.cod_novo;
                     document.getElementById('descrição-edit').value = cota.descricao;
 
                     limpar(cota.cursos);

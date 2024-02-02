@@ -137,7 +137,7 @@
                     <div class="body">
                         <div id="modalidade" @if($inscricoes->count() <= 40) style="page-break-inside: avoid;" @endif>
                             <h4 class="acao_afirmativa">@if($inscricao['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                            $inscricao['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $inscricao['no_modalidade_concorrencia'] == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$cota->cod_cota}} - {{$inscricao['no_modalidade_concorrencia']}} @endif</h4>
+                            $inscricao['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $inscricao['no_modalidade_concorrencia'] == 'Ampla concorrência') Ampla concorrência / Ação afirmativa @else Ação afirmativa: {{$cota->cod_novo}} - {{$inscricao['no_modalidade_concorrencia']}} @endif</h4>
                             <table>
                                 <thead>
                                     <tr class="esquerda">

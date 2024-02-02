@@ -369,7 +369,7 @@
                                                     @endphp
                                                     @if($cota->cod_cota != "B4342")
                                                         <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
-                                                            {{$cota->cod_cota}}
+                                                            {{$cota->cod_novo}}
                                                             <div class="row align-items-center">
                                                                 <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
                                                                     Número de vagas
