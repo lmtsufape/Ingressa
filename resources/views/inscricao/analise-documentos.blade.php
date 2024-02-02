@@ -337,11 +337,17 @@
                                     </div> --}}
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
-                                Cota de Classificação:<p class="nomeDocumento" style="display: inline"></p>
+                                Modalidade Escolhida: <p class="nomeDocumento" style="display: inline">
+                                    {{ $inscricao->no_modalidade_concorrencia }}</p>
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
-                                Modalidade: <p class="nomeDocumento" style="display: inline">
-                                    {{ $inscricao->no_modalidade_concorrencia }}</p>
+                                Modalidade Ocupada:<p class="nomeDocumento" style="display: inline">
+                                    @if($inscricao->cota_classificacao_id == NULL)
+
+                                    @else
+                                        {{$inscricao->cotaClassificacao->cod_novo}}
+                                    @endif
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
@@ -448,9 +454,14 @@
                                     @endisset
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
-                                    Etnia: @isset($inscricao->candidato->etnia)
+                                    Quilombola: @if($inscricao->quilombola == 'S')
                                         <p class="nomeDocumento" style="display: inline">
-                                            {{ \App\Models\Candidato::ETNIA[$inscricao->candidato->etnia] }}</p>
+                                            Sim
+                                        </p>
+                                        @else
+                                        <p class="nomeDocumento" style="display: inline">
+                                            Não
+                                        </p>
                                     @endisset
                                 </div>
                             </div>
