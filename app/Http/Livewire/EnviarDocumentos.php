@@ -203,7 +203,7 @@ class EnviarDocumentos extends Component
             $rules['arquivos.rani'] = $this->rulePdf('rani');
         }
         if($this->documentos->contains('declaracao_quilombola')) {
-            $rules['arquivos.fcp'] = $this->rulePdf('fcp');
+            $rules['arquivos.declaracao_quilombola'] = $this->rulePdf('declaracao_quilombola');
         }
         if($this->documentos->contains('heteroidentificacao')) {
             $rules['arquivos.heteroidentificacao'] = $this->ruleVideo('heteroidentificacao');

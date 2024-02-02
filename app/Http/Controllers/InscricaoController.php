@@ -147,33 +147,46 @@ class InscricaoController extends Controller
             $documentos->push('quitacao_militar');
         }
         $documentos->push('foto');
-        if ($inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->etnia_e_cor == 5) {
+
+        // Indígena
+        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->etnia_e_cor == 5) {
             $documentos->push('rani');
             $documentos->push('declaracao_cotista');
         }
-        if ($inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
+        // Preto e pardo
+        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
             $documentos->push('heteroidentificacao');
             $documentos->push('fotografia');
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
-        if ($inscricao->st_lei_renda == 'S') {
+        // Baixa renda
+        if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists() && $inscricao->st_lei_renda == 'S') {
             $documentos->push('comprovante_renda');
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
-        if (str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')) {
+        // Deficiente
+        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists() && $inscricao->deficiente == 'S') {
             $documentos->push('laudo_medico');
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
+
         if ($inscricao->cota->cod_cota == 'L5' || $inscricao->cota->cod_cota == 'L6') {
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
+        }
+        // Quilombola
+        if ($inscricao->cota()->whereIn('cod_novo', ['LB_Q', 'LI_Q'])->exists() && $inscricao->quilombola == 'S') {
+            if (!$documentos->contains('declaracao_cotista')) {
+                $documentos->push('declaracao_cotista');
+            }
+            $documentos->push('declaracao_quilombola');
         }
 
         return $documentos;
@@ -196,35 +209,41 @@ class InscricaoController extends Controller
                 $documentos->push('quitacao_militar');
             }
             $documentos->push('foto');
-            if ($inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->etnia_e_cor == 5) {
+            // Indígena
+            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->etnia_e_cor == 5) {
                 $documentos->push('rani');
                 $documentos->push('declaracao_cotista');
             }
-            if ($inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
+            // Preto e pardo
+            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
-            if ($inscricao->st_lei_renda == 'S') {
+            // Baixa renda
+            if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists() && $inscricao->st_lei_renda == 'S') {
                 $documentos->push('comprovante_renda');
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
-            if (str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')) {
+            // Deficiente
+            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists() && $inscricao->deficiente == 'S') {
                 $documentos->push('laudo_medico');
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
+
             if ($inscricao->cota->cod_cota == 'L5' || $inscricao->cota->cod_cota == 'L6') {
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
-            if ($inscricao->quilombola == 'S') {
+            // Quilombola
+            if ($inscricao->cota()->whereIn('cod_novo', ['LB_Q', 'LI_Q'])->exists() && $inscricao->quilombola == 'S') {
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
@@ -232,7 +251,7 @@ class InscricaoController extends Controller
             }
         } else {
             if ($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())) {
-                if ($inscricao->st_lei_etnia_p == 'S') {
+                if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
                     $documentos->push('heteroidentificacao');
                     $documentos->push('fotografia');
                     if (!$documentos->contains('declaracao_cotista')) {
@@ -241,7 +260,7 @@ class InscricaoController extends Controller
                 }
             }
             if ($userPolicy->ehAnalistaMedico(auth()->user())) {
-                if (str_contains($inscricao->no_modalidade_concorrencia, 'deficiência')) {
+                if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists() && $inscricao->deficiente == 'S') {
                     $documentos->push('laudo_medico');
                     if (!$documentos->contains('declaracao_cotista')) {
                         $documentos->push('declaracao_cotista');
@@ -688,6 +707,8 @@ class InscricaoController extends Controller
             return "Declaração Cotista";
         } else if ($documento == 'ficha') {
             return "Ficha Geral";
+        } else if ($documento == 'declaracao_quilombola') {
+            return "Declaração da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de Vínculo com Comunidade Quilombola assinada por 03 (três) lideranças da Comunidade.";
         }
     }
 
