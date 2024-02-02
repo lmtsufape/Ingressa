@@ -238,7 +238,7 @@
                                     name="cotas_analista[]" value="{{ $cota->id }}"
                                     id="cotas_analista_store_{{ $cota->id }}" checked>
                                 <label class="form-check-label"
-                                    for="cotas_analista_store_{{ $cota->id }}">{{ $cota->cod_cota }}</label>
+                                    for="cotas_analista_store_{{ $cota->id }}">{{ $cota->cod_novo }}</label>
                             </div>
                         @endforeach
                         @error('cotas_analista_store')

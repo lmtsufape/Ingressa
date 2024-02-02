@@ -224,6 +224,12 @@ class InscricaoController extends Controller
                     $documentos->push('declaracao_cotista');
                 }
             }
+            if ($inscricao->quilombola == 'S') {
+                if (!$documentos->contains('declaracao_cotista')) {
+                    $documentos->push('declaracao_cotista');
+                }
+                $documentos->push('declaracao_quilombola');
+            }
         } else {
             if ($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())) {
                 if ($inscricao->st_lei_etnia_p == 'S') {

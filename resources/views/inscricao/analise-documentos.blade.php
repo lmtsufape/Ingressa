@@ -97,7 +97,7 @@
                         @endswitch </a>
                     > </span> <span
                     style="color: #24CEE8; font-size: 17px; font-weight: 600;">{{ $inscricao->candidato->no_inscrito }}
-                    - {{ $inscricao->cota->cod_cota }}</span>
+                    - {{ $inscricao->cota->cod_novo }}</span>
             </div>
             <div class="row justify-content-between">
                 <div class="col-md-8">
