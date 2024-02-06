@@ -51,7 +51,7 @@
                                         <th scope="col">#</th>
                                         <th class="text-center">CPF</th>
                                         <th class="text-center">Cota Classificação</th>
-                                        <th class="text-center">Cota Inscricação</th>
+                                        <th class="text-center">Cota Inscrição</th>
                                         <th scope="col">Nome</th>
                                         <th class="text-center">Situação</th>
                                         <th class="text-center">Nota</th>
@@ -132,7 +132,7 @@
                                     <th scope="col">#</th>
                                     <th class="text-center">CPF</th>
                                     <th class="text-center">Cota Classificação</th>
-                                    <th class="text-center">Cota Inscricação</th>
+                                    <th class="text-center">Cota Inscrição</th>
                                     <th scope="col">Nome</th>
                                     <th class="text-center">Situação</th>
                                     <th class="text-center">Nota</th>
@@ -190,7 +190,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th class="text-center">CPF</th>
-                                    <th class="text-center">Cota Inscricação</th>
+                                    <th class="text-center">Cota Inscrição</th>
                                     <th scope="col">Nome</th>
                                     <th class="text-center">Situação</th>
                                     <th class="text-center">Nota</th>

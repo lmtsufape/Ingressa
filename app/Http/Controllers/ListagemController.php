@@ -15,10 +15,7 @@ use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Bus;
-use App\Jobs\EnviarEmailsPublicacaoListagem;
 use App\Models\Sisu;
-use Illuminate\Support\Facades\Log;
 
 class ListagemController extends Controller
 {
@@ -426,7 +423,6 @@ class ListagemController extends Controller
                                     $candidatosIngressantesCurso->push($candidato);
                                     $cota_curso_quantidade -= 1;
                                     $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                                    Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
                                 }
                             } else {
                                 $continua = true;
@@ -452,8 +448,8 @@ class ListagemController extends Controller
                 return ['A0' => 30, 'L1' => 2, 'L2' => 12, 'L5' => 3, 'L6' => 11, 'L9' => 1, 'L13' => 1, 'LB_Q' => 0, 'LI_Q' => 0];
             }
         }
-        
-        $qntdPorCota = $curso->cotas()->withPivot(['quantidade_vagas'])->where('sisu_id', $sisu->id)->pluck('pivot.quantidade_vagas', 'cod_cota');
+
+        $qntdPorCota = $curso->cotas()->wherePivot('sisu_id', $sisu->id)->pluck('quantidade_vagas', 'cod_cota');
 
         return $qntdPorCota;
     }
