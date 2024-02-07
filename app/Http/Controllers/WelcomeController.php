@@ -15,10 +15,10 @@ class WelcomeController extends Controller
     public function index()
     {
         $edicao_atual = $this->getEdicaoAtual();
-        
-        if($edicao_atual != null){
+
+        if ($edicao_atual != null) {
             $chamadas = $edicao_atual->chamadas()->orderBy('created_at', 'DESC')->get();
-        }else{
+        } else {
             $chamadas = collect();
         }
 
@@ -27,12 +27,13 @@ class WelcomeController extends Controller
         return view('welcome', compact('chamadas', 'edicao_atual', 'checagem_chamada'))->with(['tipos_data' => DataChamada::TIPO_ENUM, ['tipos_listagem' => Listagem::TIPO_ENUM]]);
     }
 
-    private function getEdicaoAtual() {
+    private function getEdicaoAtual()
+    {
         $intervalo_inicio = now()->subMonth(3);
         $intervalo_fim = now()->addMonth(2);
-        
-        $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->first();
-        
+
+        $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->orderBy('created_at', 'DESC')->first();
+
         return $edicao_atual;
     }
 
@@ -51,17 +52,19 @@ class WelcomeController extends Controller
         return view('contact');
     }
 
-    public function edicoes() {
+    public function edicoes()
+    {
         $edicoes = Sisu::orderBy('created_at')->get();
         $edicao_atual = $this->getEdicaoAtual();
 
-        if($edicoes->count() > 0 && $edicao_atual != null){
+        if ($edicoes->count() > 0 && $edicao_atual != null) {
             $edicoes->pop();
         }
         return view('historico_chamadas.index', compact('edicoes'));
     }
 
-    public function showEdicao($id) {
+    public function showEdicao($id)
+    {
         $sisu = Sisu::find($id);
         $tipos_data = DataChamada::TIPO_ENUM;
         $tipos_listagem = Listagem::TIPO_ENUM;
@@ -85,11 +88,13 @@ class WelcomeController extends Controller
         return redirect()->back()->with(['success' => 'Obrigado por entrar em contato, sua mensagem foi enviada com sucesso!']);
     }
 
-    public function envio_docs() {
+    public function envio_docs()
+    {
         return view('informacoes.enviar_docs');
     }
 
-    private function listas_a_serem_exibidas($chamadas) {
+    private function listas_a_serem_exibidas($chamadas)
+    {
         foreach ($chamadas as $chamada) {
             foreach ($chamada->listagem as $listagem) {
                 if ($listagem->publicada) {

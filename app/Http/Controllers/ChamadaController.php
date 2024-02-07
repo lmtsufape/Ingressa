@@ -1061,6 +1061,10 @@ class ChamadaController extends Controller
 
     private function getCotaModalidade($modalidade)
     {
+        if ($modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.') {
+            return Cota::where('cod_cota', 'A0')->first();
+        }
+
         return Cota::where('nome', $modalidade)->first();
     }
 

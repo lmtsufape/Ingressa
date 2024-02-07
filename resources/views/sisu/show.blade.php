@@ -363,7 +363,7 @@
                                                 @endswitch
                                             </div>
                                             <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
-                                                @foreach ($curso->cotas as $cota)
+                                                @foreach ($curso->cotas()->wherePivot('sisu_id', $sisu->id)->get() as $cota)
                                                     @php
                                                         $contTotal += $cota->pivot->vagas_ocupadas;
                                                     @endphp
