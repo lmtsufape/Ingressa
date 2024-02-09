@@ -869,8 +869,8 @@ class ListagemController extends Controller
             'L9' => 10,
             'L14' => 11,
             'L13' => 12,
-            'LB_Q' => 3,
-            'LI_Q' => 5,
+            'LB_Q' => 9,
+            'LI_Q' => 11,
         ];
         if ($cotaRemanejada) return $codigos[$cotaRemanejada->cod_cota];
         return $codigos[$cota->cod_cota];
