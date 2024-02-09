@@ -48,7 +48,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $primeira = true;
         $candidatos = collect();
         $cont = 0;
-        while ( ($data = fgetcsv($dados,0,';') ) !== FALSE ) {
+        while ( ($data = fgetcsv($dados, 0,';') ) !== FALSE ) {
             /*if($cont > 5){
                 break;
             }*/
