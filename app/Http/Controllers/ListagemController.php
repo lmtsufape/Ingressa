@@ -868,10 +868,12 @@ class ListagemController extends Controller
             'L10' => 9,
             'L9' => 10,
             'L14' => 11,
-            'L13' => 12
+            'L13' => 12,
+            'LB_Q' => 9,
+            'LI_Q' => 11,
         ];
-        if ($cotaRemanejada == null) return $codigos[$cota->cod_cota];
-        return ($codigos[$cota->cod_cota]);
+        if ($cotaRemanejada) return $codigos[$cotaRemanejada->cod_cota];
+        return $codigos[$cota->cod_cota];
     }
 
     private function removeAcentos($palavra)
