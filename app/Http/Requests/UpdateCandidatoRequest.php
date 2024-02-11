@@ -71,6 +71,7 @@ class UpdateCandidatoRequest extends FormRequest
             'nu_fone2' => ['nullable', 'string'],
             'edital' => ['required', 'accepted'],
             'vinculo' => ['required', 'accepted'],
+            'tp_sexo' => ['required', 'in:F,M']
         ];
     }
 
