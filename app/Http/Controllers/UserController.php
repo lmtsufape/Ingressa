@@ -11,6 +11,8 @@ use Laravel\Jetstream\Jetstream;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Requests\UserRequest;
 use App\Models\TipoAnalista;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -180,10 +182,21 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $user = User::find($id);
-        foreach ($user->tipo_analista()->get() as $tipo) {
-            $tipo->pivot->delete();
+        DB::beginTransaction();
+        try {
+            foreach ($user->tipo_analista()->get() as $tipo) {
+                $tipo->pivot->delete();
+            }
+
+            $user->delete();
+        } catch (Exception $e) {
+            DB::rollBack();
+            if ($e->getCode() == '23503') {
+                return redirect()->back()->withErrors(['analista' => 'O analista não pode ser deletado pois possui avaliações.']);
+            }
         }
-        $user->delete();
+
+        DB::commit();
 
         return redirect(route('usuarios.index'))->with(['success' => 'Analista deletado com sucesso!']);
     }

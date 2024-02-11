@@ -44,6 +44,28 @@
                                 </div>
                             </div>
                         @endif
+                        @error('analista')
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                        style="display: none;">
+                                        <symbol id="prohibition" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm0 1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM5.146 5.146a.5.5 0 0 1 .708 0L8 7.293l2.146-2.147a.5.5 0 0 1 .708.708L8.707 8l2.147 2.146a.5.5 0 1 1-.708.708L8 8.707l-2.146 2.147a.5.5 0 1 1-.708-.708L7.293 8 5.146 5.854a.5.5 0 0 1 0-.708z" />
+                                        </symbol>
+                                    </svg>
+
+
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <svg class="bi" width="32" height="32" fill="currentColor">
+                                            <use xlink:href="#prohibition" />
+                                        </svg>{{ $errors->first() }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @enderror
                         @if ($users->count() > 0)
                             <table class="table">
                                 <thead>
