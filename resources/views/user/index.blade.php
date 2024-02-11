@@ -66,8 +66,7 @@
                                                     style="cursor: pointer;"><img class="m-1 " width="30"
                                                         src="{{ asset('img/Grupo 1664.svg') }}"
                                                         alt="Icone de deletar analista"></button>
-                                                <button title="Editar analista"
-                                                    onclick="editarAnalista({{ $user->id }}, {{ $tipos }})"
+                                                <button title="Editar analista" onclick="setUserId({{ $user->id }})"
                                                     data-bs-toggle="modal" data-bs-target="#editar-user-modal"
                                                     style="cursor: pointer;"><img class="m-1 " width="30"
                                                         src="{{ asset('img/Grupo 1665.svg') }}"
@@ -272,7 +271,7 @@
 
                 <form method="POST" id="editar-analista" action="{{ route('usuarios.update.analista') }}">
                     @csrf
-                    <input type="hidden" id="user-edit" name="user_id" value="">
+                    <input type="hidden" id="user-edit" name="user_id" value="{{ old('user_id') }}">
                     <div class="form-row">
                         <div class="col-md-12 pt-3 textoModal">
                             <label class="pb-2" for="name-edit">Nome completo:</label>
@@ -418,6 +417,7 @@
             </div>
         </div>
     @endforeach
+    <input type="hidden" id="tipos" value="{{ $tipos->pluck('id') }}">
 </x-app-layout>
 
 @if (old('user_id') == 'none')
@@ -446,16 +446,12 @@
     });
 
     // Chama a função inicialmente para configurar a visibilidade correta
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
         // Adiciona um ouvinte de eventos para os modais serem mostrados
-        $('#criar-user-modal, #editar-user-modal').on('shown.bs.modal', function() {
-            // Obtém o ID do modal
-            var modalId = $(this).attr('id');
-            // Chama a função para configurar a visibilidade correta
-            atualizarVisibilidadeCotas(modalId);
+        $('#editar-user-modal').on('shown.bs.modal', function() {
+            atualizarDadosModal();
         });
     });
-
 
     function atualizarVisibilidadeCotas(modalId) {
         // Verifica se a checkbox de tipo medico e heteroidentificacao está desmarcada
@@ -472,10 +468,16 @@
         }
     }
 
+    function setUserId(id) {
+        document.getElementById('user-edit').value = id;
+    }
 
-    function editarAnalista(id, tipos) {
+    function atualizarDadosModal() {
+        id = document.getElementById('user-edit').value;
+        tipos = JSON.parse(document.getElementById('tipos').value);
+
         for (var i = 0; i < tipos.length; i++) {
-            document.getElementById('tipo-editar-user-modal-' + tipos[i].id).checked = false;
+            document.getElementById('tipo-editar-user-modal-' + tipos[i]).checked = false;
         }
 
         var cursos = document.querySelectorAll('[name*="edit"].form-check-cursos');
@@ -502,7 +504,7 @@
                 document.getElementById('name-edit').value = user.name;
                 document.getElementById('email-edit').value = user.email;
                 for (var i = 0; i < user.cargos.length; i++) {
-                    document.getElementById('tipo-editar-user-modal-' + tipos[i].id).checked = true;
+                    document.getElementById('tipo-editar-user-modal-' + user.cargos[i].id).checked = true;
                 }
                 for (var i = 0; i < user.cursos.length; i++) {
                     document.getElementById('cursos_analista_' + user.cursos[i].cod_curso).checked = true;
@@ -510,9 +512,9 @@
                 for (var i = 0; i < user.cotas.length; i++) {
                     document.getElementById('cotas_analista_' + user.cotas[i].id).checked = true;
                 }
+
+                atualizarVisibilidadeCotas('editar-user-modal');
             }
         });
-
-        atualizarVisibilidadeCotas('editar-user-modal');
     }
 </script>

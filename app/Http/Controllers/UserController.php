@@ -123,11 +123,15 @@ class UserController extends Controller
         $user = User::find($request->user_id);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id,],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'tipos_analista_edit' => 'required',
-            'cotas_analista_edit' => 'required|exists:cotas,id',
+            'cotas_analista_edit' => 'exists:cotas,id',
             'cursos_analista_edit' => 'required|exists:cursos,cod_curso',
         ]);
+
+        $validator->sometimes('cotas_analista_edit', 'required', function ($input) {
+            return in_array(TipoAnalista::TIPO_ENUM['geral'], $input->tipos_analista_edit);
+        });
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();
