@@ -312,7 +312,7 @@
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="tp_sexo">{{ __('Sexo') }}</label>
-                                        <select id="tp_sexo" disabled
+                                        <select id="tp_sexo" name="tp_sexo"
                                             class="form-control form-control-sm caixaDeTexto">
                                             <option value="M" @if ($inscricao->tp_sexo == 'M') selected @endif>
                                                 Masculino</option>
