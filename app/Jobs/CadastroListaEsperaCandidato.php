@@ -460,7 +460,10 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
     private function getCotaModalidade($modalidade)
     {
-        if ($modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.') {
+        if (
+            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
+            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
+        ) {
             return Cota::where('cod_cota', 'A0')->first();
         }
 
