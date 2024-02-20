@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
         @page {
             margin: 0px;
         }
+
         body {
             margin-right: 50px;
             margin-left: 50px;
@@ -24,6 +26,7 @@
             right: 0cm;
             height: 4.5cm;
         }
+
         .titulo {
             position: relative;
             top: -20px;
@@ -32,6 +35,7 @@
             color: #393c47;
             font-family: 'Times New Roman', Times, serif;
         }
+
         .subtitulo {
             font-weight: normal;
             position: fixed;
@@ -42,27 +46,33 @@
             left: 50%;
             transform: translateX(-50%);
         }
+
         .quebrar_pagina {
             page-break-after: always;
         }
-        table{
+
+        table {
             margin-top: 10px;
             padding-bottom: 0px;
             border-collapse: collapse;
             width: 100%;
             position: relative;
         }
+
         table th {
             font-weight: 100;
             font-size: 10px;
         }
+
         table thead {
             background-color: #393c47;
             color: white;
         }
+
         tr {
             border: none;
         }
+
         #footer {
             position: fixed;
             bottom: 0;
@@ -70,23 +80,29 @@
             text-align: right;
             border-top: 1px solid gray;
         }
-        #footer .page:after{
+
+        #footer .page:after {
             content: counter(page);
         }
+
         #modalidade {
             margin-bottom: 10px;
             padding-bottom: 10px;
         }
+
         .esquerda {
             text-align: left;
             float: left;
         }
+
         .back-color-1 {
             background-color: white;
         }
+
         .back-color-2 {
             background-color: #d3d5dc;
         }
+
         .acao_afirmativa {
             font-size: 12px;
             text-align: justify;
@@ -97,58 +113,62 @@
     </style>
 
 </head>
+
 <body>
     <header>
-        <img src="{{public_path('img/cabeçalhoSISU5.fw.png')}}" width="100%" alt="">
+        <img src="{{ public_path('img/cabeçalhoSISU5.fw.png') }}" width="100%" alt="">
     </header>
     <div>
         @php
-            $semestre = "indefinido";
+            $semestre = 'indefinido';
         @endphp
         @foreach ($candidatosIngressantesCursos as $i => $curso)
-            @if($curso->count() <= 40)
+            @if ($curso->count() <= 40)
                 @php
                     $exibirNomeCurso = true;
                 @endphp
-                @if($exibirNomeCurso)
+                @if ($exibirNomeCurso)
                     @php
                         $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                     @endphp
                     <h3 class="subtitulo" style="text-align: center">
-                        <span style="font-weight: bold; word-break: keep-all" >
+                        <span style="font-weight: bold; word-break: keep-all">
                             RELAÇÃO DOS CANDIDATOS INGRESSANTES - CADASTRO EFETIVADO
                         </span><br>
                         <span style="font-weight: bold;">
-                            @if(!is_null($inscricao->curso->semestre))
-                                Semestre de ingresso: {{$chamada->sisu->edicao}}.{{$inscricao->curso->semestre}}
+                            @if (!is_null($inscricao->curso->semestre))
+                                Semestre de ingresso: {{ $chamada->sisu->edicao }}.{{ $inscricao->curso->semestre }}
                                 @php
-                                    $semestre = "indefinido";
+                                    $semestre = 'indefinido';
                                 @endphp
-                            @elseif($semestre == "indefinido")
-                                Semestre de ingresso: {{$chamada->sisu->edicao}}.1
+                            @elseif($semestre == 'indefinido')
+                                Semestre de ingresso: {{ $chamada->sisu->edicao }}.1
                                 @php
-                                    $semestre = "1";
+                                    $semestre = '1';
                                 @endphp
-                            @elseif($semestre == "1")
-                                Semestre de ingresso: {{$chamada->sisu->edicao}}.2
+                            @elseif($semestre == '1')
+                                Semestre de ingresso: {{ $chamada->sisu->edicao }}.2
                                 @php
-                                    $semestre = "indefinido";
+                                    $semestre = 'indefinido';
                                 @endphp
                             @endif
                         </span><br>
                         <span>
-                            Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                                Matutino
+                            Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
+                                @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                                    Matutino
                                 @break
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                                Vespertino
+
+                                @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                                    Vespertino
                                 @break
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                                Noturno
+
+                                @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                                    Noturno
                                 @break
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
-                                Integral
+
+                                @case(App\Models\Curso::TURNO_ENUM['integral'])
+                                    Integral
                                 @break
                             @endswitch
                         </span>
@@ -164,7 +184,6 @@
                                 <tr class="esquerda">
                                     <th>Seq.</th>
                                     <th>CPF</th>
-                                    <th>Cota de classificação</th>
                                     <th>Cota de inscrição</th>
                                     <th>Nome</th>
                                     <th>Situação</th>
@@ -181,14 +200,14 @@
                                         $inscricao = App\Models\Inscricao::find($inscricao['id']);
                                         $inscricao->cota_vaga_ocupada_id = $ocupada;
                                     @endphp
-                                    <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
-                                        <th>{{$k+1}}</th>
-                                        <th>{{$inscricao->candidato->getCpfPDF()}}</th>
-                                        <th>{{$inscricao->cotaRemanejada->cod_novo}}</th>
-                                        <th>{{$inscricao->cota->cod_novo}}</th>
-                                        <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
+                                    <tr
+                                        class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
+                                        <th>{{ $k + 1 }}</th>
+                                        <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
+                                        <th>{{ $inscricao->cota->cod_novo }}</th>
+                                        <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
                                         <th>MATRICULADO</th>
-                                        <th>{{$inscricao->nu_nota_candidato}}</th>
+                                        <th>{{ $inscricao->nu_nota_candidato }}</th>
                                     </tr>
                                     @php
                                         $k += 1;
@@ -199,7 +218,8 @@
                     </div>
                 </div>
                 @if ($i != $curso->count() - 1)
-                    <br/><div class="quebrar_pagina"></div>
+                    <br />
+                    <div class="quebrar_pagina"></div>
                 @endif
             @endif
         @endforeach
@@ -208,7 +228,7 @@
             @php
                 $exibirNomeCurso = true;
             @endphp
-            @if($exibirNomeCurso)
+            @if ($exibirNomeCurso)
                 @php
                     $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
@@ -217,18 +237,21 @@
                         RELAÇÃO DE CANDIDATOS - CADASTRO RESERVA (SUPLENTES)
                     </span><br>
                     <span>
-                        Curso: {{$inscricao->curso->nome}} - @switch($inscricao->curso->turno)
-                        @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                            Matutino
+                        Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
+                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                                Matutino
                             @break
-                        @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                            Vespertino
+
+                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                                Vespertino
                             @break
-                        @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                            Noturno
+
+                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                                Noturno
                             @break
-                        @case(App\Models\Curso::TURNO_ENUM['integral'])
-                            Integral
+
+                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                                Integral
                             @break
                         @endswitch
                     </span>
@@ -260,13 +283,13 @@
                                     $inscricao = App\Models\Inscricao::find($inscricao['id']);
                                     $inscricao->cota_vaga_ocupada_id = $ocupada;
                                 @endphp
-                                <tr class="@if($k % 2 == 0)back-color-1 @else back-color-2 @endif">
-                                    <th>{{$k+1}}</th>
-                                    <th>{{$inscricao->candidato->getCpfPDF()}}</th>
-                                    <th>{{$inscricao->cota->cod_novo}}</th>
-                                    <th class="esquerda">{{$inscricao->candidato->no_inscrito}}</th>
+                                <tr class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
+                                    <th>{{ $k + 1 }}</th>
+                                    <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
+                                    <th>{{ $inscricao->cota->cod_novo }}</th>
+                                    <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
                                     <th>RESERVA</th>
-                                    <th>{{$inscricao->nu_nota_candidato}}</th>
+                                    <th>{{ $inscricao->nu_nota_candidato }}</th>
                                 </tr>
                                 @php
                                     $k += 1;
@@ -276,8 +299,10 @@
                     </table>
                 </div>
             </div>
-            <br/><div class="quebrar_pagina"></div>
+            <br />
+            <div class="quebrar_pagina"></div>
         @endforeach
     </div>
 </body>
+
 </html>
