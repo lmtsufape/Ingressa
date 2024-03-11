@@ -32,6 +32,7 @@ class Arquivo extends Model
         'heteroidentificacao' => "Vídeo de Heteroidentificação",
         'fotografia' => "Foto de Heteroidentificação",
         'declaracao_cotista' => "Declaração Cotista",
+        'declaracao_quilombola' => "Declaração da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de Vínculo com Comunidade Quilombola assinada por 03 (três) lideranças da Comunidade",
     ];
 
     public function inscricao()
