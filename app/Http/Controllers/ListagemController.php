@@ -313,13 +313,11 @@ class ListagemController extends Controller
                 $primeiroSemestre = $this->ordenarCurso($request->ordenacao, $primeiroSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($primeiroSemestre);
-
                 $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false);
                 $segundoSemestre = $retorno['ingressantes'];
                 $segundoSemestre = $this->ordenarCurso($request->ordenacao, $segundoSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($segundoSemestre);
-
                 $primeiroSemestre = $primeiroSemestre->map->only(['id', 'cota_vaga_ocupada_id']);
                 $segundoSemestre = $segundoSemestre->map->only(['id', 'cota_vaga_ocupada_id']);
 
@@ -493,13 +491,8 @@ class ListagemController extends Controller
             $request['chamada'] = $sisu->chamadas->first()->id;
             $sisu->lista_personalizada = true;
             $inscricoes = $this->getInscricoesIngressantesReservas($request);
-            $candidatosIngressantesCursos = $inscricoes['ingressantes']
-                ->filter(function ($value, $key) {
-                    return $value->count() <= 40;
-                });
-
-            $curso_atual = null;
-            $curso_anterior = null;
+            $candidatosIngressantesCursos = $inscricoes['ingressantes'];
+            $primeiro = true;
             foreach ($candidatosIngressantesCursos as $curso) {
                 $curso_atual = Inscricao::find($curso[0]['id'])->curso;
                 foreach ($curso as $i => $insc) {
@@ -508,15 +501,11 @@ class ListagemController extends Controller
                     if ($curso_atual->semestre != null) {
                         $inscricao->semestre_entrada = $curso_atual->semestre;
                     } else {
-                        if ($curso_anterior == $curso_atual) {
-                            $inscricao->semestre_entrada = 2;
-                        } else {
-                            $inscricao->semestre_entrada = 1;
-                        }
+                        $inscricao->semestre_entrada = $primeiro ? 1 : 2;
                     }
                     $inscricao->update();
                 }
-                $curso_anterior = $curso_atual;
+                $primeiro = !$primeiro;
             }
 
             $candidatosReserva = $inscricoes['reservas'];
