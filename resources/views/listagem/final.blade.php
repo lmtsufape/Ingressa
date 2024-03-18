@@ -123,104 +123,102 @@
             $semestre = 'indefinido';
         @endphp
         @foreach ($candidatosIngressantesCursos as $i => $curso)
-            @if ($curso->count() <= 40)
+            @php
+                $exibirNomeCurso = true;
+            @endphp
+            @if ($exibirNomeCurso)
                 @php
-                    $exibirNomeCurso = true;
+                    $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
-                @if ($exibirNomeCurso)
-                    @php
-                        $inscricao = App\Models\Inscricao::find($curso->first()['id']);
-                    @endphp
-                    <h3 class="subtitulo" style="text-align: center">
-                        <span style="font-weight: bold; word-break: keep-all">
-                            RELAÇÃO DOS CANDIDATOS INGRESSANTES - CADASTRO EFETIVADO
-                        </span><br>
-                        <span style="font-weight: bold;">
-                            @if (!is_null($inscricao->curso->semestre))
-                                Semestre de ingresso: {{ $chamada->sisu->edicao }}.{{ $inscricao->curso->semestre }}
-                                @php
-                                    $semestre = 'indefinido';
-                                @endphp
-                            @elseif($semestre == 'indefinido')
-                                Semestre de ingresso: {{ $chamada->sisu->edicao }}.1
-                                @php
-                                    $semestre = '1';
-                                @endphp
-                            @elseif($semestre == '1')
-                                Semestre de ingresso: {{ $chamada->sisu->edicao }}.2
-                                @php
-                                    $semestre = 'indefinido';
-                                @endphp
-                            @endif
-                        </span><br>
-                        <span>
-                            Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
-                                @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                                    Matutino
-                                @break
+                <h3 class="subtitulo" style="text-align: center">
+                    <span style="font-weight: bold; word-break: keep-all">
+                        RELAÇÃO DOS CANDIDATOS INGRESSANTES - CADASTRO EFETIVADO
+                    </span><br>
+                    <span style="font-weight: bold;">
+                        @if (!is_null($inscricao->curso->semestre))
+                            Semestre de ingresso: {{ $chamada->sisu->edicao }}.{{ $inscricao->curso->semestre }}
+                            @php
+                                $semestre = 'indefinido';
+                            @endphp
+                        @elseif($semestre == 'indefinido')
+                            Semestre de ingresso: {{ $chamada->sisu->edicao }}.1
+                            @php
+                                $semestre = '1';
+                            @endphp
+                        @elseif($semestre == '1')
+                            Semestre de ingresso: {{ $chamada->sisu->edicao }}.2
+                            @php
+                                $semestre = 'indefinido';
+                            @endphp
+                        @endif
+                    </span><br>
+                    <span>
+                        Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
+                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                                Matutino
+                            @break
 
-                                @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                                    Vespertino
-                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                                Vespertino
+                            @break
 
-                                @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                                    Noturno
-                                @break
+                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                                Noturno
+                            @break
 
-                                @case(App\Models\Curso::TURNO_ENUM['integral'])
-                                    Integral
-                                @break
-                            @endswitch
-                        </span>
-                    </h3>
-                    @php
-                        $exibirNomeCurso = false;
-                    @endphp
-                @endif
-                <div class="body">
-                    <div id="modalidade" style="page-break-inside: avoid;">
-                        <table>
-                            <thead>
-                                <tr class="esquerda">
-                                    <th>Seq.</th>
-                                    <th>CPF</th>
-                                    <th>Cota de inscrição</th>
-                                    <th>Nome</th>
-                                    <th>Situação</th>
-                                    <th>Nota</th>
+                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                                Integral
+                            @break
+                        @endswitch
+                    </span>
+                </h3>
+                @php
+                    $exibirNomeCurso = false;
+                @endphp
+            @endif
+            <div class="body">
+                <div id="modalidade" style="page-break-inside: avoid;">
+                    <table>
+                        <thead>
+                            <tr class="esquerda">
+                                <th>Seq.</th>
+                                <th>CPF</th>
+                                <th>Cota de inscrição</th>
+                                <th>Nome</th>
+                                <th>Situação</th>
+                                <th>Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $k = 0;
+                            @endphp
+                            @foreach ($curso as $inscricao)
+                                @php
+                                    $ocupada = $inscricao['cota_vaga_ocupada_id'];
+                                    $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                    $inscricao->cota_vaga_ocupada_id = $ocupada;
+                                @endphp
+                                <tr
+                                    class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
+                                    <th>{{ $k + 1 }}</th>
+                                    <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
+                                    <th>{{ $inscricao->cota->cod_novo }}</th>
+                                    <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
+                                    <th>MATRICULADO</th>
+                                    <th>{{ $inscricao->nu_nota_candidato }}</th>
                                 </tr>
-                            </thead>
-                            <tbody>
                                 @php
-                                    $k = 0;
+                                    $k += 1;
                                 @endphp
-                                @foreach ($curso as $inscricao)
-                                    @php
-                                        $ocupada = $inscricao['cota_vaga_ocupada_id'];
-                                        $inscricao = App\Models\Inscricao::find($inscricao['id']);
-                                        $inscricao->cota_vaga_ocupada_id = $ocupada;
-                                    @endphp
-                                    <tr
-                                        class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
-                                        <th>{{ $k + 1 }}</th>
-                                        <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
-                                        <th>{{ $inscricao->cota->cod_novo }}</th>
-                                        <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
-                                        <th>MATRICULADO</th>
-                                        <th>{{ $inscricao->nu_nota_candidato }}</th>
-                                    </tr>
-                                    @php
-                                        $k += 1;
-                                    @endphp
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                @if ($i != $curso->count() - 1)
-                    <br />
-                    <div class="quebrar_pagina"></div>
-                @endif
+            </div>
+            @if ($i != $curso->count() - 1)
+                <br />
+                <div class="quebrar_pagina"></div>
             @endif
         @endforeach
 
