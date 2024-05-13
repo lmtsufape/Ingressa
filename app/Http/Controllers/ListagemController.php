@@ -582,9 +582,6 @@ class ListagemController extends Controller
         ];
 
         $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
-            ->filter(function ($value, $key) {
-                return $value->count() <= 40;
-            })
             ->map(function ($value, $key) {
                 return $value->map(function ($value, $key) {
                     $value = Inscricao::find($value['id']);
@@ -892,7 +889,8 @@ class ListagemController extends Controller
         if ($curso->semestre != null) {
             return $curso->semestre;
         }
-        return $this->periodos[$curso->cod_curso]++ < 40 ? 1 : 2;
+
+        return $this->periodos[$curso->cod_curso]++ < 20 ? 1 : 2;
     }
 
     private function getNacionalidade($nacionalidade)
