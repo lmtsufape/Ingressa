@@ -799,9 +799,6 @@ class ListagemController extends Controller
         $chamada = Chamada::find($request->chamada);
 
         $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
-            ->filter(function ($value, $key) {
-                return $value->count() <= 40;
-            })
             ->map(function ($value, $key) {
                 return $value->map(function ($value, $key) {
                     $value = Inscricao::find($value['id']);
