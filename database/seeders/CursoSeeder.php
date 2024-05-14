@@ -20,9 +20,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91555,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#7CEF90",
-            'vagas' => 40,
+            'vagas' => 20,
             'icone' => 'img-seeder/agronomia.svg',
-            'semestre' => 2,
+            'semestre' => 1,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Agronomia',
@@ -30,9 +30,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91555,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#7CEF90",
-            'vagas' => 40,
+            'vagas' => 60,
             'icone' => 'img-seeder/agronomia.svg',
-            'semestre' => 1,
+            'semestre' => 2,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Ciência da Computação',
@@ -67,9 +67,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91561,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#F97171",
-            'vagas' => 40,
+            'vagas' => 20,
             'icone' => 'img-seeder/veterinaria.svg',
-            'semestre' => 2,
+            'semestre' => 1,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Medicina Veterinária',
@@ -77,9 +77,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91561,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#F97171",
-            'vagas' => 40,
+            'vagas' => 60,
             'icone' => 'img-seeder/veterinaria.svg',
-            'semestre' => 1,
+            'semestre' => 2,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Pedagogia',
@@ -87,9 +87,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91969,
             'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
             'cor_padrao' => "#FBEE3F",
-            'vagas' => 40,
+            'vagas' => 60,
             'icone' => 'img-seeder/pedagogia.svg',
-            'semestre' => 1,
+            'semestre' => 2,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Pedagogia',
@@ -97,9 +97,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91969,
             'cor_padrao' => "#FBEE3F",
             'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
-            'vagas' => 40,
+            'vagas' => 20,
             'icone' => 'img-seeder/pedagogia.svg',
-            'semestre' => 2,
+            'semestre' => 1,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Zootecnia',
@@ -107,9 +107,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91738,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#D693F2",
-            'vagas' => 40,
+            'vagas' => 60,
             'icone' => 'img-seeder/zootecnia.svg',
-            'semestre' => 1,
+            'semestre' => 2,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Zootecnia',
@@ -117,9 +117,9 @@ class CursoSeeder extends Seeder
             'cod_curso' => 91738,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#D693F2",
-            'vagas' => 40,
+            'vagas' => 20,
             'icone' => 'img-seeder/zootecnia.svg',
-            'semestre' => 2,
+            'semestre' => 1,
         ]);
     }
 }

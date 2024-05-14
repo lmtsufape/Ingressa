@@ -10,36 +10,36 @@ class Candidato extends Model
 {
     use HasFactory;
 
-    public const COR_RACA = [
-        1 => 'Branco(a)',
-        2 => 'Preto(a)',
-        3 => 'Pardo(a)',
-        4 => 'Amarelo(a)',
-        5 => 'Indígena',
+    public const ETNIA_E_COR = [
+        1 => 'BRANCA',
+        2 => 'PRETA',
+        3 => 'PARDA',
+        4 => 'AMARELA',
+        5 => 'INDIGENA',
     ];
 
     public const NECESSIDADES = [
-        'nenhuma'=>'Nenhuma',
-        2017=>'Altas habilidades/Superdotação',
-        2013=>'Autismo infantil',
-        2008=>'Deficiência auditiva',
-        2009=>'Deficiência física',
-        2012=>'Deficiência intelectual',
-        2011=>'Deficiência múltipla',
-        2001=>'Surdez',
-        2004=>'Cegueira',
-        2005=>'Visão sub-normal ou baixa visão',
-        2014=>'Síndrome de Asperger',
-        2015=>'Síndrome de Rett',
-        2010=>'Surdocegueira',
-        2016=>'Transtorno Desintegrativo da Infância',
+        'nenhuma' => 'Nenhuma',
+        2017 => 'Altas habilidades/Superdotação',
+        2013 => 'Autismo infantil',
+        2008 => 'Deficiência auditiva',
+        2009 => 'Deficiência física',
+        2012 => 'Deficiência intelectual',
+        2011 => 'Deficiência múltipla',
+        2001 => 'Surdez',
+        2004 => 'Cegueira',
+        2005 => 'Visão sub-normal ou baixa visão',
+        2014 => 'Síndrome de Asperger',
+        2015 => 'Síndrome de Rett',
+        2010 => 'Surdocegueira',
+        2016 => 'Transtorno Desintegrativo da Infância',
     ];
 
-    public const ETNIA = [
-        'indigena' => 'Indígena',
-        'quilombola' => 'Quilombola',
-        'outros' => 'Outros',
-    ];
+    // public const ETNIA = [
+    //     'indigena' => 'Indígena',
+    //     'quilombola' => 'Quilombola',
+    //     'outros' => 'Outros',
+    // ];
 
     public const ESTADO_CIVIL = [
         1 => 'Solteiro(a)',
@@ -326,8 +326,7 @@ class Candidato extends Model
         'modalidade',
         'concluiu_publica',
         'necessidades',
-        'cor_raca',
-        'etnia',
+        'etnia_e_cor',
         'trabalha',
         'grupo_familiar',
         'valor_renda',
@@ -351,6 +350,6 @@ class Candidato extends Model
 
     public function isPretoOrPardo()
     {
-        return $this->cor_raca == 2 || $this->cor_raca == 3;
+        return $this->etnia_e_cor == 2 || $this->etnia_e_cor == 3;
     }
 }

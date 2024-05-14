@@ -15,367 +15,367 @@ class RemanejamentoSeeder extends Seeder
      */
     public function run()
     {
-        $cotaA0 = Cota::where('cod_cota', 'A0')->first();
-        $cotaL1 = Cota::where('cod_cota', 'L1')->first();
-        $cotaL2 = Cota::where('cod_cota', 'L2')->first();
-        $cotaL5 = Cota::where('cod_cota', 'L5')->first();
-        $cotaL6 = Cota::where('cod_cota', 'L6')->first();
-        $cotaL9 = Cota::where('cod_cota', 'L9')->first();
-        $cotaL10 = Cota::where('cod_cota', 'L10')->first();
-        $cotaL13 = Cota::where('cod_cota', 'L13')->first();
-        $cotaL14 = Cota::where('cod_cota', 'L14')->first();
+        $cotaAC = Cota::where('cod_novo', 'AC')->first();
+        $cotaLB_PPI = Cota::where('cod_novo', 'LB_PPI')->first();
+        $cotaLB_Q = Cota::where('cod_novo', 'LB_Q')->first();
+        $cotaLB_PCD = Cota::where('cod_novo', 'LB_PCD')->first();
+        $cotaLB_EP = Cota::where('cod_novo', 'LB_EP')->first();
+        $cotaLI_PPI = Cota::where('cod_novo', 'LI_PPI')->first();
+        $cotaLI_Q = Cota::where('cod_novo', 'LI_Q')->first();
+        $cotaLI_PCD = Cota::where('cod_novo', 'LI_PCD')->first();
+        $cotaLI_EP = Cota::where('cod_novo', 'LI_EP')->first();
 
-        $vagasL1 = [
+        $vagasLB_EP = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL1->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLB_EP->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL2 = [
+        $vagasLI_PPI = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL2->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLI_PPI->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL5 = [
+        $vagasLI_EP = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL5->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLI_EP->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL6 = [
+        $vagasLB_PPI = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL6->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLB_PPI->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL9 = [
+        $vagasLB_PCD = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL9->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLB_PCD->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL10 = [
+        $vagasLB_Q = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL10->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLB_Q->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL13 = [
+        $vagasLI_PCD = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL14->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLI_Q->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL13->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLI_PCD->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        $vagasL14 = [
+        $vagasLI_Q = [
             [
                 'ordem' => 1,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL6->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLB_PPI->id,
             ],
             [
                 'ordem' => 2,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL10->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLB_Q->id,
             ],
             [
                 'ordem' => 3,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL2->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLB_PCD->id,
             ],
             [
                 'ordem' => 4,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL9->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLB_EP->id,
             ],
             [
                 'ordem' => 5,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL1->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLI_PPI->id,
             ],
             [
                 'ordem' => 6,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL13->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLI_PCD->id,
             ],
             [
                 'ordem' => 7,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaL5->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaLI_EP->id,
             ],
             [
                 'ordem' => 8,
-                'cota_id' => $cotaL14->id,
-                'id_prox_cota' => $cotaA0->id,
+                'cota_id' => $cotaLI_Q->id,
+                'id_prox_cota' => $cotaAC->id,
             ],
         ];
 
-        Remanejamento::insert($vagasL1);
-        Remanejamento::insert($vagasL2);
-        Remanejamento::insert($vagasL5);
-        Remanejamento::insert($vagasL6);
-        Remanejamento::insert($vagasL9);
-        Remanejamento::insert($vagasL10);
-        Remanejamento::insert($vagasL13);
-        Remanejamento::insert($vagasL14);
+        Remanejamento::insert($vagasLB_PPI);
+        Remanejamento::insert($vagasLB_Q);
+        Remanejamento::insert($vagasLB_PCD);
+        Remanejamento::insert($vagasLB_EP);
+        Remanejamento::insert($vagasLI_PPI);
+        Remanejamento::insert($vagasLI_Q);
+        Remanejamento::insert($vagasLI_PCD);
+        Remanejamento::insert($vagasLI_EP);
     }
 }

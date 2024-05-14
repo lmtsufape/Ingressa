@@ -31,6 +31,8 @@ class UserRequest extends FormRequest
             'password'  => 'required|string|min:8|confirmed',
             'terms'     => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
             'tipos_analista' => 'required',
+            'cotas_analista' => 'required|exists:cotas,id',
+            'cursos_analista' => 'required|exists:cursos,cod_curso',
         ];
     }
 

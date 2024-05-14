@@ -105,7 +105,7 @@
                                             <tr>
                                                 <th class="align-middle"> {{$loop->iteration}}</th>
                                                 <td class="align-middle">{{$candidato->candidato->no_inscrito}}</td>
-                                                <td class="align-middle text-center">{{$candidato->cota->cod_cota}}</td>
+                                                <td class="align-middle text-center">{{$candidato->cota->cod_novo}}</td>
                                                 <td class="align-middle text-center">
                                                     <div class="btn-group">
                                                         @if($candidato->candidato->user->email != null)

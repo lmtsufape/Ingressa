@@ -22,11 +22,11 @@ class CandidatoSearchBar extends Component
         if ($userPolicy->isAdminOrAnalistaGeral(auth()->user()))
             $this->cotas = Cota::pluck('id')->all();
         elseif ($userPolicy->soEhAnalistaHeteroidentificacao(auth()->user()))
-            $this->cotas = Cota::whereIn('cod_cota', ['L2', 'L6', 'L10', 'L14'])->pluck('id')->all();
+            $this->cotas = Cota::whereIn('cod_cota', ['L2', 'L6', 'LB_Q', 'LI_Q'])->pluck('id')->all();
         elseif ($userPolicy->soEhAnalistaMedico(auth()->user()))
-            $this->cotas = Cota::whereIn('cod_cota', ['L9', 'L10', 'L13', 'L14'])->pluck('id')->all();
+            $this->cotas = Cota::whereIn('cod_cota', ['L9', 'L13'])->pluck('id')->all();
         elseif ($userPolicy->ehAnalistaHeteroidentificacaoEMedico(auth()->user()))
-            $this->cotas = Cota::whereIn('cod_cota', ['L2','L6','L9','L10','L13','L14'])->pluck('id')->all();
+            $this->cotas = Cota::whereIn('cod_cota', ['L2','L6','L9', 'L13', 'LB_Q', 'LI_Q'])->pluck('id')->all();
         $this->limpar();
     }
 

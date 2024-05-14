@@ -541,7 +541,7 @@
                                                     <div class="form-check">
                                                         <input class="checkbox_cota form-check-input form-check-cursos" type="checkbox" name="cotas[]" value="{{$cota->id}}" id="cota_{{$cota->id}}">
                                                         <label class="form-check-label" for="cota_{{$cota->id}}">
-                                                            {{$cota->cod_cota}} - {{$cota->nome}}
+                                                            {{$cota->cod_novo}} - {{$cota->nome}}
                                                         </label>
                                                     </div>
                                                 </div>
