@@ -48,10 +48,13 @@
                                 @foreach ($cotas as $i => $cota)
                                 <tr>
                                     <th class="align-middle">{{$i+1}}</th>
-                                    <td class="align-middle">{{$cota->cod_cota}}</td>
+                                    <td class="align-middle">{{$cota->cod_novo}}</td>
                                     <td class="align-middle text-center">
                                     <button title="Deletar cota" id="criar-cota-btn" data-bs-toggle="modal" data-bs-target="#delete-cota-{{$cota->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1664.svg')}}" alt="Icone de deletar cota"></button>
                                     <button title="Editar cota" onclick="editarCota({{$cota->id}})" data-bs-toggle="modal" data-bs-target="#editar-cota" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/Grupo 1675.svg')}}" alt="Icone de editar cota"></button>
+                                    <a href="{{route('cotas.remanejamento', $cota->id)}}">
+                                        <button title="Editar remanejamento" style="cursor: pointer;"><img class="m-1" width="30" src="{{asset('img/icons-document-blue.png')}}" alt="Icone de editar cota"></button>
+                                    </a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -81,6 +84,14 @@
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1665.svg')}}" alt="Icone de editar cota">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Editar cota
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Editar remanejamento" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <img class="aling-middle" width="33" src="{{asset('img/icons-document-blue.png')}}" alt="Icone de editar remanejamento">
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Editar remanejamento
                                     </div>
                                 </div>
                             </li>
@@ -426,7 +437,7 @@
                 success: function(cota) {
                     document.getElementById('cota-edit').value = cota.id;
                     document.getElementById('nome-edit').value = cota.nome;
-                    document.getElementById('codigo-edit').value = cota.cod_cota;
+                    document.getElementById('codigo-edit').value = cota.cod_novo;
                     document.getElementById('descrição-edit').value = cota.descricao;
 
                     limpar(cota.cursos);

@@ -37,7 +37,7 @@ class Curso extends Model
 
     public function cotas()
     {
-        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('id', 'vagas_ocupadas', 'quantidade_vagas')->orderByPivot('cota_id');
+        return $this->belongsToMany(Cota::class, 'cota_curso', 'curso_id', 'cota_id')->withPivot('id', 'vagas_ocupadas', 'quantidade_vagas', 'sisu_id')->orderByPivot('cota_id');
     }
 
     public function getTurno()
@@ -88,5 +88,10 @@ class Curso extends Model
         Storage::putFileAs('public/' . $path, $file, $name);
         $this->icone = $path . $name;
         $this->update();
+    }
+
+    public function analistas()
+    {
+        return $this->belongsToMany(User::class, 'curso_user', 'curso_id', 'user_id');
     }
 }

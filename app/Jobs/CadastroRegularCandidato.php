@@ -42,15 +42,15 @@ class CadastroRegularCandidato implements ShouldQueue
     {
         ini_set('max_execution_time', 900);
         ini_set('auto_detect_line_endings', true);
-        $dados = fopen(storage_path('app'.DIRECTORY_SEPARATOR.$this->chamada->sisu->caminho_import_regular), "r");
+        $dados = fopen(storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_regular), "r");
         $primeira = true;
-        while ( ($data = fgetcsv($dados,0,';') ) !== FALSE ) {
-            if($primeira){
+        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
+            if ($primeira) {
                 $primeira = false;
-            }else{
+            } else {
                 $inscricao = new Inscricao([
                     'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make(strval($data[8]).$this->chamada->id),
+                    'protocolo' => Hash::make(strval($data[8]) . $this->chamada->id),
                     'nu_etapa' => strval($data[0]),
                     'no_campus' => strval($data[1]),
                     'co_ies_curso' => strval($data[2]),
@@ -73,19 +73,19 @@ class CadastroRegularCandidato implements ShouldQueue
                     'nu_fone1' => strval($data[22]),
                     'nu_fone2' => strval($data[23]),
                     'ds_email' => strval($data[24]),
-                    'nu_nota_l' => floatval(str_replace( ',', '.', $data[25])),
-                    'nu_nota_ch' => floatval(str_replace( ',', '.', $data[26])),
-                    'nu_nota_cn' => floatval(str_replace( ',', '.', $data[27])),
-                    'nu_nota_m' => floatval(str_replace( ',', '.', $data[28])),
-                    'nu_nota_r' => floatval(str_replace( ',', '.', $data[29])),
+                    'nu_nota_l' => floatval(str_replace(',', '.', $data[25])),
+                    'nu_nota_ch' => floatval(str_replace(',', '.', $data[26])),
+                    'nu_nota_cn' => floatval(str_replace(',', '.', $data[27])),
+                    'nu_nota_m' => floatval(str_replace(',', '.', $data[28])),
+                    'nu_nota_r' => floatval(str_replace(',', '.', $data[29])),
                     'co_curso_inscricao' => strval($data[30]),
                     'st_opcao' => strval($data[31]),
                     'no_modalidade_concorrencia' => strval($data[32]),
                     'st_bonus_perc' => strval($data[33]),
                     'qt_bonus_perc' => strval($data[34]),
                     'no_acao_afirmativa_bonus' => strval($data[35]),
-                    'nu_nota_candidato' => floatval(str_replace( ',', '.', $data[36])),
-                    'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
+                    'nu_nota_candidato' => floatval(str_replace(',', '.', $data[36])),
+                    'nu_notacorte_concorrida' => floatval(str_replace(',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => strval($data[39]),
                     'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $data[40])->format('Y/m/d'),
@@ -97,23 +97,31 @@ class CadastroRegularCandidato implements ShouldQueue
                     'st_lei_renda' => strval($data[46]),
                     'st_lei_etnia_p' => strval($data[47]),
                     'st_lei_etnia_i' => strval($data[48]),
+                    'de_acordo_lei_cota' => strval($data[49]),
+                    'ensino_medio' => strval($data[50]),
+                    'quilombola' => strval($data[52]),
+                    'deficiente' => strval($data[53]),
+                    'modalidade_escolhida' => strval($data[54]),
+                    'tipo_concorrencia' => strval($data[55]),
                 ]);
 
                 $candidatoExistente = Candidato::where('nu_cpf_inscrito', strval($data[10]))->first();
-                if($inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                $inscricao->no_modalidade_concorrencia == 'Ampla concorrência' || $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'){
+                if (
+                    $inscricao->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                    $inscricao->no_modalidade_concorrencia == 'Ampla concorrência' || $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA'
+                ) {
                     $cota = Cota::where('descricao',  'Ampla concorrência')->first();
-                }else{
+                } else {
                     $cota = Cota::where('descricao', $inscricao->no_modalidade_concorrencia)->first();
                 }
 
-                if($inscricao->ds_turno == 'Matutino'){
+                if ($inscricao->ds_turno == 'Matutino') {
                     $turno =  Curso::TURNO_ENUM['matutino'];
-                }elseif($inscricao->ds_turno  == 'Vespertino'){
+                } elseif ($inscricao->ds_turno  == 'Vespertino') {
                     $turno = Curso::TURNO_ENUM['vespertino'];
-                }elseif($inscricao->ds_turno == 'Noturno'){
+                } elseif ($inscricao->ds_turno == 'Noturno') {
                     $turno = Curso::TURNO_ENUM['noturno'];
-                }elseif($inscricao->ds_turno == 'Integral'){
+                } elseif ($inscricao->ds_turno == 'Integral') {
                     $turno = Curso::TURNO_ENUM['integral'];
                 }
 
@@ -125,52 +133,58 @@ class CadastroRegularCandidato implements ShouldQueue
                 $inscricao->cota_vaga_ocupada_id = $cota->id;
                 $inscricao->curso_id = $curs->id;
 
-                if($candidatoExistente == null){
+                if ($candidatoExistente == null) {
                     $user = new User([
                         'name' => strval($data[8]),
                         'password' => Hash::make('12345678'),
                         'role' => User::ROLE_ENUM['candidato'],
                         'primeiro_acesso' => true,
                     ]);
-                    if($data[9] != null){
+                    if ($data[9] != null) {
                         $user->name = strval($data[9]);
                     }
                     $user->save();
 
-                    if($data[9] != null){
-                        $candidato = new Candidato([
-                            'no_inscrito' => strval($data[8]),
-                            'no_social' => strval($data[9]),
-                            'nu_cpf_inscrito' => strval($data[10]),
-                            'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d'),
-                        ]);
-                    }else{
-                        $candidato = new Candidato([
-                            'no_inscrito' => strval($data[8]),
-                            'nu_cpf_inscrito' => strval($data[10]),
-                            'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d'),
-                        ]);
+                    $candidato = new Candidato();
+                    if ($data[9] != null) {
+                        $candidato->no_social = strval($data[9]);
                     }
+                    $candidato->no_inscrito = strval($data[8]);
+                    $candidato->nu_cpf_inscrito = strval($data[10]);
+                    $candidato->dt_nascimento = DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d');
+                    $candidato->etnia_e_cor = strval(array_search($data[51], Candidato::ETNIA_E_COR));
                     $candidato->user_id = $user->id;
                     $candidato->save();
                     $inscricao->candidato_id = $candidato->id;
                     $inscricao->save();
-                }else{
+                } else {
                     $candidatoExistente->atualizar_dados = true;
-                    if($data[9] != null){
+                    if ($data[9] != null) {
                         $candidatoExistente->no_social = strval($data[9]);
                         $candidatoExistente->user->name = strval($data[9]);
-                    }else{
+                    } else {
                         $candidatoExistente->user->name = strval($data[8]);
                     }
+                    $candidatoExistente->etnia_e_cor = strval(array_search($data[51], Candidato::ETNIA_E_COR));
                     $candidatoExistente->update();
                     $candidatoExistente->user->update();
 
                     $inscricao->candidato_id = $candidatoExistente->id;
                     $inscricao->save();
-
                 }
             }
         }
+    }
+
+    private function getCotaModalidade($modalidade)
+    {
+        if (
+            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
+            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
+        ) {
+            return Cota::where('cod_cota', 'A0')->first();
+        }
+
+        return Cota::where('nome', $modalidade)->first();
     }
 }

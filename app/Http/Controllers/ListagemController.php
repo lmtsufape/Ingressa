@@ -15,10 +15,7 @@ use App\Models\Curso;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Bus;
-use App\Jobs\EnviarEmailsPublicacaoListagem;
 use App\Models\Sisu;
-use Illuminate\Support\Facades\Log;
 
 class ListagemController extends Controller
 {
@@ -122,8 +119,8 @@ class ListagemController extends Controller
         $this->authorize('isAdmin', User::class);
         $listagem = Listagem::find($id);
 
-        if (Storage::disk()->exists('public/' .$listagem->caminho_listagem)) {
-            Storage::delete('public/'.$listagem->caminho_listagem);
+        if (Storage::disk()->exists('public/' . $listagem->caminho_listagem)) {
+            Storage::delete('public/' . $listagem->caminho_listagem);
         }
 
         $listagem->delete();
@@ -148,19 +145,19 @@ class ListagemController extends Controller
 
         foreach ($cursos as $i => $curso) {
             $inscricoes_curso = collect();
-            if($curso->turno == Curso::TURNO_ENUM['matutino']){
+            if ($curso->turno == Curso::TURNO_ENUM['matutino']) {
                 $turno = 'Matutino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['vespertino']) {
                 $turno = 'Vespertino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['noturno']) {
                 $turno = 'Noturno';
-            }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['integral']) {
                 $turno = 'Integral';
             }
             $ampla = collect();
             foreach ($cotas as $j => $cota) {
                 //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
-                if($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']){
+                if ($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']) {
                     $ampla2 = Inscricao::select('inscricaos.*')
                         ->where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
                         ->whereIn(
@@ -171,28 +168,27 @@ class ListagemController extends Controller
                                 'AMPLA CONCORRÊNCIA'
                             ]
                         )
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
+                        ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
+                        ->join('users', 'users.id', '=', 'candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
                     $ampla2 = $ampla2->map->only(['id']);
                     $ampla = $ampla->concat($ampla2);
-                }else if($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']){
+                } else if ($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']) {
                     //ignorar a de 10% visto que entra na mesma tabela que A0
-                }else{
-                    $inscritosCota = Inscricao::select('inscricaos.*')->
-                    where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
-                        ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                        ->join('users','users.id','=','candidatos.user_id')
+                } else {
+                    $inscritosCota = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
+                        ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
+                        ->join('users', 'users.id', '=', 'candidatos.user_id')
                         ->orderBy($ordenacao, $ordem)
                         ->get();
-                    if($inscritosCota->count() > 0 ){
+                    if ($inscritosCota->count() > 0) {
                         $inscritosCota = $inscritosCota->map->only(['id']);
                         $inscricoes_curso->push($inscritosCota);
                     }
                 }
             }
-            if($ampla->count() > 0){
+            if ($ampla->count() > 0) {
                 $inscricoes_curso->prepend($ampla);
             }
             if ($inscricoes_curso->count() > 0) {
@@ -237,34 +233,33 @@ class ListagemController extends Controller
 
         foreach ($cursos as $curso) {
             $inscricoes_curso = collect();
-            if($curso->turno == Curso::TURNO_ENUM['matutino']){
+            if ($curso->turno == Curso::TURNO_ENUM['matutino']) {
                 $turno = 'Matutino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['vespertino']) {
                 $turno = 'Vespertino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['noturno']) {
                 $turno = 'Noturno';
-            }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['integral']) {
                 $turno = 'Integral';
             }
-            if($cotas->where('cod_cota', 'A0')){
+            if ($cotas->where('cod_cota', 'A0')) {
                 $modalidadeCotaArray = [
                     'Ampla concorrência',
                     'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
                     'AMPLA CONCORRÊNCIA'
                 ];
-            }else{
+            } else {
                 $modalidadeCotaArray = [];
             }
 
             $modalidadeCotaArray = array_merge($modalidadeCotaArray, $cotas->pluck('descricao')->toArray());
-            $inscricoes_curso = Inscricao::select('inscricaos.*')->
-                where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
+            $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
                 ->whereIn(
                     'no_modalidade_concorrencia',
                     $modalidadeCotaArray
                 )
-                ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                ->join('users','users.id','=','candidatos.user_id')
+                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
+                ->join('users', 'users.id', '=', 'candidatos.user_id')
                 ->orderBy($ordenacao, $ordem)
                 ->get();
 
@@ -297,7 +292,7 @@ class ListagemController extends Controller
         $candidatosReservaCursos = collect();
         $A0 = Cota::where('cod_cota', 'A0')->first();
 
-        foreach($cursos as $curso){
+        foreach ($cursos as $curso) {
             $cpfs = collect();
             $candidatosIngressantesCurso = collect();
 
@@ -313,25 +308,23 @@ class ListagemController extends Controller
 
             //se o curso for de 80 vagas, logo A0 tem 40 vagas
             if ($cota_curso_quantidade == 40) {
-                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, true);
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true);
                 $primeiroSemestre = $retorno['ingressantes'];
                 $primeiroSemestre = $this->ordenarCurso($request->ordenacao, $primeiroSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($primeiroSemestre);
-
-                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, true, false);
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false);
                 $segundoSemestre = $retorno['ingressantes'];
                 $segundoSemestre = $this->ordenarCurso($request->ordenacao, $segundoSemestre, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->concat($segundoSemestre);
-
                 $primeiroSemestre = $primeiroSemestre->map->only(['id', 'cota_vaga_ocupada_id']);
                 $segundoSemestre = $segundoSemestre->map->only(['id', 'cota_vaga_ocupada_id']);
 
                 $candidatosIngressantesCursos->push($primeiroSemestre);
                 $candidatosIngressantesCursos->push($segundoSemestre);
             } else {
-                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs, false, true);
+                $retorno = $this->definirIngressantes($sisu, $curso, $candidatosCurso, $cpfs);
                 $curso = $retorno['ingressantes'];
                 $curso = $this->ordenarCurso($request->ordenacao, $curso, 'cota_vaga_ocupada_id');
                 $cpfs = $retorno['cpfs'];
@@ -346,14 +339,14 @@ class ListagemController extends Controller
             $candidatosReservaCurso = $this->ordenarCurso($request->ordenacao, $candidatosReservaCurso, 'cota_id');
 
             $candidatosReservaCurso = $candidatosReservaCurso->map->only(['id', 'cota_vaga_ocupada_id']);
-            if($candidatosReservaCurso->first() != null){
+            if ($candidatosReservaCurso->first() != null) {
                 $candidatosReservaCursos->push($candidatosReservaCurso);
             }
         }
         return ['ingressantes' => $candidatosIngressantesCursos, 'reservas' => $candidatosReservaCursos];
     }
 
-    private function definirIngressantes(Sisu $sisu, Curso $curso, $candidatosCurso, $cpfs, $eh80, $primeira)
+    private function definirIngressantes(Sisu $sisu, Curso $curso, $candidatosCurso, $cpfs, $primeira = false)
     {
         $cotas = Cota::all();
         $A0 = Cota::where('cod_cota', 'A0')->first();
@@ -361,15 +354,7 @@ class ListagemController extends Controller
 
         $candidatosIngressantesCurso = collect();
 
-        if ($eh80) {
-            if ($primeira) {
-                $qtndPorCota = $this->quantidadePorCota(true, true);
-            } else {
-                $qtndPorCota = $this->quantidadePorCota(true, false);
-            }
-        } else {
-            $qtndPorCota = $this->quantidadePorCota(false, true);
-        }
+        $qtndPorCota = $this->quantidadePorCota($curso, $sisu, $primeira);
 
         $qntdA0 = $qtndPorCota["A0"];
 
@@ -384,7 +369,7 @@ class ListagemController extends Controller
             }
         }
 
-        foreach($cotas as $i => $cota){
+        foreach ($cotas as $i => $cota) {
             if ($cota->cod_cota != $A0->cod_cota) {
                 $candidatosCotaCurso = Inscricao::where(
                     [
@@ -412,7 +397,7 @@ class ListagemController extends Controller
             }
         }
 
-        foreach($cotas as $i => $cota){
+        foreach ($cotas as $i => $cota) {
             if ($cota->cod_cota != $A0->cod_cota) {
                 $cota_curso_quantidade = $vagas_restantes[$i];
                 if ($cota_curso_quantidade > 0) {
@@ -420,11 +405,11 @@ class ListagemController extends Controller
                         $cotaRemanejamento = $remanejamento->proximaCota;
                         $candidatosCotaCursoRemanejamento = Inscricao::where(
                             [
-                                    ['sisu_id', $sisu->id],
-                                    ['curso_id', $curso->id],
-                                    ['cota_id', $cotaRemanejamento->id],
-                                    ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
-                                ]
+                                ['sisu_id', $sisu->id],
+                                ['curso_id', $curso->id],
+                                ['cota_id', $cotaRemanejamento->id],
+                                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                            ]
                         )->orderBy('nu_nota_candidato', 'DESC')->get();
 
                         $continua = false;
@@ -436,7 +421,6 @@ class ListagemController extends Controller
                                     $candidatosIngressantesCurso->push($candidato);
                                     $cota_curso_quantidade -= 1;
                                     $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                                    Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
                                 }
                             } else {
                                 $continua = true;
@@ -453,34 +437,37 @@ class ListagemController extends Controller
         return ['ingressantes' => $candidatosIngressantesCurso, 'cpfs' => $cpfs];
     }
 
-    private function quantidadePorCota($eh80, $primeira)
+    private function quantidadePorCota(Curso $curso, Sisu $sisu, $primeira)
     {
-        if ($eh80) {
+        if ($curso->vagas == 80) {
             if ($primeira) {
-                return ['A0' => 20, 'L1' => 3, 'L2' => 6, 'L5' => 3, 'L6' => 6, 'L9' => 1, 'L10' => 0, 'L13' => 1, 'L14' => 0];
+                return ['A0' => 10, 'L1' => 1, 'L2' => 2, 'L5' => 1, 'L6' => 3, 'L9' => 1, 'L13' => 1, 'LB_Q' => 1, 'LI_Q' => 0];
+            } else {
+                return ['A0' => 30, 'L1' => 2, 'L2' => 12, 'L5' => 3, 'L6' => 11, 'L9' => 1, 'L13' => 1, 'LB_Q' => 0, 'LI_Q' => 0];
             }
-            return ['A0' => 20, 'L1' => 3, 'L2' => 6, 'L5' => 3, 'L6' => 6, 'L9' => 0, 'L10' => 1, 'L13' => 0, 'L14' => 1];
         }
-        return ['A0' => 20, 'L1' => 2, 'L2' => 6, 'L5' => 2, 'L6' => 6, 'L9' => 1, 'L10' => 1, 'L13' => 1, 'L14' => 1];
 
+        $qntdPorCota = $curso->cotas()->wherePivot('sisu_id', $sisu->id)->pluck('quantidade_vagas', 'cod_cota');
+
+        return $qntdPorCota;
     }
 
     private function ordenarCurso($ordenacao, $curso, $grupo)
     {
         $retorno = collect();
-        if($ordenacao == "nome"){
+        if ($ordenacao == "nome") {
 
             $curso = $curso->groupBy($grupo);
-            foreach($curso as $candidatos){
-                $candidatos = $candidatos->sortBy(function($candidato){
+            foreach ($curso as $candidatos) {
+                $candidatos = $candidatos->sortBy(function ($candidato) {
                     return $candidato->candidato->no_inscrito;
                 });
                 $retorno = $retorno->concat($candidatos);
             }
-        }else{
+        } else {
             $curso = $curso->groupBy($grupo);
-            foreach($curso as $candidatos){
-                $candidatos = $candidatos->sortByDesc(function($candidato){
+            foreach ($curso as $candidatos) {
+                $candidatos = $candidatos->sortByDesc(function ($candidato) {
                     return $candidato['nu_nota_candidato'];
                 });
                 $retorno = $retorno->concat($candidatos);
@@ -500,34 +487,25 @@ class ListagemController extends Controller
 
         $sisu = Sisu::find($id);
 
-        if (! $sisu->lista_personalizada) {
+        if (!$sisu->lista_personalizada) {
             $request['chamada'] = $sisu->chamadas->first()->id;
             $sisu->lista_personalizada = true;
             $inscricoes = $this->getInscricoesIngressantesReservas($request);
-            $candidatosIngressantesCursos = $inscricoes['ingressantes']
-            ->filter(function ($value, $key) {
-                return $value->count() <= 40;
-            });
-
-            $curso_atual = null;
-            $curso_anterior = null;
+            $candidatosIngressantesCursos = $inscricoes['ingressantes'];
+            $primeiro = true;
             foreach ($candidatosIngressantesCursos as $curso) {
                 $curso_atual = Inscricao::find($curso[0]['id'])->curso;
                 foreach ($curso as $i => $insc) {
                     $inscricao = Inscricao::find($insc['id']);
                     $inscricao->cota_classificacao_id = $insc['cota_vaga_ocupada_id'];
-                    if ($curso_atual->semestre != null){
+                    if ($curso_atual->semestre != null) {
                         $inscricao->semestre_entrada = $curso_atual->semestre;
                     } else {
-                        if ($curso_anterior == $curso_atual) {
-                            $inscricao->semestre_entrada = 2;
-                        } else {
-                            $inscricao->semestre_entrada = 1;
-                        }
+                        $inscricao->semestre_entrada = $primeiro ? 1 : 2;
                     }
                     $inscricao->update();
                 }
-                $curso_anterior = $curso_atual;
+                $primeiro = !$primeiro;
             }
 
             $candidatosReserva = $inscricoes['reservas'];
@@ -582,7 +560,6 @@ class ListagemController extends Controller
 
 
         return view('sisu.lista_personalizada', compact('curso', 'sisu', 'turno', 'cotas', 'candidatosIngressantes', 'candidatosReserva'));
-
     }
 
     public function exportarCSV(Request $request)
@@ -594,9 +571,6 @@ class ListagemController extends Controller
         ];
 
         $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
-            ->filter(function ($value, $key) {
-                return $value->count() <= 40;
-            })
             ->map(function ($value, $key) {
                 return $value->map(function ($value, $key) {
                     $value = Inscricao::find($value['id']);
@@ -633,7 +607,7 @@ class ListagemController extends Controller
                         $value->candidato->ano_conclusao,
                         $this->getCotaFinal($value->cota, $value->cotaRemanejada),
                         154575, //POLO DE RECIFE??
-                        $value->candidato->cor_raca,
+                        $value->candidato->etnia_e_cor,
                         $value->candidato->titulo,
                         $value->candidato->zona_eleitoral,
                         $value->candidato->secao_eleitoral,
@@ -673,50 +647,50 @@ class ListagemController extends Controller
 
         $retorno = $candidatosIngressantes
             ->map(function ($value, $key) {
-                    return [
-                        $value->candidato->nu_cpf_inscrito,
-                        $value->nu_rg,
-                        $this->removeAcentos($value->candidato->no_inscrito),
-                        $this->getCodProgramaForm($value->curso),
-                        $value->semestre_entrada,
-                        $value->sisu->edicao,
-                        $this->getTurno($value->curso),
-                        2, //presencial
-                        15, //sisu
-                        $this->removeAcentos($value->no_mae),
-                        $this->removeAcentos($value->candidato->pai),
-                        $value->tp_sexo,
-                        $this->getNacionalidade($value->candidato->pais_natural),
-                        date('d/m/Y', strtotime($value->candidato->dt_nascimento)),
-                        $value->candidato->estado_civil,
-                        $this->removeAcentos($value->candidato->cidade_natal),
-                        $value->nu_cep,
-                        $this->getNumeroEndereco($value->nu_endereco),
-                        $this->removeAcentos($value->ds_complemento),
-                        date('d/m/Y', strtotime($value->candidato->data_expedicao)),
-                        $value->candidato->orgao_expedidor,
-                        $value->candidato->uf_rg,
-                        'BRA',
-                        $value->candidato->user->email,
-                        //passaporte
-                        $value->nu_nota_candidato,
-                        //INSCRICAOVEST
-                        //NOTAVEST
-                        //CLASSVEST
-                        $value->candidato->ano_conclusao,
-                        $this->getCotaFinal($value->cota, $value->cotaRemanejada),
-                        154575, //POLO DE RECIFE??
-                        $value->candidato->cor_raca,
-                        $value->candidato->titulo,
-                        $value->candidato->zona_eleitoral,
-                        $value->candidato->secao_eleitoral,
-                        $value->nu_fone1,
-                        $value->nu_fone2,
-                        $this->removeAcentos($value->candidato->escola_ens_med),
-                        //escolaridade mae
-                        //escolaridade pai
-                        $value->candidato->necessidades,
-                    ];
+                return [
+                    $value->candidato->nu_cpf_inscrito,
+                    $value->nu_rg,
+                    $this->removeAcentos($value->candidato->no_inscrito),
+                    $this->getCodProgramaForm($value->curso),
+                    $value->semestre_entrada,
+                    $value->sisu->edicao,
+                    $this->getTurno($value->curso),
+                    2, //presencial
+                    15, //sisu
+                    $this->removeAcentos($value->no_mae),
+                    $this->removeAcentos($value->candidato->pai),
+                    $value->tp_sexo,
+                    $this->getNacionalidade($value->candidato->pais_natural),
+                    date('d/m/Y', strtotime($value->candidato->dt_nascimento)),
+                    $value->candidato->estado_civil,
+                    $this->removeAcentos($value->candidato->cidade_natal),
+                    $value->nu_cep,
+                    $this->getNumeroEndereco($value->nu_endereco),
+                    $this->removeAcentos($value->ds_complemento),
+                    date('d/m/Y', strtotime($value->candidato->data_expedicao)),
+                    $value->candidato->orgao_expedidor,
+                    $value->candidato->uf_rg,
+                    'BRA',
+                    $value->candidato->user->email,
+                    //passaporte
+                    $value->nu_nota_candidato,
+                    //INSCRICAOVEST
+                    //NOTAVEST
+                    //CLASSVEST
+                    $value->candidato->ano_conclusao,
+                    $this->getCotaFinal($value->cota, $value->cotaRemanejada),
+                    154575, //POLO DE RECIFE??
+                    $value->candidato->etnia_e_cor,
+                    $value->candidato->titulo,
+                    $value->candidato->zona_eleitoral,
+                    $value->candidato->secao_eleitoral,
+                    $value->nu_fone1,
+                    $value->nu_fone2,
+                    $this->removeAcentos($value->candidato->escola_ens_med),
+                    //escolaridade mae
+                    //escolaridade pai
+                    $value->candidato->necessidades,
+                ];
             })->collect();
         return Excel::download(
             new AprovadosExport($retorno),
@@ -745,7 +719,7 @@ class ListagemController extends Controller
         $candidatosReserva = collect();
 
         foreach ($cursos as $curso) {
-            if($curso->semestre != null){
+            if ($curso->semestre != null) {
                 $candidatosIngressantesCurso = Inscricao::where(
                     [
                         ['sisu_id', $sisu_id],
@@ -776,7 +750,6 @@ class ListagemController extends Controller
                     ]
                 )->orderBy('cota_classificacao_id', 'ASC')->get();
                 $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
-
             }
 
             $candidatosReservaCurso = Inscricao::where(
@@ -815,13 +788,10 @@ class ListagemController extends Controller
         $chamada = Chamada::find($request->chamada);
 
         $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
-            ->filter(function ($value, $key) {
-                return $value->count() <= 40;
-            })
             ->map(function ($value, $key) {
                 return $value->map(function ($value, $key) {
                     $value = Inscricao::find($value['id']);
-                    if(!$value->chamada->regular){
+                    if (!$value->chamada->regular) {
                         return [
                             $value->co_inscricao_enem,
                             'M',
@@ -832,9 +802,9 @@ class ListagemController extends Controller
 
         $ingressantes = collect();
 
-        foreach($retorno as $curso){
-            foreach($curso as $ingressante){
-                if($ingressante != null){
+        foreach ($retorno as $curso) {
+            foreach ($curso as $ingressante) {
+                if ($ingressante != null) {
                     $ingressantes->push($ingressante);
                 }
             }
@@ -843,7 +813,7 @@ class ListagemController extends Controller
         $candidatos = Inscricao::where('sisu_id', $chamada->sisu->id)
             ->whereIn('status', [Inscricao::STATUS_ENUM['documentos_pendentes'], Inscricao::STATUS_ENUM['documentos_invalidados']])
             ->get()->map(function ($candidato) {
-                if(!$candidato->chamada->regular){
+                if (!$candidato->chamada->regular) {
                     return [
                         $candidato->co_inscricao_enem,
                         $this->situacaoMatricula($candidato->status),
@@ -881,10 +851,12 @@ class ListagemController extends Controller
             'L10' => 9,
             'L9' => 10,
             'L14' => 11,
-            'L13' => 12
+            'L13' => 12,
+            'LB_Q' => 9,
+            'LI_Q' => 11,
         ];
-        if($cotaRemanejada == null) return $codigos[$cota->cod_cota];
-        return ($codigos[$cota->cod_cota]);
+        if ($cotaRemanejada) return $codigos[$cotaRemanejada->cod_cota];
+        return $codigos[$cota->cod_cota];
     }
 
     private function removeAcentos($palavra)
@@ -900,11 +872,11 @@ class ListagemController extends Controller
 
     private function getPeriodo(Curso $curso)
     {
-        if($curso->semestre != null) {
+        if ($curso->semestre != null) {
             return $curso->semestre;
         }
-        return $this->periodos[$curso->cod_curso]++ < 40 ? 1 : 2;
 
+        return $this->periodos[$curso->cod_curso]++ < 20 ? 1 : 2;
     }
 
     private function getNacionalidade($nacionalidade)
@@ -942,49 +914,49 @@ class ListagemController extends Controller
 
     private function divirPorSemestre($cotas, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, $deficiente)
     {
-        foreach($cotas as $cota){
+        foreach ($cotas as $cota) {
             $porCota = $candidatosIngressantesCurso->where('cota_vaga_ocupada_id', $cota->id);
-            if($deficiente){
-                if($cotas->first()->cod_cota == 'L9'){
+            if ($deficiente) {
+                if ($cotas->first()->cod_cota == 'L9') {
                     $primeiroSemestre = $primeiroSemestre->concat($porCota);
                     $second = collect();
                     $segundoSemestre = $segundoSemestre->concat($second);
-                }elseif($cotas->first()->cod_cota == 'L10'){
+                } elseif ($cotas->first()->cod_cota == 'L10') {
                     $first = collect();
                     $primeiroSemestre = $primeiroSemestre->concat($first);
                     $segundoSemestre = $segundoSemestre->concat($porCota);
                 }
-            }else{
-                $metade = ceil($porCota->count()/2);
+            } else {
+                $metade = ceil($porCota->count() / 2);
                 $divisoes = $porCota->chunk($metade);
 
-                if($divisoes->count()>0){
+                if ($divisoes->count() > 0) {
                     $first = $divisoes[0];
-                }else{
+                } else {
                     $first = collect();
                 }
-                if($divisoes->count()>1){
+                if ($divisoes->count() > 1) {
                     $second = $divisoes[1];
-                }else{
+                } else {
                     $second = collect();
                 }
 
-                if($first->count()!=$second->count()){
-                    if($primeiroSemestre->count()<$segundoSemestre->count()){
+                if ($first->count() != $second->count()) {
+                    if ($primeiroSemestre->count() < $segundoSemestre->count()) {
                         $primeiroSemestre = $primeiroSemestre->concat($first);
                         $segundoSemestre = $segundoSemestre->concat($second);
-                    }elseif($primeiroSemestre->count()>$segundoSemestre->count()){
-                        $ultimoElemento = $first->slice($first->count()-1, 1)->first();
+                    } elseif ($primeiroSemestre->count() > $segundoSemestre->count()) {
+                        $ultimoElemento = $first->slice($first->count() - 1, 1)->first();
                         $first = $first->slice(0, -1);
                         $second->push($ultimoElemento);
 
                         $primeiroSemestre = $primeiroSemestre->concat($first);
                         $segundoSemestre = $segundoSemestre->concat($second);
-                    }else{
+                    } else {
                         $primeiroSemestre = $primeiroSemestre->concat($first);
                         $segundoSemestre = $segundoSemestre->concat($second);
                     }
-                }else{
+                } else {
                     $primeiroSemestre = $primeiroSemestre->concat($first);
                     $segundoSemestre = $segundoSemestre->concat($second);
                 }
@@ -1051,34 +1023,33 @@ class ListagemController extends Controller
 
         foreach ($cursos as $curso) {
             $inscricoes_curso = collect();
-            if($curso->turno == Curso::TURNO_ENUM['matutino']){
+            if ($curso->turno == Curso::TURNO_ENUM['matutino']) {
                 $turno = 'Matutino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['vespertino']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['vespertino']) {
                 $turno = 'Vespertino';
-            }elseif($curso->turno == Curso::TURNO_ENUM['noturno']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['noturno']) {
                 $turno = 'Noturno';
-            }elseif($curso->turno == Curso::TURNO_ENUM['integral']){
+            } elseif ($curso->turno == Curso::TURNO_ENUM['integral']) {
                 $turno = 'Integral';
             }
-            if($cotas->where('cod_cota', 'A0')){
+            if ($cotas->where('cod_cota', 'A0')) {
                 $modalidadeCotaArray = [
                     'Ampla concorrência',
                     'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
                     'AMPLA CONCORRÊNCIA'
                 ];
-            }else{
+            } else {
                 $modalidadeCotaArray = [];
             }
 
             $modalidadeCotaArray = array_merge($modalidadeCotaArray, $cotas->pluck('descricao')->toArray());
-            $inscricoes_curso = Inscricao::select('inscricaos.*')->
-                where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
+            $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
                 ->whereIn(
                     'no_modalidade_concorrencia',
                     $modalidadeCotaArray
                 )
-                ->join('candidatos','inscricaos.candidato_id','=','candidatos.id')
-                ->join('users','users.id','=','candidatos.user_id')
+                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
+                ->join('users', 'users.id', '=', 'candidatos.user_id')
                 ->orderBy($ordenacao, $ordem)
                 ->get();
 
@@ -1093,7 +1064,8 @@ class ListagemController extends Controller
         return $this->salvarListagem($listagem, $pdf->stream());
     }
 
-    public function publicar(Request $request) {
+    public function publicar(Request $request)
+    {
         $listagem = Listagem::find($request->listagem_id);
         $listagem->publicada = $request->publicar;
 

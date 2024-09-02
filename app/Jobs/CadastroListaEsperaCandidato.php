@@ -18,7 +18,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class CadastroListaEsperaCandidato implements ShouldQueue
 {
@@ -44,22 +43,21 @@ class CadastroListaEsperaCandidato implements ShouldQueue
     {
         ini_set('max_execution_time', 900);
         ini_set('auto_detect_line_endings', true);
-        $dados = fopen(storage_path('app'.DIRECTORY_SEPARATOR.$this->chamada->sisu->caminho_import_espera), "r");
+        $dados = fopen(storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_espera), "r");
         $primeira = true;
         $candidatos = collect();
         $cont = 0;
-        while ( ($data = fgetcsv($dados,0,';') ) !== FALSE ) {
+        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
             /*if($cont > 5){
                 break;
             }*/
-            if($primeira){
+            if ($primeira) {
                 $primeira = false;
-                Log::info(print_r($dados, true));
-            }else{
+            } else {
                 //Armazenamos as informações de cada candidato
                 $inscricao = array(
                     'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make(strval($data[8]).$this->chamada->id),
+                    'protocolo' => Hash::make(strval($data[8]) . $this->chamada->id),
                     'nu_etapa' => strval($data[0]),
                     'no_campus' => strval($data[1]),
                     'co_ies_curso' => strval($data[2]),
@@ -88,19 +86,19 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_fone1' => strval($data[22]),
                     'nu_fone2' => strval($data[23]),
                     'ds_email' => strval($data[24]),
-                    'nu_nota_l' => floatval(str_replace( ',', '.', $data[25])),
-                    'nu_nota_ch' => floatval(str_replace( ',', '.', $data[26])),
-                    'nu_nota_cn' => floatval(str_replace( ',', '.', $data[27])),
-                    'nu_nota_m' => floatval(str_replace( ',', '.', $data[28])),
-                    'nu_nota_r' => floatval(str_replace( ',', '.', $data[29])),
+                    'nu_nota_l' => floatval(str_replace(',', '.', $data[25])),
+                    'nu_nota_ch' => floatval(str_replace(',', '.', $data[26])),
+                    'nu_nota_cn' => floatval(str_replace(',', '.', $data[27])),
+                    'nu_nota_m' => floatval(str_replace(',', '.', $data[28])),
+                    'nu_nota_r' => floatval(str_replace(',', '.', $data[29])),
                     'co_curso_inscricao' => strval($data[30]),
                     'st_opcao' => strval($data[31]),
                     'no_modalidade_concorrencia' => strval($data[32]),
                     'st_bonus_perc' => strval($data[33]),
                     'qt_bonus_perc' => strval($data[34]),
                     'no_acao_afirmativa_bonus' => strval($data[35]),
-                    'nu_nota_candidato' => floatval(str_replace( ',', '.', $data[36])),
-                    'nu_notacorte_concorrida' => floatval(str_replace( ',', '.', $data[37])),
+                    'nu_nota_candidato' => floatval(str_replace(',', '.', $data[36])),
+                    'nu_notacorte_concorrida' => floatval(str_replace(',', '.', $data[37])),
                     'nu_classificacao' => intval($data[38]),
                     'ds_matricula' => strval($data[39]),
                     'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $data[40])->format('Y/m/d'),
@@ -112,6 +110,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'st_lei_renda' => strval($data[46]),
                     'st_lei_etnia_p' => strval($data[47]),
                     'st_lei_etnia_i' => strval($data[48]),
+                    'de_acordo_lei_cota' => strval($data[49]),
+                    'ensino_medio' => strval($data[50]),
+                    'etnia_e_cor' => strval($data[51]),
+                    'quilombola' => strval($data[52]),
+                    'deficiente' => strval($data[53]),
+                    'modalidade_escolhida' => strval($data[54]),
+                    'tipo_concorrencia' => strval($data[55]),
                 );
                 $candidatos->push($inscricao);
                 $cont += 1;
@@ -121,11 +126,11 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
         //Agrupamos por curso
         $grouped = $candidatos->groupBy(function ($candidato) {
-            return $candidato['co_ies_curso'].$candidato['ds_turno'];
+            return $candidato['co_ies_curso'] . $candidato['ds_turno'];
         });
         $porCurso = collect();
         //E separamos por modalidade
-        foreach($grouped as $curso){
+        foreach ($grouped as $curso) {
             $porCurso->push($curso->groupBy('no_modalidade_concorrencia'));
         }
 
@@ -136,39 +141,41 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $cotasCursosCOD = collect();
 
         //Feito isto, é necessário juntar todos os inscritos da ampla concorrencia independente da cota de 10%
-        foreach($porCurso as $curso){
+        foreach ($porCurso as $curso) {
             $modalidade = collect();
             $ampla = collect();
             $modalidades = collect();
 
             $cotaCOD = collect();
             $cotaAmpla = false;
-            foreach($curso as $porModalidade){
+            foreach ($curso as $porModalidade) {
                 //os de ampla são colocados em um único collection aqui. Há várias verificações por inconsistência dos dados fornecidos
-                if($porModalidade[0]['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $porModalidade[0]['no_modalidade_concorrencia'] == 'Ampla concorrência'){
+                if (
+                    $porModalidade[0]['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                    $porModalidade[0]['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $porModalidade[0]['no_modalidade_concorrencia'] == 'Ampla concorrência'
+                ) {
                     $ampla = $ampla->concat($porModalidade);
-                    if(!$cotaAmpla){
+                    if (!$cotaAmpla) {
                         $cotaAmpla = true;
                     }
-                }else{
+                } else {
                     $modalidade = $porModalidade;
-                    if(!$cotaCOD->contains($modalidade[0]['no_modalidade_concorrencia'])){
+                    if (!$cotaCOD->contains($modalidade[0]['no_modalidade_concorrencia'])) {
                         $cotaCOD->push($modalidade[0]['no_modalidade_concorrencia']);
                     }
-                    $modalidade = $modalidade->sortBy(function($candidato){
+                    $modalidade = $modalidade->sortBy(function ($candidato) {
                         return $candidato['nu_classificacao'];
                     });
                     $modalidades->push($modalidade);
                 }
             }
             //ordenamos os inscritos da modalidade daquele curso pela classificacao
-            $ampla = $ampla->sortBy(function($candidato){
+            $ampla = $ampla->sortBy(function ($candidato) {
                 return $candidato['nu_classificacao'];
             });
             $modalidades->push($ampla);
             $cursos->push($modalidades);
-            if($cotaAmpla){
+            if ($cotaAmpla) {
                 $cotaCOD->push(Cota::COD_COTA_ENUM['A0']);
             }
             $cotasCursosCOD->push($cotaCOD);
@@ -176,7 +183,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
         //Preparados os dados dos inscritos, agora criaremos as instancias para salvar no banco
         //Percorremos cada curso
-        foreach($cursos as $indexCurso => $curso){
+        foreach ($cursos as $indexCurso => $curso) {
             $candidato = $curso[0][0];
             /*//Recuperamos a cota que aquele inscrito está relacionado
             if($candidato['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
@@ -188,13 +195,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             //E pegamos a informação de quantas vagas temos tem restante baseado em quantos candidatos foram efetivados e quantas vagas são
             //ofertadas para aquela cota*/
 
-            if($candidato['ds_turno'] == 'Matutino'){
+            if ($candidato['ds_turno'] == 'Matutino') {
                 $turno =  Curso::TURNO_ENUM['matutino'];
-            }elseif($candidato['ds_turno'] == 'Vespertino'){
+            } elseif ($candidato['ds_turno'] == 'Vespertino') {
                 $turno = Curso::TURNO_ENUM['vespertino'];
-            }elseif($candidato['ds_turno'] == 'Noturno'){
+            } elseif ($candidato['ds_turno'] == 'Noturno') {
                 $turno = Curso::TURNO_ENUM['noturno'];
-            }elseif($candidato['ds_turno'] == 'Integral'){
+            } elseif ($candidato['ds_turno'] == 'Integral') {
                 $turno = Curso::TURNO_ENUM['integral'];
             }
 
@@ -205,11 +212,11 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             com os candidatos com as maiores notas  daquele curso*/
 
             $candidatosCurso = collect();
-            foreach($cursos[$indexCurso] as $modalidadeAtual){
+            foreach ($cursos[$indexCurso] as $modalidadeAtual) {
                 $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
             }
 
-            $candidatosCurso = $candidatosCurso->sortByDesc(function($candidato){
+            $candidatosCurso = $candidatosCurso->sortByDesc(function ($candidato) {
                 return $candidato['nu_nota_candidato'];
             });
 
@@ -219,7 +226,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
             //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
             $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
-            if($multiplicador != null){
+            if ($multiplicador != null) {
                 $vagasCotaA0 *= $multiplicador->multiplicador;
             }
 
@@ -231,15 +238,15 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             $vagasCotaCollection->push(0);
 
             //Varremos todas as cotas do curso
-            foreach($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $cota){
-                if($cota->cod_cota != $A0->cod_cota){
+            foreach ($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $cota) {
+                if ($cota->cod_cota != $A0->cod_cota) {
                     //recuperamos informações da quantidade que iremos chamar
                     $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $this->chamada->sisu->id)->first()->pivot;
 
                     $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
                     //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
                     $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $this->chamada->id]])->first();
-                    if(!is_null($multiplicador)){
+                    if (!is_null($multiplicador)) {
                         $vagasCota *= $multiplicador->multiplicador;
                     }
 
@@ -248,42 +255,41 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     $modalidadeDaCotaIndex = null;
 
                     //Se o curso atual possuir algum candidato da modalidade descrita na descricao da cota, significa que temos quem chamar
-                    foreach($cursoAtual as $index => $modalidadeCursoAtual){
-                        if($modalidadeCursoAtual == $cota->descricao){
+                    foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
+                        if ($modalidadeCursoAtual == $cota->descricao) {
                             $modalidadeDaCotaIndex = $index;
                             break;
                         }
                     }
                     //Então assim faremos
-                    if(!is_null($modalidadeDaCotaIndex)){
+                    if (!is_null($modalidadeDaCotaIndex)) {
                         $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
                     }
                     $vagasCotaCollection->push($vagasCota);
-
                 }
             }
             //Varremos todas as cotas do curso
-            foreach($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $indice => $cota){
-                if($cota->cod_cota != $A0->cod_cota){
+            foreach ($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $indice => $cota) {
+                if ($cota->cod_cota != $A0->cod_cota) {
                     $vagasCota = $vagasCotaCollection[$indice];
                     //Caso restem vagas, faremos o remanejamento
-                    if($vagasCota > 0){
-                        foreach($cota->remanejamentos as $remanejamento){
+                    if ($vagasCota > 0) {
+                        foreach ($cota->remanejamentos as $remanejamento) {
                             $cotaRemanejamento = $remanejamento->proximaCota;
                             $cursoAtual = $cotasCursosCOD[$indexCurso];
 
                             $modalidadeDaCotaIndex = null;
 
-                            foreach($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento){
-                                if($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao){
+                            foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
+                                if ($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao) {
                                     $modalidadeDaCotaIndex = $indexRemanejamento;
                                     break;
                                 }
                             }
-                            if(!is_null($modalidadeDaCotaIndex)){
+                            if (!is_null($modalidadeDaCotaIndex)) {
                                 $vagasCota = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
                             }
-                            if($vagasCota == 0){
+                            if ($vagasCota == 0) {
                                 break;
                             }
                         }
@@ -297,16 +303,16 @@ class CadastroListaEsperaCandidato implements ShouldQueue
     {
         //enquanto houver vagas e inscritos daquela modalidade, o laço irá continuar
         $ehNull = $cotaRemanejamento;
-        foreach($porModalidade as $inscrito){
-            if($vagasCota > 0){
+        foreach ($porModalidade as $inscrito) {
+            if ($vagasCota > 0) {
 
-                if($ehNull == null){
+                if ($ehNull == null) {
                     $cotaRemanejamento = $this->getCotaModalidade($inscrito['no_modalidade_concorrencia']);
                 }
                 //agora podemos preparar o objeto de inscricao para o candidato
                 $inscricao = new Inscricao([
                     'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make($inscrito['protocolo'].$this->chamada->id),
+                    'protocolo' => Hash::make($inscrito['protocolo'] . $this->chamada->id),
                     'nu_etapa' => $inscrito['nu_etapa'],
                     'no_campus' => $inscrito['no_campus'],
                     'co_ies_curso' => $inscrito['co_ies_curso'],
@@ -354,11 +360,17 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'st_lei_renda' => $inscrito['st_lei_renda'],
                     'st_lei_etnia_p' => $inscrito['st_lei_etnia_p'],
                     'st_lei_etnia_i' => $inscrito['st_lei_etnia_i'],
+                    'de_acordo_lei_cota' => $inscrito['de_acordo_lei_cota'],
+                    'ensino_medio' => $inscrito['ensino_medio'],
+                    'quilombola' => $inscrito['quilombola'],
+                    'deficiente' => $inscrito['deficiente'],
+                    'modalidade_escolhida' => $inscrito['modalidade_escolhida'],
+                    'tipo_concorrencia' => $inscrito['tipo_concorrencia'],
                 ]);
 
                 //recuperamos se o inscrito possui um usuário no sistema
                 $candidatoExistente = Candidato::where('nu_cpf_inscrito', $inscrito['nu_cpf_inscrito'])->first();
-                if($candidatoExistente == null){
+                if ($candidatoExistente == null) {
                     //caso não exista, criaremos um para ele
                     $user = new User([
                         'name' => $inscrito['no_inscrito'],
@@ -367,25 +379,26 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         'primeiro_acesso' => true,
                     ]);
                     //aqui estamos usando o nome social dele caso o mesmo possua
-                    if($inscrito['no_social'] != null){
+                    if ($inscrito['no_social'] != null) {
                         $user->name = $inscrito['no_social'];
                     }
                     $user->save();
 
-                    if($inscrito['no_social'] != null){
+                    if ($inscrito['no_social'] != null) {
                         $candidato = new Candidato([
                             'no_inscrito' => $inscrito['no_inscrito'],
                             'no_social' => $inscrito['no_social'],
                             'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
                             'dt_nascimento' => $inscrito['dt_nascimento'],
                         ]);
-                    }else{
+                    } else {
                         $candidato = new Candidato([
                             'no_inscrito' => $inscrito['no_inscrito'],
                             'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
                             'dt_nascimento' => $inscrito['dt_nascimento'],
                         ]);
                     }
+                    $candidato->etnia_e_cor = strval(array_search($inscrito['etnia_e_cor'], Candidato::ETNIA_E_COR));
 
                     $candidato->user_id = $user->id;
                     $candidato->save();
@@ -399,26 +412,27 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                     $inscricao->curso_id = $curs->id;
                     $inscricao->save();
-
-                }else{
+                } else {
                     //Caso o inscrito já possua cadastro no sistema, checamos se ele já foi chamado naquela edição do sisu
                     //isso evita que ele seja chamado novamente naquela edição, e permite que o mesmo arquivo csv
                     //da lista de espera seja utilizado em outras chamadas.
                     $chamado = False;
-                    foreach($candidatoExistente->inscricoes as $inscricaoCandidato){
-                        if($inscricaoCandidato->chamada->sisu->id == $this->chamada->sisu->id){
+                    foreach ($candidatoExistente->inscricoes as $inscricaoCandidato) {
+                        if ($inscricaoCandidato->chamada->sisu->id == $this->chamada->sisu->id) {
                             $chamado = True;
                             break;
                         }
                     }
-                    if(!$chamado){
+                    if (!$chamado) {
                         $candidatoExistente->atualizar_dados = true;
-                        if($inscrito['no_social'] != null){
+                        if ($inscrito['no_social'] != null) {
                             $candidatoExistente->no_social = $inscrito['no_social'];
                             $candidatoExistente->user->name = $inscrito['no_social'];
-                        }else{
+                        } else {
                             $candidatoExistente->user->name = $inscrito['no_inscrito'];
                         }
+                        $candidatoExistente->etnia_e_cor = strval(array_search($inscrito['etnia_e_cor'], Candidato::ETNIA_E_COR));
+
                         $candidatoExistente->update();
                         $candidatoExistente->user->update();
 
@@ -431,46 +445,28 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                         $inscricao->curso_id = $curs->id;
                         $inscricao->save();
-                    }else{
+                    } else {
                         $vagasCota += 1;
                     }
-
                 }
                 $vagasCota -= 1;
-            }else{
+            } else {
                 break;
             }
         }
 
         return $vagasCota;
-
     }
 
     private function getCotaModalidade($modalidade)
     {
-        switch($modalidade){
-            case 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'AMPLA CONCORRÊNCIA':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'Ampla concorrência':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'Candidatos com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L1')->first();
-            case 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L2')->first();
-            case 'Candidatos que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L5')->first();
-            case 'Candidatos autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L6')->first();
-            case 'Candidatos com deficiência que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L9')->first();
-            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas, que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)':
-                return Cota::where('cod_cota', 'L10')->first();
-            case 'Candidatos com deficiência que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L13')->first();
-            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L14')->first();
+        if (
+            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
+            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
+        ) {
+            return Cota::where('cod_cota', 'A0')->first();
         }
+
+        return Cota::where('nome', $modalidade)->first();
     }
 }

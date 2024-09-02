@@ -88,6 +88,12 @@ class Inscricao extends Model
         'st_lei_renda',
         'st_lei_etnia_p',
         'st_lei_etnia_i',
+        'de_acordo_lei_cota',
+        'ensino_medio',
+        'quilombola',
+        'deficiente',
+        'modalidade_escolhida',
+        'tipo_concorrencia',
     ];
 
     public function candidato()
