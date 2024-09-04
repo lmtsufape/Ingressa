@@ -392,6 +392,10 @@
                                     Celular: <p class="nomeDocumento" style="display: inline">
                                         {{ $inscricao->nu_fone2 }}</p>
                                 </div>
+                                <div class="col-md-4 tituloDocumento">
+                                    Contato de Emergência: <p class="nomeDocumento" style="display: inline">
+                                        {{ $inscricao->nu_fone_emergencia }}</p>
+                                </div>
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
                                 Email: <p class="nomeDocumento" style="display: inline">

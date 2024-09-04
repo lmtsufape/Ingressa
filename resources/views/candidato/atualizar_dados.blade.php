@@ -734,6 +734,18 @@
                                             </div>
                                         @enderror
                                     </div>
+                                    <div class="form-group col-md-4 textoInput">
+                                        <label for="nu_fone_emergencia">{{ __('Contato de Emergência') }}</label>
+                                        <input id="nu_fone_emergencia"
+                                            class="form-control form-control-sm caixaDeTexto @error('nu_fone_emergencia') is-invalid @enderror celular"
+                                            type="text" name="nu_fone_emergencia"
+                                            value="{{ old('nu_fone_emergencia', $inscricao->nu_fone_emergencia) }}">
+                                        @error('nu_fone_emergencia')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">

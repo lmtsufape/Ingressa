@@ -293,6 +293,9 @@ class ChamadaController extends Controller
             ->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
+    public function listarTodosCandChamada(){
+        
+    }
     private function inscricoesHeteroidentificacao($chamada, $curso, $cotas, $arquivos)
     {
         $retorno = [];
