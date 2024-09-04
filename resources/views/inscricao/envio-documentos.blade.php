@@ -49,8 +49,8 @@
                             validados. Caso não possa enviar algum documento dispensável, assinalar o termo de
                             compromisso dos arquivos. <br>
                             <b>ATENÇÃO</b>: Antes de enviar os documentos conferir as especificações da sua modalidade de
-                            concorrência descritas no Edital do processo de seleção SiSU 2023 da UFAPE, disponível em:
-                            <a href="http://www.ufape.edu.br/documentossisu2023" target="_blank">www.ufape.edu.br/documentossisu2023</a>.
+                            concorrência descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em:
+                            <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>.
                         </div>
                         <livewire:enviar-documentos :inscricao="$inscricao" :documentos="$documentos"/>
                     </div>

@@ -44,6 +44,28 @@
                                 </div>
                             </div>
                         @endif
+                        @error('analista')
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                        style="display: none;">
+                                        <symbol id="prohibition" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm0 1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM5.146 5.146a.5.5 0 0 1 .708 0L8 7.293l2.146-2.147a.5.5 0 0 1 .708.708L8.707 8l2.147 2.146a.5.5 0 1 1-.708.708L8 8.707l-2.146 2.147a.5.5 0 1 1-.708-.708L7.293 8 5.146 5.854a.5.5 0 0 1 0-.708z" />
+                                        </symbol>
+                                    </svg>
+
+
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <svg class="bi" width="32" height="32" fill="currentColor">
+                                            <use xlink:href="#prohibition" />
+                                        </svg>{{ $errors->first() }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @enderror
                         @if ($users->count() > 0)
                             <table class="table">
                                 <thead>
@@ -66,8 +88,7 @@
                                                     style="cursor: pointer;"><img class="m-1 " width="30"
                                                         src="{{ asset('img/Grupo 1664.svg') }}"
                                                         alt="Icone de deletar analista"></button>
-                                                <button title="Editar analista"
-                                                    onclick="editarAnalista({{ $user->id }}, {{ $tipos }})"
+                                                <button title="Editar analista" onclick="setUserId({{ $user->id }})"
                                                     data-bs-toggle="modal" data-bs-target="#editar-user-modal"
                                                     style="cursor: pointer;"><img class="m-1 " width="30"
                                                         src="{{ asset('img/Grupo 1665.svg') }}"
@@ -238,7 +259,7 @@
                                     name="cotas_analista[]" value="{{ $cota->id }}"
                                     id="cotas_analista_store_{{ $cota->id }}" checked>
                                 <label class="form-check-label"
-                                    for="cotas_analista_store_{{ $cota->id }}">{{ $cota->cod_cota }}</label>
+                                    for="cotas_analista_store_{{ $cota->id }}">{{ $cota->cod_novo }}</label>
                             </div>
                         @endforeach
                         @error('cotas_analista_store')
@@ -272,7 +293,7 @@
 
                 <form method="POST" id="editar-analista" action="{{ route('usuarios.update.analista') }}">
                     @csrf
-                    <input type="hidden" id="user-edit" name="user_id" value="">
+                    <input type="hidden" id="user-edit" name="user_id" value="{{ old('user_id') }}">
                     <div class="form-row">
                         <div class="col-md-12 pt-3 textoModal">
                             <label class="pb-2" for="name-edit">Nome completo:</label>
@@ -361,7 +382,7 @@
                                         name="cotas_analista_edit[]" value="{{ $cota->id }}"
                                         id="cotas_analista_{{ $cota->id }}">
                                     <label class="form-check-label"
-                                        for="cotas_analista_{{ $cota->id }}">{{ $cota->cod_cota }}</label>
+                                        for="cotas_analista_{{ $cota->id }}">{{ $cota->cod_novo }}</label>
                                 </div>
                             @endforeach
                             @error('cotas_analista_edit')
@@ -418,6 +439,7 @@
             </div>
         </div>
     @endforeach
+    <input type="hidden" id="tipos" value="{{ $tipos->pluck('id') }}">
 </x-app-layout>
 
 @if (old('user_id') == 'none')
@@ -446,16 +468,12 @@
     });
 
     // Chama a função inicialmente para configurar a visibilidade correta
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
         // Adiciona um ouvinte de eventos para os modais serem mostrados
-        $('#criar-user-modal, #editar-user-modal').on('shown.bs.modal', function() {
-            // Obtém o ID do modal
-            var modalId = $(this).attr('id');
-            // Chama a função para configurar a visibilidade correta
-            atualizarVisibilidadeCotas(modalId);
+        $('#editar-user-modal').on('shown.bs.modal', function() {
+            atualizarDadosModal();
         });
     });
-
 
     function atualizarVisibilidadeCotas(modalId) {
         // Verifica se a checkbox de tipo medico e heteroidentificacao está desmarcada
@@ -472,10 +490,16 @@
         }
     }
 
+    function setUserId(id) {
+        document.getElementById('user-edit').value = id;
+    }
 
-    function editarAnalista(id, tipos) {
+    function atualizarDadosModal() {
+        id = document.getElementById('user-edit').value;
+        tipos = JSON.parse(document.getElementById('tipos').value);
+
         for (var i = 0; i < tipos.length; i++) {
-            document.getElementById('tipo-editar-user-modal-' + tipos[i].id).checked = false;
+            document.getElementById('tipo-editar-user-modal-' + tipos[i]).checked = false;
         }
 
         var cursos = document.querySelectorAll('[name*="edit"].form-check-cursos');
@@ -502,7 +526,7 @@
                 document.getElementById('name-edit').value = user.name;
                 document.getElementById('email-edit').value = user.email;
                 for (var i = 0; i < user.cargos.length; i++) {
-                    document.getElementById('tipo-editar-user-modal-' + tipos[i].id).checked = true;
+                    document.getElementById('tipo-editar-user-modal-' + user.cargos[i].id).checked = true;
                 }
                 for (var i = 0; i < user.cursos.length; i++) {
                     document.getElementById('cursos_analista_' + user.cursos[i].cod_curso).checked = true;
@@ -510,9 +534,9 @@
                 for (var i = 0; i < user.cotas.length; i++) {
                     document.getElementById('cotas_analista_' + user.cotas[i].id).checked = true;
                 }
+
+                atualizarVisibilidadeCotas('editar-user-modal');
             }
         });
-
-        atualizarVisibilidadeCotas('editar-user-modal');
     }
 </script>

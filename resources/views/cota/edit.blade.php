@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label for="codigo">{{__('Código da cota')}}</label>
-                                    <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo', $cota->cod_cota)}}" required>
+                                    <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo', $cota->cod_novo)}}" required>
 
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">

@@ -75,7 +75,10 @@
                                                     @endif
                                                 @else
                                                     @if($batches[$i]->finished())
-                                                        <a title="Listar candidatos da chamada" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos"></a>
+                                                        @include('sisu.modal_show_candidatos')
+                                                        <button title="Listar candidatos da chamada" type="button" data-toggle="modal" data-target="#listar">
+                                                            <img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos">
+                                                        </button>
                                                     @else
                                                         <a title="Cadastrando candidatos"><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
                                                     @endif
@@ -363,13 +366,13 @@
                                                 @endswitch
                                             </div>
                                             <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">
-                                                @foreach ($curso->cotas as $cota)
+                                                @foreach ($curso->cotas()->wherePivot('sisu_id', $sisu->id)->get() as $cota)
                                                     @php
                                                         $contTotal += $cota->pivot->vagas_ocupadas;
                                                     @endphp
                                                     @if($cota->cod_cota != "B4342")
                                                         <div class="col-md-12 pb-2" style="border-bottom: 1px solid #f5f5f5;">
-                                                            {{$cota->cod_cota}}
+                                                            {{$cota->cod_novo}}
                                                             <div class="row align-items-center">
                                                                 <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
                                                                     Número de vagas

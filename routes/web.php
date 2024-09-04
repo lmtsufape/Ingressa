@@ -11,6 +11,7 @@ use App\Http\Controllers\DataChamadaController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ListagemController;
 use App\Http\Controllers\WelcomeController;
+use Illuminate\Support\Facades\App;
 
 include "fortify.php";
 /*
@@ -83,8 +84,10 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::post('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/confirmar-invalidacao', [InscricaoController::class, 'confirmarInvalidacao'])
         ->name('inscricao.confirmar.invalidacao');
 
-    Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada-aprovar', [ChamadaController::class, 'aprovarCandidatosChamada'])
-        ->name('chamadas.candidatos.aprovar');
+    if (App::environment('test')) {
+        Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada-aprovar', [ChamadaController::class, 'aprovarCandidatosChamada'])
+            ->name('chamadas.candidatos.aprovar');
+    }
 
     Route::get('/sisus/{sisu_id}/lista-personalizada-cursos', [ListagemController::class, 'listaPersonalizada'])
         ->name('lista.personalizada');

@@ -11,6 +11,8 @@ use Laravel\Jetstream\Jetstream;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Requests\UserRequest;
 use App\Models\TipoAnalista;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -123,11 +125,15 @@ class UserController extends Controller
         $user = User::find($request->user_id);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id,],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'tipos_analista_edit' => 'required',
-            'cotas_analista_edit' => 'required|exists:cotas,id',
+            'cotas_analista_edit' => 'exists:cotas,id',
             'cursos_analista_edit' => 'required|exists:cursos,cod_curso',
         ]);
+
+        $validator->sometimes('cotas_analista_edit', 'required', function ($input) {
+            return in_array(TipoAnalista::TIPO_ENUM['geral'], $input->tipos_analista_edit);
+        });
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();
@@ -176,10 +182,21 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
         $user = User::find($id);
-        foreach ($user->tipo_analista()->get() as $tipo) {
-            $tipo->pivot->delete();
+        DB::beginTransaction();
+        try {
+            foreach ($user->tipo_analista()->get() as $tipo) {
+                $tipo->pivot->delete();
+            }
+
+            $user->delete();
+        } catch (Exception $e) {
+            DB::rollBack();
+            if ($e->getCode() == '23503') {
+                return redirect()->back()->withErrors(['analista' => 'O analista não pode ser deletado pois possui avaliações.']);
+            }
         }
-        $user->delete();
+
+        DB::commit();
 
         return redirect(route('usuarios.index'))->with(['success' => 'Analista deletado com sucesso!']);
     }

@@ -168,7 +168,6 @@ class ChamadaController extends Controller
         $chamada = Chamada::find($chamada_id);
 
         if ($chamada->regular) {
-            //$this->cadastrarCandidatosRegular($chamada);
             $batch = Bus::batch([
                 new CadastroRegularCandidato($chamada),
             ])->name('Importar Chamada Regular ' . $chamada->id)->dispatch();
@@ -186,7 +185,6 @@ class ChamadaController extends Controller
                 $chamada->update();
                 return redirect(route('chamadas.show', $chamada))->with(['success_listagem' =>  'Listagem criada com sucesso!']);
             } else {
-                //$this->cadastrarCandidatosEspera($chamada);
                 $batch = Bus::batch([
                     new CadastroListaEsperaCandidato($chamada),
                 ])->name('Importar Chamada Lista Espera ' . $chamada->id)->dispatch();
@@ -217,348 +215,6 @@ class ChamadaController extends Controller
         }
     }
 
-    private function cadastrarCandidatosRegular($chamada)
-    {
-        $this->authorize('isAdmin', User::class);
-        $dados = fopen('storage/' . $chamada->caminho_import_sisu_gestao, "r");
-        $primeira = true;
-        ini_set('max_execution_time', 300);
-        while (($data = fgetcsv($dados, ";", ";")) !== FALSE) {
-            if ($primeira) {
-                $primeira = false;
-            } else {
-                $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make($data[8] . $chamada->id),
-                    'nu_etapa' => $data[0],
-                    'no_campus' => $data[1],
-                    'co_ies_curso' => $data[2],
-                    'no_curso' => $data[3],
-                    'ds_turno' => $data[4],
-                    'ds_formacao' => $data[5],
-                    'qt_vagas_concorrencia' => $data[6],
-                    'co_inscricao_enem' => $data[7],
-                    'cd_efetivado' => false,
-                    'tp_sexo' => $data[12],
-                    'nu_rg' => $data[13],
-                    'no_mae' => $data[14],
-                    'ds_logradouro' => $data[15],
-                    'nu_endereco' => $data[16],
-                    'ds_complemento' => $data[17],
-                    'sg_uf_inscrito' => $data[18],
-                    'no_municipio' => $data[19],
-                    'no_bairro' => $data[20],
-                    'nu_cep' => $data[21],
-                    'nu_fone1' => $data[22],
-                    'nu_fone2' => $data[23],
-                    'ds_email' => $data[24],
-                    'nu_nota_l' => floatval(str_replace(',', '.', $data[25])),
-                    'nu_nota_ch' => floatval(str_replace(',', '.', $data[26])),
-                    'nu_nota_cn' => floatval(str_replace(',', '.', $data[27])),
-                    'nu_nota_m' => floatval(str_replace(',', '.', $data[28])),
-                    'nu_nota_r' => floatval(str_replace(',', '.', $data[29])),
-                    'co_curso_inscricao' => $data[30],
-                    'st_opcao' => $data[31],
-                    'no_modalidade_concorrencia' => $data[32],
-                    'st_bonus_perc' => $data[33],
-                    'qt_bonus_perc' => $data[34],
-                    'no_acao_afirmativa_bonus' => $data[35],
-                    'nu_nota_candidato' => floatval(str_replace(',', '.', $data[36])),
-                    'nu_notacorte_concorrida' => floatval(str_replace(',', '.', $data[37])),
-                    'nu_classificacao' => intval($data[38]),
-                    'ds_matricula' => $data[39],
-                    'dt_operacao' => $data[40],
-                    'co_ies' => $data[41],
-                    'no_ies' => $data[42],
-                    'sg_ies' => $data[43],
-                    'sg_uf_ies' => $data[44],
-                    'st_lei_optante' => $data[45],
-                    'st_lei_renda' => $data[46],
-                    'st_lei_etnia_p' => $data[47],
-                    'st_lei_etnia_i' => $data[48],
-                ]);
-
-                dd($inscricao);
-
-                $candidatoExistente = Candidato::where('nu_cpf_inscrito', $data[10])->first();
-                if ($candidatoExistente == null) {
-                    $user = new User([
-                        'name' => $data[8],
-                        'password' => Hash::make('12345678'),
-                        'role' => User::ROLE_ENUM['candidato'],
-                        'primeiro_acesso' => true,
-                    ]);
-                    if ($data[9] != null) {
-                        $user->name = $data[9];
-                    }
-                    $user->save();
-
-                    $candidato = new Candidato([
-                        'nu_cpf_inscrito' => $data[10],
-                        'dt_nascimento' => $data[11],
-                    ]);
-                    $candidato->user_id = $user->id;
-                    $candidato->save();
-
-                    $inscricao->chamada_id = $chamada->id;
-                    $inscricao->candidato_id = $candidato->id;
-                    $inscricao->save();
-                } else {
-                    if ($data[9] != null) {
-                        $candidatoExistente->user->name = $data[9];
-                    } else {
-                        $candidatoExistente->user->name = $data[8];
-                    }
-                    $candidatoExistente->user->update();
-
-                    $inscricao->chamada_id = $chamada->id;
-                    $inscricao->candidato_id = $candidatoExistente->id;
-                    $inscricao->save();
-                }
-            }
-        }
-    }
-
-    public function cadastrarCandidatosEspera($chamada)
-    {
-        $this->authorize('isAdmin', User::class);
-        ini_set('max_execution_time', 300);
-        ini_set('auto_detect_line_endings', true);
-        $dados = fopen(storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera), "r");
-        $primeira = true;
-        $candidatos = collect();
-        $cont = 0;
-        while (($data = fgetcsv($dados, ";", ';')) !== FALSE) {
-            /*if($cont > 30){
-                break;
-            }*/
-            if ($primeira) {
-                $primeira = false;
-            } else {
-                //Armazenamos as informações de cada candidato
-                $inscricao = array(
-                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make($data[8] . $chamada->id),
-                    'nu_etapa' => $data[0],
-                    'no_campus' => $data[1],
-                    'co_ies_curso' => $data[2],
-                    'no_curso' => $data[3],
-                    'ds_turno' => $data[4],
-                    'ds_formacao' => $data[5],
-                    'qt_vagas_concorrencia' => $data[6],
-                    'co_inscricao_enem' => $data[7],
-
-                    'no_inscrito' => $data[8],
-                    'no_social' => $data[9],
-                    'nu_cpf_inscrito' => $data[10],
-                    'dt_nascimento' => $data[11],
-
-                    'cd_efetivado' => false,
-                    'tp_sexo' => $data[12],
-                    'nu_rg' => $data[13],
-                    'no_mae' => $data[14],
-                    'ds_logradouro' => $data[15],
-                    'nu_endereco' => $data[16],
-                    'ds_complemento' => $data[17],
-                    'sg_uf_inscrito' => $data[18],
-                    'no_municipio' => $data[19],
-                    'no_bairro' => $data[20],
-                    'nu_cep' => $data[21],
-                    'nu_fone1' => $data[22],
-                    'nu_fone2' => $data[23],
-                    'ds_email' => $data[24],
-                    'nu_nota_l' => floatval($data[25]),
-                    'nu_nota_ch' => floatval($data[26]),
-                    'nu_nota_cn' => floatval($data[27]),
-                    'nu_nota_m' => floatval($data[28]),
-                    'nu_nota_r' => floatval($data[29]),
-                    'co_curso_inscricao' => $data[30],
-                    'st_opcao' => $data[31],
-                    'no_modalidade_concorrencia' => $data[32],
-                    'st_bonus_perc' => $data[33],
-                    'qt_bonus_perc' => $data[34],
-                    'no_acao_afirmativa_bonus' => $data[35],
-                    'nu_nota_candidato' => floatval($data[36]),
-                    'nu_notacorte_concorrida' => floatval($data[37]),
-                    'nu_classificacao' => intval($data[38]),
-                    'ds_matricula' => $data[39],
-                    'dt_operacao' => $data[40],
-                    'co_ies' => $data[41],
-                    'no_ies' => $data[42],
-                    'sg_ies' => $data[43],
-                    'sg_uf_ies' => $data[44],
-                    'st_lei_optante' => $data[45],
-                    'st_lei_renda' => $data[46],
-                    'st_lei_etnia_p' => $data[47],
-                    'st_lei_etnia_i' => $data[48],
-                );
-                $candidatos->push($inscricao);
-                $cont += 1;
-            }
-        }
-
-
-        //Agrupamos por curso
-        $grouped = $candidatos->groupBy(function ($candidato) {
-            return $candidato['co_ies_curso'] . $candidato['ds_turno'];
-        });
-        $porCurso = collect();
-        //E separamos por modalidade
-        foreach ($grouped as $curso) {
-            $porCurso->push($curso->groupBy('no_modalidade_concorrencia'));
-        }
-
-        $cursos = collect();
-        $cotasCursosCOD = collect();
-
-        //Feito isto, é necessário juntar todos os inscritos da ampla concorrencia independete da cota de 10%
-        foreach ($porCurso as $curso) {
-            $modalidade = collect();
-            $ampla = collect();
-            $modalidades = collect();
-
-            $cotaCOD = collect();
-            $cotaAmpla = false;
-            foreach ($curso as $porModalidade) {
-                //os de ampla são colocados em um único collection aqui
-                if (
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $porModalidade[0]['no_modalidade_concorrencia'] == 'Ampla concorrência'
-                ) {
-                    $ampla = $ampla->concat($porModalidade);
-                    if (!$cotaAmpla) {
-                        $cotaAmpla = true;
-                    }
-                } else {
-                    $modalidade = $porModalidade;
-                    if (!$cotaCOD->contains($modalidade[0]['no_modalidade_concorrencia'])) {
-                        $cotaCOD->push($modalidade[0]['no_modalidade_concorrencia']);
-                    }
-                    $modalidade = $modalidade->sortBy(function ($candidato) {
-                        return $candidato['nu_classificacao'];
-                    });
-                    $modalidades->push($modalidade);
-                }
-            }
-            //ordenamos os inscritos da modalidade daquele curso pela nota
-            $ampla = $ampla->sortByDesc(function ($candidato) {
-                return $candidato['nu_classificacao'];
-            });
-            $modalidades->push($ampla);
-            $cursos->push($modalidades);
-            if ($cotaAmpla) {
-                $cotaCOD->push('Ampla concorrência');
-            }
-            $cotasCursosCOD->push($cotaCOD);
-        }
-
-        //Preparados os dados dos inscritos, agora criaremos as instancias para salvar no banco
-        //Percorremos cada curso
-        foreach ($cursos as $indexCurso => $curso) {
-            $candidato = $curso[0][0];
-
-            /*//Recuperamos a cota que aquele inscrito está relacionado
-            if($candidato['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-            $candidato['no_modalidade_concorrencia'] == 'Ampla concorrência' || $candidato['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA'){
-                $cota = Cota::where('descricao',  'Ampla concorrência')->first();
-            }else{
-                $cota = Cota::where('descricao', $candidato['no_modalidade_concorrencia'])->first();
-            }
-            //E pegamos a informação de quantas vagas temos tem restante baseado em quantos candidatos foram efetivados e quantas vagas são
-            //ofertadas para aquela cota*/
-
-            if ($candidato['ds_turno'] == 'Matutino') {
-                $turno =  Curso::TURNO_ENUM['matutino'];
-            } elseif ($candidato['ds_turno'] == 'Vespertino') {
-                $turno = Curso::TURNO_ENUM['vespertino'];
-            } elseif ($candidato['ds_turno'] == 'Noturno') {
-                $turno = Curso::TURNO_ENUM['noturno'];
-            } elseif ($candidato['ds_turno'] == 'Integral') {
-                $turno = Curso::TURNO_ENUM['integral'];
-            }
-
-            //E recuperamos a instancia do curso do banco de dados
-            $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
-
-            $candidatosCurso = collect();
-            foreach ($cursos[$indexCurso] as $modalidadeAtual) {
-                $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
-            }
-
-            $candidatosCurso = $candidatosCurso->sortBy(function ($candidato) {
-                return $candidato['nu_nota_candidato'];
-            });
-
-            $A0 = Cota::where('cod_cota', 'A0')->first();
-            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-            $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
-            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-            $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
-            if ($multiplicador != null) {
-                $vagasCotaA0 *= $multiplicador->multiplicador;
-            }
-
-            $candidatosCurso = $candidatosCurso->slice($vagasCotaA0);
-
-
-            //Varremos todas as cotas do curso
-            foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota) {
-
-                //recuperamos informações da quantidade que iremos chamar
-                $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-
-                $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
-                //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-                $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_curso->id)->first();
-                if ($multiplicador != null) {
-                    $vagasCota *= $multiplicador->multiplicador;
-                }
-
-                //aqui veremos se essa cota tem candidatos inscritos para fazer o cadastro
-                $cursoAtual = $cotasCursosCOD[$indexCurso];
-
-                $modalidadeDaCotaIndex = null;
-
-                //Se o curso atual possuir algum candidato da modalidade descrita na descricao da cota, significa que temos quem chamar
-                foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
-                    if ($modalidadeCursoAtual == $cota->descricao) {
-                        $modalidadeDaCotaIndex = $index;
-                        break;
-                    }
-                }
-                //dd($modalidadeDaCotaIndex);
-
-                //Então assim faremos
-                if ($cota->descricao == 'Ampla concorrência' && $curs->id == 1) {
-                    dd($cursos[$indexCurso][$modalidadeDaCotaIndex]);
-                }
-
-                //Caso restem vagas, faremos o remanejamento
-                if ($vagasCota < 0) {
-                    foreach ($cota->remanejamentos as $remanejamento) {
-                        $proximaCota = $remanejamento->proximaCota;
-                        $cursoAtual = $cotasCursosCOD[$indexCurso];
-
-                        $modalidadeDaCotaIndex = null;
-
-                        foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
-                            if ($modalidadeCursoAtualRemanejamento == $proximaCota->descricao) {
-                                $modalidadeDaCotaIndex = $indexRemanejamento;
-                                break;
-                            }
-                        }
-                        if ($modalidadeDaCotaIndex != null) {
-                            //$vagasCota = $this->fazerCadastro($proximaCota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
-                        }
-                        if ($vagasCota == 0) {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public function candidatosChamada($sisu_id, $chamada_id)
     {
         $chamada = Chamada::find($chamada_id);
@@ -570,16 +226,18 @@ class ChamadaController extends Controller
         $invalidados = collect();
 
         $cursos = auth()->user()->analistaCursos->sortBy('nome');
+        $cursos = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Curso::all() : $cursos;
         $userPolicy = new UserPolicy();
 
         $L2 = Cota::where('cod_cota', 'L2')->first();
         $L6 = Cota::where('cod_cota', 'L6')->first();
         $L9 = Cota::where('cod_cota', 'L9')->first();
-        $L10 = Cota::where('cod_cota', 'L10')->first();
+        $LI_Q = Cota::where('cod_cota', 'LI_Q')->first();
         $L13 = Cota::where('cod_cota', 'L13')->first();
-        $L14 = Cota::where('cod_cota', 'L14')->first();
+        $LB_Q = Cota::where('cod_cota', 'LB_Q')->first();
 
         $cotas = auth()->user()->analistaCotas()->pluck('cota_id')->toArray();
+        $cotas = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Cota::pluck('id') : $cotas;
 
         foreach ($cursos as $curso) {
             if ($userPolicy->isAdminOrAnalistaGeral(auth()->user())) {
@@ -589,33 +247,26 @@ class ChamadaController extends Controller
                 $candidatosEnviado = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_enviados']]])->whereIn('cota_id', $cotas)->get();
                 $candidatosInvalidados = Inscricao::where([['chamada_id', $chamada->id], ['curso_id', $curso->id], ['status', Inscricao::STATUS_ENUM['documentos_invalidados']]])->whereIn('cota_id', $cotas)->get();
             } else if ($userPolicy->soEhAnalistaHeteroidentificacao(auth()->user())) {
-                $retorno = $this->inscricoesHeteroidentificacao($chamada, $curso, [$L2->id, $L6->id, $L10->id, $L14->id], ['fotografia', 'heteroidentificacao', 'declaracao_cotista']);
+                $retorno = $this->inscricoesHeteroidentificacao($chamada, $curso, [$L2->id, $L6->id, $LI_Q->id, $LB_Q->id], ['fotografia', 'heteroidentificacao', 'declaracao_cotista']);
                 $candidatosConcluidos = $retorno['candidatosConcluidos'];
                 $candidatosConcluidosPendencia = $retorno['candidatosConcluidosPendencia'];
                 $candidatosNaoEnviado = $retorno['candidatosNaoEnviado'];
                 $candidatosEnviado = $retorno['candidatosEnviado'];
                 $candidatosInvalidados = $retorno['candidatosInvalidados'];
             } elseif ($userPolicy->soEhAnalistaMedico(auth()->user())) {
-                $retorno = $this->inscricoesMedico($chamada, $curso, [$L9->id, $L10->id, $L13->id, $L14->id]);
+                $retorno = $this->inscricoesMedico($chamada, $curso, [$L9->id, $L13->id]);
                 $candidatosConcluidos = $retorno['candidatosConcluidos'];
                 $candidatosConcluidosPendencia = $retorno['candidatosConcluidosPendencia'];
                 $candidatosNaoEnviado = $retorno['candidatosNaoEnviado'];
                 $candidatosEnviado = $retorno['candidatosEnviado'];
                 $candidatosInvalidados = $retorno['candidatosInvalidados'];
             } else if ($userPolicy->ehAnalistaHeteroidentificacaoEMedico(auth()->user())) {
-                $inscricoes1 = $this->inscricoesHeteroidentificacao($chamada, $curso, [$L2->id, $L6->id], ['fotografia', 'heteroidentificacao', 'declaracao_cotista']);
+                $inscricoes1 = $this->inscricoesHeteroidentificacao($chamada, $curso, [$L2->id, $L6->id, $LB_Q->id, $LI_Q->id], ['fotografia', 'heteroidentificacao', 'declaracao_cotista']);
                 $candidatosConcluidos = $inscricoes1['candidatosConcluidos'];
                 $candidatosConcluidosPendencia = $inscricoes1['candidatosConcluidosPendencia'];
                 $candidatosNaoEnviado = $inscricoes1['candidatosNaoEnviado'];
                 $candidatosEnviado = $inscricoes1['candidatosEnviado'];
                 $candidatosInvalidados = $inscricoes1['candidatosInvalidados'];
-
-                $inscricoes2 = $this->inscricoesHeteroidentificacao($chamada, $curso, [$L10->id, $L14->id], ['fotografia', 'heteroidentificacao', 'declaracao_cotista', 'laudo_medico']);
-                $candidatosConcluidos = $candidatosConcluidos->concat($inscricoes2['candidatosConcluidos'])->unique();
-                $candidatosConcluidosPendencia = $candidatosConcluidosPendencia->concat($inscricoes2['candidatosConcluidosPendencia'])->unique();
-                $candidatosNaoEnviado = $candidatosNaoEnviado->concat($inscricoes2['candidatosNaoEnviado'])->unique();
-                $candidatosEnviado = $candidatosEnviado->concat($inscricoes2['candidatosEnviado'])->unique();
-                $candidatosInvalidados = $candidatosInvalidados->concat($inscricoes2['candidatosInvalidados'])->unique();
 
                 $inscricoes3 = $this->inscricoesMedico($chamada, $curso, [$L9->id, $L13->id]);
                 $candidatosConcluidos = $candidatosConcluidos->concat($inscricoes3['candidatosConcluidos'])->unique();
@@ -637,10 +288,14 @@ class ChamadaController extends Controller
             $naoEnviados->push(count($candidatosNaoEnviado));
             $invalidados->push(count($candidatosInvalidados));
         }
+
         return view('chamada.candidatos-chamada', compact('chamada', 'cursos', 'concluidos', 'concluidosPendentes', 'enviados', 'naoEnviados', 'invalidados'))
             ->with(['turnos' => Curso::TURNO_ENUM, 'graus' => Curso::GRAU_ENUM]);
     }
 
+    public function listarTodosCandChamada(){
+        
+    }
     private function inscricoesHeteroidentificacao($chamada, $curso, $cotas, $arquivos)
     {
         $retorno = [];
@@ -650,8 +305,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })
             ->whereIn('inscricaos.id', function ($qry) use ($arquivos) {
                 $qry->select('inscricaos.id')
@@ -672,8 +327,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })->get();
 
         $retorno['candidatosNaoEnviado'] = Inscricao::select('inscricaos.*')
@@ -682,8 +337,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })->get();
 
         $retorno['candidatosEnviado'] = Inscricao::select('inscricaos.*')
@@ -692,8 +347,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })
             ->whereNotIn('inscricaos.id', function ($qry) use ($arquivos) {
                 $qry->select('inscricaos.id')
@@ -714,8 +369,8 @@ class ChamadaController extends Controller
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
             ->join('users', 'users.id', '=', 'candidatos.user_id')
             ->where(function ($qry) {
-                $qry->whereIn('candidatos.cor_raca', [2, 3])
-                    ->orWhereNull('candidatos.cor_raca');
+                $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                    ->orWhereNull('candidatos.etnia_e_cor');
             })
             ->whereIn('inscricaos.id', function ($qry) use ($arquivos) {
                 $qry->select('inscricaos.id')
@@ -834,6 +489,8 @@ class ChamadaController extends Controller
         $turno = $curso->getTurno();
         $ordem = $request->ordem;
         $cotas = auth()->user()->analistaCotas->pluck('id');
+        $cotas = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Cota::pluck('id') : $cotas;
+
 
         $userPolicy = new UserPolicy();
         $concluidos = collect();
@@ -847,16 +504,16 @@ class ChamadaController extends Controller
         } elseif ($userPolicy->soEhAnalistaHeteroidentificacao(auth()->user())) {
             $L2 = Cota::where('cod_cota', 'L2')->first();
             $L6 = Cota::where('cod_cota', 'L6')->first();
-            $L10 = Cota::where('cod_cota', 'L10')->first();
-            $L14 = Cota::where('cod_cota', 'L14')->first();
+            $LB_Q = Cota::where('cod_cota', 'LB_Q')->first();
+            $LI_Q = Cota::where('cod_cota', 'LI_Q')->first();
             $query = Inscricao::select('inscricaos.*')
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
                 ->join('users', 'users.id', '=', 'candidatos.user_id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
+                ->whereIn('cota_id', [$L2->id, $L6->id, $LB_Q->id, $LI_Q->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 });
             $concluidos = Inscricao::select('inscricaos.id')
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
@@ -864,10 +521,10 @@ class ChamadaController extends Controller
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
-                ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
+                ->whereIn('cota_id', [$L2->id, $L6->id, $LB_Q->id, $LI_Q->id])
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1])
                 ->groupBy('inscricaos.id')
@@ -878,10 +535,10 @@ class ChamadaController extends Controller
                 ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
+                ->whereIn('cota_id', [$L2->id, $L6->id, $LB_Q->id, $LI_Q->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1, 2])
@@ -900,12 +557,10 @@ class ChamadaController extends Controller
                 ->get();
         } elseif ($userPolicy->soEhAnalistaMedico(auth()->user())) {
             $L9 = Cota::where('cod_cota', 'L9')->first();
-            $L10 = Cota::where('cod_cota', 'L10')->first();
             $L13 = Cota::where('cod_cota', 'L13')->first();
-            $L14 = Cota::where('cod_cota', 'L14')->first();
             $query = Inscricao::select('inscricaos.*')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L9->id, $L10->id, $L13->id, $L14->id])
+                ->whereIn('cota_id', [$L9->id, $L13->id])
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
                 ->join('users', 'users.id', '=', 'candidatos.user_id');
             $concluidos = Inscricao::select('inscricaos.id')
@@ -913,7 +568,7 @@ class ChamadaController extends Controller
                 ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L9->id, $L10->id, $L13->id, $L14->id])
+                ->whereIn('cota_id', [$L9->id, $L13->id])
                 ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1])
                 ->groupBy('inscricaos.id')
@@ -924,7 +579,7 @@ class ChamadaController extends Controller
                 ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L9->id, $L10->id, $L13->id, $L14->id])
+                ->whereIn('cota_id', [$L9->id, $L13->id])
                 ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1, 2])
                 ->whereIn('inscricaos.id', function ($sub) {
@@ -944,18 +599,18 @@ class ChamadaController extends Controller
             $L2 = Cota::where('cod_cota', 'L2')->first();
             $L6 = Cota::where('cod_cota', 'L6')->first();
             $L9 = Cota::where('cod_cota', 'L9')->first();
-            $L10 = Cota::where('cod_cota', 'L10')->first();
+            $LI_Q = Cota::where('cod_cota', 'LI_Q')->first();
             $L13 = Cota::where('cod_cota', 'L13')->first();
-            $L14 = Cota::where('cod_cota', 'L14')->first();
+            $LB_Q = Cota::where('cod_cota', 'LB_Q ')->first();
 
             $query = Inscricao::select('inscricaos.*')
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
                 ->join('users', 'users.id', '=', 'candidatos.user_id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L2->id, $L6->id, $L10->id, $L14->id])
+                ->whereIn('cota_id', [$L2->id, $L6->id, $LI_Q->id, $LB_Q->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->get();
             $concluidos = Inscricao::select('inscricaos.id')
@@ -964,8 +619,8 @@ class ChamadaController extends Controller
                 ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('cota_id', [$L2->id, $L6->id])
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
@@ -980,8 +635,8 @@ class ChamadaController extends Controller
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
                 ->whereIn('cota_id', [$L2->id, $L6->id])
                 ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
+                    $qry->whereIn('candidatos.etnia_e_cor', [2, 3])
+                        ->orWhereNull('candidatos.etnia_e_cor');
                 })
                 ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista'])
                 ->whereIn('avaliacaos.avaliacao', [1, 2])
@@ -998,47 +653,6 @@ class ChamadaController extends Controller
                 ->groupBy('inscricaos.id')
                 ->havingRaw('COUNT(*) = ?', [3])
                 ->get();
-
-            $concluidos = $concluidos->concat(Inscricao::select('inscricaos.id')
-                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
-                ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
-                ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
-                })
-                ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L10->id, $L14->id])
-                ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista', 'laudo_medico', 'declaracao_cotista'])
-                ->whereIn('avaliacaos.avaliacao', [1])
-                ->groupBy('inscricaos.id')
-                ->havingRaw('COUNT(*) = ?', [4])
-                ->get());
-            $invalidados = $invalidados->concat(Inscricao::select('inscricaos.id')
-                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
-                ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
-                ->where(function ($qry) {
-                    $qry->whereIn('candidatos.cor_raca', [2, 3])
-                        ->orWhereNull('candidatos.cor_raca');
-                })
-                ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
-                ->whereIn('cota_id', [$L10->id, $L14->id])
-                ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista', 'laudo_medico', 'declaracao_cotista'])
-                ->whereIn('avaliacaos.avaliacao', [1, 2])
-                ->whereIn('inscricaos.id', function ($sub) {
-                    $sub->select('inscricaos.id')
-                        ->from('inscricaos')
-                        ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
-                        ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
-                        ->whereIn('arquivos.nome', ['fotografia', 'heteroidentificacao', 'declaracao_cotista', 'laudo_medico', 'declaracao_cotista'])
-                        ->whereIn('avaliacaos.avaliacao', [2])
-                        ->groupBy('inscricaos.id')
-                        ->get();
-                })
-                ->groupBy('inscricaos.id')
-                ->havingRaw('COUNT(*) = ?', [4])
-                ->get());
 
             $query = $query->concat(Inscricao::select('inscricaos.*')
                 ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
@@ -1152,7 +766,7 @@ class ChamadaController extends Controller
         $chamados = collect();
         $candidatosCPF = collect();
 
-        while (($data = fgetcsv($dados, ";", ';')) !== FALSE) {
+        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
             if ($primeira) {
                 $primeira = false;
             } else {
@@ -1450,30 +1064,14 @@ class ChamadaController extends Controller
 
     private function getCotaModalidade($modalidade)
     {
-        switch ($modalidade) {
-            case 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'AMPLA CONCORRÊNCIA':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'Ampla concorrência':
-                return Cota::where('cod_cota', 'A0')->first();
-            case 'Candidatos com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L1')->first();
-            case 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L2')->first();
-            case 'Candidatos que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L5')->first();
-            case 'Candidatos autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L6')->first();
-            case 'Candidatos com deficiência que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L9')->first();
-            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas, que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)':
-                return Cota::where('cod_cota', 'L10')->first();
-            case 'Candidatos com deficiência que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L13')->first();
-            case 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).':
-                return Cota::where('cod_cota', 'L14')->first();
+        if (
+            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
+            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
+        ) {
+            return Cota::where('cod_cota', 'A0')->first();
         }
+
+        return Cota::where('nome', $modalidade)->first();
     }
 
     private function situacaoMatricula($status)

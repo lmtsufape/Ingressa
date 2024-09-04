@@ -42,7 +42,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row justify-content-center">
                         <div class="col-md-12 corpo p-2 px-3">
                             <table class="table">
@@ -51,7 +50,7 @@
                                         <th scope="col">#</th>
                                         <th class="text-center">CPF</th>
                                         <th class="text-center">Cota Classificação</th>
-                                        <th class="text-center">Cota Inscricação</th>
+                                        <th class="text-center">Cota Inscrição</th>
                                         <th scope="col">Nome</th>
                                         <th class="text-center">Situação</th>
                                         <th class="text-center">Nota</th>
@@ -59,47 +58,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if($candidatosIngressantes->count() <= 40)
-                                        @php
-                                            $k = 1;
-                                        @endphp
-                                        @foreach ($candidatosIngressantes as $inscricao)
-                                            <tr>
-                                                <th class="align-middle"> {{$k}}</th>
-                                                <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                                <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
-                                                <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
-                                                <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
-                                                <td class="align-middle">MATRICULADO</td>
-                                                <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
-                                                <td class="align-middle"><button class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#modalEditarInscricao{{$inscricao->id}}"><span class="px-2">Editar</span></button></td>
-                                            </tr>
-                                            @php
-                                                $k += 1;
-                                            @endphp
-                                        @endforeach
-                                    @else
-                                        @php
-                                            $k = 1;
-                                        @endphp
-                                        @foreach ($candidatosIngressantes as $inscricao)
-                                            @if($inscricao->semestre_entrada == 1)
-                                                <tr>
-                                                    <th class="align-middle">{{$k}}</th>
-                                                    <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                                    <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
-                                                    <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
-                                                    <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
-                                                    <td class="align-middle">MATRICULADO</td>
-                                                    <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
-                                                    <td class="align-middle"><button class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#modalEditarInscricao{{$inscricao->id}}"><span class="px-2">Editar</span></button></td>
-                                                </tr>
-                                                @php
-                                                    $k += 1;
-                                                @endphp
-                                            @endif
-                                        @endforeach
-                                    @endif
+                                    @php
+                                        $semestre_entrada = $curso->semestre ?? 1;
+                                    @endphp
+                                    @foreach ($candidatosIngressantes->where('semestre_entrada', $semestre_entrada) as $inscricao)
+                                        <tr>
+                                            <th class="align-middle"> {{$loop->iteration}}</th>
+                                            <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
+                                            <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_novo}}</td>
+                                            <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
+                                            <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
+                                            <td class="align-middle">MATRICULADO</td>
+                                            <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
+                                            <td class="align-middle"><button class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#modalEditarInscricao{{$inscricao->id}}"><span class="px-2">Editar</span></button></td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -107,7 +80,7 @@
                 </div>
             </div>
 
-            @if ($candidatosIngressantes->count() > 40)
+            @if ($candidatosIngressantes->count() > 60)
                 <div class="row mt-2 justify-content-center">
                     <div class="col-md-12 cabecalhoCurso p-2 px-3 align-items-center" style="background-color: {{$curso->cor_padrao != null ? $curso->cor_padrao : 'black'}}">
                     <div class="row justify-content-between">
@@ -132,7 +105,7 @@
                                     <th scope="col">#</th>
                                     <th class="text-center">CPF</th>
                                     <th class="text-center">Cota Classificação</th>
-                                    <th class="text-center">Cota Inscricação</th>
+                                    <th class="text-center">Cota Inscrição</th>
                                     <th scope="col">Nome</th>
                                     <th class="text-center">Situação</th>
                                     <th class="text-center">Nota</th>
@@ -141,24 +114,19 @@
                             </thead>
                             <tbody>
                                 @php
-                                    $k = 1;
+                                    $semestre_entrada = 2;
                                 @endphp
-                                @foreach ($candidatosIngressantes as $inscricao)
-                                    @if($inscricao->semestre_entrada == 2)
-                                        <tr>
-                                            <th class="align-middle"> {{$k}}</th>
-                                            <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                            <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_cota}}</td>
-                                            <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
-                                            <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
-                                            <td class="align-middle">MATRICULADO</td>
-                                            <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
-                                            <td class="align-middle"><button class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#modalEditarInscricao{{$inscricao->id}}"><span class="px-2">Editar</span></button></td>
-                                        </tr>
-                                        @php
-                                            $k += 1;
-                                        @endphp
-                                    @endif
+                                @foreach ($candidatosIngressantes->where('semestre_entrada', $semestre_entrada) as $inscricao)
+                                    <tr>
+                                        <th class="align-middle"> {{$loop->iteration}} </th>
+                                        <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
+                                        <td class="align-middle text-center">{{$inscricao->cotaClassificacao->cod_novo}}</td>
+                                        <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
+                                        <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
+                                        <td class="align-middle">MATRICULADO</td>
+                                        <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
+                                        <td class="align-middle"><button class="btn botao my-2 py-1" data-bs-toggle="modal" data-bs-target="#modalEditarInscricao{{$inscricao->id}}"><span class="px-2">Editar</span></button></td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -190,7 +158,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th class="text-center">CPF</th>
-                                    <th class="text-center">Cota Inscricação</th>
+                                    <th class="text-center">Cota Inscrição</th>
                                     <th scope="col">Nome</th>
                                     <th class="text-center">Situação</th>
                                     <th class="text-center">Nota</th>
@@ -205,7 +173,7 @@
                                     <tr>
                                         <th class="align-middle"> {{$k}}</th>
                                         <td class="align-middle">{{$inscricao->candidato->nu_cpf_inscrito}}</td>
-                                        <td class="align-middle text-center">{{$inscricao->cota->cod_cota}}</td>
+                                        <td class="align-middle text-center">{{$inscricao->cota->cod_novo}}</td>
                                         <td class="align-middle">{{$inscricao->candidato->no_inscrito}}</td>
                                         <td class="align-middle">RESERVA</td>
                                         <td class="align-middle">{{$inscricao->nu_nota_candidato}}</td>
@@ -238,10 +206,10 @@
                                             <label class="pb-2" for="v">{{ __('Cota de classificação:') }}</label>
                                             <select name="cota_classificacao" id="cota_classificacao" class="form-control campoDeTexto @error('cota_classificacao') is-invalid @enderror">
                                                 @foreach ($cotas as $cota)
-                                                    <option @if(old('cota_classificacao') == $cota->id || $inscricao->cotaClassificacao->id == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_cota}}</option>
+                                                    <option @if(old('cota_classificacao') == $cota->id || $inscricao->cotaClassificacao->id == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_novo}}</option>
                                                 @endforeach
                                             </select>
-            
+
                                             @error('cota_classificacao')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
@@ -258,7 +226,7 @@
                                                 <option @if(old('semestre') == 2 || $inscricao->semestre_entrada == 2) selected @endif value="2">2ª entrada</option>
                                                 <option @if($inscricao->semestre_entrada == null) selected @endif value={{null}}>Reserva</option>
                                             </select>
-            
+
                                             @error('semestre')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
@@ -278,7 +246,7 @@
                                                 @endif
                                                 <option @if($inscricao->semestre_entrada == null) selected @endif value={{null}}>Reserva</option>
                                             </select>
-            
+
                                             @error('semestre')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
@@ -321,10 +289,10 @@
                                             <select name="cota_classificacao" id="cota_classificacao" class="form-control campoDeTexto @error('cota_classificacao') is-invalid @enderror">
                                                 <option value="" selected disabled>-- Selecione a cota de classificação --</option>
                                                 @foreach ($cotas as $cota)
-                                                    <option @if(old('cota_classificacao') == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_cota}}</option>
+                                                    <option @if(old('cota_classificacao') == $cota->id) selected @endif value="{{$cota->id}}">{{$cota->cod_novo}}</option>
                                                 @endforeach
                                             </select>
-            
+
                                             @error('cota_classificacao')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
@@ -341,7 +309,7 @@
                                                 <option @if(old('semestre') == 2 || $inscricao->semestre_entrada == 2) selected @endif value="2">2ª entrada</option>
                                                 <option @if($inscricao->semestre_entrada == null) selected @endif value={{null}}>Reserva</option>
                                             </select>
-            
+
                                             @error('semestre')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
@@ -361,7 +329,7 @@
                                                 @endif
                                                 <option @if($inscricao->semestre_entrada == null) selected @endif value={{null}}>Reserva</option>
                                             </select>
-            
+
                                             @error('semestre')
                                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                                     {{ $message }}
