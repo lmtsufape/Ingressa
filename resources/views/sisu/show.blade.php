@@ -75,10 +75,7 @@
                                                     @endif
                                                 @else
                                                     @if($batches[$i]->finished())
-                                                        @include('sisu.modal_show_candidatos')
-                                                        <button title="Listar candidatos da chamada" type="button" data-toggle="modal" data-target="#listar">
-                                                            <img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos">
-                                                        </button>
+                                                        <a title="Listar candidatos da chamada" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos"></a>
                                                     @else
                                                         <a title="Cadastrando candidatos"><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
                                                     @endif
