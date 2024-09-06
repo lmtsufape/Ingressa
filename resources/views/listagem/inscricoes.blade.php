@@ -204,7 +204,7 @@
                         </div>
                     </div>
                 @endforeach
-                <br />
+                <br>
                 <div class="quebrar_pagina"></div>
             @endif
         @endforeach
