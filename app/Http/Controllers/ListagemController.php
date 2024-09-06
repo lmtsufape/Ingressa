@@ -705,7 +705,7 @@ class ListagemController extends Controller
         $this->authorize('isAdmin', User::class);
 
         $sisu = Sisu::find($sisu_id);
-        $cursos = Curso::all();
+        $cursos = Curso::orderBy('nome')->get();
         $listagem = new Listagem();
 
         $request['tipo'] = Listagem::TIPO_ENUM['final'];
