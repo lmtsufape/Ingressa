@@ -204,8 +204,10 @@
                         </div>
                     </div>
                 @endforeach
-                <br>
-                <div class="quebrar_pagina"></div>
+                @unless ($collect === $collect_inscricoes->last())
+                    <br>
+                    <div class="quebrar_pagina"></div>
+                @endunless
             @endif
         @endforeach
     </div>
