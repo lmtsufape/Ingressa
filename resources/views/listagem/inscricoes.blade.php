@@ -152,7 +152,7 @@
                         @endswitch
                     </h3>
                     <div class="body">
-                        <div id="modalidade" @if ($inscricoes->count() <= 40) style="page-break-inside: avoid;" @endif>
+                        <div id="modalidade" @if ($inscricoes->count() <= 40) @endif>
                             <h4 class="acao_afirmativa">
                                 @if (
                                     $inscricao->no_modalidade_concorrencia ==
@@ -204,8 +204,10 @@
                         </div>
                     </div>
                 @endforeach
-                <br />
-                <div class="quebrar_pagina"></div>
+                @unless ($collect === $collect_inscricoes->last())
+                    <br>
+                    <div class="quebrar_pagina"></div>
+                @endunless
             @endif
         @endforeach
     </div>

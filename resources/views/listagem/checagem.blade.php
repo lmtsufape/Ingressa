@@ -154,7 +154,7 @@
                         $inscricao = $inscricoes[0];
                     @endphp
                     <div class="body">
-                        <div id="modalidade" @if ($inscricoes->count() <= 40) style="page-break-inside: avoid;" @endif>
+                        <div id="modalidade" @if ($inscricoes->count() <= 40) @endif>
                             <h4 class="acao_afirmativa">
                                 @if (
                                     $inscricao['no_modalidade_concorrencia'] ==
