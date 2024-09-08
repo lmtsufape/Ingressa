@@ -250,8 +250,10 @@
                         </table>
                     </div>
                 </div>
-                <br />
-                <div class="quebrar_pagina"></div>
+                @unless ($curso === $collect_inscricoes->last())
+                    <br />
+                    <div class="quebrar_pagina"></div>
+                @endunless
             @endif
         @endforeach
     </div>
