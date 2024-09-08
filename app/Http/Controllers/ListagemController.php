@@ -287,7 +287,7 @@ class ListagemController extends Controller
     {
         $chamada = Chamada::find($request->chamada);
         $sisu = $chamada->sisu;
-        $cursos = Curso::all();
+        $cursos = Curso::OrderBy('nome')->get();
         $candidatosIngressantesCursos = collect();
         $candidatosReservaCursos = collect();
         $A0 = Cota::where('cod_cota', 'A0')->first();
