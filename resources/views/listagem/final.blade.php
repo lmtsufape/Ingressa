@@ -123,10 +123,6 @@
             $semestre = 'indefinido';
         @endphp
         @foreach ($candidatosIngressantesCursos as $i => $curso)
-            @php
-                $exibirNomeCurso = true;
-            @endphp
-            @if ($exibirNomeCurso)
                 @php
                     $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
@@ -172,12 +168,8 @@
                         @endswitch
                     </span>
                 </h3>
-                @php
-                    $exibirNomeCurso = false;
-                @endphp
-            @endif
             <div class="body">
-                <div id="modalidade" style="page-break-inside: avoid;">
+                <div id="modalidade">
                     <table>
                         <thead>
                             <tr class="esquerda">
@@ -216,17 +208,13 @@
                     </table>
                 </div>
             </div>
-            @if ($i != $curso->count() - 1)
-                <br />
+            @unless ($curso === $candidatosIngressantesCursos->last() && $candidatosReservaCursos->isEmpty())
+                <br>
                 <div class="quebrar_pagina"></div>
-            @endif
+            @endunless
         @endforeach
 
         @foreach ($candidatosReservaCursos as $i => $curso)
-            @php
-                $exibirNomeCurso = true;
-            @endphp
-            @if ($exibirNomeCurso)
                 @php
                     $inscricao = App\Models\Inscricao::find($curso->first()['id']);
                 @endphp
@@ -254,12 +242,8 @@
                         @endswitch
                     </span>
                 </h3>
-                @php
-                    $exibirNomeCurso = false;
-                @endphp
-            @endif
             <div class="body">
-                <div id="modalidade" style="page-break-inside: avoid;">
+                <div id="modalidade">
                     <table>
                         <thead>
                             <tr class="esquerda">
@@ -297,8 +281,10 @@
                     </table>
                 </div>
             </div>
-            <br />
-            <div class="quebrar_pagina"></div>
+            @unless ($curso === $candidatosReservaCursos->last())
+                <br>
+                <div class="quebrar_pagina"></div>
+            @endunless
         @endforeach
     </div>
 </body>
