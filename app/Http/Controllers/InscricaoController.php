@@ -215,11 +215,13 @@ class InscricaoController extends Controller
                 $documentos->push('declaracao_cotista');
             }
             // Preto e pardo
-            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
-                $documentos->push('heteroidentificacao');
-                $documentos->push('fotografia');
-                if (!$documentos->contains('declaracao_cotista')) {
-                    $documentos->push('declaracao_cotista');
+            if (!$userPolicy->ehAnalistaGeral(auth()->user())) {  # Removendo heteroidentificação do analista geral
+                if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
+                    $documentos->push('heteroidentificacao');
+                    $documentos->push('fotografia');
+                    if (!$documentos->contains('declaracao_cotista')) {
+                        $documentos->push('declaracao_cotista');
+                    }
                 }
             }
             // Baixa renda
