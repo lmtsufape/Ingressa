@@ -851,6 +851,11 @@
                                 </span></button>
                         @endif
                     @endcan
+                    @can('isAdmin', \App\Models\User::class)
+                            <button id="invalidar-desistencia" type="button" class="btn botao mt-2 py-1 col-md-12"
+                                onclick="" style="background-color: #FC605F;"><span class="px-4">Invalidar Cadastro por Desistência
+                                </span></button>
+                    @endcan
                     <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"
                         class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o
                             candidato</span></button>
