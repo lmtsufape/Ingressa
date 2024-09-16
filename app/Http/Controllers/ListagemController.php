@@ -302,7 +302,11 @@ class ListagemController extends Controller
                     ['curso_id', $curso->id],
                     ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                 ]
-            )->orderBy('nu_nota_candidato', 'DESC')->get();
+            )->where(function ($query) {
+                $query->where([['desistente', true], ['realocar_vaga', false]])
+                    ->orWhere('desistente', false);
+            })
+            ->orderBy('nu_nota_candidato', 'DESC')->get();
 
             $cota_curso_quantidade = $curso->cotas()->where('cota_id', $A0->id)->where('sisu_id', $sisu->id)->first()->pivot->quantidade_vagas;
 
@@ -378,7 +382,10 @@ class ListagemController extends Controller
                         ['cota_id', $cota->id],
                         ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                     ]
-                )->orderBy('nu_nota_candidato', 'DESC')->get();
+                )->where(function ($query) {
+                    $query->where([['desistente', true], ['realocar_vaga', false]])
+                        ->orWhere('desistente', false);
+                })->orderBy('nu_nota_candidato', 'DESC')->get();
 
                 $cota_curso_quantidade = $qtndPorCota[$cota->cod_cota];
 
@@ -410,7 +417,10 @@ class ListagemController extends Controller
                                 ['cota_id', $cotaRemanejamento->id],
                                 ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                             ]
-                        )->orderBy('nu_nota_candidato', 'DESC')->get();
+                        )->where(function ($query) {
+                            $query->where([['desistente', true], ['realocar_vaga', false]])
+                                ->orWhere('desistente', false);
+                        })->orderBy('nu_nota_candidato', 'DESC')->get();
 
                         $continua = false;
 
@@ -547,7 +557,10 @@ class ListagemController extends Controller
                 ['semestre_entrada', '!=', null],
                 ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
             ]
-        )->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+        )->where(function ($query) {
+            $query->where([['desistente', true], ['realocar_vaga', false]])
+                ->orWhere('desistente', false);
+        })->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
 
         $candidatosReserva = Inscricao::where(
             [
@@ -556,7 +569,10 @@ class ListagemController extends Controller
                 ['semestre_entrada', '=', null],
                 ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
             ]
-        )->orderBy('cota_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+        )->where(function ($query) {
+            $query->where([['desistente', true], ['realocar_vaga', false]])
+                ->orWhere('desistente', false);
+        })->orderBy('cota_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
 
 
         return view('sisu.lista_personalizada', compact('curso', 'sisu', 'turno', 'cotas', 'candidatosIngressantes', 'candidatosReserva'));
@@ -643,7 +659,10 @@ class ListagemController extends Controller
                 ['semestre_entrada', '!=', null],
                 ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
             ]
-        )->orderBy('curso_id', 'ASC')->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
+        )->where(function ($query) {
+            $query->where([['desistente', true], ['realocar_vaga', false]])
+                ->orWhere('desistente', false);
+        })->orderBy('curso_id', 'ASC')->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')->get();
 
         $retorno = $candidatosIngressantes
             ->map(function ($value, $key) {
@@ -727,7 +746,10 @@ class ListagemController extends Controller
                         ['curso_id', $curso->id],
                         ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                     ]
-                )->orderBy('cota_classificacao_id', 'ASC')->get();
+                )->where(function ($query) {
+                    $query->where([['desistente', true], ['realocar_vaga', false]])
+                        ->orWhere('desistente', false);
+                })->orderBy('cota_classificacao_id', 'ASC')->get();
 
                 $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
             } else {
@@ -738,7 +760,10 @@ class ListagemController extends Controller
                         ['curso_id', $curso->id],
                         ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                     ]
-                )->orderBy('cota_classificacao_id', 'ASC')->get();
+                )->where(function ($query) {
+                    $query->where([['desistente', true], ['realocar_vaga', false]])
+                        ->orWhere('desistente', false);
+                })->orderBy('cota_classificacao_id', 'ASC')->get();
                 $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
 
                 $candidatosIngressantesCurso = Inscricao::where(
@@ -748,7 +773,10 @@ class ListagemController extends Controller
                         ['curso_id', $curso->id],
                         ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                     ]
-                )->orderBy('cota_classificacao_id', 'ASC')->get();
+                )->where(function ($query) {
+                    $query->where([['desistente', true], ['realocar_vaga', false]])
+                        ->orWhere('desistente', false);
+                })->orderBy('cota_classificacao_id', 'ASC')->get();
                 $candidatosIngressantes->push($this->ordenarCurso('nu_nota_candidato', $candidatosIngressantesCurso, 'cota_classificacao_id')->map->only(['id', 'cota_classificacao_id']));
             }
 
@@ -759,7 +787,10 @@ class ListagemController extends Controller
                     ['curso_id', $curso->id],
                     ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
                 ]
-            )->orderBy('cota_id', 'ASC')->get();
+            )->where(function ($query) {
+                $query->where([['desistente', true], ['realocar_vaga', false]])
+                    ->orWhere('desistente', false);
+            })->orderBy('cota_id', 'ASC')->get();
             if ($candidatosReservaCurso->first() != null) {
                 $candidatosReserva->push($this->ordenarCurso('nu_nota_candidato', $candidatosReservaCurso, 'cota_id')->map->only(['id']));
             }
