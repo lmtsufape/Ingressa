@@ -1123,13 +1123,24 @@
                     Tem certeza que deseja marcar o candidato como desistente?
                 </div>
             </div>
+            <form action="{{ route('inscricao.marcar-desistente', $inscricao->id) }}" method="post" id="marcar-desistencia">
+                @csrf
+                
+                <input type="hidden" name="remanejar_vaga" value="0">
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="remanejar-vaga" name="remanejar_vaga">
+                    <label class="form-check-label" for="remanejar-vaga">
+                        Remanejar vaga
+                    </label>
+                </div>
+            </form>
             <div class="row justify-content-between mt-4">
                 <div class="col-md-3">
                     <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span
                             class="px-4" style="font-weight: bolder;">Cancelar</span></button>
                 </div>
                 <div id ="confirmar-desistencia-button" class="col-md-4">
-                    <button type="button" class="btn botaoVerde my-2 py-1 submeterFormBotao" style="background-color: #FC605F; float: right;"><span
+                    <button type="submit" form="marcar-desistencia" class="btn botaoVerde my-2 py-1 submeterFormBotao" style="background-color: #FC605F; float: right;"><span
                             class="px-4" style="font-weight: bolder;">Confirmar</span></button>
                 </div>
             </div>

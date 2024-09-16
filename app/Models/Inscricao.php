@@ -21,7 +21,6 @@ class Inscricao extends Model
         'cadastro_validado' => 1,
         'cadastro_invalidado_confirmacao' => 2,
         'cadastro_invalidado' => 3,
-        'cadastro_invalidado_desistencia' => 4
     ];
 
     public const STATUS_RETIFICACAO = [
