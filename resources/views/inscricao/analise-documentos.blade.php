@@ -857,8 +857,7 @@
                 @endcan
                 @can('isAdmin', \App\Models\User::class)
                     <button id="invalidar-desistencia" type="button" class="btn botao mt-2 py-1 col-md-12"
-                    data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal" style="background-color: #FC605F;"><span class="px-4">Invalidar Cadastro por
-                            Desistência
+                    data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal" style="background-color: #FC605F;"><span class="px-4">Informar Desistência
                         </span></button>
                 @endcan
                 <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"
@@ -1118,10 +1117,10 @@
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modalFundo p-3">
-            <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Invalidar Cadastro por Desistência</div>
+            <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Informar Desistência</div>
             <div class="pt-3 pb-2 textoModal">
                 <div class="pt-3">
-                    Tem certeza que deseja invalidar o cadastro do candidato por desistência?
+                    Tem certeza que deseja marcar o candidato como desistente?
                 </div>
             </div>
             <div class="row justify-content-between mt-4">
@@ -1131,7 +1130,7 @@
                 </div>
                 <div id ="confirmar-desistencia-button" class="col-md-4">
                     <button type="button" class="btn botaoVerde my-2 py-1 submeterFormBotao" style="background-color: #FC605F; float: right;"><span
-                            class="px-4" style="font-weight: bolder;">Invalidar</span></button>
+                            class="px-4" style="font-weight: bolder;">Confirmar</span></button>
                 </div>
             </div>
         </div>
