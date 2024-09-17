@@ -857,7 +857,7 @@
                 @endcan
                 @can('isAdmin', \App\Models\User::class)
                     <button id="invalidar-desistencia" type="button" class="btn botao mt-2 py-1 col-md-12"
-                    data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal" style="background-color: #FC605F;"><span class="px-4">Informar Desistência
+                    data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal" style="background-color: #FC605F;"><span class="px-4">{{ !$inscricao->desistente ? 'Informar Desistência' : 'Reverter Desistência'}}
                         </span></button>
                 @endcan
                 <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"
@@ -1117,22 +1117,26 @@
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modalFundo p-3">
-            <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">Informar Desistência</div>
+            <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">{{ !$inscricao->desistente ? 'Informar Desistência' : 'Reverter Desistência' }}</div>
             <div class="pt-3 pb-2 textoModal">
                 <div class="pt-3">
-                    Tem certeza que deseja marcar o candidato como desistente?
+                    {{ !$inscricao->desistente ? 'Tem certeza que deseja marcar o candidato como desistente?' : 'Tem certeza que deseja reverter a desistência do candidato?' }}
                 </div>
             </div>
-            <form action="{{ route('inscricao.marcar-desistente', $inscricao->id) }}" method="post" id="marcar-desistencia">
+            <form action="{{ route('inscricao.status-desistencia', $inscricao->id) }}" method="post" id="marcar-desistencia">
                 @csrf
                 
-                <input type="hidden" name="remanejar_vaga" value="0">
-                <div class="form-check mt-3">
-                    <input class="form-check-input" type="checkbox" value="1" id="remanejar-vaga" name="remanejar_vaga">
-                    <label class="form-check-label" for="remanejar-vaga">
-                        Remanejar vaga
-                    </label>
-                </div>
+                <input type="hidden" name="desistencia" value="{{ $inscricao->desistente ? 0 : 1 }}">
+
+                @if (!$inscricao->desistente)
+                    <input type="hidden" name="remanejar_vaga" value="0">
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" value="1" id="remanejar-vaga" name="remanejar_vaga">
+                        <label class="form-check-label" for="remanejar-vaga">
+                            Remanejar vaga
+                        </label>
+                    </div>
+                @endif
             </form>
             <div class="row justify-content-between mt-4">
                 <div class="col-md-3">
