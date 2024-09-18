@@ -14,8 +14,8 @@ class AddDesistenciaToInscricaosTable extends Migration
     public function up()
     {
         Schema::table('inscricaos', function (Blueprint $table) {
-            $table->boolean('desistente')->nullable();
-            $table->boolean('realocar_vaga')->nullable();
+            $table->boolean('desistente')->default(false);
+            $table->boolean('realocar_vaga')->default(false);
         });
     }
 
