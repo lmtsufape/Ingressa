@@ -779,4 +779,19 @@ class InscricaoController extends Controller
 
         return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);
     }
+
+    public function statusDesistencia(Request $request, $id) {
+        $this->authorize('isAdmin', User::class);
+        $dados = $request->validate([
+            'desistencia' => 'required|boolean',
+            'remanejar_vaga' => 'nullable|boolean'
+        ]);
+
+        $inscricao = Inscricao::find($id);
+        $inscricao->desistente = $dados['desistencia'];
+        $inscricao->realocar_vaga = $dados['desistencia'] ? $dados['remanejar_vaga'] : false;
+        $inscricao->update();
+
+        return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);
+    }
 }
