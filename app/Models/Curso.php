@@ -43,16 +43,16 @@ class Curso extends Model
     public function getTurno()
     {
         switch ($this->turno) {
-            case Curso::TURNO_ENUM['matutino']:
+            case Curso::TURNO_ENUM['Matutino']:
                 return 'Matutino';
                 break;
-            case Curso::TURNO_ENUM['vespertino']:
+            case Curso::TURNO_ENUM['Vespertino']:
                 return 'Vespertino';
                 break;
-            case Curso::TURNO_ENUM['noturno']:
+            case Curso::TURNO_ENUM['Noturno']:
                 return 'Noturno';
                 break;
-            case Curso::TURNO_ENUM['integral']:
+            case Curso::TURNO_ENUM['Integral']:
                 return 'Integral';
                 break;
             default:

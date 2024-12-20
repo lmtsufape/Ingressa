@@ -145,13 +145,13 @@ class ListagemController extends Controller
 
         foreach ($cursos as $i => $curso) {
             $inscricoes_curso = collect();
-            if ($curso->turno == Curso::TURNO_ENUM['matutino']) {
+            if ($curso->turno == Curso::TURNO_ENUM['Matutino']) {
                 $turno = 'Matutino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['vespertino']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Vespertino']) {
                 $turno = 'Vespertino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['noturno']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Noturno']) {
                 $turno = 'Noturno';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['integral']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
                 $turno = 'Integral';
             }
             $ampla = collect();
@@ -233,13 +233,13 @@ class ListagemController extends Controller
 
         foreach ($cursos as $curso) {
             $inscricoes_curso = collect();
-            if ($curso->turno == Curso::TURNO_ENUM['matutino']) {
+            if ($curso->turno == Curso::TURNO_ENUM['Matutino']) {
                 $turno = 'Matutino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['vespertino']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Vespertino']) {
                 $turno = 'Vespertino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['noturno']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Noturno']) {
                 $turno = 'Noturno';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['integral']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
                 $turno = 'Integral';
             }
             if ($cotas->where('cod_cota', 'A0')) {
@@ -1054,13 +1054,13 @@ class ListagemController extends Controller
 
         foreach ($cursos as $curso) {
             $inscricoes_curso = collect();
-            if ($curso->turno == Curso::TURNO_ENUM['matutino']) {
+            if ($curso->turno == Curso::TURNO_ENUM['Matutino']) {
                 $turno = 'Matutino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['vespertino']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Vespertino']) {
                 $turno = 'Vespertino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['noturno']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Noturno']) {
                 $turno = 'Noturno';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['integral']) {
+            } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
                 $turno = 'Integral';
             }
             if ($cotas->where('cod_cota', 'A0')) {

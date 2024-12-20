@@ -52,10 +52,10 @@
                             @case($graus['tecnologo']){{"Tecnólogo"}}@break
                         @endswitch -<strong>
                         @switch($cursos[$count]->turno)
-                            @case($turnos['matutino']){{"Matutino"}}@break
-                            @case($turnos['vespertino']){{"Vespertino"}}@break
-                            @case($turnos['noturno']){{"Noturno"}}@break
-                            @case($turnos['integral']){{"Integral"}}@break
+                            @case($turnos['Matutino']){{"Matutino"}}@break
+                            @case($turnos['Vespertino']){{"Vespertino"}}@break
+                            @case($turnos['Noturno']){{"Noturno"}}@break
+                            @case($turnos['Integral']){{"Integral"}}@break
                         @endswitch)</strong>
                         </div>
                     </div>
@@ -119,10 +119,10 @@
                                 <label for="turno" class="form-label">{{__('Turno')}}</label>
                                 <select name="turno" id="turno" class="form-control campoDeTexto @error('turno') is-invalid @enderror" required>
                                     <option value="" selected disabled>-- Selecione o turno do curso --</option>
-                                    <option @if(old('turno') == $turnos['matutino']) selected @endif value="{{$turnos['matutino']}}">Matutino</option>
-                                    <option @if(old('turno') == $turnos['vespertino']) selected @endif value="{{$turnos['vespertino']}}">Vespertino</option>
-                                    <option @if(old('turno') == $turnos['noturno']) selected @endif value="{{$turnos['noturno']}}">Noturno</option>
-                                    <option @if(old('turno') == $turnos['integral']) selected @endif value="{{$turnos['integral']}}">Integral</option>
+                                    <option @if(old('turno') == $turnos['Matutino']) selected @endif value="{{$turnos['Matutino']}}">Matutino</option>
+                                    <option @if(old('turno') == $turnos['Vespertino']) selected @endif value="{{$turnos['Vespertino']}}">Vespertino</option>
+                                    <option @if(old('turno') == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
+                                    <option @if(old('turno') == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
                                 </select>
 
                                 @error('turno')
@@ -224,10 +224,10 @@
                                                 <div class="">
                                                     <div class="tituloLista aling-middle">
                                                         {{$curso->nome}} - @switch($curso->turno)
-                                                                                @case($turnos['matutino']){{"Matutino"}}@break
-                                                                                @case($turnos['vespertino']){{"Vespertino"}}@break
-                                                                                @case($turnos['noturno']){{"Noturno"}}@break
-                                                                                @case($turnos['integral']){{"Integral"}}@break
+                                                                                @case($turnos['Matutino']){{"Matutino"}}@break
+                                                                                @case($turnos['Vespertino']){{"Vespertino"}}@break
+                                                                                @case($turnos['Noturno']){{"Noturno"}}@break
+                                                                                @case($turnos['Integral']){{"Integral"}}@break
                                                                            @endswitch
                                                     </div>
                                                     <div class="aling-middle datinha">
@@ -302,10 +302,10 @@
                             <label for="turno-edit" class="form-label">{{__('Turno')}}</label>
                             <select name="turno" id="turno-edit" class="form-control campoDeTexto @error('turno') is-invalid @enderror" required>
                                 <option value="" selected disabled>-- Selecione o turno do curso --</option>
-                                <option @if(old('turno') == $turnos['matutino']) selected @endif value="{{$turnos['matutino']}}">Matutino</option>
-                                <option @if(old('turno') == $turnos['vespertino']) selected @endif value="{{$turnos['vespertino']}}">Vespertino</option>
-                                <option @if(old('turno') == $turnos['noturno']) selected @endif value="{{$turnos['noturno']}}">Noturno</option>
-                                <option @if(old('turno') == $turnos['integral']) selected @endif value="{{$turnos['integral']}}">Integral</option>
+                                <option @if(old('turno') == $turnos['Matutino']) selected @endif value="{{$turnos['Matutino']}}">Matutino</option>
+                                <option @if(old('turno') == $turnos['Vespertino']) selected @endif value="{{$turnos['Vespertino']}}">Vespertino</option>
+                                <option @if(old('turno') == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
+                                <option @if(old('turno') == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
                             </select>
 
                             @error('turno')

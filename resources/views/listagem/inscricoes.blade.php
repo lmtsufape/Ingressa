@@ -134,19 +134,19 @@
                         style="margin-top: 12px;;border: 3px solid #ffffff;width: 60%;height: 10px;background-color:#ffffff;">
                     </div>
                     <h3 class="subtitulo">Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Matutino'])
                                 Matutino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
                                 Vespertino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            @case(App\Models\Curso::TURNO_ENUM['Noturno'])
                                 Noturno
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            @case(App\Models\Curso::TURNO_ENUM['Integral'])
                                 Integral
                             @break
                         @endswitch
