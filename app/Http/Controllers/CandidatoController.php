@@ -94,7 +94,7 @@ class CandidatoController extends Controller
     public function edit(Candidato $candidato, Inscricao $inscricao)
     {
         $this->authorize('canAtualizarFicha', $inscricao);
-        $cores_racas = Candidato::ETNIA_E_COR;
+        $cores_racas = array_keys(Candidato::ETNIA_E_COR);
         return view('candidato.atualizar_dados', compact('candidato', 'inscricao', 'cores_racas'));
     }
 }

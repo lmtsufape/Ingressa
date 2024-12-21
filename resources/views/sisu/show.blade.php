@@ -67,7 +67,7 @@
                                         @endif
                                         <td class="align-middle text-center">
                                             <div class="btn-group">
-                                                @if ($batches[$i] == null)
+                                                @if ($batches[$i] == null || $batches[$i]->hasFailures())
                                                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                                                         <button title="Cadastrar candidatos" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
                                                     @else
