@@ -832,13 +832,13 @@ class ChamadaController extends Controller
         foreach ($cursos as $indexCurso => $curso) {
             $candidato = $curso[0][0];
             if ($candidato['ds_turno'] == 'Matutino') {
-                $turno =  Curso::TURNO_ENUM['matutino'];
+                $turno =  Curso::TURNO_ENUM['Matutino'];
             } elseif ($candidato['ds_turno'] == 'Vespertino') {
-                $turno = Curso::TURNO_ENUM['vespertino'];
+                $turno = Curso::TURNO_ENUM['Vespertino'];
             } elseif ($candidato['ds_turno'] == 'Noturno') {
-                $turno = Curso::TURNO_ENUM['noturno'];
+                $turno = Curso::TURNO_ENUM['Noturno'];
             } elseif ($candidato['ds_turno'] == 'Integral') {
-                $turno = Curso::TURNO_ENUM['integral'];
+                $turno = Curso::TURNO_ENUM['Integral'];
             }
 
             $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();

@@ -12,10 +12,10 @@ class Curso extends Model
     use HasFactory;
 
     public const TURNO_ENUM = [
-        'matutino'      => 1,
-        'vespertino'    => 2,
-        'noturno'       => 3,
-        'integral'      => 4,
+        'Matutino'      => 1,
+        'Vespertino'    => 2,
+        'Noturno'       => 3,
+        'Integral'      => 4,
     ];
 
     public const GRAU_ENUM = [
@@ -43,16 +43,16 @@ class Curso extends Model
     public function getTurno()
     {
         switch ($this->turno) {
-            case Curso::TURNO_ENUM['matutino']:
+            case Curso::TURNO_ENUM['Matutino']:
                 return 'Matutino';
                 break;
-            case Curso::TURNO_ENUM['vespertino']:
+            case Curso::TURNO_ENUM['Vespertino']:
                 return 'Vespertino';
                 break;
-            case Curso::TURNO_ENUM['noturno']:
+            case Curso::TURNO_ENUM['Noturno']:
                 return 'Noturno';
                 break;
-            case Curso::TURNO_ENUM['integral']:
+            case Curso::TURNO_ENUM['Integral']:
                 return 'Integral';
                 break;
             default:

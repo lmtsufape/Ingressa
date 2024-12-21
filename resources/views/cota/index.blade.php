@@ -247,10 +247,10 @@
                                         <input id="curso-{{$curso->id}}" type="checkbox" onclick="alocarValue(this, {{$curso->id}})" class="form-check-input" data-bs-toggle="collapse" href="#curso_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
                                         <label class="form-check-label" for="curso-{{$curso->id}}">
                                             {{$curso->nome}} (@switch($curso->turno)
-                                                @case($turnos['matutino']){{"Matutino"}}@break
-                                                @case($turnos['vespertino']){{"Vespertino"}}@break
-                                                @case($turnos['noturno']){{"Noturno"}}@break
-                                                @case($turnos['integral']){{"Integral"}}@break
+                                                @case($turnos['Matutino']){{"Matutino"}}@break
+                                                @case($turnos['Vespertino']){{"Vespertino"}}@break
+                                                @case($turnos['Noturno']){{"Noturno"}}@break
+                                                @case($turnos['Integral']){{"Integral"}}@break
                                             @endswitch)
                                         </label>
                                         <div class="collapse col-md-6 py-1 @if(old('cursos.'.$i) != null) show @endif" id="curso_{{$curso->id}}">
@@ -334,10 +334,10 @@
                                         <input class="limpar form-check-input form-check-cursos" id="curso-edit-{{$curso->id}}" type="checkbox" onclick="alocarValueEdit(this, {{$curso->id}})" data-bs-toggle="collapse" href="#curso_edit_{{$curso->id}}" role="button" @if(old('cursos.'.$i) != null) checked aria-expanded="true" @else aria-expanded="false" @endif aria-controls="collapseExample">
                                         <label class="form-check-label" for="curso-edit-{{$curso->id}}">
                                             {{$curso->nome}} (@switch($curso->turno)
-                                                @case($turnos['matutino']){{"Matutino"}}@break
-                                                @case($turnos['vespertino']){{"Vespertino"}}@break
-                                                @case($turnos['noturno']){{"Noturno"}}@break
-                                                @case($turnos['integral']){{"Integral"}}@break
+                                                @case($turnos['Matutino']){{"Matutino"}}@break
+                                                @case($turnos['Vespertino']){{"Vespertino"}}@break
+                                                @case($turnos['Noturno']){{"Noturno"}}@break
+                                                @case($turnos['Integral']){{"Integral"}}@break
                                             @endswitch)
                                         </label>
                                         <div class="collapse collapse-edit col-md-6 py-1 @if(old('cursos.'.$i) != null) show @endif" id="curso_edit_{{$curso->id}}" idcurso="{{$curso->id}}">
