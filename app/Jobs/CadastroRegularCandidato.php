@@ -16,7 +16,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Hash;
 use League\Csv\Reader;
 use Illuminate\Support\Facades\DB;
 
@@ -78,7 +77,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,
                     'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
-                    'password' => Hash::make('12345678'),
+                    'password' => '', // A senha será modificada quando o usuário acessar a conta pela primeira vez
                     'role' => User::ROLE_ENUM['candidato'],
                     'primeiro_acesso' => true,
                     'created_at' => now(),
@@ -126,7 +125,7 @@ class CadastroRegularCandidato implements ShouldQueue
 
             $inscricoesData[] = [ // Adicionando inscrição
                 'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                'protocolo' => Hash::make(strval($record['CO_INSCRICAO_ENEM']) . $this->chamada->id),
+                'protocolo' => '',
                 'nu_etapa' => $record['NU_ETAPA'],
                 'no_campus' => $record['NO_CAMPUS'],
                 'co_ies_curso' => $record['CO_IES_CURSO'],
