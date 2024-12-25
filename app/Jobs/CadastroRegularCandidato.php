@@ -45,8 +45,6 @@ class CadastroRegularCandidato implements ShouldQueue
      */
     public function handle()
     {
-        $startTime = microtime(true);
-
         $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_regular);
 
         // Lendo o arquivo CSV
@@ -73,7 +71,7 @@ class CadastroRegularCandidato implements ShouldQueue
             $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
 
             if (!$candidato) { // Cria um novo candidato e usuário caso ele não exista
-                // Adiciona o usuário a um array para inserção
+                // Adiciona o usuário no array para inserção
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,
                     'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
@@ -84,14 +82,14 @@ class CadastroRegularCandidato implements ShouldQueue
                     'updated_at' => now(),
                 ];
 
-                // Adiciona o candidato a um array para inserção
+                // Adiciona o candidato no array para inserção
                 $candidatosData[] = [
                     'id' => $nextCandidatoIdValue,
                     'no_social' => $record['NO_SOCIAL'],
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
                     'dt_nascimento' => (new DateTime($record['DT_NASCIMENTO']))->format('Y-m-d'),
-                    'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['ETNIA_E_COR']],
+                    'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['COR_RAÇA']],
                     'user_id' => $nextUserIdValue++,
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -115,7 +113,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'id' => $candidato->user->id,
                     'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
                     'updated_at' => now(),
-                    
+
                     // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
                     'password' => '',
                     'role' => 0,
@@ -167,15 +165,34 @@ class CadastroRegularCandidato implements ShouldQueue
                 'no_ies' => $record['NO_IES'],
                 'sg_ies' => $record['SG_IES'],
                 'sg_uf_ies' => $record['SG_UF_IES'],
-                'st_lei_optante' => $record['ST_LEI_OPTANTE'],
-                'st_lei_renda' => $record['ST_LEI_RENDA'],
-                'st_lei_etnia_p' => $record['ST_LEI_ETNIA_P'],
-                'st_lei_etnia_i' => $record['ST_LEI_ETNIA_I'],
-                'de_acordo_lei_cota' => $record['DE_ACORDO_LEI_COTA'],
                 'ensino_medio' => $record['ENSINO_MEDIO'],
                 'quilombola' => $record['QUILOMBOLA'],
-                'deficiente' => $record['DEFICIENTE'],
-                'modalidade_escolhida' => $record['MODALIDADE_ESCOLHIDA'],
+                'deficiente' => $record['PcD'],
+                'st_rank_ensino_medio' => $record['ST_RANK_ENSINO_MEDIO'],
+                'st_rank_raca' => $record['ST_RANK_RACA'],
+                'st_rank_quilombola' => $record['ST_RANK_QUILOMBOLA'],
+                'st_rank_pcd' => $record['ST_RANK_PcD'],
+                'st_confirma_lgpd' => $record['ST_CONFIRMA_LGPD'],
+                'total_membros_familiar' => $record['TOTAL_MEMBROS_FAMILIAR'],
+                'renda_familiar_bruta' => $record['RENDA_FAMILIAR_BRUTA'],
+                'salario_minimo' => $record['SALARIO_MINIMO'],
+                'dt_curso_inscricao' => $record['DT_CURSO_INSCRICAO'],
+                'hr_curso_inscricao' => $record['HR_CURSO_INSCRICAO'],
+                'dt_mes_dia_inscricao' => $record['DT_MES_DIA_INSCRICAO'],
+                'nu_nota_curso_l' => $record['NU_NOTA_CURSO_L'],
+                'nu_nota_curso_ch' => $record['NU_NOTA_CURSO_CH'],
+                'nu_nota_curso_cn' => $record['NU_NOTA_CURSO_CN'],
+                'nu_nota_curso_m' => $record['NU_NOTA_CURSO_M'],
+                'nu_nota_curso_r' => $record['NU_NOTA_CURSO_R'],
+                'st_adesao_acao_afirmativa_curs' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
+                'st_aprovado' => $record['ST_APROVADO'],
+                'dt_mes_dia_matricula' => $record['DT_MES_DIA_MATRICULA'],
+                'st_matricula_cancelada' => $record['ST_MATRICULA_CANCELADA'],
+                'dt_matricula_cancelada' => $record['DT_MATRICULA_CANCELADA'],
+                'modalidade_original' => $record['MODALIDADE_ORIGINAL'],
+                'modalidade_final' => $record['MODALIDADE_FINAL'],
+                'no_acao_afirmativa_propria_ies' => $record['NO_ACAO_AFIRMATIVA_PROPRIA_IES'],
+                'perfil_economico_lei_cotas' => $record['PERFIL_ECONOMICO_LEI_COTAS'],
                 'tipo_concorrencia' => $record['TIPO_CONCORRENCIA'],
                 'chamada_id' => $this->chamada->id,
                 'sisu_id' => $this->chamada->sisu->id,
@@ -201,10 +218,6 @@ class CadastroRegularCandidato implements ShouldQueue
         // Atualiza o valor do próximo id da sequência
         DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
         DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
-
-        $endTime = microtime(true);
-        $executionTime = $endTime - $startTime;
-        \Illuminate\Support\Facades\Log::info('Tempo de execução do método handle: ' . $executionTime . ' segundos');
     }
 
     private function getCotaModalidade($modalidade)
