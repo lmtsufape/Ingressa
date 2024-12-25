@@ -49,13 +49,15 @@ class CadastroRegularCandidato implements ShouldQueue
 
         // Lendo o arquivo CSV
         $csv = Reader::createFromPath($csvPath, 'r');
-        $csv->setDelimiter(';'); // Define o delimitador como ;
-        $csv->setHeaderOffset(0); // Define a primeira linha como cabeçalho
-        $records = $csv->getRecords(); // Iterador com os registros
+        $csv->setDelimiter(';');
+        $csv->setHeaderOffset(0);
+        $records = $csv->getRecords();
 
-        $usersData = []; // Array para armazenar os dados dos usuários
-        $candidatosData = []; // Array para armazenar os dados dos candidatos
-        $inscricoesData = []; // Array para armazenar os dados das inscrições
+        // Arrays para armazenar os dados dos usuários, candidatos e inscrições
+        $usersData = [];
+        $candidatosData = [];
+        $inscricoesData = [];
+
         $cpfInscritos = array_column(iterator_to_array($records), 'NU_CPF_INSCRITO');
         $candidatos = Candidato::whereIn('nu_cpf_inscrito', $cpfInscritos)
             ->with('user')
@@ -69,7 +71,7 @@ class CadastroRegularCandidato implements ShouldQueue
 
         foreach ($records as $record) {
             $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
-
+            
             if (!$candidato) { // Cria um novo candidato e usuário caso ele não exista
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
