@@ -34,6 +34,17 @@ class AddCampos2025ToInscricaosTable extends Migration
             $table->string('modalidade_original', 4000)->nullable();
             $table->string('modalidade_final', 4000)->nullable();
             $table->string('no_acao_afirmativa_propria_ies', 4000)->nullable();
+            $table->double('nu_nota_curso_l')->nullable();
+            $table->double('nu_nota_curso_ch')->nullable();
+            $table->double('nu_nota_curso_cn')->nullable();
+            $table->double('nu_nota_curso_m')->nullable();
+            $table->double('nu_nota_curso_r')->nullable();
+
+            #campos removidos, adicionando nullable a eles.
+            $table->string('st_lei_optante')->nullable()->change();
+            $table->string('st_lei_renda')->nullable()->change();
+            $table->string('st_lei_etnia_p')->nullable()->change();
+            $table->string('st_lei_etnia_i')->nullable()->change();
         });
     }
 
@@ -65,6 +76,16 @@ class AddCampos2025ToInscricaosTable extends Migration
             $table->dropColumn('modalidade_original');
             $table->dropColumn('modalidade_final');
             $table->dropColumn('no_acao_afirmativa_propria_ies');
+            $table->dropColumn('nu_nota_curso_l');
+            $table->dropColumn('nu_nota_curso_ch');
+            $table->dropColumn('nu_nota_curso_cn');
+            $table->dropColumn('nu_nota_curso_m');
+            $table->dropColumn('nu_nota_curso_r');
+
+            $table->string('st_lei_optante')->change();
+            $table->string('st_lei_renda')->change();
+            $table->string('st_lei_etnia_p')->change();
+            $table->string('st_lei_etnia_i')->change();
         });
     }
     
