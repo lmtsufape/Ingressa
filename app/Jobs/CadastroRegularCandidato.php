@@ -45,6 +45,7 @@ class CadastroRegularCandidato implements ShouldQueue
      */
     public function handle()
     {
+        // Caminho do arquivo CSV
         $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_regular);
 
         // Lendo o arquivo CSV
@@ -58,11 +59,12 @@ class CadastroRegularCandidato implements ShouldQueue
         $candidatosData = [];
         $inscricoesData = [];
 
+        // Otimização para pegar apenas os candidatos que já estão cadastrados e usar indexação para tornar a busca mais rápida
         $cpfInscritos = array_column(iterator_to_array($records), 'NU_CPF_INSCRITO');
         $candidatos = Candidato::whereIn('nu_cpf_inscrito', $cpfInscritos)
             ->with('user')
             ->get()
-            ->keyBy('nu_cpf_inscrito'); // Otimização para pegar apenas os candidatos que já estão cadastrados e tornar a busca mais rápida
+            ->keyBy('nu_cpf_inscrito');
 
 
         // Pega o próximo valor da sequência para que seja possível inserir os ids sem usar o método create ou save dentro do foreach
@@ -72,7 +74,8 @@ class CadastroRegularCandidato implements ShouldQueue
         foreach ($records as $record) {
             $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
             
-            if (!$candidato) { // Cria um novo candidato e usuário caso ele não exista
+            // Cria um novo candidato e usuário caso ele não exista
+            if (!$candidato) { 
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,
@@ -96,7 +99,9 @@ class CadastroRegularCandidato implements ShouldQueue
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-            } else { // Atualiza dados do candidato caso ele exista
+
+            // Atualiza dados do candidato caso ele exista
+            } else {
                 $candidatosData[] = [
                     'id' => $candidato->id,
                     'atualizar_dados' => true,
@@ -123,7 +128,8 @@ class CadastroRegularCandidato implements ShouldQueue
                 ];
             }
 
-            $inscricoesData[] = [ // Adicionando inscrição
+            // Adicionando inscrição
+            $inscricoesData[] = [
                 'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
                 'protocolo' => '',
                 'nu_etapa' => $record['NU_ETAPA'],
@@ -210,7 +216,7 @@ class CadastroRegularCandidato implements ShouldQueue
             ];
         }
 
-        // Executa as inserções e atualizações em massa de maneira atômica
+        // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($usersData, $candidatosData, $inscricoesData) {
             User::upsert($usersData, 'id', ['name', 'updated_at']);
             Candidato::upsert($candidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);

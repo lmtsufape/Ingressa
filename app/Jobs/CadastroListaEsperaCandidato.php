@@ -18,6 +18,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Hash;
+use League\Csv\Reader;
+
 
 class CadastroListaEsperaCandidato implements ShouldQueue
 {
@@ -41,91 +43,88 @@ class CadastroListaEsperaCandidato implements ShouldQueue
      */
     public function handle()
     {
-        ini_set('max_execution_time', 900);
-        ini_set('auto_detect_line_endings', true);
-        $dados = fopen(storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_espera), "r");
-        $primeira = true;
-        $candidatos = collect();
+        $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_espera);
+
+        // Lendo o arquivo CSV
+        $csv = Reader::createFromPath($csvPath, 'r');
+        $csv->setDelimiter(';');
+        $csv->setHeaderOffset(0);
+        $records = $csv->getRecords();
+
+        $inscricoesData = [];
         $cont = 0;
-        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
-            /*if($cont > 5){
-                break;
-            }*/
-            if ($primeira) {
-                $primeira = false;
-            } else {
-                //Armazenamos as informações de cada candidato
-                $inscricao = array(
-                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make(strval($data[8]) . $this->chamada->id),
-                    'nu_etapa' => strval($data[0]),
-                    'no_campus' => strval($data[1]),
-                    'co_ies_curso' => strval($data[2]),
-                    'no_curso' => strval($data[3]),
-                    'ds_turno' => strval($data[4]),
-                    'ds_formacao' => strval($data[5]),
-                    'qt_vagas_concorrencia' => strval($data[6]),
-                    'co_inscricao_enem' => strval($data[7]),
+        foreach ($records as $record) {
+            //Armazenamos as informações de cada candidato
+            $inscricoesData[] = [
+                'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
+                'protocolo' => Hash::make($record['NO_INSCRITO'] . $this->chamada->id),
+                'nu_etapa' => $record['NU_ETAPA'],
+                'no_campus' => $record['NO_CAMPUS'],
+                'co_ies_curso' => $record['CO_IES_CURSO'],
+                'no_curso' => $record['NO_CURSO'],
+                'ds_turno' => $record['DS_TURNO'],
+                'ds_formacao' => $record['DS_FORMACAO'],
+                'qt_vagas_concorrencia' => $record['QT_VAGAS_CONCORRENCIA'],
+                'co_inscricao_enem' => $record['CO_INSCRICAO_ENEM'],
 
-                    'no_inscrito' => strval($data[8]),
-                    'no_social' => strval($data[9]),
-                    'nu_cpf_inscrito' => strval($data[10]),
-                    'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $data[11])->format('Y-m-d'),
+                'no_inscrito' => $record['NO_INSCRITO'],
+                'no_social' => $record['NO_SOCIAL'],
+                'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
+                'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d'),
 
-                    //'cd_efetivado' => false,
-                    'tp_sexo' => strval($data[12]),
-                    'nu_rg' => strval($data[13]),
-                    'no_mae' => strval($data[14]),
-                    'ds_logradouro' => strval($data[15]),
-                    'nu_endereco' => strval($data[16]),
-                    'ds_complemento' => strval($data[17]),
-                    'sg_uf_inscrito' => strval($data[18]),
-                    'no_municipio' => strval($data[19]),
-                    'no_bairro' => strval($data[20]),
-                    'nu_cep' => strval($data[21]),
-                    'nu_fone1' => strval($data[22]),
-                    'nu_fone2' => strval($data[23]),
-                    'ds_email' => strval($data[24]),
-                    'nu_nota_l' => floatval(str_replace(',', '.', $data[25])),
-                    'nu_nota_ch' => floatval(str_replace(',', '.', $data[26])),
-                    'nu_nota_cn' => floatval(str_replace(',', '.', $data[27])),
-                    'nu_nota_m' => floatval(str_replace(',', '.', $data[28])),
-                    'nu_nota_r' => floatval(str_replace(',', '.', $data[29])),
-                    'co_curso_inscricao' => strval($data[30]),
-                    'st_opcao' => strval($data[31]),
-                    'no_modalidade_concorrencia' => strval($data[32]),
-                    'st_bonus_perc' => strval($data[33]),
-                    'qt_bonus_perc' => strval($data[34]),
-                    'no_acao_afirmativa_bonus' => strval($data[35]),
-                    'nu_nota_candidato' => floatval(str_replace(',', '.', $data[36])),
-                    'nu_notacorte_concorrida' => floatval(str_replace(',', '.', $data[37])),
-                    'nu_classificacao' => intval($data[38]),
-                    'ds_matricula' => strval($data[39]),
-                    'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $data[40])->format('Y/m/d'),
-                    'co_ies' => strval($data[41]),
-                    'no_ies' => strval($data[42]),
-                    'sg_ies' => strval($data[43]),
-                    'sg_uf_ies' => strval($data[44]),
-                    'st_lei_optante' => strval($data[45]),
-                    'st_lei_renda' => strval($data[46]),
-                    'st_lei_etnia_p' => strval($data[47]),
-                    'st_lei_etnia_i' => strval($data[48]),
-                    'de_acordo_lei_cota' => strval($data[49]),
-                    'ensino_medio' => strval($data[50]),
-                    'etnia_e_cor' => strval($data[51]),
-                    'quilombola' => strval($data[52]),
-                    'deficiente' => strval($data[53]),
-                    'modalidade_escolhida' => strval($data[54]),
-                    'tipo_concorrencia' => strval($data[55]),
-                );
-                $candidatos->push($inscricao);
-                $cont += 1;
-            }
+                //'cd_efetivado' => false,
+                'tp_sexo' => $record['TP_SEXO'],
+                'nu_rg' => $record['NU_RG'],
+                'no_mae' => $record['NO_MAE'],
+                'ds_logradouro' => $record['DS_LOGRADOURO'],
+                'nu_endereco' => $record['NU_ENDERECO'],
+                'ds_complemento' => $record['DS_COMPLEMENTO'],
+                'sg_uf_inscrito' => $record['SG_UF_INSCRITO'],
+                'no_municipio' => $record['NO_MUNICIPIO'],
+                'no_bairro' => $record['NO_BAIRRO'],
+                'nu_cep' => $record['NU_CEP'],
+                'nu_fone1' => $record['NU_FONE1'],
+                'nu_fone2' => $record['NU_FONE2'],
+                'ds_email' => $record['DS_EMAIL'],
+                'nu_nota_l' => str_replace(',', '.', $record['NU_NOTA_L']),
+                'nu_nota_ch' => str_replace(',', '.', $record['NU_NOTA_CH']),
+                'nu_nota_cn' => str_replace(',', '.', $record['NU_NOTA_CN']),
+                'nu_nota_m' => str_replace(',', '.', $record['NU_NOTA_M']),
+                'nu_nota_r' => str_replace(',', '.', $record['NU_NOTA_R']),
+                'co_curso_inscricao' => $record['CO_CURSO_INSCRICAO'],
+                'st_opcao' => $record['ST_OPCAO'],
+                'no_modalidade_concorrencia' => $record['NO_MODALIDADE_CONCORRENCIA'],
+                'st_bonus_perc' => $record['ST_BONUS_PERC'],
+                'qt_bonus_perc' => $record['QT_BONUS_PERC'],
+                'no_acao_afirmativa_bonus' => $record['NO_ACAO_AFIRMATIVA_BONUS'],
+                'nu_nota_candidato' => str_replace(',', '.', $record['NU_NOTA_CANDIDATO']),
+                'nu_notacorte_concorrida' => str_replace(',', '.', $record['NU_NOTACORTE_CONCORRIDA']),
+                'nu_classificacao' => $record['NU_CLASSIFICACAO'],
+                'ds_matricula' => $record['DS_MATRICULA'],
+                'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $record['DT_OPERACAO'])->format('Y/m/d'),
+                'co_ies' => $record['CO_IES'],
+                'no_ies' => $record['NO_IES'],
+                'sg_ies' => $record['SG_IES'],
+                'sg_uf_ies' => $record['SG_UF_IES'],
+                'st_lei_optante' => $record['ST_LEI_OPTANTE'],
+                'st_lei_renda' => $record['ST_LEI_RENDA'],
+                'st_lei_etnia_p' => $record['ST_LEI_ETNIA_P'],
+                'st_lei_etnia_i' => $record['ST_LEI_ETNIA_I'],
+                'de_acordo_lei_cota' => $record['DE_ACORDO_LEI_COTA'],
+                'ensino_medio' => $record['ENSINO_MEDIO'],
+                'etnia_e_cor' => $record['ETNIA_E_COR'],
+                'quilombola' => $record['QUILOMBOLA'],
+                'deficiente' => $record['DEFICIENTE'],
+                'modalidade_escolhida' => $record['MODALIDADE_ESCOLHIDA'],
+                'tipo_concorrencia' => $record['TIPO_CONCORRENCIA'],
+            ];
+            $cont += 1;
         }
 
+        $inscricoes = collect($inscricoesData);
 
         //Agrupamos por curso
-        $grouped = $candidatos->groupBy(function ($candidato) {
+        $grouped = $inscricoes->groupBy(function ($candidato) {
             return $candidato['co_ies_curso'] . $candidato['ds_turno'];
         });
         $porCurso = collect();
