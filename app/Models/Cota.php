@@ -93,4 +93,14 @@ class Cota extends Model
     {
         return $this->belongsToMany(User::class, 'cota_user', 'cota_id', 'user_id');
     }
+
+    public static function getModalidade($nomeModalidade) {
+        $amplaConcorrencia = [
+            'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
+            'AMPLA CONCORRÊNCIA',
+            'Ampla concorrência'
+        ];
+
+        return in_array($nomeModalidade, $amplaConcorrencia) ? self::firstWhere('cod_cota', 'A0') : self::firstWhere('nome', $nomeModalidade);
+    }
 }
