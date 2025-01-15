@@ -323,8 +323,6 @@ Route::get('/test/{id}', function ($id) {
 
     $ordemModalidades = [
         'Ampla concorrência' => 1,
-        'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' => 1,
-        'AMPLA CONCORRÊNCIA' => 1,
         'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 2,
         'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 3,
         'Candidatos autodeclarados quilombolas, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 4,
@@ -335,14 +333,41 @@ Route::get('/test/{id}', function ($id) {
         'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 9
     ];
 
-    $inscricoesOrdenadas = collect($inscricoesData)
-        ->sortBy(function ($item) use ($ordemModalidades) {
-            return [
-                $ordemModalidades[$item['no_modalidade_concorrencia']] ?? PHP_INT_MAX,
-                $item['nu_classificacao'],
-            ];
-        })->groupBy(['co_ies_curso', 'ds_turno', 'no_modalidade_concorrencia']);
+    $modalidadeAmpla = [
+        'Ampla concorrência',
+        'AMPLA CONCORRÊNCIA',
+        'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
+    ];
 
+    // Agrupa inscrições por curso, turno e modalidade de concorrência juntando ampla concorrência com bônus e sem bônus em uma única modalidade.
+    // Após isso, ordena as modalidades de acordo com $ordemModalidades e os inscritos por nota decrescente
+    $inscricoesOrdenadas = collect($inscricoesData)
+        ->groupBy([
+            'co_ies_curso',
+            'ds_turno',
+            function ($item) use ($modalidadeAmpla) {
+                // Junta a ampla concorrência com bônus e sem bônus em uma única modalidade
+                return in_array($item['no_modalidade_concorrencia'], $modalidadeAmpla)
+                    ? 'Ampla concorrência'
+                    : $item['no_modalidade_concorrencia'];
+            }
+        ])->map(function ($cursos) use ($ordemModalidades) {
+            // Ordenar modalidades de acordo com $ordemModalidades
+            return $cursos->map(function ($turnos) use ($ordemModalidades) {
+                $ordenadoPorModalidade = $turnos->sortKeysUsing(function ($key1, $key2) use ($ordemModalidades) {
+                    $ordem1 = $ordemModalidades[$key1] ?? PHP_INT_MAX;
+                    $ordem2 = $ordemModalidades[$key2] ?? PHP_INT_MAX;
+                    return $ordem1 <=> $ordem2;
+                });
+    
+                // Ordenar inscritos dentro de cada modalidade por nota decrescente
+                return $ordenadoPorModalidade->map(function ($inscritos) {
+                    return collect($inscritos)->sortByDesc('nu_nota_candidato')->values();
+                });
+            });
+        });
+
+    dd($inscricoesOrdenadas);
     $candidatosConvocados = [];
 
     // Os candidatos estão agrupados por curso, turno e modalidade de concorrência. O primeiro foreach itera pelos curso, o segundo pelo turno e o terceiro pela modalidade e o quarto pelos candidatos.
@@ -360,6 +385,7 @@ Route::get('/test/{id}', function ($id) {
                     ->first()
                     ->pivot;
 
+                // Calcula quantidade de vagas
                 $vagasReais = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
                 $contador = 0;
 
@@ -404,7 +430,7 @@ Route::get('/test/{id}', function ($id) {
                     ['chamada_id', $chamada->id]
                 ])->first();
 
-                // Multiplica a quantidade de vagas reais pelo multiplicador
+                // Calcula quantidade de vagas reais e vagas de reserva
                 $multiplicador = $multiplicador ? $multiplicador->multiplicador : 1;
                 $vagasReais = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
                 $vagasMultiplicadas = $vagasReais * $multiplicador;
@@ -415,6 +441,7 @@ Route::get('/test/{id}', function ($id) {
                     if ($contador < $vagasMultiplicadas) { // Candidatos que entrarão na reserva
                         $convocado = false;
 
+                        // Verifica se o candidato já foi convocado
                         foreach ($candidatosConvocados as $index => $candidatoConvocado) {
                             if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
                                 $convocado = true;
@@ -425,14 +452,16 @@ Route::get('/test/{id}', function ($id) {
                         if ($convocado) {
                             continue;
                         } else {
-                            // Recupera todas as inscrições que possuem o mesmo RG do candidato no curso e turno atual
+                            // Recupera todas as inscrições que possuem o mesmo email do candidato no curso e turno atual
                             $duplicatas = $turno->flatmap(function ($modalidade) {
                                 return $modalidade;
                             })->filter(function ($inscrito) use ($candidato) {
                                 return $inscrito['ds_email'] === $candidato['ds_email'];
                             });
 
-                            $dados = []; // Armazena a diferença entre a quantidade de vagas disponíveis e a classificação do candidato, juntamente como candidato que possui o menor valor dessa diferença
+                            // Armazena a diferença entre a quantidade de vagas disponíveis e a classificação do candidato, juntamente como candidato que possui o menor valor dessa diferença
+                            $dados = [];
+
                             foreach ($duplicatas as $duplicata) {
                                 $pivot = \App\Models\Cota::getModalidade($duplicata['no_modalidade_concorrencia'])
                                     ->cursos()
@@ -441,7 +470,7 @@ Route::get('/test/{id}', function ($id) {
                                     ->wherePivot('sisu_id', $chamada->sisu->id)
                                     ->first()
                                     ->pivot;
-                                
+
                                 $vagas = $pivot->quantidade_vagas - $pivot->vagas_ocupadas;
                                 $diferenca = $vagas - $duplicata['nu_classificacao'];
 
@@ -451,7 +480,8 @@ Route::get('/test/{id}', function ($id) {
                                 }
                             }
 
-                            if ($dados[1]['no_modalidade_concorrencia'] === $nomeModalidade) { // Se a duplicata com mais chances de ser aprovada for o candidato atual, então adicione a lista de convocados
+                            // Se a duplicata com mais chances de ser aprovada for o candidato atual, então adicione a lista de convocados
+                            if ($dados[1]['no_modalidade_concorrencia'] === $nomeModalidade) {
                                 $candidato['cota_vaga_ocupada_id'] = \App\Models\Cota::getModalidade($nomeModalidade)->id;
                                 $candidatosConvocados[] = $candidato;
                                 $contador++;
@@ -464,8 +494,8 @@ Route::get('/test/{id}', function ($id) {
     }
     dd($candidatosConvocados);
 
-        $candidato = $curso[0][0];
-        /*//Recuperamos a cota que aquele inscrito está relacionado
+    $candidato = $curso[0][0];
+    /*//Recuperamos a cota que aquele inscrito está relacionado
         if($candidato['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
         $candidato['no_modalidade_concorrencia'] == 'Ampla concorrência' || $candidato['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA'){
             $cota = Cota::where('descricao',  'Ampla concorrência')->first();
@@ -476,94 +506,94 @@ Route::get('/test/{id}', function ($id) {
         //ofertadas para aquela cota*/
 
 
-        //E recuperamos a instancia do curso do banco de dados
+    //E recuperamos a instancia do curso do banco de dados
 
-        /*Para a nova regra de chamadas da lista de espera, e necessario preencher o restante de vagas da ampla concorrencia
+    /*Para a nova regra de chamadas da lista de espera, e necessario preencher o restante de vagas da ampla concorrencia
         com os candidatos com as maiores notas  daquele curso*/
 
-        $candidatosCurso = collect();
-        foreach ($cursos[$indexCurso] as $modalidadeAtual) {
-            $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
-        }
+    $candidatosCurso = collect();
+    foreach ($cursos[$indexCurso] as $modalidadeAtual) {
+        $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
+    }
 
-        $candidatosCurso = $candidatosCurso->sortByDesc(function ($candidato) {
-            return $candidato['nu_nota_candidato'];
-        });
+    $candidatosCurso = $candidatosCurso->sortByDesc(function ($candidato) {
+        return $candidato['nu_nota_candidato'];
+    });
 
-        $cotaAC = \App\Models\Cota::firstWhere('cod_cota', 'A0');
-        $cota_cursoA0 = $curs->cotas()->where('cota_id', $cotaAC->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-        $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
+    $cotaAC = \App\Models\Cota::firstWhere('cod_cota', 'A0');
+    $cota_cursoA0 = $curs->cotas()->where('cota_id', $cotaAC->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
+    $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
 
-        //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-        $multiplicador = \App\Models\MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
-        if ($multiplicador != null) {
-            $vagasCotaA0 *= $multiplicador->multiplicador;
-        }
+    //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
+    $multiplicador = \App\Models\MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
+    if ($multiplicador != null) {
+        $vagasCotaA0 *= $multiplicador->multiplicador;
+    }
 
-        //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
+    //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
 
-        $vagasCota = $this->fazerCadastro($cotaAC, null, $curs, $candidatosCurso, $vagasCotaA0);
+    $vagasCota = $this->fazerCadastro($cotaAC, null, $curs, $candidatosCurso, $vagasCotaA0);
 
-        $vagasCotaCollection = collect();
-        $vagasCotaCollection->push(0);
+    $vagasCotaCollection = collect();
+    $vagasCotaCollection->push(0);
 
-        //Varremos todas as cotas do curso
-        foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota) {
-            if ($cota->cod_cota != $cotaAC->cod_cota) {
-                //recuperamos informações da quantidade que iremos chamar
-                $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
+    //Varremos todas as cotas do curso
+    foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota) {
+        if ($cota->cod_cota != $cotaAC->cod_cota) {
+            //recuperamos informações da quantidade que iremos chamar
+            $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
 
-                $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
-                //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-                $multiplicador = \App\Models\MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
-                if (!is_null($multiplicador)) {
-                    $vagasCota *= $multiplicador->multiplicador;
-                }
-
-                //aqui veremos se essa cota tem candidatos inscritos para fazer o cadastro
-                $cursoAtual = $cotasCursosCOD[$indexCurso];
-                $modalidadeDaCotaIndex = null;
-
-                //Se o curso atual possuir algum candidato da modalidade descrita na descricao da cota, significa que temos quem chamar
-                foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
-                    if ($modalidadeCursoAtual == $cota->descricao) {
-                        $modalidadeDaCotaIndex = $index;
-                        break;
-                    }
-                }
-                //Então assim faremos
-                if (!is_null($modalidadeDaCotaIndex)) {
-                    $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
-                }
-                $vagasCotaCollection->push($vagasCota);
+            $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
+            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
+            $multiplicador = \App\Models\MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
+            if (!is_null($multiplicador)) {
+                $vagasCota *= $multiplicador->multiplicador;
             }
+
+            //aqui veremos se essa cota tem candidatos inscritos para fazer o cadastro
+            $cursoAtual = $cotasCursosCOD[$indexCurso];
+            $modalidadeDaCotaIndex = null;
+
+            //Se o curso atual possuir algum candidato da modalidade descrita na descricao da cota, significa que temos quem chamar
+            foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
+                if ($modalidadeCursoAtual == $cota->descricao) {
+                    $modalidadeDaCotaIndex = $index;
+                    break;
+                }
+            }
+            //Então assim faremos
+            if (!is_null($modalidadeDaCotaIndex)) {
+                $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
+            }
+            $vagasCotaCollection->push($vagasCota);
         }
-        //Varremos todas as cotas do curso
-        foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $indice => $cota) {
-            if ($cota->cod_cota != $cotaAC->cod_cota) {
-                $vagasCota = $vagasCotaCollection[$indice];
-                //Caso restem vagas, faremos o remanejamento
-                if ($vagasCota > 0) {
-                    foreach ($cota->remanejamentos as $remanejamento) {
-                        $cotaRemanejamento = $remanejamento->proximaCota;
-                        $cursoAtual = $cotasCursosCOD[$indexCurso];
+    }
+    //Varremos todas as cotas do curso
+    foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $indice => $cota) {
+        if ($cota->cod_cota != $cotaAC->cod_cota) {
+            $vagasCota = $vagasCotaCollection[$indice];
+            //Caso restem vagas, faremos o remanejamento
+            if ($vagasCota > 0) {
+                foreach ($cota->remanejamentos as $remanejamento) {
+                    $cotaRemanejamento = $remanejamento->proximaCota;
+                    $cursoAtual = $cotasCursosCOD[$indexCurso];
 
-                        $modalidadeDaCotaIndex = null;
+                    $modalidadeDaCotaIndex = null;
 
-                        foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
-                            if ($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao) {
-                                $modalidadeDaCotaIndex = $indexRemanejamento;
-                                break;
-                            }
-                        }
-                        if (!is_null($modalidadeDaCotaIndex)) {
-                            $vagasCota = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
-                        }
-                        if ($vagasCota == 0) {
+                    foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
+                        if ($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao) {
+                            $modalidadeDaCotaIndex = $indexRemanejamento;
                             break;
                         }
                     }
+                    if (!is_null($modalidadeDaCotaIndex)) {
+                        $vagasCota = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
+                    }
+                    if ($vagasCota == 0) {
+                        break;
+                    }
                 }
             }
         }
+    }
 });
