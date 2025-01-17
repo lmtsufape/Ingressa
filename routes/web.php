@@ -322,21 +322,15 @@ Route::get('/test/{id}', function ($id) {
     }
 
     $ordemModalidades = [
-        'Ampla concorrência' => 1,
-        'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 2,
-        'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 3,
-        'Candidatos autodeclarados quilombolas, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 4,
-        'Candidatos autodeclarados pretos, pardos ou indígenas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 5,
-        'Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 6,
-        'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)' => 7,
-        'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 8,
-        'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 9
-    ];
-
-    $modalidadeAmpla = [
-        'Ampla concorrência',
-        'AMPLA CONCORRÊNCIA',
-        'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
+        'AC'     => 1,
+        'LI_EP'  => 2,
+        'LI_PCD' => 3,
+        'LI_Q'   => 4,
+        'LI_PPI' => 5,
+        'LB_EP'  => 6,
+        'LB_PCD' => 7,
+        'LB_Q'   => 8,
+        'LB_PPI' => 9
     ];
 
     // Agrupa inscrições por curso, turno e modalidade de concorrência juntando ampla concorrência com bônus e sem bônus em uma única modalidade.
@@ -345,11 +339,9 @@ Route::get('/test/{id}', function ($id) {
         ->groupBy([
             'co_ies_curso',
             'ds_turno',
-            function ($item) use ($modalidadeAmpla) {
-                // Junta a ampla concorrência com bônus e sem bônus em uma única modalidade
-                return in_array($item['no_modalidade_concorrencia'], $modalidadeAmpla)
-                    ? 'Ampla concorrência'
-                    : $item['no_modalidade_concorrencia'];
+            function ($item) {
+                // Junta a ampla concorrência com bônus e sem bônus em uma única modalidade e agrupa usando o código da cota
+                return \App\Models\Cota::getModalidade($item['no_modalidade_concorrencia'])->cod_novo;
             }
         ])->map(function ($cursos) use ($ordemModalidades) {
             // Ordenar modalidades de acordo com $ordemModalidades
@@ -359,7 +351,7 @@ Route::get('/test/{id}', function ($id) {
                     $ordem2 = $ordemModalidades[$key2] ?? PHP_INT_MAX;
                     return $ordem1 <=> $ordem2;
                 });
-    
+
                 // Ordenar inscritos dentro de cada modalidade por nota decrescente
                 return $ordenadoPorModalidade->map(function ($inscritos) {
                     return collect($inscritos)->sortByDesc('nu_nota_candidato')->values();
@@ -367,56 +359,20 @@ Route::get('/test/{id}', function ($id) {
             });
         });
 
-    dd($inscricoesOrdenadas);
+    // Arrays para armazenar os candidatos convocados e reservas
     $candidatosConvocados = [];
+    $candidatosReservas = [];
 
     // Os candidatos estão agrupados por curso, turno e modalidade de concorrência. O primeiro foreach itera pelos curso, o segundo pelo turno e o terceiro pela modalidade e o quarto pelos candidatos.
     foreach ($inscricoesOrdenadas as $codCurso => $curso) {
         foreach ($curso as $nomeTurno => $turno) {
+            $vagasModalidade = []; // Armazena a quantidade de vagas restantes para cada modalidade
+
             // Processa os candidatos até preencher todas as vagas reais de todas as modalidades
-            foreach ($turno as $nomeModalidade => $modalidade) {
+            foreach ($turno as $codCota => $modalidade) {
 
                 // Acessa a tabela intermediária
-                $cotaCurso = \App\Models\Cota::getModalidade($nomeModalidade)
-                    ->cursos()
-                    ->where('cod_curso', $codCurso)
-                    ->where('turno', \App\Models\Curso::TURNO_ENUM[$nomeTurno])
-                    ->wherePivot('sisu_id', $chamada->sisu->id)
-                    ->first()
-                    ->pivot;
-
-                // Calcula quantidade de vagas
-                $vagasReais = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
-                $contador = 0;
-
-                foreach ($modalidade as $candidato) {
-                    if ($contador < $vagasReais) { // Candidatos que possuem vaga garantida
-                        $convocado = false;
-
-                        // Verifica se o candidato já foi convocado
-                        foreach ($candidatosConvocados as $index => $candidatoConvocado) {
-                            if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
-                                $convocado = true;
-                                break;
-                            }
-                        }
-
-                        if ($convocado) {
-                            continue;
-                        } else { // Adiciona o candidato à lista de convocados
-                            $candidato['cota_vaga_ocupada_id'] = \App\Models\Cota::getModalidade($nomeModalidade)->id;
-                            $candidatosConvocados[] = $candidato;
-                            $contador++;
-                        }
-                    } else break;
-                }
-            }
-
-            // Processa os candidatos até preencher todas as vagas reserva de todas as modalidades
-            foreach ($turno as $nomeModalidade => $modalidade) {
-
-                // Acessa a tabela intermediária
-                $cotaCurso = \App\Models\Cota::getModalidade($nomeModalidade)
+                $cotaCurso = \App\Models\Cota::firstWhere('cod_novo', $codCota)
                     ->cursos()
                     ->where('cod_curso', $codCurso)
                     ->where('turno', \App\Models\Curso::TURNO_ENUM[$nomeTurno])
@@ -430,19 +386,17 @@ Route::get('/test/{id}', function ($id) {
                     ['chamada_id', $chamada->id]
                 ])->first();
 
-                // Calcula quantidade de vagas reais e vagas de reserva
+                // Calcula quantidade de vagas reais e reservas e armazena na chave correspondente no código da cota
                 $multiplicador = $multiplicador ? $multiplicador->multiplicador : 1;
-                $vagasReais = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
-                $vagasMultiplicadas = $vagasReais * $multiplicador;
-
-                $contador = $vagasReais; // Começa a contar a partir do número de vagas reais pois as vagas reais já foram preenchidas
+                $vagasModalidade[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
+                $vagasModalidade[$codCota]['reservas'] = $vagasModalidade[$codCota]['reais'] * ($multiplicador -1); // O multiplicador é subtraído por 1 pois as vagas reais já foram contabilizadas
 
                 foreach ($modalidade as $candidato) {
-                    if ($contador < $vagasMultiplicadas) { // Candidatos que entrarão na reserva
+                    if ($vagasModalidade[$codCota]['reais'] > 0) { // Candidatos que possuem vaga garantida
                         $convocado = false;
 
                         // Verifica se o candidato já foi convocado
-                        foreach ($candidatosConvocados as $index => $candidatoConvocado) {
+                        foreach ($candidatosConvocados as $candidatoConvocado) {
                             if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
                                 $convocado = true;
                                 break;
@@ -451,149 +405,63 @@ Route::get('/test/{id}', function ($id) {
 
                         if ($convocado) {
                             continue;
-                        } else {
-                            // Recupera todas as inscrições que possuem o mesmo email do candidato no curso e turno atual
-                            $duplicatas = $turno->flatmap(function ($modalidade) {
-                                return $modalidade;
-                            })->filter(function ($inscrito) use ($candidato) {
-                                return $inscrito['ds_email'] === $candidato['ds_email'];
-                            });
-
-                            // Armazena a diferença entre a quantidade de vagas disponíveis e a classificação do candidato, juntamente como candidato que possui o menor valor dessa diferença
-                            $dados = [];
-
-                            foreach ($duplicatas as $duplicata) {
-                                $pivot = \App\Models\Cota::getModalidade($duplicata['no_modalidade_concorrencia'])
-                                    ->cursos()
-                                    ->where('cod_curso', $codCurso)
-                                    ->where('turno', \App\Models\Curso::TURNO_ENUM[$nomeTurno])
-                                    ->wherePivot('sisu_id', $chamada->sisu->id)
-                                    ->first()
-                                    ->pivot;
-
-                                $vagas = $pivot->quantidade_vagas - $pivot->vagas_ocupadas;
-                                $diferenca = $vagas - $duplicata['nu_classificacao'];
-
-                                if (empty($dados) || $diferenca > $dados[0]) {
-                                    $dados[0] = $diferenca;
-                                    $dados[1] = $duplicata;
-                                }
-                            }
-
-                            // Se a duplicata com mais chances de ser aprovada for o candidato atual, então adicione a lista de convocados
-                            if ($dados[1]['no_modalidade_concorrencia'] === $nomeModalidade) {
-                                $candidato['cota_vaga_ocupada_id'] = \App\Models\Cota::getModalidade($nomeModalidade)->id;
-                                $candidatosConvocados[] = $candidato;
-                                $contador++;
-                            }
+                        } else { // Adiciona o candidato à lista de convocados
+                            $candidato['cota_vaga_ocupada_id'] = \App\Models\Cota::firstWhere('cod_novo', $codCota)->id;
+                            $candidatosConvocados[] = $candidato;
+                            $vagasModalidade[$codCota]['reais']--;
                         }
                     } else break;
                 }
             }
-        }
-    }
-    dd($candidatosConvocados);
 
-    $candidato = $curso[0][0];
-    /*//Recuperamos a cota que aquele inscrito está relacionado
-        if($candidato['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-        $candidato['no_modalidade_concorrencia'] == 'Ampla concorrência' || $candidato['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA'){
-            $cota = Cota::where('descricao',  'Ampla concorrência')->first();
-        }else{
-            $cota = Cota::where('descricao', $candidato['no_modalidade_concorrencia'])->first();
-        }
-        //E pegamos a informação de quantas vagas temos tem restante baseado em quantos candidatos foram efetivados e quantas vagas são
-        //ofertadas para aquela cota*/
+            // Remanejamento
 
 
-    //E recuperamos a instancia do curso do banco de dados
-
-    /*Para a nova regra de chamadas da lista de espera, e necessario preencher o restante de vagas da ampla concorrencia
-        com os candidatos com as maiores notas  daquele curso*/
-
-    $candidatosCurso = collect();
-    foreach ($cursos[$indexCurso] as $modalidadeAtual) {
-        $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
-    }
-
-    $candidatosCurso = $candidatosCurso->sortByDesc(function ($candidato) {
-        return $candidato['nu_nota_candidato'];
-    });
-
-    $cotaAC = \App\Models\Cota::firstWhere('cod_cota', 'A0');
-    $cota_cursoA0 = $curs->cotas()->where('cota_id', $cotaAC->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-    $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
-
-    //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-    $multiplicador = \App\Models\MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
-    if ($multiplicador != null) {
-        $vagasCotaA0 *= $multiplicador->multiplicador;
-    }
-
-    //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
-
-    $vagasCota = $this->fazerCadastro($cotaAC, null, $curs, $candidatosCurso, $vagasCotaA0);
-
-    $vagasCotaCollection = collect();
-    $vagasCotaCollection->push(0);
-
-    //Varremos todas as cotas do curso
-    foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota) {
-        if ($cota->cod_cota != $cotaAC->cod_cota) {
-            //recuperamos informações da quantidade que iremos chamar
-            $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-
-            $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
-            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-            $multiplicador = \App\Models\MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
-            if (!is_null($multiplicador)) {
-                $vagasCota *= $multiplicador->multiplicador;
-            }
-
-            //aqui veremos se essa cota tem candidatos inscritos para fazer o cadastro
-            $cursoAtual = $cotasCursosCOD[$indexCurso];
-            $modalidadeDaCotaIndex = null;
-
-            //Se o curso atual possuir algum candidato da modalidade descrita na descricao da cota, significa que temos quem chamar
-            foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
-                if ($modalidadeCursoAtual == $cota->descricao) {
-                    $modalidadeDaCotaIndex = $index;
-                    break;
+            // Desagrupa e ordena os candidatos pela maior nota, em seguida pelos candidatos com mais mais chances de serem convocados e por fim pela modalidade menos restritiva para a mais restritiva
+            $candidatosDesagrupados = $turno->flatmap(function ($modalidade) {
+                return $modalidade;
+            })->sortByDesc([
+                'nu_nota_candidato',
+                function ($item) use ($vagasModalidade) {
+                    $codCota = \App\Models\Cota::getModalidade($item['no_modalidade_concorrencia'])->cod_novo;
+                    return $vagasModalidade[$codCota]['reservas'] - $item['nu_classificacao'];
+                },
+                function ($item) use ($ordemModalidades) {
+                    return -$ordemModalidades[\App\Models\Cota::getModalidade($item['no_modalidade_concorrencia'])->cod_novo];
                 }
-            }
-            //Então assim faremos
-            if (!is_null($modalidadeDaCotaIndex)) {
-                $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
-            }
-            $vagasCotaCollection->push($vagasCota);
-        }
-    }
-    //Varremos todas as cotas do curso
-    foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $indice => $cota) {
-        if ($cota->cod_cota != $cotaAC->cod_cota) {
-            $vagasCota = $vagasCotaCollection[$indice];
-            //Caso restem vagas, faremos o remanejamento
-            if ($vagasCota > 0) {
-                foreach ($cota->remanejamentos as $remanejamento) {
-                    $cotaRemanejamento = $remanejamento->proximaCota;
-                    $cursoAtual = $cotasCursosCOD[$indexCurso];
+            ]);
 
-                    $modalidadeDaCotaIndex = null;
+            // Processa os candidatos até preencher todas as vagas reserva de todas as modalidades
+            foreach ($candidatosDesagrupados as $candidato) {
+                $codCota = \App\Models\Cota::getModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
+                if ($vagasModalidade[$codCota]['reservas'] > 0) {
+                    $convocado = false;
 
-                    foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
-                        if ($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao) {
-                            $modalidadeDaCotaIndex = $indexRemanejamento;
+                    // Verifica se o candidato já foi convocado
+                    foreach ($candidatosConvocados as $candidatoConvocado) {
+                        if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
+                            $convocado = true;
                             break;
                         }
                     }
-                    if (!is_null($modalidadeDaCotaIndex)) {
-                        $vagasCota = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
+
+                    foreach ($candidatosReservas as $candidatoReserva) {
+                        if ($candidato['ds_email'] === $candidatoReserva['ds_email']) {
+                            $convocado = true;
+                            break;
+                        }
                     }
-                    if ($vagasCota == 0) {
-                        break;
+
+                    if ($convocado) {
+                        continue;
+                    } else { // Adiciona o candidato à lista de reservas
+                        $candidato['cota_vaga_ocupada_id'] = \App\Models\Cota::firstWhere('cod_novo', $codCota)->id;
+                        $candidatosReservas[] = $candidato;
+                        $vagasModalidade[$codCota]['reservas']--;
                     }
                 }
             }
+            dd($vagasModalidade, $candidatosConvocados, $candidatosReservas);
         }
     }
 });

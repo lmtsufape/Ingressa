@@ -217,15 +217,15 @@ class CadastroRegularCandidato implements ShouldQueue
         }
 
         // Executa as inserções e atualizações em massa atômicamente
-        DB::transaction(function () use ($usersData, $candidatosData, $inscricoesData) {
+        DB::transaction(function () use ($usersData, $candidatosData, $inscricoesData, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($usersData, 'id', ['name', 'updated_at']);
             Candidato::upsert($candidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
             Inscricao::insert($inscricoesData);
-        });
 
-        // Atualiza o valor do próximo id da sequência
-        DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
-        DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
+            // Atualiza o valor do próximo id da sequência
+            DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
+            DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
+        });
     }
 
     private function getCotaModalidade($modalidade)
