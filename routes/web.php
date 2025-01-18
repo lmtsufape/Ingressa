@@ -415,7 +415,42 @@ Route::get('/test/{id}', function ($id) {
             }
 
             // Remanejamento
+            foreach ($vagasModalidade as $codCota => $vagas) {
+                if ($vagas['reais'] > 0) {
+                    $cota = \App\Models\Cota::firstWhere('cod_novo', $codCota);
+                    $remanejamentos = $cota->remanejamentos;
 
+                    foreach ($remanejamentos as $remanejamento) {
+                        $preenchido = false;
+
+                        foreach ($turno->get($remanejamento->proximaCota->cod_novo) ?? [] as $candidato) {
+                            if ($vagasModalidade[$codCota]['reais'] > 0) {
+                                $convocado = false;
+
+                                // Verifica se o candidato já foi convocado
+                                foreach ($candidatosConvocados as $candidatoConvocado) {
+                                    if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
+                                        $convocado = true;
+                                        break;
+                                    }
+                                }
+
+                                if ($convocado) {
+                                    continue;
+                                } else { // Remaneja o candidato
+                                    $candidato['cota_vaga_ocupada_id'] = $cota->id;
+                                    $candidatosConvocados[] = $candidato;
+                                    $vagasModalidade[$codCota]['reais']--;
+                                }
+                            } else {
+                                $preechido = true;
+                                break;
+                            }
+                        }
+                        if ($preenchido) break;
+                    }
+                }
+            }
 
             // Desagrupa e ordena os candidatos pela maior nota, em seguida pelos candidatos com mais mais chances de serem convocados e por fim pela modalidade menos restritiva para a mais restritiva
             $candidatosDesagrupados = $turno->flatmap(function ($modalidade) {
@@ -461,7 +496,6 @@ Route::get('/test/{id}', function ($id) {
                     }
                 }
             }
-            dd($vagasModalidade, $candidatosConvocados, $candidatosReservas);
         }
     }
 });
