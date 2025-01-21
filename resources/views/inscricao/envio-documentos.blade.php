@@ -42,14 +42,14 @@
                             de boa qualidade (sem cortes, rasuras ou emendas) e com todas as informações legíveis com
                             tamanho máximo de 5 MB cada. Para o procedimento de heteroidentificação, os candidatos
                             beneficiários da reserva de vagas para autodeclarados negros (preto e pardos), deverão enviar,
-                            além dos documentos, um vídeo com uma das seguintes extensões ".mp4", ".avi", ".wmv", ".mjpeg"
+                            além dos documentos, um vídeo com uma das seguintes extensões ".mp4", ".avi", ".wmv", ".mjpeg", ".mov", ".mkv" 
                             ou ".flv" com, no máximo, 120 MB, e uma fotografia com uma das seguintes extensões
                             ".png", ".jpg", ".jpeg" ou ".bmp" com, no máximo, 90 MB. <br>
                             Os arquivos enviados que não sejam de boa qualidade ou que estejam ilegíveis não serão
                             validados. Caso não possa enviar algum documento dispensável, assinalar o termo de
                             compromisso dos arquivos. <br>
                             <b>ATENÇÃO</b>: Antes de enviar os documentos conferir as especificações da sua modalidade de
-                            concorrência descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em:
+                            concorrência descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em:
                             <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>.
                         </div>
                         <livewire:enviar-documentos :inscricao="$inscricao" :documentos="$documentos"/>
