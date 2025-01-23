@@ -785,8 +785,8 @@
                                             class="form-control form-control-sm caixaDeTexto @error('quilombola') is-invalid @enderror"
                                             name="quilombola">
                                             <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1">Sim</option>
-                                            <option value="0">Não</option>
+                                            <option value="1" @if ($candidato->quilombola == true) selected @endif>Sim</option>
+                                            <option value="0" @if ($candidato->quilombola == false) selected @endif>Não</option>
                                         </select>
                                         @error('quilombola')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
@@ -802,8 +802,8 @@
                                             class="form-control form-control-sm caixaDeTexto @error('indigena') is-invalid @enderror"
                                             name="indigena">
                                             <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1">Sim</option>
-                                            <option value="0">Não</option>
+                                            <option value="1" @if ($candidato->indigena == true) selected @endif>Sim</option>
+                                            <option value="0" @if ($candidato->indigena == false) selected @endif>Não</option>
                                         </select>
                                         @error('indigena')
                                             <div id="validationServer03Feedback" class="invalid-feedback">

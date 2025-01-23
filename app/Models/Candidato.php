@@ -332,6 +332,8 @@ class Candidato extends Model
         'grupo_familiar',
         'valor_renda',
         'atualizar_dados',
+        'quilombola',
+        'indigena'
     ];
 
     public function inscricoes()
