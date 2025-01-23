@@ -33,6 +33,7 @@ class AddCampos2025ToInscricaosTable extends Migration
             $table->date('dt_matricula_cancelada')->nullable();
             $table->string('modalidade_original', 4000)->nullable();
             $table->string('modalidade_final', 4000)->nullable();
+            $table->string('vaga_remanejada', 4000)->nullable();
             $table->string('no_acao_afirmativa_propria_ies', 4000)->nullable();
             $table->double('nu_nota_curso_l')->nullable();
             $table->double('nu_nota_curso_ch')->nullable();
@@ -81,6 +82,7 @@ class AddCampos2025ToInscricaosTable extends Migration
             $table->dropColumn('nu_nota_curso_cn');
             $table->dropColumn('nu_nota_curso_m');
             $table->dropColumn('nu_nota_curso_r');
+            $table->dropColumn('vaga_remanejada');
 
             $table->string('st_lei_optante')->change();
             $table->string('st_lei_renda')->change();
