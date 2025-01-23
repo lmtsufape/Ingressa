@@ -672,7 +672,7 @@
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="concluiu_publica"><span
                                                 style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Concluiu o Ensino Médio na rede pública?') }}</label>
+                                            {{ __('Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público') }}</label>
                                         <select id="concluiu_publica"
                                             class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
                                             name="concluiu_publica">
@@ -755,23 +755,21 @@
                                             class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
                                             name="cor_raca">
                                             <option value="" selected disabled>-- Selecione --</option>
-                                            @if ($inscricao->st_lei_etnia_i != 'S' && $inscricao->st_lei_etnia_p != 'S')
-                                                <option value="1"
-                                                    @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
-                                                    {{ $cores_racas[1] }}</option>
-                                                <option value="4"
-                                                    @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
-                                                    {{ $cores_racas[4] }}</option>
-                                            @endif
+                                            <option value="1"
+                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
+                                                {{ $cores_racas[0] }}</option>
+                                            <option value="4"
+                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
+                                                {{ $cores_racas[3] }}</option>
                                             <option value="2"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 2) selected @endif>
-                                                {{ $cores_racas[2] }}</option>
+                                                {{ $cores_racas[1] }}</option>
                                             <option value="3"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 3) selected @endif>
-                                                {{ $cores_racas[3] }}</option>
+                                                {{ $cores_racas[2] }}</option>
                                             <option value="5"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 5) selected @endif>
-                                                {{ $cores_racas[5] }}</option>
+                                                {{ $cores_racas[4] }}</option>
                                         </select>
                                         @error('cor_raca')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
