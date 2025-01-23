@@ -757,21 +757,55 @@
                                             <option value="" selected disabled>-- Selecione --</option>
                                             <option value="1"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
-                                                {{ $cores_racas[0] }}</option>
+                                                {{ $cores_racas[1] }}</option>
                                             <option value="4"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
-                                                {{ $cores_racas[3] }}</option>
+                                                {{ $cores_racas[4] }}</option>
                                             <option value="2"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 2) selected @endif>
-                                                {{ $cores_racas[1] }}</option>
+                                                {{ $cores_racas[2] }}</option>
                                             <option value="3"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 3) selected @endif>
-                                                {{ $cores_racas[2] }}</option>
+                                                {{ $cores_racas[3] }}</option>
                                             <option value="5"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 5) selected @endif>
-                                                {{ $cores_racas[4] }}</option>
+                                                {{ $cores_racas[5] }}</option>
                                         </select>
                                         @error('cor_raca')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group col-md-4 textoInput">
+                                        <label for="quilombola"><span style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Quilombola') }}</label>
+                                        <select id="quilombola"
+                                            class="form-control form-control-sm caixaDeTexto @error('quilombola') is-invalid @enderror"
+                                            name="quilombola">
+                                            <option value="" selected disabled>-- Selecione --</option>
+                                            <option value="1">Sim</option>
+                                            <option value="0">Não</option>
+                                        </select>
+                                        @error('quilombola')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group col-md-4 textoInput">
+                                        <label for="indigena"><span style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Indígena') }}</label>
+                                        <select id="indigena"
+                                            class="form-control form-control-sm caixaDeTexto @error('indigena') is-invalid @enderror"
+                                            name="indigena">
+                                            <option value="" selected disabled>-- Selecione --</option>
+                                            <option value="1">Sim</option>
+                                            <option value="0">Não</option>
+                                        </select>
+                                        @error('indigena')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
