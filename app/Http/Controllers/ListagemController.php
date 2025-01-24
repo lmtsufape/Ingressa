@@ -872,22 +872,8 @@ class ListagemController extends Controller
 
     private function getCotaFinal(Cota $cota, Cota $cotaRemanejada = null)
     {
-        $codigos = [
-            'B4342' => 0,
-            'A0' => 0,
-            'L2' => 3,
-            'L1' => 4,
-            'L6' => 5,
-            'L5' => 6,
-            'L10' => 9,
-            'L9' => 10,
-            'L14' => 11,
-            'L13' => 12,
-            'LB_Q' => 9,
-            'LI_Q' => 11,
-        ];
-        if ($cotaRemanejada) return $codigos[$cotaRemanejada->cod_cota];
-        return $codigos[$cota->cod_cota];
+        if ($cotaRemanejada) return $cotaRemanejada->cod_siga;
+        return $cota->cod_siga;
     }
 
     private function removeAcentos($palavra)

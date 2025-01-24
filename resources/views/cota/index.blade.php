@@ -214,10 +214,23 @@
 
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <label class="pb-2 pt-2" for="codigo">Código da cota:</label>
-                                    <input type="text" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" id="codigo" name="codigo" value="{{old('codigo')}}" placeholder="Insira o código da cota">
+                                    <label class="pb-2 pt-2" for="cod_novo">Código da cota:</label>
+                                    <input type="text" class="form-control campoDeTexto @error('cod_novo') is-invalid @enderror" id="cod_novo" name="cod_novo" value="{{old('cod_novo')}}" placeholder="Insira o código da cota">
 
-                                    @error('codigo')
+                                    @error('cod_novo')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="pb-2 pt-2" for="cod_siga">{{__('Código do siga')}}</label>
+                                    <input type="text" id="cod_siga" name="cod_siga" class="form-control campoDeTexto @error('cod_siga') is-invalid @enderror" value="{{old('cod_siga')}}" required>
+
+                                    @error('cod_siga')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -227,10 +240,10 @@
 
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <label class="pb-2 pt-2" for="descrição">Descrição da cota</label>
-                                    <textarea class="form-control campoDeTexto @error('descrição') is-invalid @enderror" id="descrição" name="descrição" rows="3">{{old('descrição')}}</textarea>
+                                    <label class="pb-2 pt-2" for="descricao">Descrição da cota</label>
+                                    <textarea class="form-control campoDeTexto @error('descricao') is-invalid @enderror" id="descricao" name="descricao" rows="3">{{old('descricao')}}</textarea>
 
-                                    @error('descrição')
+                                    @error('descricao')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -306,7 +319,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label class="pb-2 pt-2" for="codigo-edit">{{__('Código da cota')}}</label>
-                                    <input type="text" id="codigo-edit" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
+                                    <input type="text" id="codigo-edit" name="cod_novo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
 
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
@@ -317,10 +330,22 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label class="pb-2 pt-2" for="descrição-edit">{{__('Descrição')}}</label>
-                                    <textarea name="descrição" id="descrição-edit" cols="30" rows="3" class="form-control campoDeTexto @error('descrição') is-invalid @enderror" required>{{old('descrição')}}</textarea>
+                                    <label class="pb-2 pt-2" for="cod_siga-edit">{{__('Código do siga')}}</label>
+                                    <input type="text" id="cod_siga-edit" name="cod_siga" class="form-control campoDeTexto @error('cod_siga-edit') is-invalid @enderror" value="{{old('cod_siga-edit')}}" required>
 
-                                    @error('descrição')
+                                    @error('cod_siga-edit')
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="pb-2 pt-2" for="descrição-edit">{{__('Descrição')}}</label>
+                                    <textarea name="descricao" id="descrição-edit" cols="30" rows="3" class="form-control campoDeTexto @error('descricao') is-invalid @enderror" required>{{old('descricao')}}</textarea>
+
+                                    @error('descricao')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -439,6 +464,7 @@
                     document.getElementById('nome-edit').value = cota.nome;
                     document.getElementById('codigo-edit').value = cota.cod_novo;
                     document.getElementById('descrição-edit').value = cota.descricao;
+                    document.getElementById('cod_siga-edit').value = cota.cod_siga;
 
                     limpar(cota.cursos);
 

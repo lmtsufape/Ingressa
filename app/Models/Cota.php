@@ -21,8 +21,8 @@ class Cota extends Model
         'L13' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
         'L14' => 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
         'B4342' => 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
-        'LB_Q'=> 'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-        'LI_Q'=> 'Candidatos autodeclarados quilombolas, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+        'LB_Q' => 'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+        'LI_Q' => 'Candidatos autodeclarados quilombolas, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
     ];
 
     public const COTA_RACIAL = [
@@ -59,7 +59,8 @@ class Cota extends Model
         'nome',
         'descricao',
         'cod_cota',
-        'cod_novo'
+        'cod_novo',
+        'cod_siga'
     ];
 
     public function cursos()
@@ -94,13 +95,14 @@ class Cota extends Model
         return $this->belongsToMany(User::class, 'cota_user', 'cota_id', 'user_id');
     }
 
-    public static function getCotaModalidade($modalidade) {
+    public static function getCotaModalidade($modalidade)
+    {
         $modalidades = [
             // AC
             'Ampla concorrência' => 'AC',
             'AMPLA CONCORRÊNCIA' => 'AC',
             'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' => 'AC',
-            
+
             // LI_EP
             'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 'LI_EP',
             'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público' => 'LI_EP',
@@ -133,7 +135,7 @@ class Cota extends Model
             'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).' => 'LB_PPI',
             'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público' => 'LB_PPI',
         ];
-        
+
         return Cota::firstWhere('cod_novo', $modalidades[$modalidade]);
     }
 }
