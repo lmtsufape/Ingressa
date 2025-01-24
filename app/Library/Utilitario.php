@@ -7,10 +7,7 @@ use App\Models\Curso;
 use App\Models\Sisu;
 
 class Utilitario {
-
-
-    public static function criarCotaCurso(Sisu $sisu)
-    {
+    public static function criarCotaCurso(Sisu $sisu) {
         $cotas = Cota::all();
         $cursos = Curso::all();
         foreach ($cursos as $curso) {
@@ -74,6 +71,36 @@ class Utilitario {
                             break;
                         case 'LI_EP':
                             $quantidade = 3;
+                            break;
+                    }
+                } else if ($curso->vagas == 40) {
+                    switch ($cota->cod_novo) {
+                        case 'AC':
+                            $quantidade = 20;
+                            break;
+                        case 'LB_PPI':
+                            $quantidade = 7;
+                            break;
+                        case 'LB_Q':
+                            $quantidade = 1;
+                            break;
+                        case 'LB_PCD':
+                            $quantidade = 1;
+                            break;
+                        case 'LB_EP':
+                            $quantidade = 1;
+                            break;
+                        case 'LI_PPI':
+                            $quantidade = 7;
+                            break;
+                        case 'LI_Q':
+                            $quantidade = 0;
+                            break;
+                        case 'LI_PCD':
+                            $quantidade = 1;
+                            break;
+                        case 'LI_EP':
+                            $quantidade = 2;
                             break;
                     }
                 } else if ($curso->vagas == 80) {
