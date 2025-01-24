@@ -306,7 +306,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             if ($vagasCota > 0) {
 
                 if ($ehNull == null) {
-                    $cotaRemanejamento = $this->getCotaModalidade($inscrito['no_modalidade_concorrencia']);
+                    $cotaRemanejamento = Cota::getCotaModalidade($inscrito['no_modalidade_concorrencia']);
                 }
                 //agora podemos preparar o objeto de inscricao para o candidato
                 $inscricao = new Inscricao([
@@ -455,17 +455,5 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         }
 
         return $vagasCota;
-    }
-
-    private function getCotaModalidade($modalidade)
-    {
-        if (
-            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
-            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
-        ) {
-            return Cota::where('cod_cota', 'A0')->first();
-        }
-
-        return Cota::where('nome', $modalidade)->first();
     }
 }

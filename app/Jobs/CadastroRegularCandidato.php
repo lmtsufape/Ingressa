@@ -204,8 +204,8 @@ class CadastroRegularCandidato implements ShouldQueue
                 'tipo_concorrencia' => $record['TIPO_CONCORRENCIA'],
                 'chamada_id' => $this->chamada->id,
                 'sisu_id' => $this->chamada->sisu->id,
-                'cota_id' => $this->getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA']),
-                'cota_vaga_ocupada_id' => $this->getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA']),
+                'cota_id' => Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA']),
+                'cota_vaga_ocupada_id' => Cota::getCotaModalidade($record['VAGA_REMANEJADA'] ?? $record['NO_MODALIDADE_CONCORRENCIA']),
                 'candidato_id' => $candidato ? $candidato->id : $nextCandidatoIdValue++,
                 'curso_id' => $this->cursos->where('cod_curso', $record['CO_IES_CURSO'])
                     ->where('turno', Curso::TURNO_ENUM[$record['DS_TURNO']])
@@ -226,18 +226,5 @@ class CadastroRegularCandidato implements ShouldQueue
             DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
             DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
         });
-    }
-
-    private function getCotaModalidade($modalidade)
-    {
-        if (
-            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
-            || $modalidade == 'AMPLA CONCORRÊNCIA'
-            || $modalidade == 'Ampla concorrência'
-        ) {
-            return $this->cotas->firstWhere('cod_cota', 'A0')->id;
-        }
-
-        return $this->cotas->firstWhere('nome', $modalidade)->id;
     }
 }
