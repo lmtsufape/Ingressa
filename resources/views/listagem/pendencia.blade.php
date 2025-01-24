@@ -138,19 +138,19 @@
                         style="font-weight: normal; text-transform:uppercase;">{{ $chamada->nome }}</span><br>
                     <span style="font-weight: normal;">Curso: {{ $inscricao->curso->nome }} -
                         @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Matutino'])
                                 Matutino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
                                 Vespertino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            @case(App\Models\Curso::TURNO_ENUM['Noturno'])
                                 Noturno
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            @case(App\Models\Curso::TURNO_ENUM['Integral'])
                                 Integral
                             @break
                         @endswitch

@@ -67,7 +67,7 @@
                                         @endif
                                         <td class="align-middle text-center">
                                             <div class="btn-group">
-                                                @if ($batches[$i] == null)
+                                                @if ($batches[$i] == null || $batches[$i]->hasFailures())
                                                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
                                                         <button title="Cadastrar candidatos" data-bs-toggle="modal" data-bs-target="#modalStaticImportarCandidatos_{{$chamada->id}}" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}"  alt="Icone de cadastrar candidatos"></button>
                                                     @else
@@ -356,10 +356,10 @@
                                             <input class="form-check-input" data-bs-toggle="collapse" href="#cota_{{$curso->id}}" role="button" aria-expanded="false" aria-controls="collapseExample" type="checkbox" name="cota_{{$curso->id}}" id="{{$curso->id}}" value="{{$curso->id}}">
                                             <div class="form-check-label" for="cota_{{$curso->id}}">
                                                 {{$curso->nome}} - @switch($curso->turno)
-                                                @case($turnos['matutino']){{"Matutino"}}@break
-                                                @case($turnos['vespertino']){{"Vespertino"}}@break
-                                                @case($turnos['noturno']){{"Noturno"}}@break
-                                                @case($turnos['integral']){{"Integral"}}@break
+                                                @case($turnos['Matutino']){{"Matutino"}}@break
+                                                @case($turnos['Vespertino']){{"Vespertino"}}@break
+                                                @case($turnos['Noturno']){{"Noturno"}}@break
+                                                @case($turnos['Integral']){{"Integral"}}@break
                                                 @endswitch
                                             </div>
                                             <div class="collapse col-md-12 p-2 my-2" id="cota_{{$curso->id}}" style="border: 1px solid #6C6C6C; border-radius: 00.5rem;">

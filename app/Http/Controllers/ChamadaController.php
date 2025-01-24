@@ -832,13 +832,13 @@ class ChamadaController extends Controller
         foreach ($cursos as $indexCurso => $curso) {
             $candidato = $curso[0][0];
             if ($candidato['ds_turno'] == 'Matutino') {
-                $turno =  Curso::TURNO_ENUM['matutino'];
+                $turno =  Curso::TURNO_ENUM['Matutino'];
             } elseif ($candidato['ds_turno'] == 'Vespertino') {
-                $turno = Curso::TURNO_ENUM['vespertino'];
+                $turno = Curso::TURNO_ENUM['Vespertino'];
             } elseif ($candidato['ds_turno'] == 'Noturno') {
-                $turno = Curso::TURNO_ENUM['noturno'];
+                $turno = Curso::TURNO_ENUM['Noturno'];
             } elseif ($candidato['ds_turno'] == 'Integral') {
-                $turno = Curso::TURNO_ENUM['integral'];
+                $turno = Curso::TURNO_ENUM['Integral'];
             }
 
             $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
@@ -978,7 +978,7 @@ class ChamadaController extends Controller
         foreach ($porModalidade as $inscrito) {
             if ($vagasCota > 0) {
                 if ($ehNull == null) {
-                    $cotaRemanejamento = $this->getCotaModalidade($inscrito['no_modalidade_concorrencia']);
+                    $cotaRemanejamento = Cota::getCotaModalidade($inscrito['no_modalidade_concorrencia']);
                 }
                 $inscricao = array(
                     'co_ies_curso' => $inscrito['co_ies_curso'],
@@ -1057,18 +1057,6 @@ class ChamadaController extends Controller
             \Maatwebsite\Excel\Excel::CSV,
             ['Content-Type' => 'text/csv']
         );
-    }
-
-    private function getCotaModalidade($modalidade)
-    {
-        if (
-            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
-            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
-        ) {
-            return Cota::where('cod_cota', 'A0')->first();
-        }
-
-        return Cota::where('nome', $modalidade)->first();
     }
 
     private function situacaoMatricula($status)

@@ -257,6 +257,8 @@ class CotaController extends Controller
             'nome' => $cota->nome,
             'descricao' => $cota->descricao,
             'cod_cota' => $cota->cod_cota,
+            'cod_novo' => $cota->cod_novo,
+            'cod_siga' => $cota->cod_siga,
             'cursos' => $cursos,
         ];
 
@@ -271,7 +273,8 @@ class CotaController extends Controller
      */
     public function updateModal(CotaRequest $request)
     {
-        $this->authorize('isAdmin', User::class);
+        $ultimoSisu = \App\Models\Sisu::orderBy('id', 'desc')->first();
+        $this->authorize('isAdmin', \App\Models\User::class);
         $cota = Cota::find($request->cota);
         $request->validated();
         $validated = $this->validarOpcionalObrigatorio($request);
@@ -281,8 +284,19 @@ class CotaController extends Controller
 
         $cota->setAtributes($request);
         $cota->update();
-        $this->desvincularCursos($cota);
-        $this->vincularCursos($request, $cota);
+
+        foreach ($request->cursos as $i => $curso_id) {
+            if ($curso_id != null) {
+                $curso = Curso::find($curso_id);
+                $pivot = $curso->cotas()
+                    ->where('cota_id', $cota->id)
+                    ->where('sisu_id', $ultimoSisu->id)
+                    ->first()
+                    ->pivot;
+
+                $pivot->update(['quantidade_vagas' => $request->quantidade[$i]]);
+            }
+        }
 
         return redirect(route('cotas.index'))->with(['success' => 'Cota atualizada com sucesso!']);
     }

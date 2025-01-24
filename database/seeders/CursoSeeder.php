@@ -16,7 +16,7 @@ class CursoSeeder extends Seeder
     {
         \App\Models\Curso::create([
             'nome' => 'Agronomia',
-            'turno' => Curso::TURNO_ENUM['matutino'],
+            'turno' => Curso::TURNO_ENUM['Matutino'],
             'cod_curso' => 91555,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#7CEF90",
@@ -26,7 +26,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Agronomia',
-            'turno' => Curso::TURNO_ENUM['vespertino'],
+            'turno' => Curso::TURNO_ENUM['Vespertino'],
             'cod_curso' => 91555,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#7CEF90",
@@ -36,7 +36,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Ciência da Computação',
-            'turno' => Curso::TURNO_ENUM['noturno'],
+            'turno' => Curso::TURNO_ENUM['Noturno'],
             'cod_curso' => 118468,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#9BE2FC",
@@ -45,7 +45,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Engenharia de Alimentos',
-            'turno' => Curso::TURNO_ENUM['integral'],
+            'turno' => Curso::TURNO_ENUM['Integral'],
             'cod_curso' => 118466,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#FFCA61",
@@ -54,7 +54,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Letras - Inglês e Português',
-            'turno' => Curso::TURNO_ENUM['noturno'],
+            'turno' => Curso::TURNO_ENUM['Noturno'],
             'cod_curso' => 118470,
             'cor_padrao' => "#FF8FC0;",
             'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
@@ -63,7 +63,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Medicina Veterinária',
-            'turno' => Curso::TURNO_ENUM['matutino'],
+            'turno' => Curso::TURNO_ENUM['Matutino'],
             'cod_curso' => 91561,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#F97171",
@@ -73,7 +73,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Medicina Veterinária',
-            'turno' => Curso::TURNO_ENUM['vespertino'],
+            'turno' => Curso::TURNO_ENUM['Vespertino'],
             'cod_curso' => 91561,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#F97171",
@@ -83,7 +83,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Pedagogia',
-            'turno' => Curso::TURNO_ENUM['matutino'],
+            'turno' => Curso::TURNO_ENUM['Matutino'],
             'cod_curso' => 91969,
             'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
             'cor_padrao' => "#FBEE3F",
@@ -93,7 +93,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Pedagogia',
-            'turno' => Curso::TURNO_ENUM['vespertino'],
+            'turno' => Curso::TURNO_ENUM['Vespertino'],
             'cod_curso' => 91969,
             'cor_padrao' => "#FBEE3F",
             'grau_academico' => Curso::GRAU_ENUM['licenciatura'],
@@ -103,7 +103,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Zootecnia',
-            'turno' => Curso::TURNO_ENUM['matutino'],
+            'turno' => Curso::TURNO_ENUM['Matutino'],
             'cod_curso' => 91738,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#D693F2",
@@ -113,7 +113,7 @@ class CursoSeeder extends Seeder
         ]);
         \App\Models\Curso::create([
             'nome' => 'Zootecnia',
-            'turno' => Curso::TURNO_ENUM['vespertino'],
+            'turno' => Curso::TURNO_ENUM['Vespertino'],
             'cod_curso' => 91738,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#D693F2",
