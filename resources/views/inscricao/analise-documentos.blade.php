@@ -456,16 +456,28 @@
                                         </p>
                                     @endisset
                                 </div>
+
                                 <div class="col-md-4 tituloDocumento">
-                                    Quilombola: @if ($inscricao->quilombola == 'S')
-                                        <p class="nomeDocumento" style="display: inline">
+                                    Quilombola:
+                                    <p class="nomeDocumento" style="display: inline">
+                                        @if ($inscricao->candidato->quilombola)
                                             Sim
-                                        </p>
-                                    @else
-                                        <p class="nomeDocumento" style="display: inline">
+                                        @else
                                             Não
-                                        </p>
-                                    @endisset
+                                        @endif
+                                    </p>
+                                </div>
+
+                                <div class="col-md-4 tituloDocumento">
+                                    Indígena:
+                                    <p class="nomeDocumento" style="display: inline">
+                                        @if ($inscricao->candidato->indigena)
+                                            Sim
+                                        @else
+                                            Não
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
