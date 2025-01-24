@@ -124,6 +124,8 @@ class SisuController extends Controller
         if($sisu->chamadas()->count() > 0){
             return redirect()->back()->with(['error' => 'Não foi possível deletar esta edição, há chamadas criadas para ela.']);
         }
+        
+        \Illuminate\Support\Facades\DB::table('cota_curso')->where('sisu_id', $sisu->id)->delete();
         $sisu->delete();
 
         return redirect(route('sisus.index'))->with(['success' => 'Edição deletada com sucesso!']);

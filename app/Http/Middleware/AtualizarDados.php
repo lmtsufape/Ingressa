@@ -24,6 +24,7 @@ class AtualizarDados
             $inscricao = $candidato->inscricoes->last();
             return redirect()->route('candidato.edit', compact('candidato', 'inscricao'));
         }
+
         return $next($request);
     }
 }

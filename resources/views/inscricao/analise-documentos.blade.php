@@ -425,7 +425,7 @@
                             </div>
                             <div class="row pt-2">
                                 <div class="col-md-12 tituloDocumento">
-                                    Concluiu o Ensino Médio na rede pública?
+                                    Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público?
                                     @isset($inscricao->candidato->concluiu_publica)
                                         <p class="nomeDocumento" style="display: inline">
                                             {{ $inscricao->candidato->concluiu_publica ? 'Sim' : 'Não' }}</p>
@@ -456,16 +456,28 @@
                                         </p>
                                     @endisset
                                 </div>
+
                                 <div class="col-md-4 tituloDocumento">
-                                    Quilombola: @if ($inscricao->quilombola == 'S')
-                                        <p class="nomeDocumento" style="display: inline">
+                                    Quilombola:
+                                    <p class="nomeDocumento" style="display: inline">
+                                        @if ($inscricao->candidato->quilombola)
                                             Sim
-                                        </p>
-                                    @else
-                                        <p class="nomeDocumento" style="display: inline">
+                                        @else
                                             Não
-                                        </p>
-                                    @endisset
+                                        @endif
+                                    </p>
+                                </div>
+
+                                <div class="col-md-4 tituloDocumento">
+                                    Indígena:
+                                    <p class="nomeDocumento" style="display: inline">
+                                        @if ($inscricao->candidato->indigena)
+                                            Sim
+                                        @else
+                                            Não
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

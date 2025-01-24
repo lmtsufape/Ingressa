@@ -33,6 +33,7 @@ class Candidato extends Model
         2015 => 'Síndrome de Rett',
         2010 => 'Surdocegueira',
         2016 => 'Transtorno Desintegrativo da Infância',
+        2018 => 'Transtorno do Espectro Autista',
     ];
 
     // public const ETNIA = [
@@ -331,6 +332,8 @@ class Candidato extends Model
         'grupo_familiar',
         'valor_renda',
         'atualizar_dados',
+        'quilombola',
+        'indigena'
     ];
 
     public function inscricoes()

@@ -72,7 +72,9 @@ class UpdateCandidatoRequest extends FormRequest
             'nu_fone_emergencia' => ['nullable', 'string'],
             'edital' => ['required', 'accepted'],
             'vinculo' => ['required', 'accepted'],
-            'tp_sexo' => ['required', 'in:F,M']
+            'tp_sexo' => ['required', 'in:F,M'],
+            'quilombola' => ['required', 'boolean'],
+            'indigena' => ['required', 'boolean'],
         ];
     }
 
