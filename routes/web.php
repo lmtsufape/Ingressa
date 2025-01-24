@@ -198,7 +198,7 @@ Route::get('/test/{id}', function ($id) {
                 'no_inscrito' => $record['NO_INSCRITO'],
                 'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
                 'dt_nascimento' => (new DateTime($record['DT_NASCIMENTO']))->format('Y-m-d'),
-                'etnia_e_cor' => \App\Models\Candidato::ETNIA_E_COR[$record['COR_RAÇA']],
+                'etnia_e_cor' => \App\Models\Candidato::ETNIA_E_COR[$record['COR_RACA']],
                 'user_id' => $nextUserIdValue++,
                 'created_at' => now(),
                 'updated_at' => now(),
