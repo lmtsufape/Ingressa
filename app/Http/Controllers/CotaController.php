@@ -258,6 +258,7 @@ class CotaController extends Controller
             'descricao' => $cota->descricao,
             'cod_cota' => $cota->cod_cota,
             'cod_novo' => $cota->cod_novo,
+            'cod_siga' => $cota->cod_siga,
             'cursos' => $cursos,
         ];
 
