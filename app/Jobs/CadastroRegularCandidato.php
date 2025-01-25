@@ -93,7 +93,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'no_social' => $record['NO_SOCIAL'],
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
-                    'dt_nascimento' => $record['DT_NASCIMENTO'],
+                    'dt_nascimento' => \Carbon\Carbon::createFromFormat('d/m/Y', $record['DT_NASCIMENTO'])->format('Y-m-d'),
                     'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['COR_RACA']],
                     'user_id' => $nextUserIdValue++,
                     'created_at' => now(),
