@@ -17,12 +17,9 @@ class CandidatoController extends Controller
     {
         $cpf = preg_replace('/[^0-9]/', '', $request->cpf);
         $dt_nasc = $request->dt_nasc;
-        $candidato = Candidato::where(
-            [
-                ['nu_cpf_inscrito', '=', $cpf],
-                ['dt_nascimento', '=', $dt_nasc]
-            ]
-        )->first();
+        $candidato = Candidato::where('nu_cpf_inscrito', $cpf)
+            ->where('dt_nascimento', $dt_nasc)
+            ->first();
 
         if ($candidato == null) {
             return redirect(route('primeiro.acesso'))
@@ -30,7 +27,7 @@ class CandidatoController extends Controller
                 ->withInput();
         } else {
 
-            $user = User::where('id', '=', $candidato->user_id)->first();
+            $user = User::find($candidato->user_id);
 
             if ($user->primeiro_acesso == true) {
 
