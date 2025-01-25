@@ -452,7 +452,7 @@
                                 <div class="col-md-4 tituloDocumento">
                                     Cor/Raça: @isset($inscricao->candidato->etnia_e_cor)
                                         <p class="nomeDocumento" style="display: inline">
-                                            {{ \App\Models\Candidato::ETNIA_E_COR[$inscricao->candidato->etnia_e_cor] }}
+                                            {{ array_flip(\App\Models\Candidato::ETNIA_E_COR)[$inscricao->candidato->etnia_e_cor] }}
                                         </p>
                                     @endisset
                                 </div>
@@ -521,360 +521,360 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="col-md-12 caixa shadow p-3">
-                    @can('isAdmin', \App\Models\User::class)
-                        <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                            class="d-flex align-items-center justify-content-between pb-2">
-                            <div class="d-flex align-items-center">
-                                <span class="tituloTipoDoc">Documentação básica</span>
-                            </div>
-                            <a title="Anexar documentos"
-                                href="{{ route('inscricao.documentacao', $inscricao->id) }}">
-                                <img width="35" src="{{ asset('img/enviar-arquivos.svg') }}"
-                                    alt="Icone de anexar documentos"></a>
-                            </a>
-                            <a title="Baixar todos os documentos do candidato"
-                                href="{{ route('baixar.documentos.candidato', $inscricao->id) }}">
-                                <img width="35" src="{{ asset('img/download1.svg') }}"
-                                    alt="Icone de baixar todos os documentos"></a>
-                            </a>
-                        </div>
-                    @else
-                        @can('ehAnalistaGeral', \App\Models\User::class)
+                
+                <div class="col-md-4">
+                    <div class="col-md-12 caixa shadow p-3">
+                        @can('isAdmin', \App\Models\User::class)
                             <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
                                 class="d-flex align-items-center justify-content-between pb-2">
                                 <div class="d-flex align-items-center">
                                     <span class="tituloTipoDoc">Documentação básica</span>
                                 </div>
+                                <a title="Anexar documentos"
+                                    href="{{ route('inscricao.documentacao', $inscricao->id) }}">
+                                    <img width="35" src="{{ asset('img/enviar-arquivos.svg') }}"
+                                        alt="Icone de anexar documentos"></a>
+                                </a>
                                 <a title="Baixar todos os documentos do candidato"
                                     href="{{ route('baixar.documentos.candidato', $inscricao->id) }}">
                                     <img width="35" src="{{ asset('img/download1.svg') }}"
                                         alt="Icone de baixar todos os documentos"></a>
                                 </a>
                             </div>
+                        @else
+                            @can('ehAnalistaGeral', \App\Models\User::class)
+                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                    class="d-flex align-items-center justify-content-between pb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="tituloTipoDoc">Documentação básica</span>
+                                    </div>
+                                    <a title="Baixar todos os documentos do candidato"
+                                        href="{{ route('baixar.documentos.candidato', $inscricao->id) }}">
+                                        <img width="35" src="{{ asset('img/download1.svg') }}"
+                                            alt="Icone de baixar todos os documentos"></a>
+                                    </a>
+                                </div>
+                            @endcan
                         @endcan
-                    @endcan
-                    @foreach ($documentos as $indice => $documento)
-                        @if ($documento == 'rani')
-                            <div class="row">
-                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                                    class="d-flex align-items-center justify-content-between pb-2 pt-4">
-                                    <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
-                                            reserva de
-                                            vaga para candidato autodeclarado indígena</span>
+                        @foreach ($documentos as $indice => $documento)
+                            @if ($documento == 'rani')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
+                                                reserva de
+                                                vaga para candidato autodeclarado indígena</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @elseif($documento == 'declaracao_quilombola')
-                            <div class="row">
-                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                                    class="d-flex align-items-center justify-content-between pb-2 pt-4">
-                                    <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
-                                            reserva de
-                                            vaga para candidato autodeclarado quilombola</span>
+                            @elseif($documento == 'declaracao_quilombola')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
+                                                reserva de
+                                                vaga para candidato autodeclarado quilombola</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @elseif($documento == 'heteroidentificacao')
-                            <div class="row">
-                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                                    class="d-flex align-items-center justify-content-between pb-2 pt-4">
-                                    <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
-                                            reserva de
-                                            vaga para candidato autodeclarado negro (preto ou
-                                            pardo)</span>
+                            @elseif($documento == 'heteroidentificacao')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
+                                                reserva de
+                                                vaga para candidato autodeclarado negro (preto ou
+                                                pardo)</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @elseif($documento == 'comprovante_renda')
-                            <div class="row">
-                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                                    class="d-flex align-items-center justify-content-between pb-2 pt-4">
-                                    <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da renda familiar bruta mensal per
-                                            capita</span>
+                            @elseif($documento == 'comprovante_renda')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Comprovação da renda familiar bruta mensal per
+                                                capita</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @elseif($documento == 'laudo_medico')
-                            <div class="row">
-                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                                    class="d-flex align-items-center justify-content-between pb-2 pt-4">
-                                    <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
-                                            reserva de
-                                            vaga para pessoas com deficiência</span>
+                            @elseif($documento == 'laudo_medico')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Comprovação da condição de beneficiário da
+                                                reserva de
+                                                vaga para pessoas com deficiência</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @elseif($documento == 'declaracao_cotista')
-                            <div class="row">
-                                <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
-                                    class="d-flex align-items-center justify-content-between pb-2 pt-4">
-                                    <div class="d-flex align-items-center">
-                                        <span class="tituloTipoDoc">Autodeclaração como candidato participante de
-                                            reserva de vaga</span>
+                            @elseif($documento == 'declaracao_cotista')
+                                <div class="row">
+                                    <div style="border-bottom: 1px solid #f5f5f5; line-height: 1.2;"
+                                        class="d-flex align-items-center justify-content-between pb-2 pt-4">
+                                        <div class="d-flex align-items-center">
+                                            <span class="tituloTipoDoc">Autodeclaração como candidato participante de
+                                                reserva de vaga</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
-                        <div class="col-md-12">
-                            <div class="d-flex align-items-center justify-content-between pt-3">
-                                @if ($inscricao->arquivos()->where('nome', $documento)->first() != null)
-                                    <div class="col-md-2">
-                                        <a title="Abrir documento em nova aba"
-                                            href="{{ route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento]) }}"
-                                            target="_blank" style="cursor:pointer;"><img
-                                                @if (is_null($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{ asset('img/download2.svg') }}" @elseif(
-                                                    $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao ==
-                                                        \App\Models\Avaliacao::AVALIACAO_ENUM['aceito']
-                                                )  src="{{ asset('img/documento-aceito.svg') }}" @elseif(
-                                                    $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao ==
-                                                        \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
-                                                ) src="{{ asset('img/documento-recusado.svg') }}" @else src="{{ asset('img/download2.svg') }}" @endif
-                                                alt="arquivo atual" width="45" class="img-flex"></a>
-                                    </div>
-                                @else
-                                    <div class="col-md-2">
-                                        <a title="Documento não enviado" target="_blank"
-                                            style="cursor:pointer;"><img src="{{ asset('img/download3.svg') }}"
-                                                alt="arquivo atual" width="45" class="img-flex"></a>
-                                    </div>
-                                @endif
-
-                                @if ($documento == 'declaracao_veracidade')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Declaração
-                                            de Veracidade;</button>
-                                    </div>
-                                @elseif($documento == 'certificado_conclusao')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Certificado
-                                            de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino
-                                            Médio ou Certificação de Ensino Médio através do ENEM ou documento
-                                            equivalente;</button>
-                                    </div>
-                                @elseif($documento == 'historico')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Histórico
-                                            Escolar do Ensino Médio ou equivalente;</button>
-                                    </div>
-                                @elseif($documento == 'nascimento_ou_casamento')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro
-                                            de Nascimento ou Certidão de Casamento;</button>
-                                    </div>
-                                @elseif($documento == 'cpf')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Cadastro
-                                            de Pessoa Física (CPF) - pode estar no RG;</button>
-                                    </div>
-                                @elseif($documento == 'rg')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Carteira
-                                            de Identidade (RG) - Frente e verso;</button>
-                                    </div>
-                                @elseif($documento == 'quitacao_eleitoral')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Comprovante
-                                            de quitação com a Justiça Eleitoral;</button>
-                                    </div>
-                                @elseif($documento == 'quitacao_militar')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Comprovante
-                                            de quitação com o Serviço Militar, para candidatos do sexo masculino que
-                                            tenham de 18 a 45 anos - Frente e verso;</button>
-                                    </div>
-                                @elseif($documento == 'foto')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Uma
-                                            foto 3x4 atual;</button>
-                                    </div>
-                                @elseif($documento == 'rani')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro
-                                            Administrativo de Nascimento de Indígena ou equivalente;</button>
-                                    </div>
-                                @elseif($documento == 'declaracao_quilombola')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Declaração
-                                            da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de
-                                            Vínculo com Comunidade Quilombola assinada por 03 (três)
-                                            lideranças da Comunidade.</button>
-                                    </div>
-                                @elseif($documento == 'declaracao_cotista')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Autodeclaração
-                                            como candidato participante de reserva de vaga;</button>
-                                    </div>
-                                @elseif($documento == 'heteroidentificacao')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Vídeo
-                                            individual e recente para procedimento de heteroidentificação;</button>
-                                    </div>
-                                @elseif($documento == 'fotografia')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Fotografia
-                                            individual e recente para procedimento de heteroidentificação;</button>
-                                    </div>
-                                @elseif($documento == 'comprovante_renda')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Comprovante
-                                            de renda, ou de que não possui renda, de cada membro do grupo familiar,
-                                            seja maior ou menor de idade;</button>
-                                    </div>
-                                @elseif($documento == 'laudo_medico')
-                                    <div class="col-md-10" style="cursor:pointer;">
-                                        <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
-                                            style="display:inline-block; text-align: left;"
-                                            for="{{ $documento }}"
-                                            onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Laudo
-                                            médico e exames;</button>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                    @if (
-                        $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'] ||
-                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados']
-                    )
-                        <button disabled type="button" class="btn botaoVerde mt-4 py-1 col-md-12"><span
-                                class="px-4">
-                                @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                                    Validar Cadastro
-                                @else
-                                    Cadastro Validado
-                                @endif
-                            </span></button>
-                    @else
-                        <button @if (
-                            $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] &&
-                                $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] &&
-                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
-                        ) disabled @endif id="efetivarBotao2" type="button"
-                            class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span
-                                class="px-4">
-                                @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                                    Validar Cadastro
-                                @else
-                                    Cadastro Validado
-                                @endif
-                            </span></button>
-                    @endif
-                    <button @if (
-                        $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] ||
-                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']
-                    ) @elseif($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
-                        id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12"
-                        onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span
-                            class="px-4">
-                            @if (is_null($inscricao->cd_efetivado) ||
-                                    $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']
-                            )
-                                Invalidar Cadastro
-                            @else
-                                Cadastro Invalidado
                             @endif
-                        </span></button>
-                @endcan
-                @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
-                    @if ($inscricao->isCotaRacial() && $inscricao->candidato->isPretoOrPardo())
-                        <button id="bloquearHeteroidentificacao" type="button" class="btn botao mt-2 py-1 col-md-12"
-                            onclick="bloquearCandidatoInput({{ \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] }})"
-                            style="background-color: #FC605F;"> <span class="px-4">
-                                @if (is_null($inscricao->retificacao) ||
-                                        $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']
+                            <div class="col-md-12">
+                                <div class="d-flex align-items-center justify-content-between pt-3">
+                                    @if ($inscricao->arquivos()->where('nome', $documento)->first() != null)
+                                        <div class="col-md-2">
+                                            <a title="Abrir documento em nova aba"
+                                                href="{{ route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento]) }}"
+                                                target="_blank" style="cursor:pointer;"><img
+                                                    @if (is_null($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{ asset('img/download2.svg') }}" @elseif(
+                                                        $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao ==
+                                                            \App\Models\Avaliacao::AVALIACAO_ENUM['aceito']
+                                                    )  src="{{ asset('img/documento-aceito.svg') }}" @elseif(
+                                                        $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao ==
+                                                            \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
+                                                    ) src="{{ asset('img/documento-recusado.svg') }}" @else src="{{ asset('img/download2.svg') }}" @endif
+                                                    alt="arquivo atual" width="45" class="img-flex"></a>
+                                        </div>
+                                    @else
+                                        <div class="col-md-2">
+                                            <a title="Documento não enviado" target="_blank"
+                                                style="cursor:pointer;"><img src="{{ asset('img/download3.svg') }}"
+                                                    alt="arquivo atual" width="45" class="img-flex"></a>
+                                        </div>
+                                    @endif
+    
+                                    @if ($documento == 'declaracao_veracidade')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Declaração
+                                                de Veracidade;</button>
+                                        </div>
+                                    @elseif($documento == 'certificado_conclusao')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Certificado
+                                                de Conclusão do Ensino Médio ou Certidão de Exame Supletivo do Ensino
+                                                Médio ou Certificação de Ensino Médio através do ENEM ou documento
+                                                equivalente;</button>
+                                        </div>
+                                    @elseif($documento == 'historico')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Histórico
+                                                Escolar do Ensino Médio ou equivalente;</button>
+                                        </div>
+                                    @elseif($documento == 'nascimento_ou_casamento')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro
+                                                de Nascimento ou Certidão de Casamento;</button>
+                                        </div>
+                                    @elseif($documento == 'cpf')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Cadastro
+                                                de Pessoa Física (CPF) - pode estar no RG;</button>
+                                        </div>
+                                    @elseif($documento == 'rg')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Carteira
+                                                de Identidade (RG) - Frente e verso;</button>
+                                        </div>
+                                    @elseif($documento == 'quitacao_eleitoral')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Comprovante
+                                                de quitação com a Justiça Eleitoral;</button>
+                                        </div>
+                                    @elseif($documento == 'quitacao_militar')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Comprovante
+                                                de quitação com o Serviço Militar, para candidatos do sexo masculino que
+                                                tenham de 18 a 45 anos - Frente e verso;</button>
+                                        </div>
+                                    @elseif($documento == 'foto')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Uma
+                                                foto 3x4 atual;</button>
+                                        </div>
+                                    @elseif($documento == 'rani')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro
+                                                Administrativo de Nascimento de Indígena ou equivalente;</button>
+                                        </div>
+                                    @elseif($documento == 'declaracao_quilombola')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Declaração
+                                                da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de
+                                                Vínculo com Comunidade Quilombola assinada por 03 (três)
+                                                lideranças da Comunidade.</button>
+                                        </div>
+                                    @elseif($documento == 'declaracao_cotista')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Autodeclaração
+                                                como candidato participante de reserva de vaga;</button>
+                                        </div>
+                                    @elseif($documento == 'heteroidentificacao')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Vídeo
+                                                individual e recente para procedimento de heteroidentificação;</button>
+                                        </div>
+                                    @elseif($documento == 'fotografia')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Fotografia
+                                                individual e recente para procedimento de heteroidentificação;</button>
+                                        </div>
+                                    @elseif($documento == 'comprovante_renda')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Comprovante
+                                                de renda, ou de que não possui renda, de cada membro do grupo familiar,
+                                                seja maior ou menor de idade;</button>
+                                        </div>
+                                    @elseif($documento == 'laudo_medico')
+                                        <div class="col-md-10" style="cursor:pointer;">
+                                            <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
+                                                style="display:inline-block; text-align: left;"
+                                                for="{{ $documento }}"
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Laudo
+                                                médico e exames;</button>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    @can('isAdminOrAnalistaGeral', \App\Models\User::class)
+                        @if (
+                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'] ||
+                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados']
+                        )
+                            <button disabled type="button" class="btn botaoVerde mt-4 py-1 col-md-12"><span
+                                    class="px-4">
+                                    @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
+                                        Validar Cadastro
+                                    @else
+                                        Cadastro Validado
+                                    @endif
+                                </span></button>
+                        @else
+                            <button @if (
+                                $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] &&
+                                    $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] &&
+                                    $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
+                            ) disabled @endif id="efetivarBotao2" type="button"
+                                class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span
+                                    class="px-4">
+                                    @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
+                                        Validar Cadastro
+                                    @else
+                                        Cadastro Validado
+                                    @endif
+                                </span></button>
+                        @endif
+                        <button @if (
+                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] ||
+                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']
+                        ) @elseif($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
+                            id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12"
+                            onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span
+                                class="px-4">
+                                @if (is_null($inscricao->cd_efetivado) ||
+                                        $inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']
                                 )
-                                    Bloquear por não atender aos critérios fenotípicos
-                                @elseif(
-                                    $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] ||
-                                        $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico']
-                                )
-                                    Bloqueado por não atender aos critérios fenotípicos
+                                    Invalidar Cadastro
+                                @else
+                                    Cadastro Invalidado
                                 @endif
                             </span></button>
-                    @endif
-                @endcan
-                @can('isAdminOrMedico', \App\Models\User::class)
-                    @if ($inscricao->isCotaDeficiencia())
-                        <button id="bloquearMedico" type="button" class="btn botao mt-2 py-1 col-md-12"
-                            onclick="bloquearCandidatoInput({{ \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] }})"
-                            style="background-color: #FC605F;"> <span class="px-4">
-                                @if (is_null($inscricao->retificacao) ||
-                                        $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']
-                                )
-                                    Bloquear por não atender aos critérios médicos
-                                @elseif(
-                                    $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] ||
-                                        $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico']
-                                )
-                                    Bloqueado por não atender aos critérios médicos
-                                @endif
+                    @endcan
+                    @can('isAdminOrHeteroidentificacao', \App\Models\User::class)
+                        @if ($inscricao->isCotaRacial() && $inscricao->candidato->isPretoOrPardo())
+                            <button id="bloquearHeteroidentificacao" type="button" class="btn botao mt-2 py-1 col-md-12"
+                                onclick="bloquearCandidatoInput({{ \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] }})"
+                                style="background-color: #FC605F;"> <span class="px-4">
+                                    @if (is_null($inscricao->retificacao) ||
+                                            $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico']
+                                    )
+                                        Bloquear por não atender aos critérios fenotípicos
+                                    @elseif(
+                                        $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'] ||
+                                            $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico']
+                                    )
+                                        Bloqueado por não atender aos critérios fenotípicos
+                                    @endif
+                                </span></button>
+                        @endif
+                    @endcan
+                    @can('isAdminOrMedico', \App\Models\User::class)
+                        @if ($inscricao->isCotaDeficiencia())
+                            <button id="bloquearMedico" type="button" class="btn botao mt-2 py-1 col-md-12"
+                                onclick="bloquearCandidatoInput({{ \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] }})"
+                                style="background-color: #FC605F;"> <span class="px-4">
+                                    @if (is_null($inscricao->retificacao) ||
+                                            $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial']
+                                    )
+                                        Bloquear por não atender aos critérios médicos
+                                    @elseif(
+                                        $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'] ||
+                                            $inscricao->retificacao == \App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial_e_medico']
+                                    )
+                                        Bloqueado por não atender aos critérios médicos
+                                    @endif
+                                </span></button>
+                        @endif
+                    @endcan
+                    @can('isAdmin', \App\Models\User::class)
+                        <button id="invalidar-desistencia" type="button" class="btn botao mt-2 py-1 col-md-12"
+                        data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal" style="background-color: #FC605F;"><span class="px-4">{{ !$inscricao->desistente ? 'Informar Desistência' : 'Reverter Desistência'}}
                             </span></button>
-                    @endif
-                @endcan
-                @can('isAdmin', \App\Models\User::class)
-                    <button id="invalidar-desistencia" type="button" class="btn botao mt-2 py-1 col-md-12"
-                    data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal" style="background-color: #FC605F;"><span class="px-4">{{ !$inscricao->desistente ? 'Informar Desistência' : 'Reverter Desistência'}}
-                        </span></button>
-                @endcan
-                <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"
-                    class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o
-                        candidato</span></button>
+                    @endcan
+                    <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"
+                        class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o
+                            candidato</span></button>
+                </div>
             </div>
         </div>
     </div>
