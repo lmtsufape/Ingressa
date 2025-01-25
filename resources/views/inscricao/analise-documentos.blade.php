@@ -462,8 +462,10 @@
                                     <p class="nomeDocumento" style="display: inline">
                                         @if ($inscricao->candidato->quilombola)
                                             Sim
-                                        @else
+                                        @elseif ($inscricao->candidato->quilombola === false)
                                             Não
+                                        @else
+                                            Não informado
                                         @endif
                                     </p>
                                 </div>
@@ -473,8 +475,10 @@
                                     <p class="nomeDocumento" style="display: inline">
                                         @if ($inscricao->candidato->indigena)
                                             Sim
-                                        @else
+                                        @elseif ($inscricao->candidato->indigena === false)
                                             Não
+                                        @else
+                                            Não informado
                                         @endif
                                     </p>
                                 </div>
