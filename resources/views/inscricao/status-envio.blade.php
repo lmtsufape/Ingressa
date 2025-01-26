@@ -488,7 +488,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" checked disabled id="checkConfirmacaoVinculo">
                     <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                        DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>
+                        DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>
                     </label>
                 </div>
             @endempty
