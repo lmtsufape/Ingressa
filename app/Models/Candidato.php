@@ -326,6 +326,7 @@ class Candidato extends Model
         'ano_conclusao',
         'modalidade',
         'concluiu_publica',
+        'concluiu_comunitaria',
         'necessidades',
         'etnia_e_cor',
         'trabalha',

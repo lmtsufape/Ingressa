@@ -56,6 +56,7 @@ class UpdateCandidatoRequest extends FormRequest
             'ano_conclusao' => ['required', 'digits:4'],
             'modalidade' => ['required', 'string'],
             'concluiu_publica' => ['required', 'boolean'],
+            'concluiu_comunitaria' => ['required', 'boolean'],
             'necessidades' => ['required', 'array'],
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],
@@ -75,6 +76,7 @@ class UpdateCandidatoRequest extends FormRequest
             'tp_sexo' => ['required', 'in:F,M'],
             'quilombola' => ['required', 'boolean'],
             'indigena' => ['required', 'boolean'],
+            'etnia_e_cor' => ['required', 'integer'],
         ];
     }
 
