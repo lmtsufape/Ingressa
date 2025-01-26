@@ -259,7 +259,9 @@
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
                                     Expedição: <p class="nomeDocumento" style="display: inline">
-                                        {{ date('d/m/Y', strtotime($inscricao->candidato->data_expedicao)) }}</p>
+                                        @if ($inscricao->candidato->data_expedicao)
+                                            {{ date('d/m/Y', strtotime($inscricao->candidato->data_expedicao)) }}</p>
+                                        @endif
                                 </div>
                             </div>
                             <div class="row pt-2">
