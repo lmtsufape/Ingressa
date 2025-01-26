@@ -1120,7 +1120,7 @@
                                 wire:model="termos.confirmacaovinculo">
                             <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
                                 DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e
-                                datas descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em: <a
+                                datas descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a
                                     href="http://www.ufape.edu.br/sisu"
                                     target="_blank">www.ufape.edu.br/sisu</a>
                             </label>
@@ -1800,7 +1800,7 @@
                                 wire:model="termos.confirmacaovinculo">
                             <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
                                 DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e
-                                datas descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em: <a
+                                datas descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a
                                     href="http://www.ufape.edu.br/sisu"
                                     target="_blank">www.ufape.edu.br/sisu</a>
                             </label>
