@@ -753,7 +753,7 @@
                                             {{ __('Cor/Raça') }}</label>
                                         <select id="cor_raca"
                                             class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
-                                            name="cor_raca">
+                                            name="etnia_e_cor">
                                             <option value="" selected disabled>-- Selecione --</option>
                                             <option value="1"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
