@@ -75,6 +75,7 @@ class UpdateCandidatoRequest extends FormRequest
             'tp_sexo' => ['required', 'in:F,M'],
             'quilombola' => ['required', 'boolean'],
             'indigena' => ['required', 'boolean'],
+            'etnia_e_cor' => ['required', 'integer'],
         ];
     }
 
