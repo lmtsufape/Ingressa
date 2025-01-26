@@ -757,19 +757,19 @@
                                             <option value="" selected disabled>-- Selecione --</option>
                                             <option value="1"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
-                                                {{ $cores_racas[1] }}</option>
+                                                {{ $cores_racas[$candidato->etnia_e_cor -1] }}</option>
                                             <option value="4"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
-                                                {{ $cores_racas[4] }}</option>
+                                                {{ $cores_racas[$candidato->etnia_e_cor -1] }}</option>
                                             <option value="2"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 2) selected @endif>
-                                                {{ $cores_racas[2] }}</option>
+                                                {{ $cores_racas[$candidato->etnia_e_cor -1] }}</option>
                                             <option value="3"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 3) selected @endif>
-                                                {{ $cores_racas[3] }}</option>
+                                                {{ $cores_racas[$candidato->etnia_e_cor -1] }}</option>
                                             <option value="5"
                                                 @if (old('cor_raca', $candidato->etnia_e_cor) == 5) selected @endif>
-                                                {{ $cores_racas[5] }}</option>
+                                                {{ $cores_racas[$candidato->etnia_e_cor -1] }}</option>
                                         </select>
                                         @error('cor_raca')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
