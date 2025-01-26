@@ -427,10 +427,19 @@
                             </div>
                             <div class="row pt-2">
                                 <div class="col-md-12 tituloDocumento">
-                                    Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público?
+                                    Concluiu o Ensino Médio na rede pública?
                                     @isset($inscricao->candidato->concluiu_publica)
                                         <p class="nomeDocumento" style="display: inline">
                                             {{ $inscricao->candidato->concluiu_publica ? 'Sim' : 'Não' }}</p>
+                                    @endisset
+                                </div>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-md-12 tituloDocumento">
+                                    Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público?
+                                    @isset($inscricao->candidato->concluiu_comunitaria)
+                                        <p class="nomeDocumento" style="display: inline">
+                                            {{ $inscricao->candidato->concluiu_comunitaria ? 'Sim' : 'Não' }}</p>
                                     @endisset
                                 </div>
                             </div>

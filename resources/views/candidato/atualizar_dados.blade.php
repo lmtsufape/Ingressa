@@ -672,7 +672,7 @@
                                     <div class="form-group col-md-4 textoInput">
                                         <label for="concluiu_publica"><span
                                                 style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público') }}</label>
+                                            {{ __('Concluiu o Ensino Médio na rede pública?') }}</label>
                                         <select id="concluiu_publica"
                                             class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
                                             name="concluiu_publica">
@@ -683,6 +683,25 @@
                                                 @if (old('concluiu_publica', $candidato->concluiu_publica) == '0') selected @endif>Não</option>
                                         </select>
                                         @error('concluiu_publica')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-4 textoInput">
+                                        <label for="concluiu_publica"><span
+                                                style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público') }}</label>
+                                        <select id="concluiu_comunitaria"
+                                            class="form-control form-control-sm caixaDeTexto @error('concluiu_comunitaria') is-invalid @enderror"
+                                            name="concluiu_comunitaria">
+                                            <option value="" selected disabled>-- Selecione --</option>
+                                            <option value="1"
+                                                @if (old('concluiu_comunitaria', $candidato->concluiu_comunitaria) == '1') selected @endif>Sim</option>
+                                            <option value="0"
+                                                @if (old('concluiu_comunitaria', $candidato->concluiu_comunitaria) == '0') selected @endif>Não</option>
+                                        </select>
+                                        @error('concluiu_comunitaria')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
