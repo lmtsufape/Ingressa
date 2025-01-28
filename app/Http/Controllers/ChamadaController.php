@@ -225,8 +225,8 @@ class ChamadaController extends Controller
         $naoEnviados = collect();
         $invalidados = collect();
 
-        $cursos = auth()->user()->analistaCursos->sortBy('nome');
-        $cursos = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Curso::all() : $cursos;
+        $cursos = auth()->user()->analistaCursos()->orderBy('nome')->get();
+        $cursos = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Curso::orderBy('nome')->get() : $cursos;
         $userPolicy = new UserPolicy();
 
         $L2 = Cota::where('cod_cota', 'L2')->first();
