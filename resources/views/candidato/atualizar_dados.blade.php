@@ -754,7 +754,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="nu_fone_emergencia">{{ __('Contato de Emergência') }}</label>
+                                        <label for="nu_fone_emergencia"><span style="color: red; font-weight: bold;">*</span>
+                                        {{ __('Contato de Emergência') }}</label>
                                         <input id="nu_fone_emergencia"
                                             class="form-control form-control-sm caixaDeTexto @error('nu_fone_emergencia') is-invalid @enderror celular"
                                             type="text" name="nu_fone_emergencia"
