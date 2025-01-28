@@ -447,7 +447,7 @@ class ChamadaController extends Controller
             })
             ->get();
 
-        $retorno['candidatosInvalidados'] = Inscricao::select('inscricaos.*')
+            $retorno['candidatosInvalidados'] = Inscricao::select('inscricaos.*')
             ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
             ->whereIn('cota_id', $cotas)
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
@@ -458,19 +458,8 @@ class ChamadaController extends Controller
                     ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                     ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                     ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
-                    ->whereIn('avaliacaos.avaliacao', [1, 2])
-                    ->whereIn('inscricaos.id', function ($sub) {
-                        $sub->select('inscricaos.id')
-                            ->from('inscricaos')
-                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
-                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
-                            ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
-                            ->whereIn('avaliacaos.avaliacao', [2])
-                            ->groupBy('inscricaos.id')
-                            ->get();
-                    })
+                    ->where('avaliacaos.avaliacao', 2) // Apenas rejeições
                     ->groupBy('inscricaos.id')
-                    ->havingRaw('COUNT(*) = ?', [3])
                     ->get();
             })
             ->get();
