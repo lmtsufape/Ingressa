@@ -322,7 +322,7 @@
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
                                     Ano de Ingresso: <p class="nomeDocumento" style="display: inline">
-                                        {{ !empty($inscricao->dt_operacao) ? date('Y', strtotime($inscricao->dt_operacao) : null) }}</p>
+                                        {{ !empty($inscricao->dt_operacao) ? date('Y', strtotime($inscricao->dt_operacao)) : null }}</p>
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
                                     Nota: <p class="nomeDocumento" style="display: inline">
