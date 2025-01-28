@@ -360,7 +360,7 @@ class ListagemController extends Controller
 
         $qtndPorCota = $this->quantidadePorCota($curso, $sisu, $primeira);
 
-        $qntdA0 = $qtndPorCota["AC"];
+        $qntdA0 = $qtndPorCota['AC'];
 
         foreach ($candidatosCurso as $candidato) {
             if ($qntdA0 > 0) {
@@ -1049,7 +1049,7 @@ class ListagemController extends Controller
             } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
                 $turno = 'Integral';
             }
-            if ($cotas->where('cod_cota', 'A0')) {
+            if ($cotas->where('cod_cota', 'A0')->isNotEmpty()) {
                 $modalidadeCotaArray = [
                     'Ampla concorrência',
                     'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',

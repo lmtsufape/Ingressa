@@ -204,7 +204,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 'chamada_id' => $this->chamada->id,
                 'sisu_id' => $this->chamada->sisu->id,
                 'cota_id' => Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
-                'cota_vaga_ocupada_id' => $record['VAGA_REMANEJADA'] ? Cota::getCotaModalidade($record['VAGA_REMANEJADA'])->id : Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
+                'cota_vaga_ocupada_id' => !empty($record['VAGA_REMANEJADA']) ? Cota::getCotaModalidade($record['VAGA_REMANEJADA'])->id : Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
                 'candidato_id' => $candidato ? $candidato->id : $nextCandidatoIdValue++,
                 'curso_id' => $this->cursos
                     ->where('cod_curso', $record['CO_IES_CURSO'])
