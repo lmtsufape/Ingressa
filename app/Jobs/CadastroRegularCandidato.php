@@ -93,11 +93,12 @@ class CadastroRegularCandidato implements ShouldQueue
                     'no_social' => $record['NO_SOCIAL'],
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
-                    'dt_nascimento' => \Carbon\Carbon::createFromFormat('d/m/Y', $record['DT_NASCIMENTO'])->format('Y-m-d'),
+                    'dt_nascimento' => \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d'),
                     'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['COR_RACA']],
                     'user_id' => $nextUserIdValue++,
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'atualizar_dados' => true,
                 ];
 
             // Atualiza dados do candidato caso ele exista
@@ -185,7 +186,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 'renda_familiar_bruta' => floatval(str_replace(',', '.', $record['RENDA_FAMILIAR_BRUTA'])),
                 'salario_minimo' => floatval(str_replace(',', '.', $record['SALARIO_MINIMO'])),
                 'perfil_economico_lei_cotas' => $record['PERFIL_ECONOMICO_LEI_COTAS'],
-                'dt_curso_inscricao' => empty(!$record['DT_CURSO_INSCRICAO']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $record['DT_CURSO_INSCRICAO'])->format('Y-m-d') : null,
+                'dt_curso_inscricao' => empty(!$record['DT_CURSO_INSCRICAO']) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_CURSO_INSCRICAO'])->format('Y-m-d') : null,
                 'hr_curso_inscricao' => $record['HR_CURSO_INSCRICAO'],
                 'dt_mes_dia_inscricao' => empty(!$record['DT_MES_DIA_INSCRICAO']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $record['DT_MES_DIA_INSCRICAO'])->format('Y-m-d') : null,
                 'nu_nota_curso_l' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_L'])),
@@ -193,7 +194,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 'nu_nota_curso_cn' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_CN'])),
                 'nu_nota_curso_m' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_M'])),
                 'nu_nota_curso_r' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_R'])),
-                'st_adesao_acao_afirmativa_curs' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
+               // 'st_adesao_acao_afirmativa_curs' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
                 'st_aprovado' => $record['ST_APROVADO'],
                 'dt_mes_dia_matricula' => empty(!$record['DT_MES_DIA_MATRICULA']) ? \Carbon\Carbon::createFromFormat('d/m/Y', $record['DT_MES_DIA_MATRICULA'])->format('Y-m-d') : null,
                 'st_matricula_cancelada' => $record['ST_MATRICULA_CANCELADA'],
