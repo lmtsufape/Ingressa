@@ -174,7 +174,7 @@
                                         <th>{{ $k + 1 }}</th>
                                         <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
                                         <th>{{ $inscricao->cota->cod_novo }}</th>
-                                        <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
+                                        <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito }}</th>
                                         @if ($inscricao->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
                                             <th>VALIDADO</th>
                                         @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])

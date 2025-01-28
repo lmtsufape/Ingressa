@@ -248,7 +248,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
