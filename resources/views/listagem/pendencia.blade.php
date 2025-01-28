@@ -173,6 +173,9 @@
                                     $cont = 1;
                                 @endphp
                                 @foreach ($curso as $k => $inscricao)
+                                    @php
+                                        $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                    @endphp
                                     <tr
                                         class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
                                         <th>{{ $cont }}</th>

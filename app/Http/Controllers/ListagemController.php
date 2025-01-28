@@ -1033,30 +1033,24 @@ class ListagemController extends Controller
         $chamada = Chamada::find($request->chamada);
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('id')->get();
-        $ordenacao = $request->ordenacao;
+        $ordenacao = $this->get_ordenacao($request);
         $ordem = $this->get_ordem($request);
 
         $inscricoes = collect();
 
         foreach ($cursos as $curso) {
-            $query = Inscricao::join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-            ->where([
-                ['curso_id', $curso->id],
-                ['chamada_id', $chamada->id]
-            ])->whereIn('cota_id', $cotas->pluck('id'))
-              ->with(['candidato', 'candidato.user']);
+            $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
+                ->whereIn(
+                    'cota_id',
+                    $cotas->pluck('id')
+                )
+                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
+                ->join('users', 'users.id', '=', 'candidatos.user_id')
+                ->orderBy($ordenacao, $ordem)
+                ->get();
 
-            // Condição para ordenação pelo nome do candidato
-            if ($ordenacao === 'nome') {
-                $query->orderBy('candidatos.no_inscrito', $ordem);
-            } else {
-                // Ordenação padrão pela nota (campo da tabela de inscrições)
-                $query->orderBy('nu_nota_candidato', $ordem);
-            }
-
-            $inscricoes_curso = $query->get();
-
-            if ($inscricoes_curso->isNotEmpty()) {
+            if ($inscricoes_curso->count() > 0) {
+                $inscricoes_curso = $inscricoes_curso->map->only(['id']);
                 $inscricoes->push($inscricoes_curso);
             }
         }
