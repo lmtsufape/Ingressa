@@ -216,6 +216,10 @@
                                     Nome: <p class="nomeDocumento" style="display: inline">
                                         {{ $inscricao->candidato->no_inscrito }}</p>
                                 </div>
+                                <div class="tituloDocumento mx-3">
+                                    Nome Social: <p class="nomeDocumento" style="display: inline">
+                                        {{ $inscricao->candidato->no_social }}</p>
+                                </div>
                                 {{-- <div class="tituloDocumento mx-3 pt-1">
                                         CEP: {{$inscricao->nu_cep}}
                                     </div> --}}
@@ -522,8 +526,6 @@
                                 {{ $inscricao->candidato->valor_renda }}</p>
                         </div>
                     </div>
-                    </div>
-                 
                     <div class="row content-justify-between">
                         <div class="col-md-6">
                             <a href="{{ route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id]) }}"
@@ -535,6 +537,7 @@
                                     class="btn botao my-2 py-1"> <span class="px-4">Modificar ficha</span></a>
                             @endcan
                         </div>
+                    </div>
                     </div>
                 </div>
                 
