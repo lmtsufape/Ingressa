@@ -36,6 +36,11 @@
                                 action="{{ route('candidato.atualizar', ['candidato' => $candidato, 'inscricao' => $inscricao]) }}">
                                 @csrf
                                 @method('PUT')
+                                <div class="form-group mt-2 textoInput">
+                                    <label for="no_social">{{ __('Nome Social') }}</label>
+                                    <input id="no_social" class="form-control form-control-sm caixaDeTexto"
+                                        type="text" name="no_social" value="{{ $candidato->no_social }}">
+                                </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-3 textoInput">
                                         <label for="nu_rg"><span style="color: red; font-weight: bold;">*</span>
@@ -754,7 +759,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="nu_fone_emergencia">{{ __('Contato de Emergência') }}</label>
+                                        <label for="nu_fone_emergencia"><span style="color: red; font-weight: bold;">*</span>
+                                        {{ __('Contato de Emergência') }}</label>
                                         <input id="nu_fone_emergencia"
                                             class="form-control form-control-sm caixaDeTexto @error('nu_fone_emergencia') is-invalid @enderror celular"
                                             type="text" name="nu_fone_emergencia"

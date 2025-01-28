@@ -37,6 +37,7 @@ class UpdateCandidatoRequest extends FormRequest
     public function rules()
     {
         return [
+            'no_social' => ['nullable', 'string'],
             'nu_rg' => ['required', 'string'],
             'orgao_expedidor' => ['required', 'string', 'max:5'],
             'uf_rg' => ['required', 'string'],
@@ -70,7 +71,7 @@ class UpdateCandidatoRequest extends FormRequest
             'sg_uf_inscrito' => ['required', 'string'],
             'nu_fone1' => ['required', 'string'],
             'nu_fone2' => ['nullable', 'string'],
-            'nu_fone_emergencia' => ['nullable', 'string'],
+            'nu_fone_emergencia' => ['required', 'string'],
             'edital' => ['required', 'accepted'],
             'vinculo' => ['required', 'accepted'],
             'tp_sexo' => ['required', 'in:F,M'],
