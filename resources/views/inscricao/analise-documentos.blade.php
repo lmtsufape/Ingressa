@@ -216,6 +216,10 @@
                                     Nome: <p class="nomeDocumento" style="display: inline">
                                         {{ $inscricao->candidato->no_inscrito }}</p>
                                 </div>
+                                <div class="tituloDocumento mx-3">
+                                    Nome Social: <p class="nomeDocumento" style="display: inline">
+                                        {{ $inscricao->candidato->no_social }}</p>
+                                </div>
                                 {{-- <div class="tituloDocumento mx-3 pt-1">
                                         CEP: {{$inscricao->nu_cep}}
                                     </div> --}}
