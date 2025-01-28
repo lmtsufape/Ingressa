@@ -39,7 +39,7 @@
                                 <div class="form-group mt-2 textoInput">
                                     <label for="no_social">{{ __('Nome Social') }}</label>
                                     <input id="no_social" class="form-control form-control-sm caixaDeTexto"
-                                        type="text" name="no_social" value="{{ $candidato->no_social }}">
+                                        type="text" name="no_social" value="{{ old('no_social', $candidato->no_social) }}">
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-3 textoInput">
