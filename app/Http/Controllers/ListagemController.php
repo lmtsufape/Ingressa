@@ -993,10 +993,10 @@ class ListagemController extends Controller
         $coluna = 'name';
         switch ($request->ordenacao) {
             case 'nome':
-                $coluna = 'nome';
+                $coluna = 'name';
                 break;
             case 'nota':
-                $coluna = 'nu_nota_candidato';
+                $coluna = 'inscricaos.nu_nota_candidato';
                 break;
         }
         return $coluna;
