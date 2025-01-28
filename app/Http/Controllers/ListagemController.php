@@ -993,10 +993,10 @@ class ListagemController extends Controller
         $coluna = 'name';
         switch ($request->ordenacao) {
             case 'nome':
-                $coluna = 'name';
+                $coluna = 'nome';
                 break;
             case 'nota':
-                $coluna = 'inscricaos.nu_nota_candidato';
+                $coluna = 'nu_nota_candidato';
                 break;
         }
         return $coluna;
@@ -1033,45 +1033,30 @@ class ListagemController extends Controller
         $chamada = Chamada::find($request->chamada);
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('id')->get();
-        $ordenacao = $this->get_ordenacao($request);
+        $ordenacao = $request->ordenacao;
         $ordem = $this->get_ordem($request);
 
         $inscricoes = collect();
 
         foreach ($cursos as $curso) {
-            $inscricoes_curso = collect();
-            if ($curso->turno == Curso::TURNO_ENUM['Matutino']) {
-                $turno = 'Matutino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Vespertino']) {
-                $turno = 'Vespertino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Noturno']) {
-                $turno = 'Noturno';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
-                $turno = 'Integral';
-            }
-            if ($cotas->where('cod_cota', 'A0')->isNotEmpty()) {
-                $modalidadeCotaArray = [
-                    'Ampla concorrência',
-                    'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
-                    'AMPLA CONCORRÊNCIA'
-                ];
+            $query = Inscricao::join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
+            ->where([
+                ['curso_id', $curso->id],
+                ['chamada_id', $chamada->id]
+            ])->whereIn('cota_id', $cotas->pluck('id'))
+              ->with(['candidato', 'candidato.user']);
+
+            // Condição para ordenação pelo nome do candidato
+            if ($ordenacao === 'nome') {
+                $query->orderBy('candidatos.no_inscrito', $ordem);
             } else {
-                $modalidadeCotaArray = [];
+                // Ordenação padrão pela nota (campo da tabela de inscrições)
+                $query->orderBy('nu_nota_candidato', $ordem);
             }
 
-            $modalidadeCotaArray = array_merge($modalidadeCotaArray, $cotas->pluck('descricao')->toArray());
-            $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
-                ->whereIn(
-                    'no_modalidade_concorrencia',
-                    $modalidadeCotaArray
-                )
-                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                ->join('users', 'users.id', '=', 'candidatos.user_id')
-                ->orderBy($ordenacao, $ordem)
-                ->get();
+            $inscricoes_curso = $query->get();
 
-            if ($inscricoes_curso->count() > 0) {
-                $inscricoes_curso = $inscricoes_curso->map->only(['id']);
+            if ($inscricoes_curso->isNotEmpty()) {
                 $inscricoes->push($inscricoes_curso);
             }
         }
