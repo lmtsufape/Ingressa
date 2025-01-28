@@ -223,40 +223,19 @@ class ListagemController extends Controller
      */
     private function gerarListagemResultado(ListagemRequest $request, Listagem $listagem)
     {
-        //
         $chamada = Chamada::find($request->chamada);
         $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
         $cotas = Cota::whereIn('id', $request->cotas)->orderBy('id')->get();
-        $inscricoes = collect();
         $ordenacao = $this->get_ordenacao($request);
         $ordem = $this->get_ordem($request);
 
-        foreach ($cursos as $curso) {
-            $inscricoes_curso = collect();
-            if ($curso->turno == Curso::TURNO_ENUM['Matutino']) {
-                $turno = 'Matutino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Vespertino']) {
-                $turno = 'Vespertino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Noturno']) {
-                $turno = 'Noturno';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
-                $turno = 'Integral';
-            }
-            if ($cotas->where('cod_cota', 'A0')) {
-                $modalidadeCotaArray = [
-                    'Ampla concorrência',
-                    'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
-                    'AMPLA CONCORRÊNCIA'
-                ];
-            } else {
-                $modalidadeCotaArray = [];
-            }
+        $inscricoes = collect();
 
-            $modalidadeCotaArray = array_merge($modalidadeCotaArray, $cotas->pluck('descricao')->toArray());
+        foreach ($cursos as $curso) {
             $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
                 ->whereIn(
-                    'no_modalidade_concorrencia',
-                    $modalidadeCotaArray
+                    'cota_id',
+                    $cotas->pluck('id')
                 )
                 ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
                 ->join('users', 'users.id', '=', 'candidatos.user_id')
@@ -268,7 +247,8 @@ class ListagemController extends Controller
                 $inscricoes->push($inscricoes_curso);
             }
         }
-        $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
+
+        $pdf = PDF::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
