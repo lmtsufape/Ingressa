@@ -978,7 +978,7 @@
                             <label class="pb-2" for="justificativa">Justificativa:</label>
                             <textarea id="justificativa"
                                 class="form-control campoDeTexto ckeditor-editor @error('justificativa') is-invalid @enderror" type="text"
-                                name="justificativa" maxlength="1000" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{ old('justificativa', $inscricao->justificativa) }}</textarea>
+                                name="justificativa" autofocus autocomplete="justificativa" placeholder="Insira alguma justificativa">{{ old('justificativa', $inscricao->justificativa) }}</textarea>
 
                             @error('justificativa')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
