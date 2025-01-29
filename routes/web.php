@@ -148,6 +148,8 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
 });
 
 Route::get('/test/{id}', function ($id) {
+    if (auth()->user()->role !== \App\Models\User::ROLE_ENUM['admin']) abort(403);
+
     $chamada = \App\Models\Chamada::find($id);
 
     $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera);
