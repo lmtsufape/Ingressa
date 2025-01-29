@@ -184,7 +184,7 @@
                                             class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
                                             <th>{{ $k + 1 }}</th>
                                             <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
-                                            <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
+                                            <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito}}</th>
                                             <th>{{ $inscricao->nu_nota_candidato }}</th>
                                             @if (
                                                 $inscricao->no_modalidade_concorrencia ==
