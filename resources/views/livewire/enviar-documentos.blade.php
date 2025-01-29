@@ -435,11 +435,7 @@
                                 <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
                                     vaga para candidato autodeclarado quilombola</div>
                                 <div class="subtexto2 my-1">                           
-                                Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.
-                                Declaração de vínculo com comunidade indígena brasileira à qual pertença, emitida por liderança indígena 
-                                reconhecida ou por ancião indígena reconhecido ou por personalidade indígena de reputação pública reconhecida 
-                                ou outro documento emitido por órgãos públicos que contenham informações pertinentes à sua condição de 
-                                indígena.</div>
+                                Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.</div>
                             </div>
                             <div class="mt-2">
                                 <x-botao-enviar-documento documento="declaracao_quilombola" />
