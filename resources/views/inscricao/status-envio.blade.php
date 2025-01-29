@@ -136,7 +136,7 @@
                                 Carteira de Identidade válida e com foto recente (RG) - escanear frente e verso. <b>OBS.</b>:
                                 Caso tenha perdido ou sido roubado, anexar um Boletim de Ocorrência e algum outro
                                 documento com foto. A Carteira Nacional de Habilitação pode ser utilizada como
-                                documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de 
+                                documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de
                                 cadastro.
                             </span>
                         </div>
@@ -314,9 +314,9 @@
                                 Vídeo individual e recente para procedimento de heteroidentificação.
                                 De acordo com as especificações e o roteiro descritos no edital do
                                 processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
-                                Conforme Edital SiSU 2025, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação 
-                                frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2025 da 
-                                UFAPE, me autodeclaro, [dizer a opção: Preto ou Pardo]”. 
+                                Conforme Edital SiSU 2025, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação
+                                frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2025 da
+                                UFAPE, me autodeclaro, [dizer a opção: Preto ou Pardo]”.
                             </span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
@@ -364,7 +364,7 @@
                             @endif
                             <span class="subtexto3">
                                 Comprovante de renda, ou de que não possui renda, de cada membro
-                                do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>). 
+                                do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>).
                             </span>
                         </div>
                     </li>
@@ -411,10 +411,6 @@
                                 vaga para candidato autodeclarado quilombola</div>
                             <div class="subtexto2 my-1">
                             Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.
-                            Declaração de vínculo com comunidade indígena brasileira à qual pertença, emitida por liderança indígena 
-                            reconhecida ou por ancião indígena reconhecido ou por personalidade indígena de reputação pública reconhecida 
-                            ou outro documento emitido por órgãos públicos que contenham informações pertinentes à sua condição de 
-                            indígena.
                             </div>
                         </div>
                         <div class="mt-2">
