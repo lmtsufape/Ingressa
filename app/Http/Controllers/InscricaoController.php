@@ -231,7 +231,7 @@ class InscricaoController extends Controller
             }
 
             // Preto e pardo
-            if (!$userPolicy->ehAnalistaGeral(auth()->user())) {  # Removendo heteroidentificação do analista geral
+            // if (!$userPolicy->ehAnalistaGeral(auth()->user())) {  # Removendo heteroidentificação do analista geral
                 if (
                     $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
                     && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
@@ -242,7 +242,7 @@ class InscricaoController extends Controller
                         $documentos->push('declaracao_cotista');
                     }
                 }
-            }
+            // }
 
             // Baixa renda
             if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists()) {
