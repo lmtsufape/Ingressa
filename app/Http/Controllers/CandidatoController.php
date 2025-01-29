@@ -57,6 +57,7 @@ class CandidatoController extends Controller
         $request->validate([
             'assunto' => 'nullable',
             'conteúdo' => 'required|max:5000',
+            'justificativa' => 'required|string|max:1000',
         ]);
 
         $user = $inscricao->candidato->user;
