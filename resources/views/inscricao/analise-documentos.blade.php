@@ -344,14 +344,11 @@
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
                                 Modalidade Escolhida: <p class="nomeDocumento" style="display: inline">
-                                    {{ $inscricao->no_modalidade_concorrencia }}</p>
+                                    {{ $inscricao->cota->cod_novo }}</p>
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
                                 Modalidade Ocupada:<p class="nomeDocumento" style="display: inline">
-                                    @if ($inscricao->cota_classificacao_id == null)
-                                    @else
-                                        {{ $inscricao->cotaClassificacao->cod_novo }}
-                                    @endif
+                                    {{ $inscricao->cotaRemanejada->cod_novo }}
                                 </p>
                             </div>
                         </div>
