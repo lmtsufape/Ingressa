@@ -294,7 +294,7 @@ Route::get('/test/{id}', function ($id) {
                 'no_acao_afirmativa_propria_ies' => $record['NO_ACAO_AFIRMATIVA_PROPRIA_IES'],
                 'chamada_id' => $chamada->id,
                 'sisu_id' => $chamada->sisu->id,
-                'cota_id' => \App\Models\Cota::getModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
+                'cota_id' => \App\Models\Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
                 'candidato_id' => $candidato ? $candidato->id : $nextCandidatoIdValue++,
                 'curso_id' => \App\Models\Curso::where('cod_curso', $record['CO_IES_CURSO'])
                     ->where('turno', \App\Models\Curso::TURNO_ENUM[$record['DS_TURNO']])
@@ -326,7 +326,7 @@ Route::get('/test/{id}', function ($id) {
             'ds_turno',
             function ($item) {
                 // Junta a ampla concorrência com bônus e sem bônus em uma única modalidade e agrupa usando o código da cota
-                return \App\Models\Cota::getModalidade($item['no_modalidade_concorrencia'])->cod_novo;
+                return \App\Models\Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo;
             }
         ])->map(function ($cursos) use ($ordemModalidades) {
             // Ordenar modalidades de acordo com $ordemModalidades
@@ -432,6 +432,7 @@ Route::get('/test/{id}', function ($id) {
                                 break;
                             }
                         }
+
                         if ($preenchido) break;
                     }
                 }
@@ -443,17 +444,17 @@ Route::get('/test/{id}', function ($id) {
             })->sortByDesc([
                 'nu_nota_candidato',
                 function ($item) use ($vagasModalidade) {
-                    $codCota = \App\Models\Cota::getModalidade($item['no_modalidade_concorrencia'])->cod_novo;
+                    $codCota = \App\Models\Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo;
                     return $vagasModalidade[$codCota]['reservas'] - $item['nu_classificacao'];
                 },
                 function ($item) use ($ordemModalidades) {
-                    return -$ordemModalidades[\App\Models\Cota::getModalidade($item['no_modalidade_concorrencia'])->cod_novo];
+                    return -$ordemModalidades[\App\Models\Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo];
                 }
             ]);
 
             // Processa os candidatos até preencher todas as vagas reserva de todas as modalidades
             foreach ($candidatosDesagrupados as $candidato) {
-                $codCota = \App\Models\Cota::getModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
+                $codCota = \App\Models\Cota::getCotaModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
                 if ($vagasModalidade[$codCota]['reservas'] > 0) {
                     $convocado = false;
 
