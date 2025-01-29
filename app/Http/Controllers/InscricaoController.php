@@ -482,7 +482,7 @@ class InscricaoController extends Controller
         if ($request->justificativa != null) {
 
             $request->validate([
-                'justificativa' => ['string', 'max:500'],
+                'justificativa' => ['string', 'max:1000'],
             ]);
 
             $inscricao->justificativa = $request->justificativa;
