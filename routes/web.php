@@ -232,7 +232,7 @@ Route::get('/test/{id}', function ($id) {
             ];
         }
 
-        // Adicionando inscrição apenas se o candidato não existir ou se ele não estiver inscrito nessa chamada do SiSU
+        // Adicionando inscrição apenas se o candidato não existir ou se ele não estiver inscrito nesse SiSU
         if (!$candidato || !$candidato->inscricoes()->where('sisu_id', $chamada->sisu->id)->exists()) {
             $inscricoesData[] = [
                 'status' => \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'],
@@ -374,7 +374,7 @@ Route::get('/test/{id}', function ($id) {
                 // Calcula quantidade de vagas reais e reservas e armazena na chave correspondente no código da cota
                 $multiplicador = $multiplicador ? $multiplicador->multiplicador : 1;
                 $vagasModalidade[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
-                $vagasModalidade[$codCota]['reservas'] = $vagasModalidade[$codCota]['reais'] * ($multiplicador -1); // O multiplicador é subtraído por 1 pois as vagas reais já foram contabilizadas
+                $vagasModalidade[$codCota]['reservas'] = $vagasModalidade[$codCota]['reais'] * ($multiplicador - 1); // O multiplicador é subtraído por 1 pois as vagas reais já foram contabilizadas
 
                 foreach ($modalidade as $candidato) {
                     if ($vagasModalidade[$codCota]['reais'] > 0) { // Candidatos que possuem vaga garantida
@@ -483,4 +483,31 @@ Route::get('/test/{id}', function ($id) {
             }
         }
     }
+
+    // Combina todas as inscrições válidas
+    $inscricoesToInsert = array_merge($candidatosConvocados, $candidatosReservas);
+
+    // Filtra os IDs dos candidatos presentes nas inscrições
+    $candidatoIds = array_column($inscricoesToInsert, 'candidato_id');
+
+    // Filtra os candidatos e usuários que estão relacionados às inscrições
+    $filteredCandidatosData = array_filter($candidatosData, function ($candidato) use ($candidatoIds) {
+        return in_array($candidato['id'], $candidatoIds);
+    });
+
+    $userIds = array_column($filteredCandidatosData, 'user_id');
+    $filteredUsersData = array_filter($usersData, function ($user) use ($userIds) {
+        return in_array($user['id'], $userIds);
+    });
+
+    // Executa as inserções e atualizações em massa atômicamente
+    Illuminate\Support\Facades\DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
+        \App\Models\User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
+        \App\Models\Candidato::upsert($filteredCandidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
+        \App\Models\Inscricao::insert($inscricoesToInsert);
+
+        // Atualiza o valor do próximo id da sequência
+        Illuminate\Support\Facades\DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
+        Illuminate\Support\Facades\DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
+    });
 });
