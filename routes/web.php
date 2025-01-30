@@ -513,4 +513,6 @@ Route::get('/test/{id}', function ($id) {
         Illuminate\Support\Facades\DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
         Illuminate\Support\Facades\DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
     });
+
+    return redirect()->route('sisus.show', $chamada->sisu->id);
 });
