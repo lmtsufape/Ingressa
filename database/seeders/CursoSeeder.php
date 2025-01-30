@@ -15,6 +15,17 @@ class CursoSeeder extends Seeder
     public function run()
     {
         \App\Models\Curso::create([
+            'nome' => 'Administração',
+            'turno' => Curso::TURNO_ENUM['Noturno'],
+            'cod_curso' => 1682932,
+            'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
+            'cor_padrao' => "#7CEF90",
+            'vagas' => 80,
+            'icone' => 'img-seeder/agronomia.svg',
+            'semestre' => 1,
+        ]);
+
+        \App\Models\Curso::create([
             'nome' => 'Agronomia',
             'turno' => Curso::TURNO_ENUM['Matutino'],
             'cod_curso' => 91555,
@@ -43,14 +54,34 @@ class CursoSeeder extends Seeder
             'vagas' => 80,
             'icone' => 'img-seeder/bcc.svg',
         ]);
+        // \App\Models\Curso::create([
+        //     'nome' => 'Engenharia de Alimentos',
+        //     'turno' => Curso::TURNO_ENUM['Integral'],
+        //     'cod_curso' => 118466,
+        //     'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
+        //     'cor_padrao' => "#FFCA61",
+        //     'vagas' => 80,
+        //     'icone' => 'img-seeder/engalimentos.svg',
+        // ]);
         \App\Models\Curso::create([
             'nome' => 'Engenharia de Alimentos',
-            'turno' => Curso::TURNO_ENUM['Integral'],
+            'turno' => Curso::TURNO_ENUM['Matutino'],
             'cod_curso' => 118466,
             'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
             'cor_padrao' => "#FFCA61",
-            'vagas' => 80,
+            'vagas' => 40,
             'icone' => 'img-seeder/engalimentos.svg',
+            'semestre' => 1,
+        ]);
+        \App\Models\Curso::create([
+            'nome' => 'Engenharia de Alimentos',
+            'turno' => Curso::TURNO_ENUM['Vespertino'],
+            'cod_curso' => 118466,
+            'grau_academico' => Curso::GRAU_ENUM['bacharelado'],
+            'cor_padrao' => "#FFCA61",
+            'vagas' => 40,
+            'icone' => 'img-seeder/engalimentos.svg',
+            'semestre' => 2,
         ]);
         \App\Models\Curso::create([
             'nome' => 'Letras - Inglês e Português',
