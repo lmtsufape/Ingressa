@@ -37,7 +37,7 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group mt-2 textoInput">
-                                    <label for="no_social">{{ __('Nome Social') }}</label>
+                                    <label for="no_social">{{ __('Nome social (para pessoas travestis ou transsexuais)') }}</label>
                                     <input id="no_social" class="form-control form-control-sm caixaDeTexto"
                                         type="text" name="no_social" value="{{ old('no_social', $candidato->no_social) }}">
                                 </div>
