@@ -44,10 +44,10 @@
                                             type="text" name="no_social"
                                             value="{{ old('no_social', $candidato->no_social) }}">
                                     </div>
-                                    <div class="mt-1 col-md-6">
+                                    <div class="form-group mt-2 textoInput col-6">
                                         <label for="requerimento-nome-social"><span
                                                 style="color: red; font-weight: bold;">*
-                                            </span>{{ __('Requerimento para inclusão de nome social') }}</label>
+                                            </span>{{ __('Requerimento para inclusão de nome social') }} <a href="https://docs.google.com/document/d/1elnVkyCHGzaXuqaEWc1UxibqaMVtSxEz/edit" target="_blank" style="text-decoration: none">{{ __('(baixe o modelo aqui)') }}</a></label>
                                         <input class="form-control form-control-sm @error('requerimento_nome_social') is-invalid @enderror" type="file"
                                             id="requerimento-nome-social" name="requerimento_nome_social"
                                             value="{{ old('requerimento_nome_social') }}" accept=".pdf">
