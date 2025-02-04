@@ -73,6 +73,18 @@ class CandidatoController extends Controller
     public function update(Candidato $candidato, Inscricao $inscricao, UpdateCandidatoRequest $request)
     {
         $validated = $request->validated();
+
+        if ($request->hasFile('requerimento_nome_social')) {
+            $caminho = $request->file('requerimento_nome_social')->storeAs("documentos/inscricaos/$inscricao->id", 'requerimento_nome_social.pdf');
+
+            $inscricao->arquivos()->updateOrCreate([
+                'nome' => 'requerimento_nome_social',
+            ], [
+                'nome' => 'requerimento_nome_social',
+                'caminho' => $caminho,
+            ]);
+        }
+
         $validated['necessidades'] = implode(',', $validated['necessidades']);
         $candidato->fill($validated);
         $candidato->atualizar_dados = false;

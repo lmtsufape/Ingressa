@@ -33,13 +33,30 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form id="primeiro-acesso-form" class="my-4" method="POST"
-                                action="{{ route('candidato.atualizar', ['candidato' => $candidato, 'inscricao' => $inscricao]) }}">
+                                action="{{ route('candidato.atualizar', ['candidato' => $candidato, 'inscricao' => $inscricao]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-                                <div class="form-group mt-2 textoInput">
-                                    <label for="no_social">{{ __('Nome social (para pessoas travestis ou transsexuais)') }}</label>
-                                    <input id="no_social" class="form-control form-control-sm caixaDeTexto"
-                                        type="text" name="no_social" value="{{ old('no_social', $candidato->no_social) }}">
+                                <div class="row">
+                                    <div class="form-group mt-2 textoInput col-6">
+                                        <label
+                                            for="no_social">{{ __('Nome social (para pessoas travestis ou transsexuais)') }}</label>
+                                        <input id="no_social" class="form-control form-control-sm caixaDeTexto"
+                                            type="text" name="no_social"
+                                            value="{{ old('no_social', $candidato->no_social) }}">
+                                    </div>
+                                    <div class="mt-1 col-md-6">
+                                        <label for="requerimento-nome-social"><span
+                                                style="color: red; font-weight: bold;">*
+                                            </span>{{ __('Requerimento para inclusão de nome social') }}</label>
+                                        <input class="form-control form-control-sm @error('requerimento_nome_social') is-invalid @enderror" type="file"
+                                            id="requerimento-nome-social" name="requerimento_nome_social"
+                                            value="{{ old('requerimento_nome_social') }}" accept=".pdf">
+                                        @error('requerimento_nome_social')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-3 textoInput">
@@ -759,8 +776,9 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="nu_fone_emergencia"><span style="color: red; font-weight: bold;">*</span>
-                                        {{ __('Contato de Emergência') }}</label>
+                                        <label for="nu_fone_emergencia"><span
+                                                style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Contato de Emergência') }}</label>
                                         <input id="nu_fone_emergencia"
                                             class="form-control form-control-sm caixaDeTexto @error('nu_fone_emergencia') is-invalid @enderror celular"
                                             type="text" name="nu_fone_emergencia"
@@ -810,8 +828,10 @@
                                             class="form-control form-control-sm caixaDeTexto @error('quilombola') is-invalid @enderror"
                                             name="quilombola">
                                             <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1" @if ($candidato->quilombola == true) selected @endif>Sim</option>
-                                            <option value="0" @if ($candidato->quilombola == false) selected @endif>Não</option>
+                                            <option value="1"
+                                                @if ($candidato->quilombola == true) selected @endif>Sim</option>
+                                            <option value="0"
+                                                @if ($candidato->quilombola == false) selected @endif>Não</option>
                                         </select>
                                         @error('quilombola')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
@@ -827,8 +847,10 @@
                                             class="form-control form-control-sm caixaDeTexto @error('indigena') is-invalid @enderror"
                                             name="indigena">
                                             <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1" @if ($candidato->indigena == true) selected @endif>Sim</option>
-                                            <option value="0" @if ($candidato->indigena == false) selected @endif>Não</option>
+                                            <option value="1"
+                                                @if ($candidato->indigena == true) selected @endif>Sim</option>
+                                            <option value="0"
+                                                @if ($candidato->indigena == false) selected @endif>Não</option>
                                         </select>
                                         @error('indigena')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
@@ -982,6 +1004,27 @@
                     }
                 }
             });
+            $('#no_social').on('input', function() {
+                let valor = $(this).val().trim();
+
+                verificarNomeSocial(valor);
+            });
+
+            verificarNomeSocial($('#no_social').val().trim());
         });
+
+        function verificarNomeSocial(valor) {
+            let campo_requerimento = $('#requerimento-nome-social');
+            let div_pai = campo_requerimento.parent();
+
+            if (valor !== '') {
+                div_pai.show();
+                campo_requerimento.prop('required', true);
+            } else {
+                div_pai.hide();
+                campo_requerimento.prop('required', false);
+                campo_requerimento.val('');
+            }
+        }
     </script>
 </x-app-layout>

@@ -38,6 +38,7 @@ class UpdateCandidatoRequest extends FormRequest
     {
         return [
             'no_social' => ['nullable', 'string'],
+            'requerimento_nome_social' => ['required_if:no_social,!null', 'file', 'mimes:pdf', 'max:2048'],
             'nu_rg' => ['required', 'string'],
             'orgao_expedidor' => ['required', 'string', 'max:5'],
             'uf_rg' => ['required', 'string'],
