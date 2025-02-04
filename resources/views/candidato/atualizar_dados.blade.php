@@ -33,7 +33,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form id="primeiro-acesso-form" class="my-4" method="POST"
-                                action="{{ route('candidato.atualizar', ['candidato' => $candidato, 'inscricao' => $inscricao]) }}" enctype="multipart/form-data">
+                                action="{{ route('candidato.atualizar', ['candidato' => $candidato, 'inscricao' => $inscricao]) }}"
+                                enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="row">
@@ -47,9 +48,13 @@
                                     <div class="form-group mt-2 textoInput col-6">
                                         <label for="requerimento-nome-social"><span
                                                 style="color: red; font-weight: bold;">*
-                                            </span>{{ __('Requerimento para inclusão de nome social') }} <a href="https://docs.google.com/document/d/1elnVkyCHGzaXuqaEWc1UxibqaMVtSxEz/edit" target="_blank" style="text-decoration: none">{{ __('(baixe o modelo aqui)') }}</a></label>
-                                        <input class="form-control form-control-sm @error('requerimento_nome_social') is-invalid @enderror" type="file"
-                                            id="requerimento-nome-social" name="requerimento_nome_social"
+                                            </span>{{ __('Requerimento para inclusão de nome social') }} <a
+                                                href="https://docs.google.com/document/d/1elnVkyCHGzaXuqaEWc1UxibqaMVtSxEz/edit"
+                                                target="_blank"
+                                                style="text-decoration: none">{{ __('(baixe o modelo aqui)') }}</a></label>
+                                        <input
+                                            class="form-control form-control-sm @error('requerimento_nome_social') is-invalid @enderror"
+                                            type="file" id="requerimento-nome-social" name="requerimento_nome_social"
                                             value="{{ old('requerimento_nome_social') }}" accept=".pdf">
                                         @error('requerimento_nome_social')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
@@ -1014,10 +1019,11 @@
         });
 
         function verificarNomeSocial(valor) {
+            let is_admin = {{ Auth::user()->role == App\Models\User::ROLE_ENUM['admin'] ? 'true' : 'false' }};
             let campo_requerimento = $('#requerimento-nome-social');
             let div_pai = campo_requerimento.parent();
 
-            if (valor !== '') {
+            if (valor !== '' && !is_admin) {
                 div_pai.show();
                 campo_requerimento.prop('required', true);
             } else {
