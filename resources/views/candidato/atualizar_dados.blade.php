@@ -352,24 +352,50 @@
                                             </div>
                                         @enderror
                                     </div>
+                                    <div class="form-group col-md-4 textoInput">
+                                        <label for="cor_raca"><span style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Cor/Raça') }}</label>
+                                        <select id="cor_raca"
+                                            class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
+                                            name="etnia_e_cor">
+                                            <option value="" selected disabled>-- Selecione --</option>
+                                            <option value="1" @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
+                                                {{ $cores_racas[0] }}</option>
+                                            <option value="4" @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
+                                                {{ $cores_racas[3] }}</option>
+                                            <option value="2" @if (old('cor_raca', $candidato->etnia_e_cor) == 2) selected @endif>
+                                                {{ $cores_racas[1] }}</option>
+                                            <option value="3" @if (old('cor_raca', $candidato->etnia_e_cor) == 3) selected @endif>
+                                                {{ $cores_racas[2] }}</option>
+                                            <option value="5" @if (old('cor_raca', $candidato->etnia_e_cor) == 5) selected @endif>
+                                                {{ $cores_racas[4] }}</option>
+                                        </select>
+                                        @error('cor_raca')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="form-group mt-2 textoInput">
-                                    <label for="no_mae"><span style="color: red; font-weight: bold;">*</span>
-                                        {{ __('Nome da mãe') }}</label>
-                                    <input id="no_mae" class="form-control form-control-sm caixaDeTexto"
-                                        type="text" value="{{ $inscricao->no_mae }}" disabled>
-                                </div>
-                                <div class="form-group mt-2 textoInput">
-                                    <label for="pai">{{ __('Nome do pai') }}</label>
-                                    <input id="pai"
-                                        class="form-control form-control-sm caixaDeTexto @error('pai') is-invalid @enderror"
-                                        type="text" placeholder="Insira o nome do pai" name="pai"
-                                        value="{{ old('pai', $candidato->pai) }}">
-                                    @error('pai')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                                <div class="row pt-2">
+                                    <div class="form-group col-md-6 textoInput">
+                                        <label for="no_mae"><span style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Nome da mãe') }}</label>
+                                        <input id="no_mae" class="form-control form-control-sm caixaDeTexto"
+                                            type="text" value="{{ $inscricao->no_mae }}" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6 textoInput">
+                                        <label for="pai">{{ __('Nome do pai') }}</label>
+                                        <input id="pai"
+                                            class="form-control form-control-sm caixaDeTexto @error('pai') is-invalid @enderror"
+                                            type="text" placeholder="Insira o nome do pai" name="pai"
+                                            value="{{ old('pai', $candidato->pai) }}">
+                                        @error('pai')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="form-group mt-2 textoInput">
                                     <label for="ds_logradouro"><span style="color: red; font-weight: bold;">*</span>
@@ -495,19 +521,26 @@
                                                 Paraíba</option>
                                             <option value="PR" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'PR') selected @endif>
                                                 Paraná</option>
-                                            <option value="PE" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'PE') selected @endif>
+                                            <option value="PE"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'PE') selected @endif>
                                                 Pernambuco</option>
-                                            <option value="PI" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'PI') selected @endif>
+                                            <option value="PI"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'PI') selected @endif>
                                                 Piauí</option>
-                                            <option value="RJ" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RJ') selected @endif>
+                                            <option value="RJ"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RJ') selected @endif>
                                                 Rio de Janeiro</option>
-                                            <option value="RN" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RN') selected @endif>
+                                            <option value="RN"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RN') selected @endif>
                                                 Rio Grande do Norte</option>
-                                            <option value="RS" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RS') selected @endif>
+                                            <option value="RS"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RS') selected @endif>
                                                 Rio Grande do Sul</option>
-                                            <option value="RO" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RO') selected @endif>
+                                            <option value="RO"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RO') selected @endif>
                                                 Rondônia</option>
-                                            <option value="RR" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RR') selected @endif>
+                                            <option value="RR"
+                                                @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'RR') selected @endif>
                                                 Roraima</option>
                                             <option value="SC"
                                                 @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'SC') selected @endif>Santa Catarina
@@ -560,18 +593,41 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group mt-2 textoInput">
-                                    <label for="escola_ens_med"><span style="color: red; font-weight: bold;">*</span>
-                                        {{ __('Estabelecimento que concluiu o Ensino Médio:') }}</label>
-                                    <input id="escola_ens_med"
-                                        class="form-control form-control-sm caixaDeTexto @error('escola_ens_med') is-invalid @enderror"
-                                        type="text" placeholder="Insira o nome da escola" name="escola_ens_med"
-                                        value="{{ old('escola_ens_med', $candidato->escola_ens_med) }}">
-                                    @error('escola_ens_med')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                                <div class="row pt-2">
+                                    <div class="form-group col-md-6 textoInput">
+                                        <label for="escola_ens_med"><span
+                                                style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Estabelecimento que concluiu o Ensino Médio:') }}</label>
+                                        <input id="escola_ens_med"
+                                            class="form-control form-control-sm caixaDeTexto @error('escola_ens_med') is-invalid @enderror"
+                                            type="text" placeholder="Insira o nome da escola"
+                                            name="escola_ens_med"
+                                            value="{{ old('escola_ens_med', $candidato->escola_ens_med) }}">
+                                        @error('escola_ens_med')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-6 textoInput">
+                                        <label for="concluiu_publica"><span
+                                                style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Concluiu o Ensino Médio na rede pública?') }}</label>
+                                        <select id="concluiu_publica"
+                                            class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
+                                            name="concluiu_publica">
+                                            <option value="" selected disabled>-- Selecione --</option>
+                                            <option value="1"
+                                                @if (old('concluiu_publica', $candidato->concluiu_publica) == '1') selected @endif>Sim</option>
+                                            <option value="0"
+                                                @if (old('concluiu_publica', $candidato->concluiu_publica) == '0') selected @endif>Não</option>
+                                        </select>
+                                        @error('concluiu_publica')
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
@@ -696,29 +752,10 @@
                                     </div>
                                 </div>
                                 <div class="row pt-2">
-                                    <div class="form-group col-md-4 textoInput">
+                                    <div class="form-group textoInput">
                                         <label for="concluiu_publica"><span
                                                 style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Concluiu o Ensino Médio na rede pública?') }}</label>
-                                        <select id="concluiu_publica"
-                                            class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
-                                            name="concluiu_publica">
-                                            <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1"
-                                                @if (old('concluiu_publica', $candidato->concluiu_publica) == '1') selected @endif>Sim</option>
-                                            <option value="0"
-                                                @if (old('concluiu_publica', $candidato->concluiu_publica) == '0') selected @endif>Não</option>
-                                        </select>
-                                        @error('concluiu_publica')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-4 textoInput">
-                                        <label for="concluiu_publica"><span
-                                                style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público') }}</label>
+                                            {{ __('Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público?') }}</label>
                                         <select id="concluiu_comunitaria"
                                             class="form-control form-control-sm caixaDeTexto @error('concluiu_comunitaria') is-invalid @enderror"
                                             name="concluiu_comunitaria">
@@ -729,25 +766,6 @@
                                                 @if (old('concluiu_comunitaria', $candidato->concluiu_comunitaria) == '0') selected @endif>Não</option>
                                         </select>
                                         @error('concluiu_comunitaria')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-8">
-                                        <label for="necessidades"><span
-                                                style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Deficiências/transtornos') }}</label>
-                                        <select id="necessidades"
-                                            class="form-control form-control-sm caixaDeTexto selectpicker @error('necessidades') is-invalid @enderror"
-                                            name="necessidades[]" title="-- Selecione --" required multiple>
-                                            @foreach (\App\Models\Candidato::NECESSIDADES as $valor => $necessidade)
-                                                <option value="{{ $valor }}"
-                                                    @if (in_array($valor, old('necessidades', explode(',', $candidato->necessidades)))) selected @endif>
-                                                    {{ $necessidade }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('necessidades')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -797,105 +815,115 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="form-group col-md-4 textoInput">
-                                        <label for="cor_raca"><span style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Cor/Raça') }}</label>
-                                        <select id="cor_raca"
-                                            class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
-                                            name="etnia_e_cor">
-                                            <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1"
-                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
-                                                {{ $cores_racas[0] }}</option>
-                                            <option value="4"
-                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
-                                                {{ $cores_racas[3] }}</option>
-                                            <option value="2"
-                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 2) selected @endif>
-                                                {{ $cores_racas[1] }}</option>
-                                            <option value="3"
-                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 3) selected @endif>
-                                                {{ $cores_racas[2] }}</option>
-                                            <option value="5"
-                                                @if (old('cor_raca', $candidato->etnia_e_cor) == 5) selected @endif>
-                                                {{ $cores_racas[4] }}</option>
-                                        </select>
-                                        @error('cor_raca')
+                                        <label>
+                                            <span style="color: red; font-weight: bold;">*</span>
+                                            {{ __('Deficiências/transtornos') }}
+                                        </label>
+                                        <div class="border p-2 rounded" style="max-height: 100px; overflow-y: auto;">
+                                            @foreach (\App\Models\Candidato::NECESSIDADES as $valor => $necessidade)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="{{ $valor }}"
+                                                        id="{{ 'checkbox' . $valor }}">
+                                                    <label class="form-check-label" for="{{ 'checkbox' . $valor }}">
+                                                        {{ $necessidade }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @error('necessidades')
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
                                         @enderror
                                     </div>
-
-                                    <div class="form-group col-md-4 textoInput">
-                                        <label for="quilombola"><span style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Quilombola') }}</label>
-                                        <select id="quilombola"
-                                            class="form-control form-control-sm caixaDeTexto @error('quilombola') is-invalid @enderror"
-                                            name="quilombola">
-                                            <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1"
-                                                @if ($candidato->quilombola == true) selected @endif>Sim</option>
-                                            <option value="0"
-                                                @if ($candidato->quilombola == false) selected @endif>Não</option>
-                                        </select>
-                                        @error('quilombola')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                    <div class="col-md-6">
+                                        <div class="form-group textoInput">
+                                            <label for="trabalha"><span
+                                                    style="color: red; font-weight: bold;">*</span>
+                                                {{ __('Você exerce alguma atividade remunerada?') }}</label>
+                                            <select id="trabalha"
+                                                class="form-control form-control-sm caixaDeTexto @error('trabalha') is-invalid @enderror"
+                                                name="trabalha">
+                                                <option value="" selected disabled>-- Selecione --
+                                                </option>
+                                                <option value="1"
+                                                    @if (old('trabalha', $candidato->trabalha) == '1') selected @endif>
+                                                    Sim
+                                                </option>
+                                                <option value="0"
+                                                    @if (old('trabalha', $candidato->trabalha) == '0') selected @endif>
+                                                    Não
+                                                </option>
+                                            </select>
+                                            @error('trabalha')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group textoInput mt-2">
+                                            <label for="grupo_familiar"><span
+                                                    style="color: red; font-weight: bold;">*</span>
+                                                {{ __('Quantas pessoas fazem parte do seu grupo familiar?') }}</label>
+                                            <input id="grupo_familiar"
+                                                class="form-control form-control-sm caixaDeTexto @error('grupo_familiar') is-invalid @enderror"
+                                                type="number" name="grupo_familiar"
+                                                value="{{ old('grupo_familiar', $candidato->grupo_familiar) }}">
+                                            @error('grupo_familiar')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                     </div>
-
-                                    <div class="form-group col-md-4 textoInput">
-                                        <label for="indigena"><span style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Indígena') }}</label>
-                                        <select id="indigena"
-                                            class="form-control form-control-sm caixaDeTexto @error('indigena') is-invalid @enderror"
-                                            name="indigena">
-                                            <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1"
-                                                @if ($candidato->indigena == true) selected @endif>Sim</option>
-                                            <option value="0"
-                                                @if ($candidato->indigena == false) selected @endif>Não</option>
-                                        </select>
-                                        @error('indigena')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="row pt-2">
-                                    <div class="form-group col-md-6 textoInput">
-                                        <label for="trabalha"><span style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Você exerce alguma atividade remunerada?') }}</label>
-                                        <select id="trabalha"
-                                            class="form-control form-control-sm caixaDeTexto @error('trabalha') is-invalid @enderror"
-                                            name="trabalha">
-                                            <option value="" selected disabled>-- Selecione --</option>
-                                            <option value="1"
-                                                @if (old('trabalha', $candidato->trabalha) == '1') selected @endif>Sim</option>
-                                            <option value="0"
-                                                @if (old('trabalha', $candidato->trabalha) == '0') selected @endif>Não</option>
-                                        </select>
-                                        @error('trabalha')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-6 textoInput">
-                                        <label for="grupo_familiar"><span
-                                                style="color: red; font-weight: bold;">*</span>
-                                            {{ __('Quantas pessoas fazem parte do seu grupo familiar?') }}</label>
-                                        <input id="grupo_familiar"
-                                            class="form-control form-control-sm caixaDeTexto @error('grupo_familiar') is-invalid @enderror"
-                                            type="number" name="grupo_familiar"
-                                            value="{{ old('grupo_familiar', $candidato->grupo_familiar) }}">
-                                        @error('grupo_familiar')
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                    <div class="col">
+                                        <div class="form-group textoInput">
+                                            <label for="quilombola"><span
+                                                    style="color: red; font-weight: bold;">*</span>
+                                                {{ __('Quilombola') }}</label>
+                                            <select id="quilombola"
+                                                class="form-control form-control-sm caixaDeTexto @error('quilombola') is-invalid @enderror"
+                                                name="quilombola">
+                                                <option value="" selected disabled>-- Selecione --
+                                                </option>
+                                                <option value="1"
+                                                    @if ($candidato->quilombola == true) selected @endif>
+                                                    Sim
+                                                </option>
+                                                <option value="0"
+                                                    @if ($candidato->quilombola == false) selected @endif>
+                                                    Não
+                                                </option>
+                                            </select>
+                                            @error('quilombola')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group textoInput mt-2">
+                                            <label for="indigena"><span
+                                                    style="color: red; font-weight: bold;">*</span>
+                                                {{ __('Indígena') }}</label>
+                                            <select id="indigena"
+                                                class="form-control form-control-sm caixaDeTexto @error('indigena') is-invalid @enderror"
+                                                name="indigena">
+                                                <option value="" selected disabled>-- Selecione --
+                                                </option>
+                                                <option value="1"
+                                                    @if ($candidato->indigena == true) selected @endif>Sim
+                                                </option>
+                                                <option value="0"
+                                                    @if ($candidato->indigena == false) selected @endif>Não
+                                                </option>
+                                            </select>
+                                            @error('indigena')
+                                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group mt-2 textoInput">
