@@ -90,8 +90,8 @@ class CandidatoController extends Controller
         $candidato->atualizar_dados = false;
         $inscricao->fill($validated);
 
-        $candidato->save();
-        $inscricao->save();
+        $candidato->update();
+        $inscricao->update();
 
         if (auth()->user()->role == User::ROLE_ENUM['admin']) {
             return redirect()->back()->with(['success' => "Dados atualizados!"]);

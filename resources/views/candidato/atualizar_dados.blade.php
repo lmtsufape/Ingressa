@@ -819,12 +819,13 @@
                                             <span style="color: red; font-weight: bold;">*</span>
                                             {{ __('Deficiências/transtornos') }}
                                         </label>
-                                        <div class="border p-2 rounded" style="max-height: 100px; overflow-y: auto;">
+                                        <div class="border p-2 rounded @error('necessidades') is-invalid @enderror" style="max-height: 100px; overflow-y: auto;">
                                             @foreach (\App\Models\Candidato::NECESSIDADES as $valor => $necessidade)
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox"
                                                         value="{{ $valor }}"
-                                                        id="{{ 'checkbox' . $valor }}">
+                                                        id="{{ 'checkbox' . $valor }}" name="necessidades[]" 
+                                                        @if (in_array($valor, old('necessidades') ?? [])) checked @endif>
                                                     <label class="form-check-label" for="{{ 'checkbox' . $valor }}">
                                                         {{ $necessidade }}
                                                     </label>

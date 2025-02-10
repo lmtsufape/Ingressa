@@ -11,9 +11,9 @@ class UpdateCandidatoRequest extends FormRequest
     protected function getValidatorInstance()
     {
         $validator = parent::getValidatorInstance();
-
+        
         $validator->sometimes('necessidades', 'required|array|max:1', function ($input) {
-            return in_array('nenhuma', $input->necessidades);
+            return in_array('nenhuma', $input->necessidades ?? []);
         });
 
         return $validator;
@@ -59,7 +59,7 @@ class UpdateCandidatoRequest extends FormRequest
             'modalidade' => ['required', 'string'],
             'concluiu_publica' => ['required', 'boolean'],
             'concluiu_comunitaria' => ['required', 'boolean'],
-            'necessidades' => ['required', 'array'],
+            'necessidades' => ['required', 'array', 'min:1'],
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],
             'valor_renda' => ['required', 'numeric'],
