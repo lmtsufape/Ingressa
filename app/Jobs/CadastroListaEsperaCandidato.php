@@ -9,7 +9,6 @@ use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Models\MultiplicadorVaga;
 use App\Models\User;
-use DateTime;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -17,8 +16,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use League\Csv\Reader;
+use Carbon\Carbon;
 
 
 class CadastroListaEsperaCandidato implements ShouldQueue
@@ -51,409 +51,360 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $csv->setHeaderOffset(0);
         $records = $csv->getRecords();
 
+        // Arrays para armazenar os dados dos usuários, candidatos e inscrições
+        $usersData = [];
+        $candidatosData = [];
         $inscricoesData = [];
-        $cont = 0;
+
+        // Otimização para pegar apenas os candidatos que já estão cadastrados e usar indexação para tornar a busca mais rápida
+        $cpfInscritos = array_column(iterator_to_array($records), 'NU_CPF_INSCRITO');
+        $candidatos = Candidato::whereIn('nu_cpf_inscrito', $cpfInscritos)
+            ->with('user')
+            ->get()
+            ->keyBy('nu_cpf_inscrito');
+
+
+        // Pega o próximo valor da sequência para que seja possível inserir os ids sem usar o método create ou save dentro do foreach
+        $nextUserIdValue = DB::select("SELECT nextval('users_id_seq')")[0]->nextval;
+        $nextCandidatoIdValue = DB::select("SELECT nextval('candidatos_id_seq')")[0]->nextval;
+
         foreach ($records as $record) {
-            //Armazenamos as informações de cada candidato
-            $inscricoesData[] = [
-                'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                'protocolo' => Hash::make($record['NO_INSCRITO'] . $this->chamada->id),
-                'nu_etapa' => $record['NU_ETAPA'],
-                'no_campus' => $record['NO_CAMPUS'],
-                'co_ies_curso' => $record['CO_IES_CURSO'],
-                'no_curso' => $record['NO_CURSO'],
-                'ds_turno' => $record['DS_TURNO'],
-                'ds_formacao' => $record['DS_FORMACAO'],
-                'qt_vagas_concorrencia' => $record['QT_VAGAS_CONCORRENCIA'],
-                'co_inscricao_enem' => $record['CO_INSCRICAO_ENEM'],
+            $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
 
-                'no_inscrito' => $record['NO_INSCRITO'],
-                'no_social' => $record['NO_SOCIAL'],
-                'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
-                'dt_nascimento' => DateTime::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d'),
+            // Cria um novo candidato e usuário caso ele não exista
+            if (!$candidato) {
+                // Adiciona o usuário no array para inserção
+                $usersData[] = [
+                    'id' =>  $nextUserIdValue,
+                    'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
+                    'password' => '', // A senha será modificada quando o usuário acessar a conta pela primeira vez
+                    'role' => User::ROLE_ENUM['candidato'],
+                    'primeiro_acesso' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
 
-                //'cd_efetivado' => false,
-                'tp_sexo' => $record['TP_SEXO'],
-                'nu_rg' => $record['NU_RG'],
-                'no_mae' => $record['NO_MAE'],
-                'ds_logradouro' => $record['DS_LOGRADOURO'],
-                'nu_endereco' => $record['NU_ENDERECO'],
-                'ds_complemento' => $record['DS_COMPLEMENTO'],
-                'sg_uf_inscrito' => $record['SG_UF_INSCRITO'],
-                'no_municipio' => $record['NO_MUNICIPIO'],
-                'no_bairro' => $record['NO_BAIRRO'],
-                'nu_cep' => $record['NU_CEP'],
-                'nu_fone1' => $record['NU_FONE1'],
-                'nu_fone2' => $record['NU_FONE2'],
-                'ds_email' => $record['DS_EMAIL'],
-                'nu_nota_l' => str_replace(',', '.', $record['NU_NOTA_L']),
-                'nu_nota_ch' => str_replace(',', '.', $record['NU_NOTA_CH']),
-                'nu_nota_cn' => str_replace(',', '.', $record['NU_NOTA_CN']),
-                'nu_nota_m' => str_replace(',', '.', $record['NU_NOTA_M']),
-                'nu_nota_r' => str_replace(',', '.', $record['NU_NOTA_R']),
-                'co_curso_inscricao' => $record['CO_CURSO_INSCRICAO'],
-                'st_opcao' => $record['ST_OPCAO'],
-                'no_modalidade_concorrencia' => $record['NO_MODALIDADE_CONCORRENCIA'],
-                'st_bonus_perc' => $record['ST_BONUS_PERC'],
-                'qt_bonus_perc' => $record['QT_BONUS_PERC'],
-                'no_acao_afirmativa_bonus' => $record['NO_ACAO_AFIRMATIVA_BONUS'],
-                'nu_nota_candidato' => str_replace(',', '.', $record['NU_NOTA_CANDIDATO']),
-                'nu_notacorte_concorrida' => str_replace(',', '.', $record['NU_NOTACORTE_CONCORRIDA']),
-                'nu_classificacao' => $record['NU_CLASSIFICACAO'],
-                'ds_matricula' => $record['DS_MATRICULA'],
-                'dt_operacao' => DateTime::createFromFormat('Y-m-d H:i:s', $record['DT_OPERACAO'])->format('Y/m/d'),
-                'co_ies' => $record['CO_IES'],
-                'no_ies' => $record['NO_IES'],
-                'sg_ies' => $record['SG_IES'],
-                'sg_uf_ies' => $record['SG_UF_IES'],
-                'st_lei_optante' => $record['ST_LEI_OPTANTE'],
-                'st_lei_renda' => $record['ST_LEI_RENDA'],
-                'st_lei_etnia_p' => $record['ST_LEI_ETNIA_P'],
-                'st_lei_etnia_i' => $record['ST_LEI_ETNIA_I'],
-                'de_acordo_lei_cota' => $record['DE_ACORDO_LEI_COTA'],
-                'ensino_medio' => $record['ENSINO_MEDIO'],
-                'etnia_e_cor' => $record['ETNIA_E_COR'],
-                'quilombola' => $record['QUILOMBOLA'],
-                'deficiente' => $record['DEFICIENTE'],
-                'modalidade_escolhida' => $record['MODALIDADE_ESCOLHIDA'],
-                'tipo_concorrencia' => $record['TIPO_CONCORRENCIA'],
-            ];
-            $cont += 1;
+                // Adiciona o candidato no array para inserção
+                $candidatosData[] = [
+                    'id' => $nextCandidatoIdValue,
+                    'no_social' => $record['NO_SOCIAL'],
+                    'no_inscrito' => $record['NO_INSCRITO'],
+                    'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
+                    'dt_nascimento' => Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d'),
+                    'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['COR_RACA']],
+                    'user_id' => $nextUserIdValue++,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                // Atualiza dados do candidato caso ele exista
+            } else {
+                $candidatosData[] = [
+                    'id' => $candidato->id,
+                    'atualizar_dados' => true,
+                    'no_social' => $record['NO_SOCIAL'],
+                    'updated_at' => now(),
+
+                    // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
+                    'user_id' => 0,
+                    'no_inscrito' => '',
+                    'nu_cpf_inscrito' => '',
+                    'dt_nascimento' => now(),
+                    'etnia_e_cor' => 0,
+                ];
+
+                $usersData[] = [
+                    'id' => $candidato->user->id,
+                    'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
+                    'updated_at' => now(),
+
+                    // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
+                    'password' => '',
+                    'role' => 0,
+                    'primeiro_acesso' => true,
+                ];
+            }
+
+            // Adicionando inscrição apenas se o candidato não existir ou se ele não estiver inscrito nesse SiSU
+            if (!$candidato || !$candidato->inscricoes()->where('sisu_id', $this->chamada->sisu->id)->exists()) {
+                $inscricoesData[] = [
+                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
+                    'protocolo' => '',
+                    'nu_etapa' => $record['NU_ETAPA'],
+                    'no_campus' => $record['NO_CAMPUS'],
+                    'co_ies_curso' => $record['CO_IES_CURSO'],
+                    'no_curso' => $record['NO_CURSO'],
+                    'ds_turno' => $record['DS_TURNO'],
+                    'ds_formacao' => $record['DS_FORMACAO'],
+                    'qt_vagas_concorrencia' => $record['QT_VAGAS_CONCORRENCIA'],
+                    'co_inscricao_enem' => $record['CO_INSCRICAO_ENEM'],
+                    'tp_sexo' => $record['TP_SEXO'],
+                    'nu_rg' => $record['NU_RG'],
+                    'no_mae' => $record['NO_MAE'],
+                    'ds_logradouro' => $record['DS_LOGRADOURO'],
+                    'nu_endereco' => $record['NU_ENDERECO'],
+                    'ds_complemento' => $record['DS_COMPLEMENTO'],
+                    'sg_uf_inscrito' => $record['SG_UF_INSCRITO'],
+                    'no_municipio' => $record['NO_MUNICIPIO'],
+                    'no_bairro' => $record['NO_BAIRRO'],
+                    'nu_cep' => $record['NU_CEP'],
+                    'nu_fone1' => $record['NU_FONE1'],
+                    'nu_fone2' => $record['NU_FONE2'],
+                    'ds_email' => $record['DS_EMAIL'],
+                    'nu_nota_l' => str_replace(',', '.', $record['NU_NOTA_L']),
+                    'nu_nota_ch' => str_replace(',', '.', $record['NU_NOTA_CH']),
+                    'nu_nota_cn' => str_replace(',', '.', $record['NU_NOTA_CN']),
+                    'nu_nota_m' => str_replace(',', '.', $record['NU_NOTA_M']),
+                    'nu_nota_r' => str_replace(',', '.', $record['NU_NOTA_R']),
+                    'co_curso_inscricao' => $record['CO_CURSO_INSCRICAO'],
+                    'st_opcao' => $record['ST_OPCAO'],
+                    'no_modalidade_concorrencia' => $record['NO_MODALIDADE_CONCORRENCIA'],
+                    'st_bonus_perc' => $record['ST_BONUS_PERC'],
+                    'qt_bonus_perc' => $record['QT_BONUS_PERC'],
+                    'no_acao_afirmativa_bonus' => $record['NO_ACAO_AFIRMATIVA_BONUS'],
+                    'nu_nota_candidato' => str_replace(',', '.', $record['NU_NOTA_CANDIDATO']),
+                    'nu_notacorte_concorrida' => str_replace(',', '.', $record['NU_NOTACORTE_CONCORRIDA']),
+                    'nu_classificacao' => $record['NU_CLASSIFICACAO'],
+                    'ds_matricula' => $record['DS_MATRICULA'],
+                    'dt_operacao' => !empty($record['DT_OPERACAO']) ? Carbon::createFromFormat('d/m/Y', $record['DT_OPERACAO'])->format('Y-m-d') : null,
+                    'co_ies' => $record['CO_IES'],
+                    'no_ies' => $record['NO_IES'],
+                    'sg_ies' => $record['SG_IES'],
+                    'sg_uf_ies' => $record['SG_UF_IES'],
+                    'ensino_medio' => $record['ENSINO_MEDIO'],
+                    'quilombola' => $record['QUILOMBOLA'],
+                    'deficiente' => $record['PcD'],
+                    'st_rank_ensino_medio' => $record['ST_RANK_ENSINO_MEDIO'],
+                    'st_rank_raca' => $record['ST_RANK_RACA'],
+                    'st_rank_quilombola' => $record['ST_RANK_QUILOMBOLA'],
+                    'st_rank_pcd' => $record['ST_RANK_PcD'],
+                    'st_confirma_lgpd' => $record['ST_CONFIRMA_LGPD'],
+                    'total_membros_familiar' => intval($record['TOTAL_MEMBROS_FAMILIAR']),
+                    'renda_familiar_bruta' => floatval(str_replace(',', '.', $record['RENDA_FAMILIAR_BRUTA'])),
+                    'salario_minimo' => floatval(str_replace(',', '.', $record['SALARIO_MINIMO'])),
+                    'perfil_economico_lei_cotas' => $record['PERFIL_ECONOMICO_LEI_COTAS'],
+                    'tipo_concorrencia' => $record['TIPO_CONCORRENCIA'],
+                    'no_acao_afirmativa_propria_ies' => $record['NO_ACAO_AFIRMATIVA_PROPRIA_IES'],
+                    'chamada_id' => $this->chamada->id,
+                    'sisu_id' => $this->chamada->sisu->id,
+                    'cota_id' => Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
+                    'candidato_id' => $candidato ? $candidato->id : $nextCandidatoIdValue++,
+                    'curso_id' => Curso::where('cod_curso', $record['CO_IES_CURSO'])
+                        ->where('turno', Curso::TURNO_ENUM[$record['DS_TURNO']])
+                        ->first()
+                        ->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
         }
 
-        $inscricoes = collect($inscricoesData);
+        $ordemModalidades = [
+            'AC'     => 1,
+            'LI_EP'  => 2,
+            'LI_PCD' => 3,
+            'LI_Q'   => 4,
+            'LI_PPI' => 5,
+            'LB_EP'  => 6,
+            'LB_PCD' => 7,
+            'LB_Q'   => 8,
+            'LB_PPI' => 9
+        ];
 
-        //Agrupamos por curso
-        $grouped = $inscricoes->groupBy(function ($candidato) {
-            return $candidato['co_ies_curso'] . $candidato['ds_turno'];
-        });
-        $porCurso = collect();
-        //E separamos por modalidade
-        foreach ($grouped as $curso) {
-            $porCurso->push($curso->groupBy('no_modalidade_concorrencia'));
-        }
-
-        $cursos = collect();
-
-        //Collection para armazenar apenas as modalidades de cada curso que estão presentes no arquivo, para sabermos se há candidatos a
-        //serem chamados daquela modalidade
-        $cotasCursosCOD = collect();
-
-        //Feito isto, é necessário juntar todos os inscritos da ampla concorrencia independente da cota de 10%
-        foreach ($porCurso as $curso) {
-            $modalidade = collect();
-            $ampla = collect();
-            $modalidades = collect();
-
-            $cotaCOD = collect();
-            $cotaAmpla = false;
-            foreach ($curso as $porModalidade) {
-                //os de ampla são colocados em um único collection aqui. Há várias verificações por inconsistência dos dados fornecidos
-                if (
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $porModalidade[0]['no_modalidade_concorrencia'] == 'Ampla concorrência'
-                ) {
-                    $ampla = $ampla->concat($porModalidade);
-                    if (!$cotaAmpla) {
-                        $cotaAmpla = true;
-                    }
-                } else {
-                    $modalidade = $porModalidade;
-                    if (!$cotaCOD->contains($modalidade[0]['no_modalidade_concorrencia'])) {
-                        $cotaCOD->push($modalidade[0]['no_modalidade_concorrencia']);
-                    }
-                    $modalidade = $modalidade->sortBy(function ($candidato) {
-                        return $candidato['nu_classificacao'];
+        // Agrupa inscrições por curso, turno e modalidade de concorrência juntando ampla concorrência com bônus e sem bônus em uma única modalidade.
+        // Após isso, ordena as modalidades de acordo com $ordemModalidades e os inscritos por nota decrescente
+        $inscricoesOrdenadas = collect($inscricoesData)
+            ->groupBy([
+                'co_ies_curso',
+                'ds_turno',
+                function ($item) {
+                    // Junta a ampla concorrência com bônus e sem bônus em uma única modalidade e agrupa usando o código da cota
+                    return Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo;
+                }
+            ])->map(function ($cursos) use ($ordemModalidades) {
+                // Ordenar modalidades de acordo com $ordemModalidades
+                return $cursos->map(function ($turnos) use ($ordemModalidades) {
+                    $ordenadoPorModalidade = $turnos->sortKeysUsing(function ($key1, $key2) use ($ordemModalidades) {
+                        $ordem1 = $ordemModalidades[$key1] ?? PHP_INT_MAX;
+                        $ordem2 = $ordemModalidades[$key2] ?? PHP_INT_MAX;
+                        return $ordem1 <=> $ordem2;
                     });
-                    $modalidades->push($modalidade);
-                }
-            }
-            //ordenamos os inscritos da modalidade daquele curso pela classificacao
-            $ampla = $ampla->sortBy(function ($candidato) {
-                return $candidato['nu_classificacao'];
-            });
-            $modalidades->push($ampla);
-            $cursos->push($modalidades);
-            if ($cotaAmpla) {
-                $cotaCOD->push(Cota::COD_COTA_ENUM['A0']);
-            }
-            $cotasCursosCOD->push($cotaCOD);
-        }
 
-        //Preparados os dados dos inscritos, agora criaremos as instancias para salvar no banco
-        //Percorremos cada curso
-        foreach ($cursos as $indexCurso => $curso) {
-            $candidato = $curso[0][0];
-            /*//Recuperamos a cota que aquele inscrito está relacionado
-            if($candidato['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-            $candidato['no_modalidade_concorrencia'] == 'Ampla concorrência' || $candidato['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA'){
-                $cota = Cota::where('descricao',  'Ampla concorrência')->first();
-            }else{
-                $cota = Cota::where('descricao', $candidato['no_modalidade_concorrencia'])->first();
-            }
-            //E pegamos a informação de quantas vagas temos tem restante baseado em quantos candidatos foram efetivados e quantas vagas são
-            //ofertadas para aquela cota*/
-
-            if ($candidato['ds_turno'] == 'Matutino') {
-                $turno =  Curso::TURNO_ENUM['Matutino'];
-            } elseif ($candidato['ds_turno'] == 'Vespertino') {
-                $turno = Curso::TURNO_ENUM['Vespertino'];
-            } elseif ($candidato['ds_turno'] == 'Noturno') {
-                $turno = Curso::TURNO_ENUM['Noturno'];
-            } elseif ($candidato['ds_turno'] == 'Integral') {
-                $turno = Curso::TURNO_ENUM['Integral'];
-            }
-
-            //E recuperamos a instancia do curso do banco de dados
-            $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
-
-            /*Para a nova regra de chamadas da lista de espera, e necessario preencher o restante de vagas da ampla concorrencia
-            com os candidatos com as maiores notas  daquele curso*/
-
-            $candidatosCurso = collect();
-            foreach ($cursos[$indexCurso] as $modalidadeAtual) {
-                $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
-            }
-
-            $candidatosCurso = $candidatosCurso->sortByDesc(function ($candidato) {
-                return $candidato['nu_nota_candidato'];
+                    // Ordenar inscritos dentro de cada modalidade por nota decrescente
+                    return $ordenadoPorModalidade->map(function ($inscritos) {
+                        return collect($inscritos)->sortByDesc('nu_nota_candidato')->values();
+                    });
+                });
             });
 
-            $A0 = Cota::where('cod_cota', 'A0')->first();
-            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->where('sisu_id', $this->chamada->sisu->id)->first()->pivot;
-            $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
+        // Arrays para armazenar os candidatos convocados e reservas
+        $candidatosConvocados = [];
+        $candidatosReservas = [];
 
-            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-            $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
-            if ($multiplicador != null) {
-                $vagasCotaA0 *= $multiplicador->multiplicador;
-            }
+        // Os candidatos estão agrupados por curso, turno e modalidade de concorrência. O primeiro foreach itera pelos curso, o segundo pelo turno e o terceiro pela modalidade e o quarto pelos candidatos.
+        foreach ($inscricoesOrdenadas as $codCurso => $curso) {
+            foreach ($curso as $nomeTurno => $turno) {
+                $vagasModalidade = []; // Armazena a quantidade de vagas restantes para cada modalidade
 
-            //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
+                // Processa os candidatos até preencher todas as vagas reais de todas as modalidades
+                foreach ($turno as $codCota => $modalidade) {
 
-            $vagasCota = $this->fazerCadastro($A0, null, $curs, $candidatosCurso, $vagasCotaA0);
+                    // Acessa a tabela intermediária
+                    $cotaCurso = Cota::firstWhere('cod_novo', $codCota)
+                        ->cursos()
+                        ->where('cod_curso', $codCurso)
+                        ->where('turno', Curso::TURNO_ENUM[$nomeTurno])
+                        ->wherePivot('sisu_id', $this->chamada->sisu->id)
+                        ->first()
+                        ->pivot;
 
-            $vagasCotaCollection = collect();
-            $vagasCotaCollection->push(0);
+                    // Recupera o multiplicador da modalidade
+                    $multiplicador = MultiplicadorVaga::where([
+                        ['cota_curso_id', $cotaCurso->id],
+                        ['chamada_id', $this->chamada->id]
+                    ])->first();
 
-            //Varremos todas as cotas do curso
-            foreach ($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $cota) {
-                if ($cota->cod_cota != $A0->cod_cota) {
-                    //recuperamos informações da quantidade que iremos chamar
-                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $this->chamada->sisu->id)->first()->pivot;
+                    // Calcula quantidade de vagas reais e reservas e armazena na chave correspondente no código da cota
+                    $multiplicador = $multiplicador ? $multiplicador->multiplicador : 1;
+                    $vagasModalidade[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
+                    $vagasModalidade[$codCota]['reservas'] = $vagasModalidade[$codCota]['reais'] * ($multiplicador - 1); // O multiplicador é subtraído por 1 pois as vagas reais já foram contabilizadas
 
-                    $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
-                    //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-                    $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $this->chamada->id]])->first();
-                    if (!is_null($multiplicador)) {
-                        $vagasCota *= $multiplicador->multiplicador;
-                    }
+                    foreach ($modalidade as $candidato) {
+                        if ($vagasModalidade[$codCota]['reais'] > 0) { // Candidatos que possuem vaga garantida
+                            $convocado = false;
 
-                    //aqui veremos se essa cota tem candidatos inscritos para fazer o cadastro
-                    $cursoAtual = $cotasCursosCOD[$indexCurso];
-                    $modalidadeDaCotaIndex = null;
-
-                    //Se o curso atual possuir algum candidato da modalidade descrita na descricao da cota, significa que temos quem chamar
-                    foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
-                        if ($modalidadeCursoAtual == $cota->descricao) {
-                            $modalidadeDaCotaIndex = $index;
-                            break;
-                        }
-                    }
-                    //Então assim faremos
-                    if (!is_null($modalidadeDaCotaIndex)) {
-                        $vagasCota = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
-                    }
-                    $vagasCotaCollection->push($vagasCota);
-                }
-            }
-            //Varremos todas as cotas do curso
-            foreach ($curs->cotas()->where('sisu_id', $this->chamada->sisu->id)->get() as $indice => $cota) {
-                if ($cota->cod_cota != $A0->cod_cota) {
-                    $vagasCota = $vagasCotaCollection[$indice];
-                    //Caso restem vagas, faremos o remanejamento
-                    if ($vagasCota > 0) {
-                        foreach ($cota->remanejamentos as $remanejamento) {
-                            $cotaRemanejamento = $remanejamento->proximaCota;
-                            $cursoAtual = $cotasCursosCOD[$indexCurso];
-
-                            $modalidadeDaCotaIndex = null;
-
-                            foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
-                                if ($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao) {
-                                    $modalidadeDaCotaIndex = $indexRemanejamento;
+                            // Verifica se o candidato já foi convocado
+                            foreach ($candidatosConvocados as $candidatoConvocado) {
+                                if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
+                                    $convocado = true;
                                     break;
                                 }
                             }
-                            if (!is_null($modalidadeDaCotaIndex)) {
-                                $vagasCota = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota);
+
+                            if ($convocado) {
+                                continue;
+                            } else { // Adiciona o candidato à lista de convocados
+                                $candidato['cota_vaga_ocupada_id'] = Cota::firstWhere('cod_novo', $codCota)->id;
+                                $candidatosConvocados[] = $candidato;
+                                $vagasModalidade[$codCota]['reais']--;
                             }
-                            if ($vagasCota == 0) {
+                        } else break;
+                    }
+                }
+
+                // Remanejamento
+                foreach ($vagasModalidade as $codCota => $vagas) {
+                    if ($vagas['reais'] > 0) {
+                        $cota = Cota::firstWhere('cod_novo', $codCota);
+                        $remanejamentos = $cota->remanejamentos;
+
+                        foreach ($remanejamentos as $remanejamento) {
+                            $preenchido = false;
+
+                            foreach ($turno->get($remanejamento->proximaCota->cod_novo) ?? [] as $candidato) {
+                                if ($vagasModalidade[$codCota]['reais'] > 0) {
+                                    $convocado = false;
+
+                                    // Verifica se o candidato já foi convocado
+                                    foreach ($candidatosConvocados as $candidatoConvocado) {
+                                        if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
+                                            $convocado = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if ($convocado) {
+                                        continue;
+                                    } else { // Remaneja o candidato
+                                        $candidato['cota_vaga_ocupada_id'] = $cota->id;
+                                        $candidatosConvocados[] = $candidato;
+                                        $vagasModalidade[$codCota]['reais']--;
+                                    }
+                                } else {
+                                    $preechido = true;
+                                    break;
+                                }
+                            }
+
+                            if ($preenchido) break;
+                        }
+                    }
+                }
+
+                // Desagrupa e ordena os candidatos pela maior nota, em seguida pelos candidatos com mais mais chances de serem convocados e por fim pela modalidade menos restritiva para a mais restritiva
+                $candidatosDesagrupados = $turno->flatmap(function ($modalidade) {
+                    return $modalidade;
+                })->sortByDesc([
+                    'nu_nota_candidato',
+                    function ($item) use ($vagasModalidade) {
+                        $codCota = Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo;
+                        return $vagasModalidade[$codCota]['reservas'] - $item['nu_classificacao'];
+                    },
+                    function ($item) use ($ordemModalidades) {
+                        return -$ordemModalidades[Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo];
+                    }
+                ]);
+
+                // Processa os candidatos até preencher todas as vagas reserva de todas as modalidades
+                foreach ($candidatosDesagrupados as $candidato) {
+                    $codCota = Cota::getCotaModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
+                    if ($vagasModalidade[$codCota]['reservas'] > 0) {
+                        $convocado = false;
+
+                        // Verifica se o candidato já foi convocado
+                        foreach ($candidatosConvocados as $candidatoConvocado) {
+                            if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
+                                $convocado = true;
                                 break;
                             }
                         }
+
+                        foreach ($candidatosReservas as $candidatoReserva) {
+                            if ($candidato['ds_email'] === $candidatoReserva['ds_email']) {
+                                $convocado = true;
+                                break;
+                            }
+                        }
+
+                        if ($convocado) {
+                            continue;
+                        } else { // Adiciona o candidato à lista de reservas
+                            $candidato['cota_vaga_ocupada_id'] = Cota::firstWhere('cod_novo', $codCota)->id;
+                            $candidatosReservas[] = $candidato;
+                            $vagasModalidade[$codCota]['reservas']--;
+                        }
                     }
                 }
             }
         }
-    }
 
-    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota)
-    {
-        //enquanto houver vagas e inscritos daquela modalidade, o laço irá continuar
-        $ehNull = $cotaRemanejamento;
-        foreach ($porModalidade as $inscrito) {
-            if ($vagasCota > 0) {
+        // Combina todas as inscrições válidas
+        $inscricoesToInsert = array_merge($candidatosConvocados, $candidatosReservas);
 
-                if ($ehNull == null) {
-                    $cotaRemanejamento = Cota::getCotaModalidade($inscrito['no_modalidade_concorrencia']);
-                }
-                //agora podemos preparar o objeto de inscricao para o candidato
-                $inscricao = new Inscricao([
-                    'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
-                    'protocolo' => Hash::make($inscrito['protocolo'] . $this->chamada->id),
-                    'nu_etapa' => $inscrito['nu_etapa'],
-                    'no_campus' => $inscrito['no_campus'],
-                    'co_ies_curso' => $inscrito['co_ies_curso'],
-                    'no_curso' => $inscrito['no_curso'],
-                    'ds_turno' => $inscrito['ds_turno'],
-                    'ds_formacao' => $inscrito['ds_formacao'],
-                    'qt_vagas_concorrencia' => $inscrito['qt_vagas_concorrencia'],
-                    'co_inscricao_enem' => $inscrito['co_inscricao_enem'],
-                    //'cd_efetivado' => false,
-                    'no_social' => $inscrito['no_social'],
-                    'tp_sexo' => $inscrito['tp_sexo'],
-                    'nu_rg' => $inscrito['nu_rg'],
-                    'no_mae' => $inscrito['no_mae'],
-                    'ds_logradouro' => $inscrito['ds_logradouro'],
-                    'nu_endereco' => $inscrito['nu_endereco'],
-                    'ds_complemento' => $inscrito['ds_complemento'],
-                    'sg_uf_inscrito' => $inscrito['sg_uf_inscrito'],
-                    'no_municipio' => $inscrito['no_municipio'],
-                    'no_bairro' => $inscrito['no_bairro'],
-                    'nu_cep' => $inscrito['nu_cep'],
-                    'nu_fone1' => $inscrito['nu_fone1'],
-                    'nu_fone2' => $inscrito['nu_fone2'],
-                    'ds_email' => $inscrito['ds_email'],
-                    'nu_nota_l' => floatval($inscrito['nu_nota_l']),
-                    'nu_nota_ch' => floatval($inscrito['nu_nota_ch']),
-                    'nu_nota_cn' => floatval($inscrito['nu_nota_cn']),
-                    'nu_nota_m' => floatval($inscrito['nu_nota_m']),
-                    'nu_nota_r' => floatval($inscrito['nu_nota_r']),
-                    'co_curso_inscricao' => $inscrito['co_curso_inscricao'],
-                    'st_opcao' => $inscrito['st_opcao'],
-                    'no_modalidade_concorrencia' => $inscrito['no_modalidade_concorrencia'],
-                    'st_bonus_perc' => $inscrito['st_bonus_perc'],
-                    'qt_bonus_perc' => $inscrito['qt_bonus_perc'],
-                    'no_acao_afirmativa_bonus' => $inscrito['no_acao_afirmativa_bonus'],
-                    'nu_nota_candidato' => floatval($inscrito['nu_nota_candidato']),
-                    'nu_notacorte_concorrida' => floatval($inscrito['nu_notacorte_concorrida']),
-                    'nu_classificacao' => intval($inscrito['nu_classificacao']),
-                    'ds_matricula' => $inscrito['ds_matricula'],
-                    'dt_operacao' => $inscrito['dt_operacao'],
-                    'co_ies' => $inscrito['co_ies'],
-                    'no_ies' => $inscrito['no_ies'],
-                    'sg_ies' => $inscrito['sg_ies'],
-                    'sg_uf_ies' => $inscrito['sg_uf_ies'],
-                    'st_lei_optante' => $inscrito['st_lei_optante'],
-                    'st_lei_renda' => $inscrito['st_lei_renda'],
-                    'st_lei_etnia_p' => $inscrito['st_lei_etnia_p'],
-                    'st_lei_etnia_i' => $inscrito['st_lei_etnia_i'],
-                    'de_acordo_lei_cota' => $inscrito['de_acordo_lei_cota'],
-                    'ensino_medio' => $inscrito['ensino_medio'],
-                    'quilombola' => $inscrito['quilombola'],
-                    'deficiente' => $inscrito['deficiente'],
-                    'modalidade_escolhida' => $inscrito['modalidade_escolhida'],
-                    'tipo_concorrencia' => $inscrito['tipo_concorrencia'],
-                ]);
+        // Filtra os IDs dos candidatos presentes nas inscrições
+        $candidatoIds = array_column($inscricoesToInsert, 'candidato_id');
 
-                //recuperamos se o inscrito possui um usuário no sistema
-                $candidatoExistente = Candidato::where('nu_cpf_inscrito', $inscrito['nu_cpf_inscrito'])->first();
-                if ($candidatoExistente == null) {
-                    //caso não exista, criaremos um para ele
-                    $user = new User([
-                        'name' => $inscrito['no_inscrito'],
-                        'password' => Hash::make('12345678'),
-                        'role' => User::ROLE_ENUM['candidato'],
-                        'primeiro_acesso' => true,
-                    ]);
-                    //aqui estamos usando o nome social dele caso o mesmo possua
-                    if ($inscrito['no_social'] != null) {
-                        $user->name = $inscrito['no_social'];
-                    }
-                    $user->save();
+        // Filtra os candidatos e usuários que estão relacionados às inscrições
+        $filteredCandidatosData = array_filter($candidatosData, function ($candidato) use ($candidatoIds) {
+            return in_array($candidato['id'], $candidatoIds);
+        });
 
-                    if ($inscrito['no_social'] != null) {
-                        $candidato = new Candidato([
-                            'no_inscrito' => $inscrito['no_inscrito'],
-                            'no_social' => $inscrito['no_social'],
-                            'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
-                            'dt_nascimento' => $inscrito['dt_nascimento'],
-                        ]);
-                    } else {
-                        $candidato = new Candidato([
-                            'no_inscrito' => $inscrito['no_inscrito'],
-                            'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
-                            'dt_nascimento' => $inscrito['dt_nascimento'],
-                        ]);
-                    }
-                    $candidato->etnia_e_cor = strval(array_search($inscrito['etnia_e_cor'], Candidato::ETNIA_E_COR));
+        $userIds = array_column($filteredCandidatosData, 'user_id');
+        $filteredUsersData = array_filter($usersData, function ($user) use ($userIds) {
+            return in_array($user['id'], $userIds);
+        });
 
-                    $candidato->user_id = $user->id;
-                    $candidato->save();
+        // Executa as inserções e atualizações em massa atômicamente
+        DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
+            User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
+            Candidato::upsert($filteredCandidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
+            Inscricao::insert($inscricoesToInsert);
 
-                    $inscricao->chamada_id = $this->chamada->id;
-                    $inscricao->sisu_id = $this->chamada->sisu->id;
-                    $inscricao->candidato_id = $candidato->id;
+            // Atualiza o valor do próximo id da sequência
+            DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
+            DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
+        });
 
-                    $inscricao->cota_id = $cotaRemanejamento->id;
-                    $inscricao->cota_vaga_ocupada_id = $cota->id;
-
-                    $inscricao->curso_id = $curs->id;
-                    $inscricao->save();
-                } else {
-                    //Caso o inscrito já possua cadastro no sistema, checamos se ele já foi chamado naquela edição do sisu
-                    //isso evita que ele seja chamado novamente naquela edição, e permite que o mesmo arquivo csv
-                    //da lista de espera seja utilizado em outras chamadas.
-                    $chamado = False;
-                    foreach ($candidatoExistente->inscricoes as $inscricaoCandidato) {
-                        if ($inscricaoCandidato->chamada->sisu->id == $this->chamada->sisu->id) {
-                            $chamado = True;
-                            break;
-                        }
-                    }
-                    if (!$chamado) {
-                        $candidatoExistente->atualizar_dados = true;
-                        if ($inscrito['no_social'] != null) {
-                            $candidatoExistente->no_social = $inscrito['no_social'];
-                            $candidatoExistente->user->name = $inscrito['no_social'];
-                        } else {
-                            $candidatoExistente->user->name = $inscrito['no_inscrito'];
-                        }
-                        $candidatoExistente->etnia_e_cor = strval(array_search($inscrito['etnia_e_cor'], Candidato::ETNIA_E_COR));
-
-                        $candidatoExistente->update();
-                        $candidatoExistente->user->update();
-
-                        $inscricao->chamada_id = $this->chamada->id;
-                        $inscricao->sisu_id = $this->chamada->sisu->id;
-                        $inscricao->candidato_id = $candidatoExistente->id;
-
-                        $inscricao->cota_id = $cotaRemanejamento->id;
-                        $inscricao->cota_vaga_ocupada_id = $cota->id;
-
-                        $inscricao->curso_id = $curs->id;
-                        $inscricao->save();
-                    } else {
-                        $vagasCota += 1;
-                    }
-                }
-                $vagasCota -= 1;
-            } else {
-                break;
-            }
-        }
-
-        return $vagasCota;
+        return redirect()->route('sisus.show', $this->chamada->sisu->id);
     }
 }
