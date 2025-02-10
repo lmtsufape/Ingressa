@@ -49,7 +49,7 @@
         </div>
         <x-jet-banner />
         @component('layouts.nav_bar')@endcomponent
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-gray-100 p-1">
 
             {{-- @livewire('navigation-menu') --}}
 
