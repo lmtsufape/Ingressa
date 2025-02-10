@@ -404,7 +404,5 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
             DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
         });
-
-        return redirect()->route('sisus.show', $this->chamada->sisu->id);
     }
 }
