@@ -50,24 +50,24 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $csv->setDelimiter(';');
         $csv->setHeaderOffset(0);
         $records = $csv->getRecords();
-
+        
         // Arrays para armazenar os dados dos usuários, candidatos e inscrições
         $usersData = [];
         $candidatosData = [];
         $inscricoesData = [];
-
+        
         // Otimização para pegar apenas os candidatos que já estão cadastrados e usar indexação para tornar a busca mais rápida
         $cpfInscritos = array_column(iterator_to_array($records), 'NU_CPF_INSCRITO');
         $candidatos = Candidato::whereIn('nu_cpf_inscrito', $cpfInscritos)
-            ->with('user')
-            ->get()
-            ->keyBy('nu_cpf_inscrito');
-
-
+        ->with('user')
+        ->get()
+        ->keyBy('nu_cpf_inscrito');
+        
+        
         // Pega o próximo valor da sequência para que seja possível inserir os ids sem usar o método create ou save dentro do foreach
         $nextUserIdValue = DB::select("SELECT nextval('users_id_seq')")[0]->nextval;
         $nextCandidatoIdValue = DB::select("SELECT nextval('candidatos_id_seq')")[0]->nextval;
-
+        
         foreach ($records as $record) {
             $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
 
@@ -90,7 +90,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'no_social' => $record['NO_SOCIAL'],
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
-                    'dt_nascimento' => Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d'),
+                    'dt_nascimento' => Carbon::createFromFormat('d/m/Y', $record['DT_NASCIMENTO'])->format('Y-m-d'),
                     'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['COR_RACA']],
                     'user_id' => $nextUserIdValue++,
                     'created_at' => now(),
@@ -160,7 +160,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'st_opcao' => $record['ST_OPCAO'],
                     'no_modalidade_concorrencia' => $record['NO_MODALIDADE_CONCORRENCIA'],
                     'st_bonus_perc' => $record['ST_BONUS_PERC'],
-                    'qt_bonus_perc' => $record['QT_BONUS_PERC'],
+                    'qt_bonus_perc' => $record['QT_BONUS_PERCENTUAL'],
                     'no_acao_afirmativa_bonus' => $record['NO_ACAO_AFIRMATIVA_BONUS'],
                     'nu_nota_candidato' => str_replace(',', '.', $record['NU_NOTA_CANDIDATO']),
                     'nu_notacorte_concorrida' => str_replace(',', '.', $record['NU_NOTACORTE_CONCORRIDA']),
@@ -393,7 +393,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $filteredUsersData = array_filter($usersData, function ($user) use ($userIds) {
             return in_array($user['id'], $userIds);
         });
-
+        
         // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
