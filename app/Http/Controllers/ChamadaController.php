@@ -447,7 +447,7 @@ class ChamadaController extends Controller
             })
             ->get();
 
-            $retorno['candidatosInvalidados'] = Inscricao::select('inscricaos.*')
+        $retorno['candidatosInvalidados'] = Inscricao::select('inscricaos.*')
             ->where([['chamada_id', $chamada->id], ['curso_id', $curso->id]])
             ->whereIn('cota_id', $cotas)
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
@@ -746,28 +746,31 @@ class ChamadaController extends Controller
     private function gerarListagemConfirmacao($chamada)
     {
         ini_set('auto_detect_line_endings', true);
-        $dados = fopen(storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera), "r");
-        $primeira = true;
+
+        $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera);
+
+        // Lendo o arquivo CSV
+        $csv = \League\Csv\Reader::createFromPath($csvPath, 'r');
+        $csv->setDelimiter(';');
+        $csv->setHeaderOffset(0);
+        $records = $csv->getRecords();
+
         $candidatos = collect();
         $chamados = collect();
         $candidatosCPF = collect();
 
-        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
-            if ($primeira) {
-                $primeira = false;
-            } else {
-                $inscricao = array(
-                    'co_ies_curso' => strval($data[2]),
-                    'ds_turno' => strval($data[4]),
-                    'no_inscrito' => strval($data[8]),
-                    'nu_cpf_inscrito' => strval($data[10]),
-                    'no_modalidade_concorrencia' => strval($data[32]),
-                    'st_bonus_perc' => strval($data[33]),
-                    'nu_nota_candidato' => floatval(str_replace(',', '.', $data[36])),
-                    'nu_classificacao' => intval($data[38]),
-                );
-                $candidatos->push($inscricao);
-            }
+        foreach ($records as $record) {
+            $inscricao = array(
+                'co_ies_curso' => strval($record['CO_IES_CURSO']),
+                'ds_turno' => strval($record['DS_TURNO']),
+                'no_inscrito' => strval($record['NO_INSCRITO']),
+                'nu_cpf_inscrito' => strval($record['NU_CPF_INSCRITO']),
+                'no_modalidade_concorrencia' => strval($record['NO_MODALIDADE_CONCORRENCIA']),
+                'st_bonus_perc' => strval($record['ST_BONUS_PERC']),
+                'nu_nota_candidato' => floatval(str_replace(',', '.', $record['NU_NOTA_CANDIDATO'])),
+                'nu_classificacao' => intval($record['NU_CLASSIFICACAO']),
+            );
+            $candidatos->push($inscricao);
         }
         $grouped = $candidatos->groupBy(function ($candidato) {
             return $candidato['co_ies_curso'] . $candidato['ds_turno'];
