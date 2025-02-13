@@ -50,29 +50,31 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $csv->setDelimiter(';');
         $csv->setHeaderOffset(0);
         $records = $csv->getRecords();
-        
+
         // Arrays para armazenar os dados dos usuários, candidatos e inscrições
         $usersData = [];
         $candidatosData = [];
         $inscricoesData = [];
-        
+
         // Otimização para pegar apenas os candidatos que já estão cadastrados e usar indexação para tornar a busca mais rápida
         $cpfInscritos = array_column(iterator_to_array($records), 'NU_CPF_INSCRITO');
         $candidatos = Candidato::whereIn('nu_cpf_inscrito', $cpfInscritos)
-        ->with('user')
-        ->get()
-        ->keyBy('nu_cpf_inscrito');
-        
-        
+            ->with('user')
+            ->get()
+            ->keyBy('nu_cpf_inscrito');
+
+
         // Pega o próximo valor da sequência para que seja possível inserir os ids sem usar o método create ou save dentro do foreach
         $nextUserIdValue = DB::select("SELECT nextval('users_id_seq')")[0]->nextval;
         $nextCandidatoIdValue = DB::select("SELECT nextval('candidatos_id_seq')")[0]->nextval;
-        
+
         foreach ($records as $record) {
             $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
 
             // Cria um novo candidato e usuário caso ele não exista
             if (!$candidato) {
+                if (!in_array($record['NO_INSCRITO'], array_column($candidatosData, 'no_inscrito'))) {
+
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,
@@ -83,10 +85,9 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-
                 // Adiciona o candidato no array para inserção
                 $candidatosData[] = [
-                    'id' => $nextCandidatoIdValue,
+                    'id' => $nextCandidatoIdValue++,
                     'no_social' => $record['NO_SOCIAL'],
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
@@ -95,10 +96,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'user_id' => $nextUserIdValue++,
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'atualizar_dados' => true,
                 ];
+            }
 
                 // Atualiza dados do candidato caso ele exista
             } else {
+                if (!in_array($candidato->id, array_column($candidatosData, 'id'))) {
                 $candidatosData[] = [
                     'id' => $candidato->id,
                     'atualizar_dados' => true,
@@ -111,7 +115,10 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_cpf_inscrito' => '',
                     'dt_nascimento' => now(),
                     'etnia_e_cor' => 0,
+                    'created_at' => now(),
                 ];
+
+
 
                 $usersData[] = [
                     'id' => $candidato->user->id,
@@ -124,7 +131,19 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'primeiro_acesso' => true,
                 ];
             }
+            }
 
+            $cpfC = -1;
+            if( $candidato) {
+                $cpfC = $candidato->id;
+            }
+            else {
+                $index = array_search($record['NU_CPF_INSCRITO'], array_column($candidatosData, 'nu_cpf_inscrito'));
+                if($index !== false) {
+                    $cpfC = $candidatosData[$index]['id'];
+                }
+            }
+  
             // Adicionando inscrição apenas se o candidato não existir ou se ele não estiver inscrito nesse SiSU
             if (!$candidato || !$candidato->inscricoes()->where('sisu_id', $this->chamada->sisu->id)->exists()) {
                 $inscricoesData[] = [
@@ -183,12 +202,12 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'renda_familiar_bruta' => floatval(str_replace(',', '.', $record['RENDA_FAMILIAR_BRUTA'])),
                     'salario_minimo' => floatval(str_replace(',', '.', $record['SALARIO_MINIMO'])),
                     'perfil_economico_lei_cotas' => $record['PERFIL_ECONOMICO_LEI_COTAS'],
-                    'tipo_concorrencia' => $record['TIPO_CONCORRENCIA'],
+                    'tipo_concorrencia' => trim($record['TIPO_CONCORRENCIA']),
                     'no_acao_afirmativa_propria_ies' => $record['NO_ACAO_AFIRMATIVA_PROPRIA_IES'],
                     'chamada_id' => $this->chamada->id,
                     'sisu_id' => $this->chamada->sisu->id,
                     'cota_id' => Cota::getCotaModalidade($record['NO_MODALIDADE_CONCORRENCIA'])->id,
-                    'candidato_id' => $candidato ? $candidato->id : $nextCandidatoIdValue++,
+                    'candidato_id' => $cpfC, //$candidato ? $candidato->id :  $nextCandidatoIdValue++,
                     'curso_id' => Curso::where('cod_curso', $record['CO_IES_CURSO'])
                         ->where('turno', Curso::TURNO_ENUM[$record['DS_TURNO']])
                         ->first()
@@ -376,7 +395,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     }
                 }
             }
-        }
+        }     
 
         // Combina todas as inscrições válidas
         $inscricoesToInsert = array_merge($candidatosConvocados, $candidatosReservas);
@@ -387,13 +406,24 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         // Filtra os candidatos e usuários que estão relacionados às inscrições
         $filteredCandidatosData = array_filter($candidatosData, function ($candidato) use ($candidatoIds) {
             return in_array($candidato['id'], $candidatoIds);
-        });
+        }); 
 
         $userIds = array_column($filteredCandidatosData, 'user_id');
         $filteredUsersData = array_filter($usersData, function ($user) use ($userIds) {
             return in_array($user['id'], $userIds);
         });
+
+       /* $ids = array_column($filteredCandidatosData, 'id');
+        // Contando as ocorrências de cada ID
+        $idCounts = array_count_values($ids);
+        $filteredIdCounts = array_filter($idCounts, function($count) {
+            return $count > 1;
+        });
         
+        // Exibindo o resultado
+        dd($filteredIdCounts);*/
+        
+
         // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
@@ -405,4 +435,6 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             DB::statement("SELECT setval('candidatos_id_seq', $nextCandidatoIdValue, false)");
         });
     }
+
+
 }
