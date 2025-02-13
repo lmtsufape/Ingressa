@@ -428,7 +428,15 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
             Candidato::upsert($filteredCandidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
-            Inscricao::insert($inscricoesToInsert);
+            //Inscricao::insert($inscricoesToInsert);
+
+            // Define o tamanho do lote (ajuste conforme necessário)
+            $batchSize = 500;
+
+            // Divide as inscrições em lotes menores
+            foreach (array_chunk($inscricoesToInsert, $batchSize) as $batch) {
+                Inscricao::insert($batch);
+    }
 
             // Atualiza o valor do próximo id da sequência
             DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
