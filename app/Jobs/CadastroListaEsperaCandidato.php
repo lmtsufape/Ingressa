@@ -259,11 +259,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         // Arrays para armazenar os candidatos convocados e reservas
         $candidatosConvocados = [];
         $candidatosReservas = [];
+        
 
         // Os candidatos estão agrupados por curso, turno e modalidade de concorrência. O primeiro foreach itera pelos curso, o segundo pelo turno e o terceiro pela modalidade e o quarto pelos candidatos.
         foreach ($inscricoesOrdenadas as $codCurso => $curso) {
             foreach ($curso as $nomeTurno => $turno) {
                 $vagasModalidade = []; // Armazena a quantidade de vagas restantes para cada modalidade
+                $cloneVagas = []; 
 
                 // Processa os candidatos até preencher todas as vagas reais de todas as modalidades
                 foreach ($turno as $codCota => $modalidade) {
@@ -287,6 +289,9 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     $multiplicador = $multiplicador ? $multiplicador->multiplicador : 1;
                     $vagasModalidade[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
                     $vagasModalidade[$codCota]['reservas'] = $vagasModalidade[$codCota]['reais'] * ($multiplicador - 1); // O multiplicador é subtraído por 1 pois as vagas reais já foram contabilizadas
+
+                
+                    $cloneVagas[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
 
                     foreach ($modalidade as $candidato) {
                         if ($vagasModalidade[$codCota]['reais'] > 0) { // Candidatos que possuem vaga garantida
@@ -350,8 +355,9 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     }
                 }
 
+                
                 // Desagrupa e ordena os candidatos pela maior nota, em seguida pelos candidatos com mais mais chances de serem convocados e por fim pela modalidade menos restritiva para a mais restritiva
-                $candidatosDesagrupados = $turno->flatmap(function ($modalidade) {
+                /*$candidatosDesagrupados = $turno->flatmap(function ($modalidade) {
                     return $modalidade;
                 })->sortByDesc([
                     'nu_nota_candidato',
@@ -362,10 +368,57 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     function ($item) use ($ordemModalidades) {
                         return -$ordemModalidades[Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo];
                     }
-                ]);
+                ]);*/
 
+                
+                $candidatosDesagrupados = $turno->flatMap(function ($modalidade) {
+                    return $modalidade;
+                })->sort(function ($a, $b) use ($vagasModalidade, $ordemModalidades, $cloneVagas) {
+                    
+                    $codCotaA = Cota::getCotaModalidade($a['no_modalidade_concorrencia'])->cod_novo;
+                    $codCotaB = Cota::getCotaModalidade($b['no_modalidade_concorrencia'])->cod_novo;
+
+                    $notaA = $a['nu_nota_candidato'];
+                    $notaB = $b['nu_nota_candidato'];
+
+                //    $classificacaoA = $a['nu_classificacao'] - $vagasModalidade[$codCotaA]['reservas'];
+                //    $classificacaoB = $b['nu_classificacao'] - $vagasModalidade[$codCotaB]['reservas'];
+
+                 $classificacaoA = ($cloneVagas[$codCotaA]['reais'] == 0)? 1000: ($a['nu_classificacao'] - $vagasModalidade[$codCotaA]['reservas']) / $cloneVagas[$codCotaA]['reais'] ;
+                 $classificacaoB = ($cloneVagas[$codCotaB]['reais'] == 0)? 1000: ($b['nu_classificacao'] - $vagasModalidade[$codCotaB]['reservas']) / $cloneVagas[$codCotaB]['reais'];
+
+                    $ordemA = $ordemModalidades[$codCotaA];
+                    $ordemB = $ordemModalidades[$codCotaB];
+
+                /* Favor não apagar que isso ajuda a debugar se houver erro em um usuário específico
+
+       if(strcasecmp(trim($a['ds_email']), trim("mariathainaragomesdemelo@gmail.com")) === 0 && strcasecmp(trim($b['ds_email']), trim("mariathainaragomesdemelo@gmail.com")) === 0 ) {
+$string = $a['tipo_concorrencia'] . ' ' . $cloneVagas[$codCotaA]['reais'] . ", ". $a['nu_classificacao'] . "-" . $classificacaoA . " vs " . $b['tipo_concorrencia'] . ' ' . $cloneVagas[$codCotaB]['reais'] . ", ". $b['nu_classificacao']  . "-" . $classificacaoB ;// . " : " . $classificacaoB <=> $classificacaoA . "\n";
+                       var_dump($string);
+                       var_dump($classificacaoA <=> $classificacaoB);
+
+                    }*/
+
+                    // Comparação decrescente: primeiro por nota, depois por classificação, depois por ordem da modalidade
+                    return $notaB <=> $notaA ?: $classificacaoA <=> $classificacaoB ?: $ordemB <=> $ordemA;
+                });
+
+
+
+                $nota_paulo = [];
+                $vaga_modalidade = [];
+                $vaga = [];
                 // Processa os candidatos até preencher todas as vagas reserva de todas as modalidades
                 foreach ($candidatosDesagrupados as $candidato) {
+                    
+               /*     if(strcasecmp(trim($candidato['ds_email']), trim("mariathainaragomesdemelo@gmail.com")) === 0 ) {
+                        $codCota = Cota::getCotaModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
+                        $vg =  $vagasModalidade[$codCota]['reservas'] - $candidato['nu_classificacao'];
+                        $nota_paulo[] = $candidato;
+                        $vaga_modalidade[] =  $vg ;
+                        $vaga[] = $vagasModalidade[$codCota]['reservas'];
+                    }*/
+
                     $codCota = Cota::getCotaModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
                     if ($vagasModalidade[$codCota]['reservas'] > 0) {
                         $convocado = false;
@@ -394,6 +447,10 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         }
                     }
                 }
+
+            /* Favor não apagar que isso ajuda a debugar se houver erro em um usuário específico
+          //      if( $candidato["no_curso"] === "ADMINISTRAÇÃO" && $candidato["ds_turno"] === "Noturno")
+            //        dd($candidatosDesagrupados,$nota_paulo,  $vaga_modalidade, $vaga); */
             }
         }     
 
@@ -413,30 +470,19 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             return in_array($user['id'], $userIds);
         });
 
-       /* $ids = array_column($filteredCandidatosData, 'id');
-        // Contando as ocorrências de cada ID
-        $idCounts = array_count_values($ids);
-        $filteredIdCounts = array_filter($idCounts, function($count) {
-            return $count > 1;
-        });
-        
-        // Exibindo o resultado
-        dd($filteredIdCounts);*/
-        
+            
 
         // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
             Candidato::upsert($filteredCandidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
-            //Inscricao::insert($inscricoesToInsert);
+           // Inscricao::insert($inscricoesToInsert);
 
-            // Define o tamanho do lote (ajuste conforme necessário)
             $batchSize = 500;
-
             // Divide as inscrições em lotes menores
             foreach (array_chunk($inscricoesToInsert, $batchSize) as $batch) {
                 Inscricao::insert($batch);
-    }
+            }
 
             // Atualiza o valor do próximo id da sequência
             DB::statement("SELECT setval('users_id_seq', $nextUserIdValue, false)");
