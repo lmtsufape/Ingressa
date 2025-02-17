@@ -270,7 +270,7 @@ class ListagemController extends Controller
         $cursos = Curso::OrderBy('nome')->get();
         $candidatosIngressantesCursos = collect();
         $candidatosReservaCursos = collect();
-        $A0 = Cota::where('cod_cota', 'A0')->first();
+        $A0 = Cota::where('cod_novo', 'AC')->first();
 
         foreach ($cursos as $curso) {
             $cpfs = collect();
@@ -288,7 +288,7 @@ class ListagemController extends Controller
             })
             ->orderBy('nu_nota_candidato', 'DESC')->get();
 
-            $cota_curso_quantidade = $curso->cotas()->where('cota_id', $A0->id)->where('sisu_id', $sisu->id)->first()->pivot->quantidade_vagas;
+            $cota_curso_quantidade = $curso->cotas()->where('cota_id', $A0->id)->wherePivot('sisu_id', $sisu->id)->first()->pivot->quantidade_vagas;
 
             //se o curso for de 80 vagas, logo A0 tem 40 vagas
             if ($cota_curso_quantidade == 40) {
@@ -484,6 +484,8 @@ class ListagemController extends Controller
             $candidatosIngressantesCursos = $inscricoes['ingressantes'];
             $primeiro = true;
             foreach ($candidatosIngressantesCursos as $curso) {
+                if ($curso->isEmpty()) continue;
+
                 $curso_atual = Inscricao::find($curso[0]['id'])->curso;
                 foreach ($curso as $i => $insc) {
                     $inscricao = Inscricao::find($insc['id']);
@@ -894,6 +896,7 @@ class ListagemController extends Controller
             91969  => 47,
             91561  => 45,
             91738  => 46,
+            1682932 => 00 // VALOR DE TESTE, DEVE SER ALTERADO QUANDO O CÓDIGO REAL FOR FORNECIDO!
         ];
         return $codigos[$curso->cod_curso];
     }

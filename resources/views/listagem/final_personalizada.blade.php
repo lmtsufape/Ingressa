@@ -120,6 +120,9 @@
     </header>
     <div>
         @foreach ($candidatosIngressantesCursos as $i => $curso)
+            @if ($curso->isEmpty())
+                @continue
+            @endif
             @php
                 $inscricao = App\Models\Inscricao::find($curso->first()['id']);
             @endphp
