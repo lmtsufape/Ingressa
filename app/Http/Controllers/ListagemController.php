@@ -564,8 +564,8 @@ class ListagemController extends Controller
     {
         $this->periodos = [
             '118468' => 0,
-            '118466' => 0,
             '118470' => 0,
+            '1682932' => 0,
         ];
 
         $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
@@ -631,8 +631,8 @@ class ListagemController extends Controller
         $this->authorize('isAdmin', User::class);
         $this->periodos = [
             '118468' => 0,
-            '118466' => 0,
             '118470' => 0,
+            '1682932' => 0,
         ];
 
         $candidatosIngressantes = Inscricao::where(
@@ -875,7 +875,7 @@ class ListagemController extends Controller
             return $curso->semestre;
         }
 
-        return $this->periodos[$curso->cod_curso]++ < 20 ? 1 : 2;
+        return $this->periodos[$curso->cod_curso]++ < 40 ? 1 : 2;
     }
 
     private function getNacionalidade($nacionalidade)
