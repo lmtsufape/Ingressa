@@ -225,6 +225,9 @@
                                             <img width="25" src="{{ asset('img/download1.svg') }}"
                                                 alt="Ícone de download"></a>
                                         </a>
+                                        <a href="#" onclick="deleteArquivo(event)" title="Deletar requerimento de nome social">
+                                            <img width="25" src="{{ asset('img/Grupo 1664.svg') }}" alt="Ícone de download">
+                                        </a>                                        
                                     @endif
                                 </div>
                                 {{-- <div class="tituloDocumento mx-3 pt-1">
@@ -1469,6 +1472,27 @@
 
     function atualizarInputConfirmarInvalidacao(valor) {
         document.getElementById('confirmarInvalidacao').value = valor;
+    }
+
+    function deleteArquivo(event) {
+        event.preventDefault();
+        
+        if (confirm('Tem certeza que deseja excluir o requerimento de nome social do candidato?')) {
+            fetch("{{ route('inscricao.delete.arquivo', [$inscricao->id, 'requerimento_nome_social']) }}", {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert("Documento excluído com sucesso!");
+                    location.reload();
+                } else {
+                    alert("Erro ao excluir o documento.");
+                }
+            });
+        }
     }
 </script>
 

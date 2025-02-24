@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::post('/inscricaos/{inscricao_id}/status-desistencia', [InscricaoController::class, 'statusDesistencia'])->name('inscricao.status-desistencia');
 
     Route::get('/inscricaos/{inscricao_id}/ver-documento/{documento_nome}', [InscricaoController::class, 'showDocumento'])->name('inscricao.arquivo');
+    Route::delete('/inscricaos/{inscricao_id}/deletar-documento/{documento_nome}', [InscricaoController::class, 'deleteDocumento'])->name('inscricao.delete.arquivo');
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada/curso/{curso_id}/inscricao/{inscricao_id}', [InscricaoController::class, 'showAnalisarDocumentos'])
         ->name('inscricao.show.analisar.documentos');
     Route::post('/enviar/email/candidato', [CandidatoController::class, 'enviarEmail'])->name('enviar.email.candidato');
