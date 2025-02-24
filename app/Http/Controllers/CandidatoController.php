@@ -75,7 +75,7 @@ class CandidatoController extends Controller
     {
         $validated = $request->validated();
 
-        if ($request->user->role == User::ROLE_ENUM['candidato']) {
+        if ($request->user()->role == User::ROLE_ENUM['candidato']) {
             if ($request->hasFile('requerimento_nome_social')) {
                 $caminho = $request->file('requerimento_nome_social')->storeAs("documentos/inscricaos/$inscricao->id", 'requerimento_nome_social.pdf');
 
