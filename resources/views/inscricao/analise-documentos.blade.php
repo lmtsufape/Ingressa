@@ -829,11 +829,8 @@
                                     @endif
                                 </span></button>
                         @else
-                            <button @if (
-                                $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] &&
-                                    $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] &&
-                                    $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
-                            ) disabled @endif id="efetivarBotao2" type="button"
+                            <button @if ($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
+                                id="efetivarBotao2" type="button"
                                 class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span
                                     class="px-4">
                                     @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
@@ -843,10 +840,11 @@
                                     @endif
                                 </span></button>
                         @endif
-                        <button @if (
-                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] ||
-                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']
-                        ) @elseif($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
+                        <button @if ($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
+                                    && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']
+                                    && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
+                                    disabled 
+                                @endif
                             id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12"
                             onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span
                                 class="px-4">

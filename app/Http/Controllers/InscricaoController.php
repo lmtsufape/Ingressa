@@ -351,7 +351,9 @@ class InscricaoController extends Controller
         $documentosAceitos = true;
         $necessitaAvaliar = false;
         foreach ($inscricao->arquivos as $arqui) {
-            if (!is_null($arqui->avaliacao)) {
+            if ($arqui->nome == 'requerimento_nome_social') {
+                continue;
+            } else if ($arqui->avaliacao) {
                 if ($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']) {
                     $documentosAceitos = false;
                 } elseif ($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['reenviado']) {
