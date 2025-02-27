@@ -27,6 +27,11 @@ class DataChamada extends Model
         'data_fim',
     ];
 
+    protected $casts = [
+        'data_inicio' => 'datetime',
+        'data_fim' => 'datetime',
+    ];
+
     public function chamada()
     {
         return $this->belongsTo(Chamada::class, 'chamada_id');
