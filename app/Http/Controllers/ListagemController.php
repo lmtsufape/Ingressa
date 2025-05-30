@@ -267,7 +267,9 @@ class ListagemController extends Controller
     {
         $chamada = Chamada::find($request->chamada);
         $sisu = $chamada->sisu;
-        $cursos = Curso::OrderBy('nome')->get();
+        $cursos = Curso::whereHas('cotas', function ($query) use ($sisu) {
+            $query->where('cota_curso.sisu_id', $sisu->id);
+        })->orderBy('nome')->get();
         $candidatosIngressantesCursos = collect();
         $candidatosReservaCursos = collect();
         $A0 = Cota::where('cod_novo', 'AC')->first();
@@ -564,6 +566,7 @@ class ListagemController extends Controller
     {
         $this->periodos = [
             '118468' => 0,
+            '118466' => 0,
             '118470' => 0,
             '1682932' => 0,
         ];
