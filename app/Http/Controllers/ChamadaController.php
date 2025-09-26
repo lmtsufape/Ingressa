@@ -225,8 +225,8 @@ class ChamadaController extends Controller
         $naoEnviados = collect();
         $invalidados = collect();
 
-        $cursos = auth()->user()->analistaCursos->sortBy('nome');
-        $cursos = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Curso::all() : $cursos;
+        $cursos = auth()->user()->analistaCursos()->orderBy('nome')->get();
+        $cursos = auth()->user()->role !== User::ROLE_ENUM['analista'] ? Curso::orderBy('nome')->get() : $cursos;
         $userPolicy = new UserPolicy();
 
         $L2 = Cota::where('cod_cota', 'L2')->first();
@@ -458,19 +458,8 @@ class ChamadaController extends Controller
                     ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
                     ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
                     ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
-                    ->whereIn('avaliacaos.avaliacao', [1, 2])
-                    ->whereIn('inscricaos.id', function ($sub) {
-                        $sub->select('inscricaos.id')
-                            ->from('inscricaos')
-                            ->join('arquivos', 'arquivos.inscricao_id', '=', 'inscricaos.id')
-                            ->join('avaliacaos', 'avaliacaos.arquivo_id', '=', 'arquivos.id')
-                            ->whereIn('arquivos.nome', ['laudo_medico', 'declaracao_cotista'])
-                            ->whereIn('avaliacaos.avaliacao', [2])
-                            ->groupBy('inscricaos.id')
-                            ->get();
-                    })
+                    ->where('avaliacaos.avaliacao', 2) // Apenas rejeições
                     ->groupBy('inscricaos.id')
-                    ->havingRaw('COUNT(*) = ?', [3])
                     ->get();
             })
             ->get();
@@ -757,28 +746,31 @@ class ChamadaController extends Controller
     private function gerarListagemConfirmacao($chamada)
     {
         ini_set('auto_detect_line_endings', true);
-        $dados = fopen(storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera), "r");
-        $primeira = true;
+
+        $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera);
+
+        // Lendo o arquivo CSV
+        $csv = \League\Csv\Reader::createFromPath($csvPath, 'r');
+        $csv->setDelimiter(';');
+        $csv->setHeaderOffset(0);
+        $records = $csv->getRecords();
+
         $candidatos = collect();
         $chamados = collect();
         $candidatosCPF = collect();
 
-        while (($data = fgetcsv($dados, null, ';')) !== FALSE) {
-            if ($primeira) {
-                $primeira = false;
-            } else {
-                $inscricao = array(
-                    'co_ies_curso' => strval($data[2]),
-                    'ds_turno' => strval($data[4]),
-                    'no_inscrito' => strval($data[8]),
-                    'nu_cpf_inscrito' => strval($data[10]),
-                    'no_modalidade_concorrencia' => strval($data[32]),
-                    'st_bonus_perc' => strval($data[33]),
-                    'nu_nota_candidato' => floatval(str_replace(',', '.', $data[36])),
-                    'nu_classificacao' => intval($data[38]),
-                );
-                $candidatos->push($inscricao);
-            }
+        foreach ($records as $record) {
+            $inscricao = array(
+                'co_ies_curso' => strval($record['CO_IES_CURSO']),
+                'ds_turno' => strval($record['DS_TURNO']),
+                'no_inscrito' => strval($record['NO_INSCRITO']),
+                'nu_cpf_inscrito' => strval($record['NU_CPF_INSCRITO']),
+                'no_modalidade_concorrencia' => strval($record['NO_MODALIDADE_CONCORRENCIA']),
+                'st_bonus_perc' => strval($record['ST_BONUS_PERC']),
+                'nu_nota_candidato' => floatval(str_replace(',', '.', $record['NU_NOTA_CANDIDATO'])),
+                'nu_classificacao' => intval($record['NU_CLASSIFICACAO']),
+            );
+            $candidatos->push($inscricao);
         }
         $grouped = $candidatos->groupBy(function ($candidato) {
             return $candidato['co_ies_curso'] . $candidato['ds_turno'];
@@ -832,13 +824,13 @@ class ChamadaController extends Controller
         foreach ($cursos as $indexCurso => $curso) {
             $candidato = $curso[0][0];
             if ($candidato['ds_turno'] == 'Matutino') {
-                $turno =  Curso::TURNO_ENUM['matutino'];
+                $turno =  Curso::TURNO_ENUM['Matutino'];
             } elseif ($candidato['ds_turno'] == 'Vespertino') {
-                $turno = Curso::TURNO_ENUM['vespertino'];
+                $turno = Curso::TURNO_ENUM['Vespertino'];
             } elseif ($candidato['ds_turno'] == 'Noturno') {
-                $turno = Curso::TURNO_ENUM['noturno'];
+                $turno = Curso::TURNO_ENUM['Noturno'];
             } elseif ($candidato['ds_turno'] == 'Integral') {
-                $turno = Curso::TURNO_ENUM['integral'];
+                $turno = Curso::TURNO_ENUM['Integral'];
             }
 
             $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
@@ -978,7 +970,7 @@ class ChamadaController extends Controller
         foreach ($porModalidade as $inscrito) {
             if ($vagasCota > 0) {
                 if ($ehNull == null) {
-                    $cotaRemanejamento = $this->getCotaModalidade($inscrito['no_modalidade_concorrencia']);
+                    $cotaRemanejamento = Cota::getCotaModalidade($inscrito['no_modalidade_concorrencia']);
                 }
                 $inscricao = array(
                     'co_ies_curso' => $inscrito['co_ies_curso'],
@@ -1057,18 +1049,6 @@ class ChamadaController extends Controller
             \Maatwebsite\Excel\Excel::CSV,
             ['Content-Type' => 'text/csv']
         );
-    }
-
-    private function getCotaModalidade($modalidade)
-    {
-        if (
-            $modalidade == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.'
-            || $modalidade == 'AMPLA CONCORRÊNCIA' || $modalidade == 'Ampla concorrência'
-        ) {
-            return Cota::where('cod_cota', 'A0')->first();
-        }
-
-        return Cota::where('nome', $modalidade)->first();
     }
 
     private function situacaoMatricula($status)

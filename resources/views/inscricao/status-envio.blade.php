@@ -136,7 +136,8 @@
                                 Carteira de Identidade válida e com foto recente (RG) - escanear frente e verso. <b>OBS.</b>:
                                 Caso tenha perdido ou sido roubado, anexar um Boletim de Ocorrência e algum outro
                                 documento com foto. A Carteira Nacional de Habilitação pode ser utilizada como
-                                documento com foto, mas não será aceita em substituição ao RG e ao CPF
+                                documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de
+                                cadastro.
                             </span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="rg"/>
@@ -183,12 +184,12 @@
                             <span class="subtexto3">
                                 Comprovante de quitação com a Justiça Eleitoral ou Certidão de
                                 quitação eleitoral. <b>OBS.</b>:  Essa certidão poderá ser emitida no
-                                <a href="https://www.tse.jus.br/servicos-eleitorais/titulo-eleitoral/quitacao-de-multas#consulta-de-d-bitos-do-eleitor" target="_blank" rel="noopener noreferrer">
+                                <a href="https://www.tse.jus.br/servicos-eleitorais/autoatendimento-eleitoral#/certidoes-eleitor" target="_blank" rel="noopener noreferrer">
                                 site do Tribunal Superior Eleitoral.</a> Caso a certidão de quitação eleitoral não possa ser emitida em função de
                                 pagamento de multas eleitorais, poderá ser apresentada cópia (captura da
                                 tela) do relatório de quitação de débitos do eleitor (quitação de multas,
                                 disponível no
-                                <a href="https://www.tse.jus.br/" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>)
+                                <a href="https://www.tse.jus.br/servicos-eleitorais/titulo-eleitoral/quitacao-de-multas#consulta-de-d-bitos-do-eleitor" target="_blank" rel="noopener noreferrer">site do Tribunal Superior Eleitoral</a>)
                             </span>
                             @if(!$inscricao->arquivo('quitacao_eleitoral') && !$pre_envio)
                                 <div class="form-check mt-2">
@@ -312,7 +313,11 @@
                             <span class="subtexto3">
                                 Vídeo individual e recente para procedimento de heteroidentificação.
                                 De acordo com as especificações e o roteiro descritos no edital do
-                                processo de seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a></span>
+                                processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
+                                Conforme Edital SiSU 2025, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação
+                                frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2025 da
+                                UFAPE, me autodeclaro, [dizer a opção: Preto ou Pardo]”.
+                            </span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="heteroidentificacao"/>
                         <div class="mt-2">
@@ -332,7 +337,7 @@
                             <span class="subtexto3">
                                 Fotografia individual e recente para procedimento de
                                 heteroidentificação. Conforme especificado no edital do processo de
-                                seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a></span>
+                                seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a></span>
                         </div>
                         <x-show-analise-documento :inscricao="$inscricao" documento="fotografia"/>
                     </li>
@@ -359,7 +364,7 @@
                             @endif
                             <span class="subtexto3">
                                 Comprovante de renda, ou de que não possui renda, de cada membro
-                                do grupo familiar, seja maior ou menor de idade
+                                do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>).
                             </span>
                         </div>
                     </li>
@@ -404,7 +409,9 @@
                         <div class="col-md-12">
                             <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
                                 vaga para candidato autodeclarado quilombola</div>
-                            <div class="subtexto2 my-1">Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.</div>
+                            <div class="subtexto2 my-1">
+                            Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.
+                            </div>
                         </div>
                         <div class="mt-2">
                             @if ($inscricao->arquivo('declaracao_quilombola'))
@@ -421,7 +428,7 @@
                                     width="30">
                             @endif
                             <span class="subtexto3">
-                                Declaração da Fundação Cultural Palmares ou Declaração de pertencimento Ético e de Vínculo com Comunidade Quilombola assinada por 03 (três) lideranças da Comunidade.
+                                Declaração da Fundação Cultural Palmares ou Declaração de pertencimento Étnico e de Vínculo com Comunidade Quilombola assinada por 03 (três) lideranças da Comunidade.
                             </span>
                         </div>
                     </li>
@@ -452,7 +459,7 @@
                             <span class="subtexto3">
                                 Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                 para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
+                                SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
                             </span>
                         </div>
                     </li>
@@ -477,7 +484,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" checked disabled id="checkConfirmacaoVinculo">
                     <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
-                        DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2024 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>
+                        DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e datas descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>
                     </label>
                 </div>
             @endempty

@@ -120,46 +120,41 @@
     </header>
     <div>
         @foreach ($candidatosIngressantesCursos as $i => $curso)
-            @php
-                $exibirNomeCurso = true;
-            @endphp
-            @if ($exibirNomeCurso)
-                @php
-                    $inscricao = App\Models\Inscricao::find($curso->first()['id']);
-                @endphp
-                <h3 class="subtitulo" style="text-align: center">
-                    <span style="font-weight: bold; word-break: keep-all">
-                        RELAÇÃO DOS CANDIDATOS INGRESSANTES - CADASTRO EFETIVADO
-                    </span><br>
-                    <span style="font-weight: bold;">
-                        Semestre de ingresso: {{ $sisu->edicao }}.{{ $inscricao->semestre_entrada }}
-                    </span><br>
-                    <span>
-                        Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                                Matutino
-                            @break
-
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                                Vespertino
-                            @break
-
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                                Noturno
-                            @break
-
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
-                                Integral
-                            @break
-                        @endswitch
-                    </span>
-                </h3>
-                @php
-                    $exibirNomeCurso = false;
-                @endphp
+            @if ($curso->isEmpty())
+                @continue
             @endif
+            @php
+                $inscricao = App\Models\Inscricao::find($curso->first()['id']);
+            @endphp
+            <h3 class="subtitulo" style="text-align: center">
+                <span style="font-weight: bold; word-break: keep-all">
+                    RELAÇÃO DOS CANDIDATOS INGRESSANTES - CADASTRO EFETIVADO
+                </span><br>
+                <span style="font-weight: bold;">
+                    Semestre de ingresso: {{ $sisu->edicao }}.{{ $inscricao->semestre_entrada }}
+                </span><br>
+                <span>
+                    Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
+                        @case(App\Models\Curso::TURNO_ENUM['Matutino'])
+                            Matutino
+                        @break
+
+                        @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
+                            Vespertino
+                        @break
+
+                        @case(App\Models\Curso::TURNO_ENUM['Noturno'])
+                            Noturno
+                        @break
+
+                        @case(App\Models\Curso::TURNO_ENUM['Integral'])
+                            Integral
+                        @break
+                    @endswitch
+                </span>
+            </h3>
             <div class="body">
-                <div id="modalidade" style="page-break-inside: avoid;">
+                <div id="modalidade">
                     <table>
                         <thead>
                             <tr class="esquerda">
@@ -195,50 +190,43 @@
                     </table>
                 </div>
             </div>
-            @if ($i != $curso->count() - 1)
-                <br />
+            @unless ($curso === $candidatosIngressantesCursos->last() && $candidatosReservaCursos->isEmpty())
+                <br>
                 <div class="quebrar_pagina"></div>
-            @endif
+            @endunless
         @endforeach
 
         @foreach ($candidatosReservaCursos as $i => $curso)
             @php
-                $exibirNomeCurso = true;
+                $inscricao = App\Models\Inscricao::find($curso->first()['id']);
             @endphp
-            @if ($exibirNomeCurso)
-                @php
-                    $inscricao = App\Models\Inscricao::find($curso->first()['id']);
-                @endphp
-                <h3 class="subtitulo" style="text-align: center; top: 185px;">
-                    <span style="font-weight: bold;">
-                        RELAÇÃO DE CANDIDATOS - CADASTRO RESERVA (SUPLENTES)
-                    </span><br>
-                    <span>
-                        Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
-                                Matutino
-                            @break
+            <h3 class="subtitulo" style="text-align: center; top: 185px;">
+                <span style="font-weight: bold;">
+                    RELAÇÃO DE CANDIDATOS - CADASTRO RESERVA (SUPLENTES)
+                </span><br>
+                <span>
+                    Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
+                        @case(App\Models\Curso::TURNO_ENUM['Matutino'])
+                            Matutino
+                        @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
-                                Vespertino
-                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
+                            Vespertino
+                        @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
-                                Noturno
-                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['Noturno'])
+                            Noturno
+                        @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
-                                Integral
-                            @break
-                        @endswitch
-                    </span>
-                </h3>
-                @php
-                    $exibirNomeCurso = false;
-                @endphp
-            @endif
+                        @case(App\Models\Curso::TURNO_ENUM['Integral'])
+                            Integral
+                        @break
+                    @endswitch
+                </span>
+            </h3>
+
             <div class="body">
-                <div id="modalidade" style="page-break-inside: avoid;">
+                <div id="modalidade">
                     <table>
                         <thead>
                             <tr class="esquerda">
@@ -274,8 +262,10 @@
                     </table>
                 </div>
             </div>
-            <br />
-            <div class="quebrar_pagina"></div>
+            @unless ($curso === $candidatosReservaCursos->last())
+                <br>
+                <div class="quebrar_pagina"></div>
+            @endunless
         @endforeach
     </div>
 </body>

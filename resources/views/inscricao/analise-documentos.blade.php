@@ -79,19 +79,19 @@
                         href="{{ route('chamadas.candidatos.curso', ['sisu_id' => $inscricao->chamada->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id]) }}"
                         style="text-decoration: none; color: #373737;"> Curso: {{ $inscricao->curso->nome }} -
                         @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Matutino'])
                                 Matutino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
                                 Vespertino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            @case(App\Models\Curso::TURNO_ENUM['Noturno'])
                                 Noturno
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            @case(App\Models\Curso::TURNO_ENUM['Integral'])
                                 Integral
                             @break
                         @endswitch </a>
@@ -216,6 +216,20 @@
                                     Nome: <p class="nomeDocumento" style="display: inline">
                                         {{ $inscricao->candidato->no_inscrito }}</p>
                                 </div>
+                                <div class="tituloDocumento mx-3">
+                                    Nome Social: <p class="nomeDocumento" style="display: inline">
+                                        {{ $inscricao->candidato->no_social }}</p>
+                                    @if ($inscricao->arquivos()->where('nome', 'requerimento_nome_social')->exists())
+                                        <a href="{{ route('inscricao.arquivo', [$inscricao->id, 'requerimento_nome_social']) }}"
+                                            target="_blank" title="Baixar requerimento de nome social">
+                                            <img width="25" src="{{ asset('img/download1.svg') }}"
+                                                alt="Ícone de download"></a>
+                                        </a>
+                                        <a href="#" onclick="deleteArquivo(event)" title="Deletar requerimento de nome social">
+                                            <img width="25" src="{{ asset('img/Grupo 1664.svg') }}" alt="Ícone de download">
+                                        </a>                                        
+                                    @endif
+                                </div>
                                 {{-- <div class="tituloDocumento mx-3 pt-1">
                                         CEP: {{$inscricao->nu_cep}}
                                     </div> --}}
@@ -259,7 +273,10 @@
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
                                     Expedição: <p class="nomeDocumento" style="display: inline">
-                                        {{ date('d/m/Y', strtotime($inscricao->candidato->data_expedicao)) }}</p>
+                                        @if ($inscricao->candidato->data_expedicao)
+                                            {{ date('d/m/Y', strtotime($inscricao->candidato->data_expedicao)) }}
+                                    </p>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row pt-2">
@@ -320,7 +337,8 @@
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
                                     Ano de Ingresso: <p class="nomeDocumento" style="display: inline">
-                                        {{ date('Y', strtotime($inscricao->dt_operacao)) }}</p>
+                                        {{ !empty($inscricao->dt_operacao) ? date('Y', strtotime($inscricao->dt_operacao)) : null }}
+                                    </p>
                                 </div>
                                 <div class="col-md-4 tituloDocumento">
                                     Nota: <p class="nomeDocumento" style="display: inline">
@@ -338,15 +356,11 @@
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
                                 Modalidade Escolhida: <p class="nomeDocumento" style="display: inline">
-                                    {{ $inscricao->no_modalidade_concorrencia }}</p>
+                                    {{ $inscricao->cota->cod_novo }}</p>
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
                                 Modalidade Ocupada:<p class="nomeDocumento" style="display: inline">
-                                    @if($inscricao->cota_classificacao_id == NULL)
-
-                                    @else
-                                        {{$inscricao->cotaClassificacao->cod_novo}}
-                                    @endif
+                                    {{ $inscricao->cotaRemanejada->cod_novo }}
                                 </p>
                             </div>
                         </div>
@@ -392,6 +406,10 @@
                                     Celular: <p class="nomeDocumento" style="display: inline">
                                         {{ $inscricao->nu_fone2 }}</p>
                                 </div>
+                                <div class="col-md-4 tituloDocumento">
+                                    Contato de Emergência: <p class="nomeDocumento" style="display: inline">
+                                        {{ $inscricao->nu_fone_emergencia }}</p>
+                                </div>
                             </div>
                             <div class="col-md-12 pt-2 tituloDocumento">
                                 Email: <p class="nomeDocumento" style="display: inline">
@@ -429,6 +447,16 @@
                                     @endisset
                                 </div>
                             </div>
+                            <div class="row pt-2">
+                                <div class="col-md-12 tituloDocumento">
+                                    Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do
+                                    campo conveniadas com o poder público?
+                                    @isset($inscricao->candidato->concluiu_comunitaria)
+                                        <p class="nomeDocumento" style="display: inline">
+                                            {{ $inscricao->candidato->concluiu_comunitaria ? 'Sim' : 'Não' }}</p>
+                                    @endisset
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                             <div class="row">
@@ -449,20 +477,35 @@
                                 <div class="col-md-4 tituloDocumento">
                                     Cor/Raça: @isset($inscricao->candidato->etnia_e_cor)
                                         <p class="nomeDocumento" style="display: inline">
-                                            {{ \App\Models\Candidato::ETNIA_E_COR[$inscricao->candidato->etnia_e_cor] }}
+                                            {{ array_flip(\App\Models\Candidato::ETNIA_E_COR)[$inscricao->candidato->etnia_e_cor] }}
                                         </p>
                                     @endisset
                                 </div>
+
                                 <div class="col-md-4 tituloDocumento">
-                                    Quilombola: @if($inscricao->quilombola == 'S')
-                                        <p class="nomeDocumento" style="display: inline">
+                                    Quilombola:
+                                    <p class="nomeDocumento" style="display: inline">
+                                        @if ($inscricao->candidato->quilombola)
                                             Sim
-                                        </p>
-                                        @else
-                                        <p class="nomeDocumento" style="display: inline">
+                                        @elseif ($inscricao->candidato->quilombola === false)
                                             Não
-                                        </p>
-                                    @endisset
+                                        @else
+                                            Não informado
+                                        @endif
+                                    </p>
+                                </div>
+
+                                <div class="col-md-4 tituloDocumento">
+                                    Indígena:
+                                    <p class="nomeDocumento" style="display: inline">
+                                        @if ($inscricao->candidato->indigena)
+                                            Sim
+                                        @elseif ($inscricao->candidato->indigena === false)
+                                            Não
+                                        @else
+                                            Não informado
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -616,8 +659,13 @@
                                             <a title="Abrir documento em nova aba"
                                                 href="{{ route('inscricao.arquivo', ['inscricao_id' => $inscricao->id, 'documento_nome' => $documento]) }}"
                                                 target="_blank" style="cursor:pointer;"><img
-                                                    @if (is_null(
-                                                            $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{ asset('img/download2.svg') }}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['aceito'])  src="{{ asset('img/documento-aceito.svg') }}" @elseif($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) src="{{ asset('img/documento-recusado.svg') }}" @else src="{{ asset('img/download2.svg') }}" @endif
+                                                    @if (is_null($inscricao->arquivos()->where('nome', $documento)->first()->avaliacao)) src="{{ asset('img/download2.svg') }}" @elseif(
+                                                        $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao ==
+                                                            \App\Models\Avaliacao::AVALIACAO_ENUM['aceito']
+                                                    )  src="{{ asset('img/documento-aceito.svg') }}" @elseif(
+                                                        $inscricao->arquivos()->where('nome', $documento)->first()->avaliacao->avaliacao ==
+                                                            \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
+                                                    ) src="{{ asset('img/documento-recusado.svg') }}" @else src="{{ asset('img/download2.svg') }}" @endif
                                                     alt="arquivo atual" width="45" class="img-flex"></a>
                                         </div>
                                     @else
@@ -781,11 +829,8 @@
                                     @endif
                                 </span></button>
                         @else
-                            <button @if (
-                                $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] &&
-                                    $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] &&
-                                    $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
-                            ) disabled @endif id="efetivarBotao2" type="button"
+                            <button @if ($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
+                                id="efetivarBotao2" type="button"
                                 class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span
                                     class="px-4">
                                     @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
@@ -795,10 +840,11 @@
                                     @endif
                                 </span></button>
                         @endif
-                        <button @if (
-                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'] ||
-                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias']
-                        ) @elseif($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
+                        <button @if ($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
+                                    && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']
+                                    && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
+                                    disabled 
+                                @endif
                             id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12"
                             onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span
                                 class="px-4">
@@ -847,12 +893,20 @@
                                 </span></button>
                         @endif
                     @endcan
+                    @can('isAdmin', \App\Models\User::class)
+                        <button id="invalidar-desistencia" type="button" class="btn botao mt-2 py-1 col-md-12"
+                            data-bs-toggle="modal" data-bs-target="#confirmar-desistencia-modal"
+                            style="background-color: #FC605F;"><span
+                                class="px-4">{{ !$inscricao->desistente ? 'Informar Desistência' : 'Reverter Desistência' }}
+                            </span></button>
+                    @endcan
                     <button data-bs-toggle="modal" data-bs-target="#enviar-email-candidato-modal"
                         class="btn botao mt-2 py-1 col-md-12"><span class="px-4">Enviar um e-mail para o
                             candidato</span></button>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     </div>
 
@@ -1099,6 +1153,50 @@
         </div>
     </div>
 
+    {{-- modal de desistência --}}
+    <div class="modal fade" id="confirmar-desistencia-modal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modalFundo p-3">
+                <div id ="reprovarCandidatoForm" class="col-md-12 tituloModal">
+                    {{ !$inscricao->desistente ? 'Informar Desistência' : 'Reverter Desistência' }}</div>
+                <div class="pt-3 pb-2 textoModal">
+                    <div class="pt-3">
+                        {{ !$inscricao->desistente ? 'Tem certeza que deseja marcar o candidato como desistente?' : 'Tem certeza que deseja reverter a desistência do candidato?' }}
+                    </div>
+                </div>
+                <form action="{{ route('inscricao.status-desistencia', $inscricao->id) }}" method="post"
+                    id="marcar-desistencia">
+                    @csrf
+
+                    <input type="hidden" name="desistencia" value="{{ $inscricao->desistente ? 0 : 1 }}">
+
+                    @if (!$inscricao->desistente)
+                        <input type="hidden" name="remanejar_vaga" value="0">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" value="1" id="remanejar-vaga"
+                                name="remanejar_vaga">
+                            <label class="form-check-label" for="remanejar-vaga">
+                                Remanejar vaga
+                            </label>
+                        </div>
+                    @endif
+                </form>
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-3">
+                        <button type="button" class="btn botao my-2 py-1" data-bs-dismiss="modal"> <span
+                                class="px-4" style="font-weight: bolder;">Cancelar</span></button>
+                    </div>
+                    <div id ="confirmar-desistencia-button" class="col-md-4">
+                        <button type="submit" form="marcar-desistencia"
+                            class="btn botaoVerde my-2 py-1 submeterFormBotao"
+                            style="background-color: #FC605F; float: right;"><span class="px-4"
+                                style="font-weight: bolder;">Confirmar</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
 
 <script>
@@ -1372,6 +1470,27 @@
 
     function atualizarInputConfirmarInvalidacao(valor) {
         document.getElementById('confirmarInvalidacao').value = valor;
+    }
+
+    function deleteArquivo(event) {
+        event.preventDefault();
+        
+        if (confirm('Tem certeza que deseja excluir o requerimento de nome social do candidato?')) {
+            fetch("{{ route('inscricao.delete.arquivo', [$inscricao->id, 'requerimento_nome_social']) }}", {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert("Documento excluído com sucesso!");
+                    location.reload();
+                } else {
+                    alert("Erro ao excluir o documento.");
+                }
+            });
+        }
     }
 </script>
 

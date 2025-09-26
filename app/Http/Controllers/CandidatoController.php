@@ -9,6 +9,7 @@ use App\Models\Inscricao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\EmailCandidatoNotification;
+use Illuminate\Support\Facades\Storage;
 
 class CandidatoController extends Controller
 {
@@ -17,12 +18,9 @@ class CandidatoController extends Controller
     {
         $cpf = preg_replace('/[^0-9]/', '', $request->cpf);
         $dt_nasc = $request->dt_nasc;
-        $candidato = Candidato::where(
-            [
-                ['nu_cpf_inscrito', '=', $cpf],
-                ['dt_nascimento', '=', $dt_nasc]
-            ]
-        )->first();
+        $candidato = Candidato::where('nu_cpf_inscrito', $cpf)
+            ->where('dt_nascimento', $dt_nasc)
+            ->first();
 
         if ($candidato == null) {
             return redirect(route('primeiro.acesso'))
@@ -30,7 +28,7 @@ class CandidatoController extends Controller
                 ->withInput();
         } else {
 
-            $user = User::where('id', '=', $candidato->user_id)->first();
+            $user = User::find($candidato->user_id);
 
             if ($user->primeiro_acesso == true) {
 
@@ -76,13 +74,34 @@ class CandidatoController extends Controller
     public function update(Candidato $candidato, Inscricao $inscricao, UpdateCandidatoRequest $request)
     {
         $validated = $request->validated();
+
+        if ($request->user()->role == User::ROLE_ENUM['candidato']) {
+            if ($request->hasFile('requerimento_nome_social')) {
+                $caminho = $request->file('requerimento_nome_social')->storeAs("documentos/inscricaos/$inscricao->id", 'requerimento_nome_social.pdf');
+
+                $inscricao->arquivos()->updateOrCreate([
+                    'nome' => 'requerimento_nome_social',
+                ], [
+                    'nome' => 'requerimento_nome_social',
+                    'caminho' => $caminho,
+                ]);
+            } else {
+                $arquivo = $inscricao->arquivos()->where('nome', 'requerimento_nome_social')->first();
+
+                if ($arquivo) {
+                    Storage::delete($arquivo->caminho);
+                    $arquivo->delete();
+                }
+            }
+        }
+
         $validated['necessidades'] = implode(',', $validated['necessidades']);
         $candidato->fill($validated);
         $candidato->atualizar_dados = false;
         $inscricao->fill($validated);
 
-        $candidato->save();
-        $inscricao->save();
+        $candidato->update();
+        $inscricao->update();
 
         if (auth()->user()->role == User::ROLE_ENUM['admin']) {
             return redirect()->back()->with(['success' => "Dados atualizados!"]);
@@ -94,7 +113,7 @@ class CandidatoController extends Controller
     public function edit(Candidato $candidato, Inscricao $inscricao)
     {
         $this->authorize('canAtualizarFicha', $inscricao);
-        $cores_racas = Candidato::ETNIA_E_COR;
+        $cores_racas = array_keys(Candidato::ETNIA_E_COR);
         return view('candidato.atualizar_dados', compact('candidato', 'inscricao', 'cores_racas'));
     }
 }

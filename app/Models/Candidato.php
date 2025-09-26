@@ -11,11 +11,11 @@ class Candidato extends Model
     use HasFactory;
 
     public const ETNIA_E_COR = [
-        1 => 'BRANCA',
-        2 => 'PRETA',
-        3 => 'PARDA',
-        4 => 'AMARELA',
-        5 => 'INDIGENA',
+        'BRANCA' => 1,
+        'PRETA' => 2,
+        'PARDA' => 3,
+        'AMARELA' => 4,
+        'INDIGENA' => 5,
     ];
 
     public const NECESSIDADES = [
@@ -33,6 +33,7 @@ class Candidato extends Model
         2015 => 'Síndrome de Rett',
         2010 => 'Surdocegueira',
         2016 => 'Transtorno Desintegrativo da Infância',
+        2018 => 'Transtorno do Espectro Autista',
     ];
 
     // public const ETNIA = [
@@ -325,12 +326,15 @@ class Candidato extends Model
         'ano_conclusao',
         'modalidade',
         'concluiu_publica',
+        'concluiu_comunitaria',
         'necessidades',
         'etnia_e_cor',
         'trabalha',
         'grupo_familiar',
         'valor_renda',
         'atualizar_dados',
+        'quilombola',
+        'indigena'
     ];
 
     public function inscricoes()

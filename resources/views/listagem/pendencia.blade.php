@@ -138,19 +138,19 @@
                         style="font-weight: normal; text-transform:uppercase;">{{ $chamada->nome }}</span><br>
                     <span style="font-weight: normal;">Curso: {{ $inscricao->curso->nome }} -
                         @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Matutino'])
                                 Matutino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
                                 Vespertino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            @case(App\Models\Curso::TURNO_ENUM['Noturno'])
                                 Noturno
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            @case(App\Models\Curso::TURNO_ENUM['Integral'])
                                 Integral
                             @break
                         @endswitch
@@ -181,7 +181,7 @@
                                         <th>{{ $cont }}</th>
                                         <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
                                         <th>{{ $inscricao->cota->cod_novo }}</th>
-                                        <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
+                                        <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito}}</th>
                                         <th>
                                             @if (
                                                 $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] ||
@@ -259,8 +259,10 @@
                         </table>
                     </div>
                 </div>
-                <br />
-                <div class="quebrar_pagina"></div>
+                @unless ($curso === $collect_inscricoes->last())
+                    <br>
+                    <div class="quebrar_pagina"></div>
+                @endunless
             @endif
         @endforeach
     </div>

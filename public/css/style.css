@@ -252,11 +252,6 @@ body, html{
     padding-bottom: 6px;
 }
 
-.caixa{
-    border-radius: 0.5rem;
-    background-color: white;
-}
-
 .textoRodape{
     color: var(--textorodape);
     font-size: 15px;

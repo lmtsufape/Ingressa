@@ -131,6 +131,21 @@ class InscricaoController extends Controller
         return Storage::disk()->exists($arquivo->caminho) ? response()->file(storage_path('app/' . $arquivo->caminho)) : abort(404);
     }
 
+    public function deleteDocumento($inscricao_id, $documento_nome)
+    {
+        $inscricao = Inscricao::find($inscricao_id);
+        $this->authorize('isAdmin', auth()->user());
+
+        $arquivo = $inscricao->arquivos()->where('nome', $documento_nome)->first();
+
+        if ($arquivo) {
+            Storage::delete($arquivo->caminho);
+            $arquivo->delete();
+        }
+
+        return response()->noContent();
+    }
+
     public function todosDocsRequisitados($id)
     {
         $inscricao = Inscricao::find($id);
@@ -149,40 +164,51 @@ class InscricaoController extends Controller
         $documentos->push('foto');
 
         // Indígena
-        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->etnia_e_cor == 5) {
+        if (
+            $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
+            && $inscricao->candidato->etnia_e_cor == Candidato::ETNIA_E_COR['INDIGENA']
+        ) {
             $documentos->push('rani');
             $documentos->push('declaracao_cotista');
         }
+
         // Preto e pardo
-        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
+        if (
+            $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
+            && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
+        ) {
             $documentos->push('heteroidentificacao');
             $documentos->push('fotografia');
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
+
         // Baixa renda
-        if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists() && $inscricao->st_lei_renda == 'S') {
+        if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists()) {
             $documentos->push('comprovante_renda');
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
-        // Deficiente
-        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists() && $inscricao->deficiente == 'S') {
+
+        // Pessoa com deficiência
+        if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists()) {
             $documentos->push('laudo_medico');
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
 
-        if ($inscricao->cota->cod_cota == 'L5' || $inscricao->cota->cod_cota == 'L6') {
+        // Escola Pública
+        if ($inscricao->cota()->where('cod_novo', 'LI_EP')->exists()) {
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
         }
+
         // Quilombola
-        if ($inscricao->cota()->whereIn('cod_novo', ['LB_Q', 'LI_Q'])->exists() && $inscricao->quilombola == 'S') {
+        if ($inscricao->cota()->whereIn('cod_novo', ['LB_Q', 'LI_Q'])->exists()) {
             if (!$documentos->contains('declaracao_cotista')) {
                 $documentos->push('declaracao_cotista');
             }
@@ -209,41 +235,54 @@ class InscricaoController extends Controller
                 $documentos->push('quitacao_militar');
             }
             $documentos->push('foto');
+
             // Indígena
-            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_i == 'S' && $inscricao->candidato->etnia_e_cor == 5) {
+            if (
+                $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
+                && $inscricao->candidato->etnia_e_cor == Candidato::ETNIA_E_COR['INDIGENA']
+            ) {
                 $documentos->push('rani');
                 $documentos->push('declaracao_cotista');
             }
+
             // Preto e pardo
-            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
+            // if (!$userPolicy->ehAnalistaGeral(auth()->user())) {  # Removendo heteroidentificação do analista geral
+            if (
+                $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
+                && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
+            ) {
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
+            // }
+
             // Baixa renda
-            if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists() && $inscricao->st_lei_renda == 'S') {
+            if ($inscricao->cota()->where('cod_novo', 'like', 'LB%')->exists()) {
                 $documentos->push('comprovante_renda');
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
-            // Deficiente
-            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists() && $inscricao->deficiente == 'S') {
+
+            // Pessoa com deficiência
+            if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists()) {
                 $documentos->push('laudo_medico');
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
 
-            if ($inscricao->cota->cod_cota == 'L5' || $inscricao->cota->cod_cota == 'L6') {
+            // Escola Pública
+            if ($inscricao->cota()->where('cod_novo', 'LI_EP')->exists()) {
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
             }
             // Quilombola
-            if ($inscricao->cota()->whereIn('cod_novo', ['LB_Q', 'LI_Q'])->exists() && $inscricao->quilombola == 'S') {
+            if ($inscricao->cota()->whereIn('cod_novo', ['LB_Q', 'LI_Q'])->exists()) {
                 if (!$documentos->contains('declaracao_cotista')) {
                     $documentos->push('declaracao_cotista');
                 }
@@ -251,7 +290,10 @@ class InscricaoController extends Controller
             }
         } else {
             if ($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())) {
-                if ($inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists() && $inscricao->st_lei_etnia_p == 'S' && in_array($inscricao->candidato->etnia_e_cor, [2, 3])) {
+                if (
+                    $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
+                    && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
+                ) {
                     $documentos->push('heteroidentificacao');
                     $documentos->push('fotografia');
                     if (!$documentos->contains('declaracao_cotista')) {
@@ -260,7 +302,7 @@ class InscricaoController extends Controller
                 }
             }
             if ($userPolicy->ehAnalistaMedico(auth()->user())) {
-                if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists() && $inscricao->deficiente == 'S') {
+                if ($inscricao->cota()->whereIn('cod_novo', ['LB_PCD', 'LI_PCD'])->exists()) {
                     $documentos->push('laudo_medico');
                     if (!$documentos->contains('declaracao_cotista')) {
                         $documentos->push('declaracao_cotista');
@@ -309,7 +351,9 @@ class InscricaoController extends Controller
         $documentosAceitos = true;
         $necessitaAvaliar = false;
         foreach ($inscricao->arquivos as $arqui) {
-            if (!is_null($arqui->avaliacao)) {
+            if ($arqui->nome == 'requerimento_nome_social') {
+                continue;
+            } else if ($arqui->avaliacao) {
                 if ($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['recusado']) {
                     $documentosAceitos = false;
                 } elseif ($arqui->avaliacao->avaliacao == Avaliacao::AVALIACAO_ENUM['reenviado']) {
@@ -455,7 +499,7 @@ class InscricaoController extends Controller
         if ($request->justificativa != null) {
 
             $request->validate([
-                'justificativa' => ['string', 'max:500'],
+                'justificativa' => ['string', 'max:1000'],
             ]);
 
             $inscricao->justificativa = $request->justificativa;
@@ -773,6 +817,22 @@ class InscricaoController extends Controller
             $inscricao->semestre_entrada = null;
         }
 
+        $inscricao->update();
+
+        return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);
+    }
+
+    public function statusDesistencia(Request $request, $id)
+    {
+        $this->authorize('isAdmin', User::class);
+        $dados = $request->validate([
+            'desistencia' => 'required|boolean',
+            'remanejar_vaga' => 'nullable|boolean'
+        ]);
+
+        $inscricao = Inscricao::find($id);
+        $inscricao->desistente = $dados['desistencia'];
+        $inscricao->realocar_vaga = $dados['desistencia'] ? $dados['remanejar_vaga'] : false;
         $inscricao->update();
 
         return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);

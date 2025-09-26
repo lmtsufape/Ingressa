@@ -20,37 +20,43 @@ class CotaSeeder extends Seeder
                 'nome' => 'Ampla concorrência',
                 'descricao' => 'Ampla concorrência',
                 'cod_cota' => 'A0',
-                'cod_novo' => 'AC'
+                'cod_novo' => 'AC',
+                'cod_siga' => 30,
             ],
             [
-                'nome' => 'Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos com renda familiar bruta per capita igual ou inferior a 1 salário mínimo que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'L1',
-                'cod_novo' => 'LB_EP'
+                'cod_novo' => 'LB_EP',
+                'cod_siga' => 34
             ],
             [
-                'nome' => 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos autodeclarados pretos, pardos ou indígenas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'L2',
-                'cod_novo' => 'LB_PPI'
+                'cod_novo' => 'LB_PPI',
+                'cod_siga' => 31
             ],
             [
-                'nome' => 'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos que, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'L5',
-                'cod_novo' => 'LI_EP'
+                'cod_novo' => 'LI_EP',
+                'cod_siga' => 38
             ],
             [
-                'nome' => 'Candidatos autodeclarados pretos, pardos ou indígenas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos autodeclarados pretos, pardos ou indígenas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos autodeclarados pretos, pardos ou indígenas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos autodeclarados pretos, pardos ou indígenas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'L6',
-                'cod_novo' => 'LI_PPI'
+                'cod_novo' => 'LI_PPI',
+                'cod_siga' => 35
             ],
             [
-                'nome' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)',
-                'descricao' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)',
+                'nome' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos com deficiência, que tenham renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'L9',
-                'cod_novo' => 'LB_PCD'
+                'cod_novo' => 'LB_PCD',
+                'cod_siga' => 33
             ],
             // [
             //     'nome' => 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas, que tenham renda familiar bruta per capita igual ou inferior a 1,5 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012)',
@@ -59,10 +65,11 @@ class CotaSeeder extends Seeder
             //     'cod_novo' => 'L10'
             // ],
             [
-                'nome' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos com deficiência, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'L13',
-                'cod_novo' => 'LI_PCD'
+                'cod_novo' => 'LI_PCD',
+                'cod_siga' => 37
             ],
             // [
             //     'nome' => 'Candidatos com deficiência autodeclarados pretos, pardos ou indígenas que, independentemente da renda (art. 14, II, Portaria Normativa nº 18/2012), tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
@@ -76,16 +83,18 @@ class CotaSeeder extends Seeder
                 'cod_cota' => 'B4342',
             ],*/
             [
-                'nome' => 'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos autodeclarados quilombolas, com renda familiar bruta per capita igual ou inferior a 1 salário mínimo e que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'LB_Q',
                 'cod_novo' => 'LB_Q',
+                'cod_siga' => 32
             ],
             [
-                'nome' => 'Candidatos autodeclarados quilombolas, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
-                'descricao' => 'Candidatos autodeclarados quilombolas, independentemente da renda, tenham cursado integralmente o ensino médio em escolas públicas (Lei nº 12.711/2012).',
+                'nome' => 'Candidatos autodeclarados quilombolas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
+                'descricao' => 'Candidatos autodeclarados quilombolas, independentemente da renda, que tenham cursado integralmente o ensino médio em escolas públicas ou em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público',
                 'cod_cota' => 'LI_Q',
                 'cod_novo' => 'LI_Q',
+                'cod_siga' => 36
             ]
         ];
 
@@ -125,7 +134,38 @@ class CotaSeeder extends Seeder
                             $quantidade = 1;
                             break;
                     }
-                } else if ($curso->vagas == 60) {
+                } else if ($curso->vagas == 40) {
+                    switch ($cota->cod_novo) {
+                        case 'AC':
+                            $quantidade = 20;
+                            break;
+                        case 'LB_PPI':
+                            $quantidade = 7;
+                            break;
+                        case 'LB_Q':
+                            $quantidade = 1;
+                            break;
+                        case 'LB_PCD':
+                            $quantidade = 1;
+                            break;
+                        case 'LB_EP':
+                            $quantidade = 1;
+                            break;
+                        case 'LI_PPI':
+                            $quantidade = 7;
+                            break;
+                        case 'LI_Q':
+                            $quantidade = 0;
+                            break;
+                        case 'LI_PCD':
+                            $quantidade = 1;
+                            break;
+                        case 'LI_EP':
+                            $quantidade = 2;
+                            break;
+                    }
+                }
+                else if ($curso->vagas == 60) {
                     switch ($cota->cod_novo) {
                         case 'AC':
                             $quantidade = 30;

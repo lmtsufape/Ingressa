@@ -63,6 +63,7 @@ class Inscricao extends Model
         'nu_cep',
         'nu_fone1',
         'nu_fone2',
+        'nu_fone_emergencia',
         'ds_email',
         'nu_nota_l',
         'nu_nota_ch',

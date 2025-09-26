@@ -27,9 +27,10 @@ class CotaRequest extends FormRequest
     {
         return [
             'cota' => 'nullable',
-            'nome' => 'required|string|max:255',
-            'codigo' => 'required|string|min:2|max:255',
-            'descrição' => 'required|string|min:10|max:1000',
+            'nome' => 'required|string|max:1000',
+            'cod_novo' => 'required|string|min:2|max:255',
+            'cod_siga' => 'required|string|min:2|max:255',
+            'descricao' => 'required|string|min:10|max:1000',
             'cursos.*'    => 'nullable',
         ];
     }

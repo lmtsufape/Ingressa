@@ -47,15 +47,15 @@
                                     <select name="turno" id="turno" class="form-control @error('turno') is-invalid @enderror" required>
                                         <option value="" selected disabled>-- Selecione o turno do curso --</option>
                                         @if (old('turno') != null)
-                                            <option @if(old('turno') == $turnos['matutino']) selected @endif value="{{$turnos['matutino']}}">Matutino</option>
-                                            <option @if(old('turno') == $turnos['vespertino']) selected @endif value="{{$turnos['vespertino']}}">Vespertino</option>
-                                            <option @if(old('turno') == $turnos['noturno']) selected @endif value="{{$turnos['noturno']}}">Noturno</option>
-                                            <option @if(old('turno') == $turnos['integral']) selected @endif value="{{$turnos['integral']}}">Integral</option>
+                                            <option @if(old('turno') == $turnos['Matutino']) selected @endif value="{{$turnos['Matutino']}}">Matutino</option>
+                                            <option @if(old('turno') == $turnos['Vespertino']) selected @endif value="{{$turnos['Vespertino']}}">Vespertino</option>
+                                            <option @if(old('turno') == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
+                                            <option @if(old('turno') == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
                                         @else 
-                                            <option @if($curso->turno == $turnos['matutino']) selected @endif value="{{$turnos['matutino']}}">Matutino</option>
-                                            <option @if($curso->turno == $turnos['vespertino']) selected @endif value="{{$turnos['vespertino']}}">Vespertino</option>
-                                            <option @if($curso->turno == $turnos['noturno']) selected @endif value="{{$turnos['noturno']}}">Noturno</option>
-                                            <option @if($curso->turno == $turnos['integral']) selected @endif value="{{$turnos['integral']}}">Integral</option>
+                                            <option @if($curso->turno == $turnos['Matutino']) selected @endif value="{{$turnos['Matutino']}}">Matutino</option>
+                                            <option @if($curso->turno == $turnos['Vespertino']) selected @endif value="{{$turnos['Vespertino']}}">Vespertino</option>
+                                            <option @if($curso->turno == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
+                                            <option @if($curso->turno == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
                                         @endif
                                     </select>
                                 

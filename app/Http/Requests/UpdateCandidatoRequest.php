@@ -11,9 +11,9 @@ class UpdateCandidatoRequest extends FormRequest
     protected function getValidatorInstance()
     {
         $validator = parent::getValidatorInstance();
-
+        
         $validator->sometimes('necessidades', 'required|array|max:1', function ($input) {
-            return in_array('nenhuma', $input->necessidades);
+            return in_array('nenhuma', $input->necessidades ?? []);
         });
 
         return $validator;
@@ -37,6 +37,8 @@ class UpdateCandidatoRequest extends FormRequest
     public function rules()
     {
         return [
+            'no_social' => ['nullable', 'string'],
+            'requerimento_nome_social' => ['required_with:no_social', 'file', 'mimes:pdf', 'max:2048'],
             'nu_rg' => ['required', 'string'],
             'orgao_expedidor' => ['required', 'string', 'max:5'],
             'uf_rg' => ['required', 'string'],
@@ -56,7 +58,8 @@ class UpdateCandidatoRequest extends FormRequest
             'ano_conclusao' => ['required', 'digits:4'],
             'modalidade' => ['required', 'string'],
             'concluiu_publica' => ['required', 'boolean'],
-            'necessidades' => ['required', 'array'],
+            'concluiu_comunitaria' => ['required', 'boolean'],
+            'necessidades' => ['required', 'array', 'min:1'],
             'trabalha' => ['required', 'boolean'],
             'grupo_familiar' => ['required', 'numeric'],
             'valor_renda' => ['required', 'numeric'],
@@ -69,9 +72,13 @@ class UpdateCandidatoRequest extends FormRequest
             'sg_uf_inscrito' => ['required', 'string'],
             'nu_fone1' => ['required', 'string'],
             'nu_fone2' => ['nullable', 'string'],
+            'nu_fone_emergencia' => ['required', 'string'],
             'edital' => ['required', 'accepted'],
             'vinculo' => ['required', 'accepted'],
-            'tp_sexo' => ['required', 'in:F,M']
+            'tp_sexo' => ['required', 'in:F,M'],
+            'quilombola' => ['required', 'boolean'],
+            'indigena' => ['required', 'boolean'],
+            'etnia_e_cor' => ['required', 'integer'],
         ];
     }
 

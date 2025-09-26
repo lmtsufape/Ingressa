@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cota;
 use App\Models\Curso;
+use App\Models\Sisu;
 use App\Models\Remanejamento;
 use App\Http\Requests\CotaRequest;
 use Illuminate\Database\QueryException;
@@ -53,8 +54,8 @@ class CotaController extends Controller
             return $validated;
         }
 
-        $cota = new Cota();
-        $cota->setAtributes($request);
+        $cota = Cota::make($request->all());
+        $cota->cod_cota = $request->cod_novo;
         $cota->save();
         $this->vincularCursos($request, $cota);
 
@@ -95,18 +96,29 @@ class CotaController extends Controller
      */
     public function update(CotaRequest $request, $id)
     {
-        $this->authorize('isAdmin', User::class);
-        $cota = Cota::find($id);
+        $ultimoSisu = Sisu::latest()->first();
+        $this->authorize('isAdmin', \App\Models\User::class);
+        $cota = Cota::find($request->cota);
         $request->validated();
         $validated = $this->validarOpcionalObrigatorio($request);
         if ($validated != null) {
             return $validated;
         }
 
-        $cota->setAtributes($request);
-        $cota->update();
-        $this->desvincularCursos($cota);
-        $this->vincularCursos($request, $cota);
+        $cota->update($request->all());
+
+        foreach ($request->cursos as $i => $curso_id) {
+            if ($curso_id != null) {
+                $curso = Curso::find($curso_id);
+                $pivot = $curso->cotas()
+                    ->where('cota_id', $cota->id)
+                    ->where('sisu_id', $ultimoSisu->id)
+                    ->first()
+                    ->pivot;
+
+                $pivot->update(['quantidade_vagas' => $request->quantidade[$i]]);
+            }
+        }
 
         return redirect(route('cotas.index'))->with(['success' => 'Cota atualizada com sucesso!']);
     }
@@ -241,9 +253,10 @@ class CotaController extends Controller
      */
     public function infoCota(Request $request)
     {
+        $ultimoSisu = Sisu::latest()->first();
         $cota = Cota::find($request->cota_id);
         $cursos = [];
-        foreach ($cota->cursos as $curso) {
+        foreach ($cota->cursos()->wherePivot('sisu_id', $ultimoSisu->id)->get() as $curso) {
             $curso_pivot = [
                 'id' => $curso->id,
                 'nome' => $curso->nome,
@@ -257,6 +270,8 @@ class CotaController extends Controller
             'nome' => $cota->nome,
             'descricao' => $cota->descricao,
             'cod_cota' => $cota->cod_cota,
+            'cod_novo' => $cota->cod_novo,
+            'cod_siga' => $cota->cod_siga,
             'cursos' => $cursos,
         ];
 
@@ -271,7 +286,8 @@ class CotaController extends Controller
      */
     public function updateModal(CotaRequest $request)
     {
-        $this->authorize('isAdmin', User::class);
+        $ultimoSisu = Sisu::latest()->first();
+        $this->authorize('isAdmin', \App\Models\User::class);
         $cota = Cota::find($request->cota);
         $request->validated();
         $validated = $this->validarOpcionalObrigatorio($request);
@@ -279,10 +295,20 @@ class CotaController extends Controller
             return $validated;
         }
 
-        $cota->setAtributes($request);
-        $cota->update();
-        $this->desvincularCursos($cota);
-        $this->vincularCursos($request, $cota);
+        $cota->update($request->all());
+
+        foreach ($request->cursos as $i => $curso_id) {
+            if ($curso_id != null) {
+                $curso = Curso::find($curso_id);
+                $pivot = $curso->cotas()
+                    ->where('cota_id', $cota->id)
+                    ->where('sisu_id', $ultimoSisu->id)
+                    ->first()
+                    ->pivot;
+
+                $pivot->update(['quantidade_vagas' => $request->quantidade[$i]]);
+            }
+        }
 
         return redirect(route('cotas.index'))->with(['success' => 'Cota atualizada com sucesso!']);
     }

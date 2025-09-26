@@ -104,27 +104,38 @@ class ChamadaPolicy
     {
         $data_envio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['envio'])->first();
         $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
-
-        if ($data_envio && date('d/m/Y', strtotime($data_envio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_envio->data_fim)) >= date('d/m/Y', strtotime(now()))) {
-            return true;
-        }else if($data_reenvio && date('d/m/Y', strtotime($data_reenvio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_reenvio->data_fim)) >= date('d/m/Y', strtotime(now()))) {
-            return true;
-        }
-        return false;
+    
+        $hoje = now();
+    
+        return ($data_envio && $data_envio->data_inicio->startOfDay() <= $hoje && $data_envio->data_fim->endOfDay() >= $hoje) ||
+               ($data_reenvio && $data_reenvio->data_inicio->startOfDay() <= $hoje && $data_reenvio->data_fim->endOfDay() >= $hoje);
     }
+    
 
     public function periodoRetificacao(User $user, Chamada $chamada)
     {
         $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
-        return $data_reenvio && date('d/m/Y', strtotime($data_reenvio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_reenvio->data_fim)) >= date('d/m/Y', strtotime(now()));
+        
+        if (!$data_reenvio) {
+            return false;
+        }
+    
+        $hoje = now();
+        
+        return $data_reenvio->data_inicio->startOfDay() <= $hoje && $data_reenvio->data_fim->endOfDay() >= $hoje;
     }
+    
 
     public function periodoEnvio(User $user, Chamada $chamada)
     {
         $data_envio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['envio'])->first();
-        if ($data_envio && date('d/m/Y', strtotime($data_envio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_envio->data_fim)) >= date('d/m/Y', strtotime(now()))){
-            return true;
+    
+        if (!$data_envio) {
+            return false;
         }
-        return false;
+    
+        $hoje = now();
+    
+        return $data_envio->data_inicio->startOfDay() <= $hoje && $data_envio->data_fim->endOfDay() >= $hoje;
     }
 }

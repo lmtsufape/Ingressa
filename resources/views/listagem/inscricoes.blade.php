@@ -134,25 +134,25 @@
                         style="margin-top: 12px;;border: 3px solid #ffffff;width: 60%;height: 10px;background-color:#ffffff;">
                     </div>
                     <h3 class="subtitulo">Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['matutino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Matutino'])
                                 Matutino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['vespertino'])
+                            @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
                                 Vespertino
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['noturno'])
+                            @case(App\Models\Curso::TURNO_ENUM['Noturno'])
                                 Noturno
                             @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['integral'])
+                            @case(App\Models\Curso::TURNO_ENUM['Integral'])
                                 Integral
                             @break
                         @endswitch
                     </h3>
                     <div class="body">
-                        <div id="modalidade" @if ($inscricoes->count() <= 40) style="page-break-inside: avoid;" @endif>
+                        <div id="modalidade" @if ($inscricoes->count() <= 40) @endif>
                             <h4 class="acao_afirmativa">
                                 @if (
                                     $inscricao->no_modalidade_concorrencia ==
@@ -184,7 +184,7 @@
                                             class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
                                             <th>{{ $k + 1 }}</th>
                                             <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
-                                            <th class="esquerda">{{ $inscricao->candidato->no_inscrito }}</th>
+                                            <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito}}</th>
                                             <th>{{ $inscricao->nu_nota_candidato }}</th>
                                             @if (
                                                 $inscricao->no_modalidade_concorrencia ==
@@ -204,8 +204,10 @@
                         </div>
                     </div>
                 @endforeach
-                <br />
-                <div class="quebrar_pagina"></div>
+                @unless ($collect === $collect_inscricoes->last())
+                    <br>
+                    <div class="quebrar_pagina"></div>
+                @endunless
             @endif
         @endforeach
     </div>
