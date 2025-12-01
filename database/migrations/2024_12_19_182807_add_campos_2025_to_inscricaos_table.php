@@ -20,8 +20,8 @@ class AddCampos2025ToInscricaosTable extends Migration
             $table->string('st_rank_pcd', 1)->nullable();
             $table->string('st_confirma_lgpd', 1)->nullable();
             $table->integer('total_membros_familiar')->nullable();
-            $table->double('renda_familiar_bruta', 7, 2)->nullable();
-            $table->double('salario_minimo', 7, 2)->nullable();
+            $table->double('renda_familiar_bruta')->nullable();
+            $table->double('salario_minimo')->nullable();
             $table->string('perfil_economico_lei_cotas', 2)->nullable();
             $table->date('dt_curso_inscricao')->nullable();
             $table->string('hr_curso_inscricao', 5)->nullable();
@@ -86,5 +86,5 @@ class AddCampos2025ToInscricaosTable extends Migration
             $table->string('st_lei_etnia_i')->change();
         });
     }
-    
+
 }
