@@ -36,11 +36,11 @@
                 </li>
             </ul>
         </div>
-        @component('layouts.nav_bar')@endcomponent
+        @include('layouts.nav_bar')
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
-        @component('layouts.footer')@endcomponent
+        @include('layouts.footer')
 
         <script>
             $(document).ready(function () {

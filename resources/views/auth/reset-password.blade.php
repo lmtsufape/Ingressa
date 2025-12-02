@@ -1,57 +1,39 @@
 <x-guest-layout>
-    <div class="fundo px-5 py-5">
-        <div class="container">
-            <div class="py-3 px-4 row ms-0 justify-content-center">
-                <div class="col-md-5 caixa shadow p-3 bg-white">
-                    <div class="data bordinha">
-                        Atualizar a senha
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form id="update-form" class="my-4" method="POST" action="{{route('password.update')}}">
-                                @csrf
-                                <input type="hidden" name="token" value="{{ $request->route('token') }}">
-                                <div class="form-group textoInput">
-                                    <label for="email">{{ __('E-mail') }}</label>
-                                    <input id="email" class="form-control form-control-sm caixaDeTexto @error('email') is-invalid @enderror" type="text" placeholder="Insira o e-mail utilizado no login" name="email" value="{{old('email', $request->email)}}" required>
+    <form method="POST" action="{{ route('password.store') }}">
+        @csrf
 
-                                    @error('email')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group textoInput">
-                                    <label for="password">{{ __('Senha') }}</label>
-                                    <input id="password" class="form-control form-control-sm caixaDeTexto @error('password') is-invalid @enderror" type="password" placeholder="Insira a nova senha" name="password" required>
-                                    @error('password')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group textoInput">
-                                    <label for="password_confirmation">{{ __('Confirmação de senha') }}</label>
-                                    <input id="password_confirmation" class="form-control form-control-sm caixaDeTexto @error('password_confirmation') is-invalid @enderror" type="password" placeholder="Repita a senha" name="password_confirmation" required>
+        <!-- Password Reset Token -->
+        <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                                    @error('password_confirmation')
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="flex justify-end">
-                        <div class="col-md-6">
-                            <div class="text-center">
-                                <button type="submit" class="btn botaoEntrar col-md-10" form="update-form" style="width: 100%;">Modificar senha</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Email Address -->
+        <div>
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-    </div>
+
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mt-4">
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                                type="password"
+                                name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <x-primary-button>
+                {{ __('Reset Password') }}
+            </x-primary-button>
+        </div>
+    </form>
 </x-guest-layout>

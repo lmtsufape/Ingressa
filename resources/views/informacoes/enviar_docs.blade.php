@@ -14,14 +14,14 @@
             <p>Caso tenha dúvidas, preparamos alguns canais de informação, que devem ser acessados na seguinte ordem:</p>
 
             <p>1- Tutoriais - Antes de iniciar a postagem dos documentos é importante que você leia os documentos e assista aos vídeos de orientação, disponíveis em <a href="http://www.ufape.edu.br/sisu" target="_blank" >www.ufape.edu.br/sisu</a>. Leia os documentos e assista os vídeos quantas vezes quiser, antes de enviar a sua documentação, para evitar erros no processo. Esse é o primeiro passo que você deve realizar antes de buscar informações em outros canais, caso seja necessário.</p>
-           
+
             <p>2- Demais informações: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a><br>
                 3- E-mail: matriculas.sisu@ufape.edu.br</p>
-            
+
         </div>
 
         <div class="col-md-2 mt-4">
-            <a href="{{route('logar')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a>
+            <a href="{{route('login')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a>
         </div>
     </div>
 </x-guest-layout>

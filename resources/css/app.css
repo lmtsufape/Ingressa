@@ -1,3 +1,5 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* @tailwind base; mudar futuramente para o tailwind
+@tailwind components;
+@tailwind utilities; */

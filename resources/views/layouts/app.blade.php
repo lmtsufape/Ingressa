@@ -34,6 +34,9 @@
         <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+
+        <!-- Scripts -->
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     </head>
     <body class="font-sans antialiased">
         <!-- Barra Brasil -->
@@ -47,7 +50,7 @@
                 </li>
             </ul>
         </div>
-        @component('layouts.nav_bar')@endcomponent
+        @include('layouts.nav_bar')
         <div class="min-h-screen bg-gray-100 p-1">
 
             {{-- @livewire('navigation-menu') --}}
@@ -69,7 +72,7 @@
 
         @stack('modals')
 
-        @component('layouts.footer')@endcomponent
+        @include('layouts.footer')
         @livewireScripts
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @stack('scripts')
