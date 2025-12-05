@@ -16,6 +16,8 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Sisu;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 
 class ListagemController extends Controller
 {
@@ -257,8 +259,7 @@ class ListagemController extends Controller
     {
         $chamada = Chamada::find($request->chamada);
         $inscricoes = $this->getInscricoesIngressantesReservas($request);
-
-        $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $inscricoes['ingressantes'], 'candidatosReservaCursos' => $inscricoes['reservas'], 'chamada' => $chamada]);
+        $pdf = FacadePdf::loadView('listagem.final', ['candidatosIngressantesCursos' => $inscricoes['ingressantes'], 'candidatosReservaCursos' => $inscricoes['reservas'], 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }

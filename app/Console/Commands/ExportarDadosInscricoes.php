@@ -44,19 +44,19 @@ class ExportarDadosInscricoes extends Command
     {
         $this->info('Importação iniciada!');
 
-        $etinia_cor = json_encode(Candidato::ETNIA_E_COR);
+        $etnia_cor = json_encode(array_flip(Candidato::ETNIA_E_COR));
         $necessidades = json_encode(Candidato::NECESSIDADES);
 
         $inscritos = Inscricao::query()->from('inscricaos')
-            ->leftJoin('candidatos as candidato', 'candidato.id', '=', 'candidato_id')
+            ->leftJoin('candidatos as candidato', 'candidato.id', '=', 'inscricaos.candidato_id')
             ->leftJoin('sisus as sisu', 'sisu.id', '=', 'sisu_id')
             ->leftJoin('chamadas as chamada', 'chamada.id', '=', 'chamada_id')
             ->leftJoin('cotas as cota_ocupada', 'cota_ocupada.id', '=', 'cota_vaga_ocupada_id')
             ->whereIn('edicao', ['2024', '2025'])
-            ->where('regular', true)
             ->where(function($query){
                 $query->where('cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                ->orWhereIn('status', [Inscricao::STATUS_ENUM['documentos_pendentes'], Inscricao::STATUS_ENUM['documentos_invalidados']]);
+                    ->Where('desistente', false)
+                    ->whereNotNull('semestre_entrada');
             })
             ->select([
                 'no_inscrito',
@@ -89,7 +89,14 @@ class ExportarDadosInscricoes extends Command
                 'ds_turno',
                 DB::raw("'SiSU' as forma_ingress"),
                 'edicao',//seria o ano de ingresso??
-                DB::raw('ROUND(((nu_nota_l + nu_nota_ch + nu_nota_cn + nu_nota_m + nu_nota_r) / 5)::numeric, 2) as media_notas'),
+                'semestre_entrada',
+                DB::raw("CASE WHEN regular IS TRUE THEN 'Regular' ELSE 'Lista de espera' END AS tipo_chamada"),
+                'nu_nota_l',
+                'nu_nota_ch',
+                'nu_nota_cn',
+                'nu_nota_m',
+                'nu_nota_r',
+                'nu_nota_candidato',
                 'no_curso',
                 'modalidade_escolhida',
                 'cota_ocupada.nome',//modalidade ocupada
@@ -110,19 +117,21 @@ class ExportarDadosInscricoes extends Command
                 'modalidade',
                 DB::raw("CASE WHEN concluiu_publica IS TRUE THEN 'SIM' ELSE 'NÃO' END AS concluiu_publica"),
                 DB::raw("CASE WHEN concluiu_comunitaria IS TRUE THEN 'SIM' ELSE 'NÃO' END AS concluiu_comunitaria"),
-                DB::raw("COALESCE((CAST(? AS jsonb) ->> (necessidades)::text), 'Nenhuma') AS necessidades_label"),
-                DB::raw("(CAST(? AS jsonb) ->> (etnia_e_cor)::text) AS etnia_cor_label"),
+                DB::raw("COALESCE((CAST(? AS jsonb) ->> (candidato.necessidades)::text), 'Nenhuma') AS necessidades_label"),
+                DB::raw("COALESCE((CAST(? AS jsonb) ->> (candidato.etnia_e_cor)::text), 'Não informada') AS etnia_cor_label"),
+
                 DB::raw("CASE WHEN inscricaos.quilombola = 'S' THEN 'SIM' ELSE 'NÃO' END AS quilombola"),
                 DB::raw("CASE WHEN indigena IS TRUE THEN 'SIM' ELSE 'NÃO' END AS indigena"),
                 'reside',//moradia atual
+                'localidade',
                 DB::raw("CASE WHEN trabalha IS TRUE THEN 'SIM' ELSE 'NÃO' END AS trabalha"),//se trabalha
                 'grupo_familiar',// quantidade de pessoas da familia
                 'valor_renda']);
                 $inscritos->addBinding($necessidades, 'select');
-                $inscritos->addBinding($etinia_cor, 'select');
+                $inscritos->addBinding($etnia_cor, 'select');
 
             $path = 'exports/sisu_gestao.csv';
-            
+
             Excel::store(
                 new InscritosExport($inscritos),
                 $path,

@@ -77,7 +77,7 @@
                                           </div>
                                       </ul>
                                       @can('isAdmin', \App\Models\User::Class)
-                                        <a title="Baixar todos os documentos de todos os candidatos" href="{{route('baixar.documentos.candidatos.curso', ['curso_id' => $curso->id, 'chamada_id' => $chamada->id])}}">
+                                        <a title="Baixar todos os documentos de todos os candidatos" href="{{route('gerar.zip.documentos.candidatos.curso', ['curso_id' => $curso->id, 'chamada_id' => $chamada->id])}}">
                                             <img width="35" src="{{asset('img/download4.svg')}}" alt="Baixar todos os documentos de todos os candidatos"></a>
                                         </a>
                                       @endcan
@@ -150,7 +150,7 @@
                                                 @else
                                                     <td class="align-middle text-center"><a class="btn btn-sm" href="{{route('inscricao.show.analisar.documentos', ['sisu_id' => $chamada->sisu->id, 'chamada_id' => $chamada->id, 'curso_id' => $curso->id, 'inscricao_id' => $candidato->id])}}" style="background-color: #1CE8B1; color: white; font-size: 14px; font-weight: bolder;">Avaliar</a></td>
                                                 @endif
-                                                
+
                                             </tr>
                                         @endforeach
                                     </tbody>

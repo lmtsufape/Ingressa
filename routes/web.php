@@ -11,6 +11,7 @@ use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ListagemController;
 use App\Http\Controllers\ChamadaController;
 use App\Http\Controllers\SisuController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('index');
@@ -121,7 +122,9 @@ Route::middleware(['auth', 'verified', 'atualizar_dados'])->group(function () {
     Route::put('/curso/info', [CursoController::class, 'updateAjax'])->name('cursos.update.ajax');
 
     Route::get('/curso/info', [CursoController::class, 'infoCurso'])->name('cursos.info.ajax');
-    Route::get('/cursos/{curso_id}/chamada/{chamada_id}/download-documentos', [CursoController::class, 'downloadDocumentosTodosCandidatos'])->name('baixar.documentos.candidatos.curso');
+    Route::get('/cursos/{curso_id}/chamada/{chamada_id}/gerar-zip', [CursoController::class, 'gerarDocumentosTodosCandidatos'])->name('gerar.zip.documentos.candidatos.curso');
+    Route::get('/download-zip', [CursoController::class, 'downloadDocumentosTodosCandidatos'])->name('baixar.documentos.candidatos.curso');
+
 
     Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');

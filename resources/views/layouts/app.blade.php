@@ -36,7 +36,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
 
         <!-- Scripts -->
-        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
         <!-- Barra Brasil -->
@@ -51,7 +51,40 @@
             </ul>
         </div>
         @include('layouts.nav_bar')
+
+        <zip-status-listener />
+        <script type="module">
+            window.Echo
+                .private('user.{{ auth()->id() }}')
+                .listen('.ZipGerado', (e) => {
+                    Livewire.dispatch('zip-gerado', e);
+                });
+
+                window.addEventListener('download-zip', (event) => {
+                if (event.detail?.url) {
+                    window.location.href = event.detail.url;
+                }
+            });
+        </script>
+
+
+
+
+
         <div class="min-h-screen bg-gray-100 p-1">
+            @if (session('success'))
+                <div class="alert alert-success d-flex justify-content-between">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger d-flex justify-content-between">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            @endif
 
             {{-- @livewire('navigation-menu') --}}
 
