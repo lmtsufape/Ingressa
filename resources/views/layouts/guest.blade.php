@@ -22,7 +22,6 @@
         <script src="{{asset('bootstrap/js/bootstrap.js')}}" defer></script>
         <script src="{{asset('js/jquery-3.6.0.min.js')}}"></script>
         <script src="{{asset('js/jquery.mask.min.js')}}"></script>
-        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </head>
     <body class="font-sans antialiased">
         <!-- Barra Brasil -->
