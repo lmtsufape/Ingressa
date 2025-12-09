@@ -46,6 +46,13 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->get('/dashbo
 Route::put('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'update'])->name('candidato.atualizar');
 Route::get('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'edit'])->name('candidato.edit');
 Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function () {
+    
+    Route::get('/usuarios/todos', [UserController::class, 'listarTodos'])
+    ->name('usuarios.todos');
+
+    Route::post('/usuarios/update', [UserController::class, 'update'])->name('usuarios.update');
+    Route::post('/usuarios/store-user', [UserController::class, 'storeUser'])->name('usuarios.storeUser');
+    Route::post('/usuarios/update-user', [UserController::class, 'updateUser'])->name('usuarios.updateUser');
 
     Route::resource('usuarios', UserController::class);
     Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])

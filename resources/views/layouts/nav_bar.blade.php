@@ -18,6 +18,10 @@
                                 @livewire('candidato-search-bar')
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link mx-3 @if(request()->routeIs('usuarios.todos')) active @endif" href="{{ route('usuarios.todos') }}"> {{ __('Usuários') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link mx-3 @if(request()->routeIs('usuarios.*')) active @endif" href="{{route('usuarios.index')}}">{{ __('Analistas') }}</a>
                             </li>
                             <li class="nav-item">
