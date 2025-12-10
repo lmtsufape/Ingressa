@@ -31,7 +31,7 @@
                         @endif
 
                         {{-- Tabela de Usuários --}}
-                        @if ($usuarios->count() > 0)
+                        @if ($users->count() > 0)
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -44,7 +44,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($usuarios as $i => $user)
+                                    @foreach ($users as $i => $user)
                                         <tr>
                                             <th class="align-middle">{{ $i + 1 }}</th>
                                             <td class="align-middle">{{ $user->name }}</td>
@@ -85,7 +85,7 @@
                                 </tbody>
                             </table>
 
-                            {{ $usuarios->links() }}
+                            {{ $users->links() }}
                         @else
                             <div class="pt-3 pb-3">Nenhum usuário encontrado.</div>
                         @endif
@@ -105,7 +105,7 @@
                     <div class="modal-content modalFundo p-3">
                         <div class="col-md-12 tituloModal">Editar usuário</div>
 
-                        <form method="POST" id="editar-user-form" action="{{ route('usuarios.updateUser') }}">
+                        <form method="POST" id="editar-user-form" action="{{ route('users.updateUser') }}">
                             @csrf
                             <input type="hidden" id="user-edit" name="user_id" value="{{ old('user_id') }}">
                             <div class="form-row">
@@ -216,7 +216,7 @@
                     <div class="modal-content modalFundo p-3">
                         <div class="col-md-12 tituloModal">Criar usuário</div>
 
-                        <form method="POST" id="criar-user-form" action="{{ route('usuarios.storeUser') }}">
+                        <form method="POST" id="criar-user-form" action="{{ route('users.storeUser') }}">
                             @csrf
                             <div class="form-row">
                                 <div class="col-md-12 pt-3 textoModal">
@@ -307,14 +307,14 @@
                 </div>
             </div>
 
-            @foreach ($usuarios as $user)
+            @foreach ($users as $user)
                 <!-- Modal deletar usuário -->
                 <div class="modal fade" id="modalStaticDeletarUser_{{ $user->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content modalFundo p-3">
                             <div class="col-md-12 tituloModal">Deletar usuário</div>
 
-                            <form id="deletar-user-form-{{ $user->id }}" method="POST" action="{{ route('usuarios.destroy', ['usuario' => $user]) }}">
+                            <form id="deletar-user-form-{{ $user->id }}" method="POST" action="{{ route('users.destroy', ['user' => $user]) }}">
                                 @csrf
                                 <div class="pt-3">
                                     <input type="hidden" name="_method" value="DELETE">
@@ -420,7 +420,7 @@
         document.querySelectorAll('#editar-user-modal .form-check-cotas').forEach(function(cb){ cb.checked = false; });
 
         $.ajax({
-            url: "{{ route('usuario.info.ajax') }}",
+            url: "{{ route('user.info.ajax') }}",
             type: "get",
             data: { "user_id": id },
             dataType: 'json',

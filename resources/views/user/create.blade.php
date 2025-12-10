@@ -15,7 +15,7 @@
                                 <h6 class="card-subtitle mb-2 text-muted">Analistas > Criar analista</h6>
                             </div>
                         </div>
-                        <form method="POST" id="cria-analista" action="{{route('usuarios.store')}}">
+                        <form method="POST" id="cria-analista" action="{{route('users.store')}}">
                             @csrf
                             <div class="form-row">
                                 <div class="col-md-6 form-group">

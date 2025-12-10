@@ -35,12 +35,12 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
 
-        $usuarios = User::paginate(10);
+        $users = User::paginate(10);
         $tipos = TipoAnalista::all();
         $cursos = Curso::distinct()->orderBy('nome')->pluck('cod_curso', 'nome');
         $cotas = Cota::all();
 
-        return view('user.todos', compact('usuarios', 'tipos', 'cursos', 'cotas'));
+        return view('user.todos', compact('users', 'tipos', 'cursos', 'cotas'));
     }
 
     /**
@@ -80,7 +80,7 @@ class UserController extends Controller
             $user->analistaCotas()->attach(Cota::find($request->cotas_analista));
         }
 
-        return redirect(route('usuarios.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
+        return redirect(route('users.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
     }
 
     public function storeUser(Request $request)
@@ -138,7 +138,7 @@ class UserController extends Controller
             }
         }
 
-        return redirect()->route('usuarios.todos')->with(['success' => 'Usuário criado com sucesso!']);
+        return redirect()->route('users.todos')->with(['success' => 'Usuário criado com sucesso!']);
     }
 
     /**

@@ -47,16 +47,16 @@ Route::put('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController
 Route::get('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'edit'])->name('candidato.edit');
 Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function () {
     
-    Route::get('/usuarios/todos', [UserController::class, 'listarTodos'])
-    ->name('usuarios.todos');
+    Route::get('/users/todos', [UserController::class, 'listarTodos'])
+    ->name('users.todos');
 
-    Route::post('/usuarios/update', [UserController::class, 'update'])->name('usuarios.update');
-    Route::post('/usuarios/store-user', [UserController::class, 'storeUser'])->name('usuarios.storeUser');
-    Route::post('/usuarios/update-user', [UserController::class, 'updateUser'])->name('usuarios.updateUser');
+    Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
+    Route::post('/users/store-user', [UserController::class, 'storeUser'])->name('users.storeUser');
+    Route::post('/users/update-user', [UserController::class, 'updateUser'])->name('users.updateUser');
 
-    Route::resource('usuarios', UserController::class);
-    Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])
-        ->name('usuarios.update.analista');
+    Route::resource('users', UserController::class);
+    Route::post('/users/update-analista', [UserController::class, 'updateAnalista'])
+        ->name('users.update.analista');
 
     Route::resource('sisus', SisuController::class);
 
@@ -143,7 +143,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
 
-    Route::get('/usuario/info', [UserController::class, 'infoUser'])->name('usuario.info.ajax');
+    Route::get('/user/info', [UserController::class, 'infoUser'])->name('user.info.ajax');
 
     Route::get('/listagens/publicar', [ListagemController::class, 'publicar'])->name('publicar.listagem');
 
