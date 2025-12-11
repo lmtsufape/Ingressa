@@ -7,12 +7,16 @@ use App\Models\Curso;
 use App\Models\Cota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Laravel\Jetstream\Jetstream;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\TipoAnalista;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -29,6 +33,17 @@ class UserController extends Controller
         $cursos = Curso::distinct()->orderBy('nome')->pluck('cod_curso', 'nome');
         $cotas = Cota::all();
         return view('user.index', compact('users', 'tipos', 'cursos', 'cotas'));
+    }
+    public function listarTodos()
+    {
+        $this->authorize('isAdmin', User::class);
+
+        $users = User::paginate(10);
+        $tipos = TipoAnalista::all();
+        $cursos = Curso::distinct()->orderBy('nome')->pluck('cod_curso', 'nome');
+        $cotas = Cota::all();
+
+        return view('user.todos', compact('users', 'tipos', 'cursos', 'cotas'));
     }
 
     /**
@@ -68,7 +83,48 @@ class UserController extends Controller
             $user->analistaCotas()->attach(Cota::find($request->cotas_analista));
         }
 
-        return redirect(route('usuarios.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
+        return redirect(route('users.index'))->with(['success' => 'Analista cadastrado com sucesso!']);
+    }
+
+    public function storeUser(UserStoreRequest $request)
+    {
+        $this->authorize('isAdmin', User::class);
+
+        $validated = $request->validated();
+
+        $user = new User();
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->password = Hash::make($validated['password']);
+        // set role from validated data
+        $user->role = $validated['role'];
+        $user->email_verified_at = now();
+        $user->primeiro_acesso = false;
+        $user->save();
+
+        if ($user->role == User::ROLE_ENUM['analista']) {
+            if (!empty($validated['tipos_analista'] ?? [])) {
+                foreach ($validated['tipos_analista'] as $tipo_id) {
+                    $user->tipo_analista()->attach(TipoAnalista::find($tipo_id));
+                }
+            }
+
+            if (!empty($validated['cursos_analista'] ?? [])) {
+                foreach ($validated['cursos_analista'] as $cod_curso) {
+                    $user->analistaCursos()->attach(Curso::where('cod_curso', $cod_curso)->first());
+                }
+            }
+            if (!empty($validated['cotas_analista'] ?? [])) {
+                $hasSpecial = $user->tipo_analista()->whereIn('tipo', [TipoAnalista::TIPO_ENUM['heteroidentificacao'], TipoAnalista::TIPO_ENUM['medico']])->exists();
+                if (!$hasSpecial) {
+                    foreach ($validated['cotas_analista'] as $cota_id) {
+                        $user->analistaCotas()->attach(Cota::find($cota_id));
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('users.todos')->with(['success' => 'Usuário criado com sucesso!']);
     }
 
     /**
@@ -156,6 +212,39 @@ class UserController extends Controller
         return redirect()->back()->with(['success' => 'Analista editado com sucesso']);
     }
 
+    public function updateUser(UserUpdateRequest $request)
+    {
+        $this->authorize('isAdmin', User::class);
+        $user = User::find($request->user_id);
+        $validated = $request->validated();
+
+
+        if (isset($validated['tipos_analista_edit'])) {
+            $user->tipo_analista()->sync($validated['tipos_analista_edit'] ?? []);
+        }
+
+        if (isset($validated['cursos_analista_edit'])) {
+            $cursos = Curso::whereIn('cod_curso', $validated['cursos_analista_edit'])->pluck('id');
+            $user->analistaCursos()->sync($cursos);
+        }
+
+        if (isset($validated['cotas_analista_edit'])) {
+            $hasSpecialTipo = $user->tipo_analista()->whereIn('tipo', [TipoAnalista::TIPO_ENUM['heteroidentificacao'], TipoAnalista::TIPO_ENUM['medico']])->exists();
+            if (!$hasSpecialTipo) {
+                $user->analistaCotas()->sync($validated['cotas_analista_edit'] ?? []);
+            }
+        }
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        if (isset($validated['role'])) {
+            $user->role = $validated['role'];
+        }
+        $user->update();
+
+        return redirect()->back()->with(['success' => 'Usuário editado com sucesso']);
+    }
+
     public function infoUser(Request $request)
     {
         $user = User::find($request->user_id);
@@ -164,6 +253,24 @@ class UserController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'role' => $user->role,
+            'cargos' => $user->tipo_analista,
+            'cursos' => $user->analistaCursos,
+            'cotas' => $user->analistaCotas,
+        ];
+
+        return response()->json($userInfo);
+    }
+
+    public function editUser(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $userInfo = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
             'cargos' => $user->tipo_analista,
             'cursos' => $user->analistaCursos,
             'cotas' => $user->analistaCotas,
@@ -198,6 +305,14 @@ class UserController extends Controller
 
         DB::commit();
 
-        return redirect(route('usuarios.index'))->with(['success' => 'Analista deletado com sucesso!']);
+        $message = 'Usuário deletado com sucesso!';
+        if ($user && $user->role == User::ROLE_ENUM['analista']) {
+            $message = 'Analista deletado com sucesso!';
+        }
+        else if ($user && $user->role == User::ROLE_ENUM['admin']) {
+            $message = 'Administrador deletado com sucesso!';
+        }
+
+        return redirect()->back()->with(['success' => $message]);
     }
 }

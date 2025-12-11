@@ -150,7 +150,7 @@
         <div class="modal-dialog">
             <div class="modal-content modalFundo p-3">
                 <div class="col-md-12 tituloModal">Insira um novo analista</div>
-                <form method="POST" id="criar-analista" action="{{ route('usuarios.store') }}">
+                <form method="POST" id="criar-analista" action="{{ route('users.store') }}">
                     @csrf
                     <input type="hidden" id="user" name="user_id" value="none">
                     <div class="col-md-12 pt-3 textoModal">
@@ -291,7 +291,7 @@
             <div class="modal-content modalFundo p-3">
                 <div class="col-md-12 tituloModal">Editar analista</div>
 
-                <form method="POST" id="editar-analista" action="{{ route('usuarios.update.analista') }}">
+                <form method="POST" id="editar-analista" action="{{ route('users.update.analista') }}">
                     @csrf
                     <input type="hidden" id="user-edit" name="user_id" value="{{ old('user_id') }}">
                     <div class="form-row">
@@ -417,7 +417,7 @@
                     <div class="col-md-12 tituloModal">Deletar analista</div>
 
                     <form id="deletar-user-form-{{ $user->id }}" method="POST"
-                        action="{{ route('usuarios.destroy', ['usuario' => $user]) }}">
+                        action="{{ route('users.destroy', ['user' => $user]) }}">
                         @csrf
                         <div class="pt-3">
                             <input type="hidden" name="_method" value="DELETE">
@@ -515,7 +515,7 @@
         });
 
         $.ajax({
-            url: "{{ route('usuario.info.ajax') }}",
+            url: "{{ route('user.info.ajax') }}",
             type: "get",
             data: {
                 "user_id": id

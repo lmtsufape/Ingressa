@@ -18,7 +18,7 @@
                     </x-jet-nav-link>
 
                     @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                        <x-jet-nav-link href="{{route('usuarios.index')}}" :active="request()->routeIs('usuarios.*')">
+                        <x-jet-nav-link href="{{route('users.index')}}" :active="request()->routeIs('users.*')">
                             {{ __('Analistas') }}
                         </x-jet-nav-link>
                         <x-jet-nav-link href="{{route('sisus.index')}}" :active="request()->routeIs('sisus.*')">
@@ -167,7 +167,7 @@
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
             @if(auth()->user()->role == \App\Models\User::ROLE_ENUM['admin'])
-                <x-jet-responsive-nav-link href="{{route('usuarios.index')}}" :active="request()->routeIs('usuarios.*')">
+                <x-jet-responsive-nav-link href="{{route('users.index')}}" :active="request()->routeIs('users.*')">
                     {{ __('Usuários') }}
                 </x-jet-responsive-nav-link>
             @endif
