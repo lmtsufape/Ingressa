@@ -16,6 +16,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\TipoAnalista;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -94,7 +95,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-        $user->password = \Illuminate\Support\Facades\Hash::make($validated['password']);
+        $user->password = Hash::make($validated['password']);
         // set role from validated data
         $user->role = $validated['role'];
         $user->email_verified_at = now();
