@@ -199,7 +199,7 @@ class ListagemController extends Controller
                 $inscricoes->push($inscricoes_curso);
             }
         }
-        $pdf = PDF::loadView('listagem.inscricoes', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
+        $pdf = FacadePdf::loadView('listagem.inscricoes', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
@@ -252,7 +252,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
+        $pdf = FacadePdf::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
@@ -905,7 +905,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.final_personalizada', ['candidatosIngressantesCursos' => $candidatosIngressantes, 'candidatosReservaCursos' => $candidatosReserva, 'sisu' => $sisu]);
+        $pdf = FacadePdf::loadView('listagem.final_personalizada', ['candidatosIngressantesCursos' => $candidatosIngressantes, 'candidatosReservaCursos' => $candidatosReserva, 'sisu' => $sisu]);
 
         $listagem->caminho_listagem = $this->salvarListagem($listagem, $pdf->stream());
         $listagem->update();
@@ -1165,7 +1165,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
+        $pdf = FacadePdf::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
