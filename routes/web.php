@@ -93,6 +93,7 @@ Route::middleware(['auth', 'verified', 'atualizar_dados'])->group(function () {
 
     Route::get('/listagem/{chamada}/export', [ListagemController::class, 'exportarCSV'])->name('exportar-ingressantes');
     Route::get('/sisus/{id}/export-siga', [ListagemController::class, 'exportarSigaPersonalizado'])->name('exportar-ingressantes-personalizado');
+    Route::get('/sisus/{chamada}/exportar-dados', [ListagemController::class, 'exportarDadosIngressantesCsv'])->name('exportar.dados.ingressantes.csv');
     Route::get('/sisus/{id}/lista-final', [ListagemController::class, 'gerarListagemFinalPersonalizada'])->name('gerar-lista-final-personalizada');
     Route::get('/chamada/{chamada}/export-sisu-getsao', [ChamadaController::class, 'exportarCSVSisuGestao'])->name('exportar-sisu-gestao');
     Route::get('/chamada/{chamada}/exportar-ingressantes-reserva', [ListagemController::class, 'exportarIngressantesEspera'])->name('exportar-ingressantes-reserva');
