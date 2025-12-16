@@ -58,7 +58,7 @@
                                 Olá, <b>{{auth()->user()->name}}</b>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{route('profile.show')}}">{{ __('Perfil') }}</a></li>
+                                <li><a class="dropdown-item" href="{{route('profile.edit')}}">{{ __('Perfil') }}</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><!-- Authentication -->
                                     <form method="POST" action="{{ route('logout') }}">
@@ -84,7 +84,7 @@
                             <a class="nav-link mx-3" href="{{route('edicoes')}}">Edições</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mx-3" href="{{route('logar')}}">Entrar</a>
+                            <a class="nav-link mx-3" href="{{route('login')}}">Entrar</a>
                         </li>
                         {{-- <li class="nav-item">
                             <a class="nav-link mx-3 @if(request()->routeIs('login')) active @endif" href="{{route('login')}}">Login</a>

@@ -117,7 +117,7 @@ class UserController extends Controller
         $user->primeiro_acesso = false;
         $user->update();
 
-        return redirect(route('logar'))->with(['success' => 'Primeiro acesso realizado! Digite o e-mail e senha para entrar agora.']);
+        return redirect(route('login'))->with(['success' => 'Primeiro acesso realizado! Digite o e-mail e senha para entrar agora.']);
     }
 
     public function updateAnalista(Request $request)

@@ -37,11 +37,6 @@ class WelcomeController extends Controller
         return $edicao_atual;
     }
 
-    public function login()
-    {
-        return view('auth.login');
-    }
-
     public function sobre()
     {
         return view('about');

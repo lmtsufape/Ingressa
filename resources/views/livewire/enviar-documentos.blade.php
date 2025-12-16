@@ -135,8 +135,8 @@
                                     <b>OBS.</b>:
                                     Caso tenha perdido ou sido roubado, anexar um Boletim de Ocorrência e algum outro
                                     documento com foto. A Carteira Nacional de Habilitação pode ser utilizada como
-                                    documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de 
-                                    cadastro. 
+                                    documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de
+                                    cadastro.
                                 </span>
                                 <div class="invalid-feedback">
                                     @error('arquivos.rg')
@@ -323,9 +323,9 @@
                                 <span class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                     Vídeo individual e recente para procedimento de heteroidentificação.
                                     De acordo com as especificações e o roteiro descritos no edital do
-                                    processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
-                                    Conforme Edital SiSU 2025, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação 
-                                    frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2025 da 
+                                    processo de seleção SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
+                                    Conforme Edital SiSU 2026, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação
+                                    frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2026 da
                                     UFAPE, me autodeclaro, [dizer a opção: Preto ou Pardo]”. </span>
                                 <div class="invalid-feedback">
                                     @error('arquivos.heteroidentificacao')
@@ -348,7 +348,7 @@
                                 <span class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                     Fotografia individual e recente para procedimento de
                                     heteroidentificação. Conforme especificado no edital do processo de
-                                    seleção SiSU 2025 da UFAPE, disponível em: <a
+                                    seleção SiSU 2026 da UFAPE, disponível em: <a
                                         href="http://www.ufape.edu.br/sisu"
                                         target="_blank">www.ufape.edu.br/sisu</a></span>
                                 <div class="invalid-feedback">
@@ -381,7 +381,7 @@
                                 <span
                                     class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
                                     Comprovante de renda, ou de que não possui renda, de cada membro
-                                    do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
+                                    do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
                                 </span>
                                 <div class="invalid-feedback">
                                     @error('arquivos.comprovante_renda')
@@ -412,13 +412,11 @@
                                     <img src="{{ asset('img/download3.svg') }}" width="30">
                                 @endif
                                 <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
-                                    Registro Administrativo de Nascimento de Indígena (RANI)
-                                    ou declaração de vínculo com comunidade indígena brasileira à qual
-                                    pertença emitida por liderança indígena reconhecida ou por ancião
-                                    indígena reconhecido ou por personalidade indígena de reputação
-                                    pública reconhecida ou outro documento emitido por órgãos
-                                    públicos que contenham informações pertinentes à sua condição de
-                                    indígena;
+                                    Autodeclaração e Declaração de vínculo com comunidade indígena brasileira à qual pertença
+                                    emitida por liderança indígena reconhecida ou por ancião indígena reconhecido ou por
+                                    personalidade indígena de reputação pública reconhecida ou outro documento emitido por
+                                    órgãos públicos que contenham informações pertinentes à sua condição de indígena
+                                    (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>)
                                 </span>
                                 <div class="invalid-feedback">
                                     @error('arquivos.rani')
@@ -434,7 +432,7 @@
                             <div class="col-md-12">
                                 <div class="tituloEnvio">Comprovação da condição de beneficiário da reserva de
                                     vaga para candidato autodeclarado quilombola</div>
-                                <div class="subtexto2 my-1">                           
+                                <div class="subtexto2 my-1">
                                 Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.</div>
                             </div>
                             <div class="mt-2">
@@ -485,7 +483,7 @@
                                 <span class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                     Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                     para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                    SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu"
+                                    SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu"
                                         target="_blank">www.ufape.edu.br/sisu</a>
                                 </span>
                                 <div class="invalid-feedback">
@@ -696,8 +694,8 @@
                                             <b>OBS.</b>:
                                             Caso tenha perdido ou sido roubado, anexar um Boletim de Ocorrência e algum outro
                                             documento com foto. A Carteira Nacional de Habilitação pode ser utilizada como
-                                            documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de 
-                                            cadastro. 
+                                            documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de
+                                            cadastro.
                                         </span>
                                         <div class="invalid-feedback">
                                             @error('arquivos.rg')
@@ -906,9 +904,9 @@
                                             class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                             Vídeo individual e recente para procedimento de heteroidentificação.
                                             De acordo com as especificações e o roteiro descritos no edital do
-                                            processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
-                                            Conforme Edital SiSU 2025, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação 
-                                            frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2025 da 
+                                            processo de seleção SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
+                                            Conforme Edital SiSU 2026, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação
+                                            frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2026 da
                                             UFAPE, me autodeclaro, [dizer a opção: Preto ou Pardo]”. </span>
                                         <div class="invalid-feedback">
                                             @error('arquivos.heteroidentificacao')
@@ -931,7 +929,7 @@
                                             class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                             Fotografia individual e recente para procedimento de
                                             heteroidentificação. Conforme especificado no edital do processo de
-                                            seleção SiSU 2025 da UFAPE, disponível em: <a
+                                            seleção SiSU 2026 da UFAPE, disponível em: <a
                                                 href="http://www.ufape.edu.br/sisu"
                                                 target="_blank">www.ufape.edu.br/sisu</a></span>
                                         <div class="invalid-feedback">
@@ -964,7 +962,7 @@
                                         <span
                                             class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
                                             Comprovante de renda, ou de que não possui renda, de cada membro
-                                            do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
+                                            do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
                                         </span>
                                         <div class="invalid-feedback">
                                             @error('arquivos.comprovante_renda')
@@ -994,13 +992,11 @@
                                             <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
-                                            Registro Administrativo de Nascimento de Indígena (RANI)
-                                            ou declaração de vínculo com comunidade indígena brasileira à qual
-                                            pertença emitida por liderança indígena reconhecida ou por ancião
-                                            indígena reconhecido ou por personalidade indígena de reputação
-                                            pública reconhecida ou outro documento emitido por órgãos
-                                            públicos que contenham informações pertinentes à sua condição de
-                                            indígena;
+                                            Autodeclaração e Declaração de vínculo com comunidade indígena brasileira à qual pertença
+                                            emitida por liderança indígena reconhecida ou por ancião indígena reconhecido ou por
+                                            personalidade indígena de reputação pública reconhecida ou outro documento emitido por
+                                            órgãos públicos que contenham informações pertinentes à sua condição de indígena
+                                            (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>)
                                         </span>
                                         <div class="invalid-feedback">
                                             @error('arquivos.rani')
@@ -1017,9 +1013,9 @@
                                             vaga para candidato autodeclarado quilombola</div>
                                         <div class="subtexto2 my-1">
                                         Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.
-                                        Declaração de vínculo com comunidade indígena brasileira à qual pertença, emitida por liderança indígena 
-                                        reconhecida ou por ancião indígena reconhecido ou por personalidade indígena de reputação pública reconhecida 
-                                        ou outro documento emitido por órgãos públicos que contenham informações pertinentes à sua condição de 
+                                        Declaração de vínculo com comunidade indígena brasileira à qual pertença, emitida por liderança indígena
+                                        reconhecida ou por ancião indígena reconhecido ou por personalidade indígena de reputação pública reconhecida
+                                        ou outro documento emitido por órgãos públicos que contenham informações pertinentes à sua condição de
                                         indígena.
                                         </div>
                                     </div>
@@ -1071,7 +1067,7 @@
                                             class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                             Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                             para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                            SiSU 2025 da UFAPE, disponível em: <a
+                                            SiSU 2026 da UFAPE, disponível em: <a
                                                 href="http://www.ufape.edu.br/sisu"
                                                 target="_blank">www.ufape.edu.br/sisu</a>
                                         </span>
@@ -1116,7 +1112,7 @@
                                 wire:model="termos.confirmacaovinculo">
                             <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
                                 DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e
-                                datas descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a
+                                datas descritas no Edital do processo de seleção SiSU 2026 da UFAPE, disponível em: <a
                                     href="http://www.ufape.edu.br/sisu"
                                     target="_blank">www.ufape.edu.br/sisu</a>
                             </label>
@@ -1369,7 +1365,7 @@
                                                 <b>OBS.</b>:
                                                 Caso tenha perdido ou sido roubado, anexar um Boletim de Ocorrência e algum outro
                                                 documento com foto. A Carteira Nacional de Habilitação pode ser utilizada como
-                                                documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de 
+                                                documento com foto, mas não será aceita em substituição ao RG e ao CPF para efeitos de
                                                 cadastro.
                                             </span>
                                             <div class="invalid-feedback">
@@ -1582,9 +1578,9 @@
                                                 class="subtexto3 @error('arquivos.heteroidentificacao') is-invalid text-danger @enderror">
                                                 Vídeo individual e recente para procedimento de heteroidentificação.
                                                 De acordo com as especificações e o roteiro descritos no edital do
-                                                processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
-                                                Conforme Edital SiSU 2025, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação 
-                                                frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2025 da 
+                                                processo de seleção SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>
+                                                Conforme Edital SiSU 2026, no vídeo da heteroidentificação, o candidato deverá, após apresentar o documento de identificação
+                                                frente e verso, ler o seguinte texto: “Eu, [dizer o nome completo], inscrito(a) no processo seletivo SiSU 2026 da
                                                 UFAPE, me autodeclaro, [dizer a opção: Preto ou Pardo]”. </span>
                                             <div class="invalid-feedback">
                                                 @error('arquivos.heteroidentificacao')
@@ -1608,7 +1604,7 @@
                                                 class="subtexto3 @error('arquivos.fotografia') is-invalid text-danger @enderror">
                                                 Fotografia individual e recente para procedimento de
                                                 heteroidentificação. Conforme especificado no edital do processo de
-                                                seleção SiSU 2025 da UFAPE, disponível em: <a
+                                                seleção SiSU 2026 da UFAPE, disponível em: <a
                                                     href="http://www.ufape.edu.br/sisu"
                                                     target="_blank">www.ufape.edu.br/sisu</a></span>
                                             <div class="invalid-feedback">
@@ -1641,7 +1637,7 @@
                                         <span
                                             class="subtexto3 @error('arquivos.comprovante_renda') is-invalid text-danger @enderror">
                                             Comprovante de renda, ou de que não possui renda, de cada membro
-                                            do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
+                                            do grupo familiar, seja maior ou menor de idade (consultar edital do processo de seleção SiSU 2026 da UFAPE, disponível em: <a href="http://www.ufape.edu.br/sisu">www.ufape.edu.br/sisu</a>)
                                         </span>
                                         <div class="invalid-feedback">
                                             @error('arquivos.comprovante_renda')
@@ -1672,13 +1668,11 @@
                                             <img src="{{ asset('img/download3.svg') }}" width="30">
                                         @endif
                                         <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
-                                            Registro Administrativo de Nascimento de Indígena (RANI)
-                                            ou declaração de vínculo com comunidade indígena brasileira à qual
-                                            pertença emitida por liderança indígena reconhecida ou por ancião
-                                            indígena reconhecido ou por personalidade indígena de reputação
-                                            pública reconhecida ou outro documento emitido por órgãos
-                                            públicos que contenham informações pertinentes à sua condição de
-                                            indígena;
+                                            Autodeclaração e Declaração de vínculo com comunidade indígena brasileira à qual pertença
+                                            emitida por liderança indígena reconhecida ou por ancião indígena reconhecido ou por
+                                            personalidade indígena de reputação pública reconhecida ou outro documento emitido por
+                                            órgãos públicos que contenham informações pertinentes à sua condição de indígena
+                                            (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a>)
                                         </span>
                                         <div class="invalid-feedback">
                                             @error('arquivos.rani')
@@ -1696,9 +1690,9 @@
                                             vaga para candidato autodeclarado quilombola</div>
                                         <div class="subtexto2 my-1">
                                         Você está concorrendo a uma vaga de cota quilombola, portanto deve enviar o respectivo comprovante.
-                                        Declaração de vínculo com comunidade indígena brasileira à qual pertença, emitida por liderança indígena 
-                                        reconhecida ou por ancião indígena reconhecido ou por personalidade indígena de reputação pública reconhecida 
-                                        ou outro documento emitido por órgãos públicos que contenham informações pertinentes à sua condição de 
+                                        Declaração de vínculo com comunidade indígena brasileira à qual pertença, emitida por liderança indígena
+                                        reconhecida ou por ancião indígena reconhecido ou por personalidade indígena de reputação pública reconhecida
+                                        ou outro documento emitido por órgãos públicos que contenham informações pertinentes à sua condição de
                                         indígena.
                                         </div>
                                     </div>
@@ -1750,7 +1744,7 @@
                                             class="subtexto3 @error('arquivos.laudo_medico') is-invalid text-danger @enderror">
                                             Laudo Médico e exames de comprovação da condição de beneficiário da reserva de vaga
                                             para pessoas com deficiência. Conforme especificado no Edital do processo de seleção
-                                            SiSU 2025 da UFAPE, disponível em: <a
+                                            SiSU 2026 da UFAPE, disponível em: <a
                                                 href="http://www.ufape.edu.br/sisu"
                                                 target="_blank">www.ufape.edu.br/sisu</a>
                                         </span>
@@ -1796,7 +1790,7 @@
                                 wire:model="termos.confirmacaovinculo">
                             <label class="form-check-label subtexto3" for="checkConfirmacaoVinculo">
                                 DECLARO que estou ciente da obrigatoriedade de CONFIRMAÇÃO DE VÍNCULO, conforme especificações e
-                                datas descritas no Edital do processo de seleção SiSU 2025 da UFAPE, disponível em: <a
+                                datas descritas no Edital do processo de seleção SiSU 2026 da UFAPE, disponível em: <a
                                     href="http://www.ufape.edu.br/sisu"
                                     target="_blank">www.ufape.edu.br/sisu</a>
                             </label>

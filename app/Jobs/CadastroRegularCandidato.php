@@ -46,12 +46,10 @@ class CadastroRegularCandidato implements ShouldQueue
     public function handle()
     {
         // Caminho do arquivo CSV
-        $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_regular);
+        $csvPath = storage_path("app/{$this->chamada->sisu->caminho_import_regular}");
 
         // Lendo o arquivo CSV
-        $csv = Reader::createFromPath($csvPath, 'r');
-        $csv->setDelimiter(';');
-        $csv->setHeaderOffset(0);
+        $csv = Reader::from($csvPath, 'r')->setDelimiter(';')->setHeaderOffset(0);
         $records = $csv->getRecords();
 
         // Arrays para armazenar os dados dos usuários, candidatos e inscrições
@@ -73,9 +71,9 @@ class CadastroRegularCandidato implements ShouldQueue
 
         foreach ($records as $record) {
             $candidato = $candidatos->get($record['NU_CPF_INSCRITO']);
-            
+
             // Cria um novo candidato e usuário caso ele não exista
-            if (!$candidato) { 
+            if (!$candidato) {
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,

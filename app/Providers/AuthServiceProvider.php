@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Chamada;
+use App\Models\Inscricao;
+use App\Models\User;
+use App\Policies\ChamadaPolicy;
+use App\Policies\InscricaoPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,9 +20,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-        'App\Models\User' => 'App\Policies\UserPolicy',
-        'App\Models\Inscricao' => 'App\Policies\InscricaoPolicy',
-        'App\Models\Chamada' => 'App\Policies\ChamadaPolicy',
+        User::class => UserPolicy::class,
+        Inscricao::class => InscricaoPolicy::class,
+        Chamada::class => ChamadaPolicy::class,
     ];
 
     /**
@@ -26,8 +32,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
         //
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Excel;
 use App\Exports\AprovadosExport;
+use App\Exports\InscritosExport;
 use App\Exports\SisuGestaoExport;
 use App\Http\Requests\ListagemRequest;
 use App\Models\Listagem;
+use Maatwebsite\Excel\Excel as ExcelFormat;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
 use App\Models\Candidato;
@@ -16,6 +17,9 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Sisu;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class ListagemController extends Controller
 {
@@ -195,7 +199,7 @@ class ListagemController extends Controller
                 $inscricoes->push($inscricoes_curso);
             }
         }
-        $pdf = PDF::loadView('listagem.inscricoes', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
+        $pdf = FacadePdf::loadView('listagem.inscricoes', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
@@ -248,7 +252,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
+        $pdf = FacadePdf::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
@@ -257,8 +261,7 @@ class ListagemController extends Controller
     {
         $chamada = Chamada::find($request->chamada);
         $inscricoes = $this->getInscricoesIngressantesReservas($request);
-
-        $pdf = PDF::loadView('listagem.final', ['candidatosIngressantesCursos' => $inscricoes['ingressantes'], 'candidatosReservaCursos' => $inscricoes['reservas'], 'chamada' => $chamada]);
+        $pdf = FacadePdf::loadView('listagem.final', ['candidatosIngressantesCursos' => $inscricoes['ingressantes'], 'candidatosReservaCursos' => $inscricoes['reservas'], 'chamada' => $chamada]);
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }
@@ -704,6 +707,127 @@ class ListagemController extends Controller
         );
     }
 
+    public function exportarDadosIngressantesCsv(Request $request){
+        $etnia_cor = json_encode(array_flip(Candidato::ETNIA_E_COR));
+        $necessidades = json_encode(Candidato::NECESSIDADES);
+
+        $this->periodos = [
+            '118468' => 0,
+            '118466' => 0,
+            '118470' => 0,
+            '1682932' => 0,
+        ];
+
+        $chamada = Chamada::find($request->chamada);
+        $sisu = $chamada->sisu;
+        $inscritos = Inscricao::where(
+            [
+                ['inscricaos.sisu_id', $sisu->id],
+                ['semestre_entrada', '!=', null],
+                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+            ]
+        )->where(function ($query) {
+            $query->where([['desistente', true], ['realocar_vaga', false]])
+                ->orWhere('desistente', false);
+        })->orderBy('curso_id', 'ASC')->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')
+
+            ->leftJoin('candidatos as candidato', 'candidato.id', '=', 'inscricaos.candidato_id')
+            ->leftJoin('sisus as sisu', 'sisu.id', '=', 'sisu_id')
+            ->leftJoin('chamadas as chamada', 'chamada.id', '=', 'chamada_id')
+            ->leftJoin('cursos as curso', 'curso.id', '=', 'curso_id')
+            ->leftJoin('cotas as cota_ocupada', 'cota_ocupada.id', '=', 'cota_vaga_ocupada_id')
+            ->select([
+                'no_inscrito',
+                'no_social',
+                DB::raw("to_char(dt_nascimento, 'DD/MM/YYYY') as dt_nascimento"),
+                'tp_sexo',
+                DB::raw("CASE estado_civil::int
+                            WHEN 1 THEN 'Solteiro(a)'
+                            WHEN 2 THEN 'Casado(a)'
+                            WHEN 3 THEN 'Separado(a) judicialmente'
+                            WHEN 4 THEN 'Divorciado(a)'
+                            WHEN 5 THEN 'Viuvo(a)'
+                            ELSE '—'
+                        END as estado_civil"),
+                'nu_cpf_inscrito',
+                'nu_rg',
+                'orgao_expedidor',
+                'uf_rg',
+                DB::raw("to_char(data_expedicao, 'DD/MM/YYYY') as data_expedicao"),
+                'titulo',
+                'zona_eleitoral',
+                'secao_eleitoral',
+                'cidade_natal',
+                'uf_natural',
+                'pais_natural',
+                'no_mae',
+                'pai',
+                'no_campus',//unidade
+                'ds_formacao',//bacharelado ou licenciatura
+                'ds_turno',
+                DB::raw("'SiSU' as forma_ingress"),
+                'edicao',
+                'semestre_entrada',
+                DB::raw("CASE WHEN regular IS TRUE THEN 'Regular' ELSE 'Lista de espera' END AS tipo_chamada"),
+                'nu_nota_l',
+                'nu_nota_ch',
+                'nu_nota_cn',
+                'nu_nota_m',
+                'nu_nota_r',
+                'nu_nota_candidato',
+                'no_curso',
+                'modalidade_escolhida',
+                'cota_ocupada.nome',//modalidade ocupada
+                'ds_logradouro',
+                'nu_endereco',
+                'nu_cep',
+                'ds_complemento',
+                'no_municipio',
+                'no_bairro',
+                'sg_uf_inscrito',
+                'nu_fone1',
+                'nu_fone2',
+                'nu_fone_emergencia',
+                'ds_email',
+                'escola_ens_med',//nome da escola
+                'uf_escola',
+                'ano_conclusao',
+                'modalidade',
+                DB::raw("CASE WHEN concluiu_publica IS TRUE THEN 'SIM' ELSE 'NÃO' END AS concluiu_publica"),
+                DB::raw("CASE WHEN concluiu_comunitaria IS TRUE THEN 'SIM' ELSE 'NÃO' END AS concluiu_comunitaria"),
+                DB::raw("COALESCE((CAST(? AS jsonb) ->> (candidato.necessidades)::text), 'Nenhuma') AS necessidades_label"),
+                DB::raw("COALESCE((CAST(? AS jsonb) ->> (candidato.etnia_e_cor)::text), 'Não informada') AS etnia_cor_label"),
+
+                DB::raw("CASE WHEN inscricaos.quilombola = 'S' THEN 'SIM' ELSE 'NÃO' END AS quilombola"),
+                DB::raw("CASE WHEN indigena IS TRUE THEN 'SIM' ELSE 'NÃO' END AS indigena"),
+                'reside',//moradia atual
+                'localidade',
+                DB::raw("CASE WHEN trabalha IS TRUE THEN 'SIM' ELSE 'NÃO' END AS trabalha"),//se trabalha
+                'grupo_familiar',// quantidade de pessoas da familia
+                'valor_renda'])
+                ->selectRaw("
+                    COALESCE(
+                        curso.semestre,
+                        inscricaos.semestre_entrada,
+                        CASE
+                            WHEN row_number() OVER (
+                                PARTITION BY curso.cod_curso
+                                ORDER BY inscricaos.id
+                            ) <= 40 THEN 1
+                            ELSE 2
+                        END
+                    ) AS semestre_entrada
+                ");
+                $inscritos->addBinding($necessidades, 'select');
+                $inscritos->addBinding($etnia_cor, 'select');
+
+            return Excel::download(
+                new InscritosExport($inscritos),
+                'sisu_gestao.csv',
+                ExcelFormat::CSV
+            );
+    }
+
     public function gerarListagemFinalPersonalizada(Request $request, $sisu_id)
     {
         $this->authorize('isAdmin', User::class);
@@ -781,7 +905,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.final_personalizada', ['candidatosIngressantesCursos' => $candidatosIngressantes, 'candidatosReservaCursos' => $candidatosReserva, 'sisu' => $sisu]);
+        $pdf = FacadePdf::loadView('listagem.final_personalizada', ['candidatosIngressantesCursos' => $candidatosIngressantes, 'candidatosReservaCursos' => $candidatosReserva, 'sisu' => $sisu]);
 
         $listagem->caminho_listagem = $this->salvarListagem($listagem, $pdf->stream());
         $listagem->update();
@@ -1041,7 +1165,7 @@ class ListagemController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
+        $pdf = FacadePdf::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
 
         return $this->salvarListagem($listagem, $pdf->stream());
     }

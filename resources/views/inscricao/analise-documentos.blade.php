@@ -227,7 +227,7 @@
                                         </a>
                                         <a href="#" onclick="deleteArquivo(event)" title="Deletar requerimento de nome social">
                                             <img width="25" src="{{ asset('img/Grupo 1664.svg') }}" alt="Ícone de download">
-                                        </a>                                        
+                                        </a>
                                     @endif
                                 </div>
                                 {{-- <div class="tituloDocumento mx-3 pt-1">
@@ -461,7 +461,7 @@
                         <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                             <div class="row">
                                 <div class="col-md-12 tituloDocumento">
-                                    Necessidades Especiais:
+                                    Necessidades Específicas:
                                     @isset($inscricao->candidato->necessidades)
                                         <p class="nomeDocumento" style="display: inline">
                                             @foreach (explode(',', $inscricao->candidato->necessidades) as $necessidade)
@@ -756,8 +756,7 @@
                                             <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
                                                 style="display:inline-block; text-align: left;"
                                                 for="{{ $documento }}"
-                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro
-                                                Administrativo de Nascimento de Indígena ou equivalente;</button>
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Autodeclaração e Declaração de vínculo com comunidade indígena brasileira à qual pertença;</button>
                                         </div>
                                     @elseif($documento == 'declaracao_quilombola')
                                         <div class="col-md-10" style="cursor:pointer;">
@@ -843,7 +842,7 @@
                         <button @if ($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
                                     && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']
                                     && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
-                                    disabled 
+                                    disabled
                                 @endif
                             id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12"
                             onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span
@@ -1474,7 +1473,7 @@
 
     function deleteArquivo(event) {
         event.preventDefault();
-        
+
         if (confirm('Tem certeza que deseja excluir o requerimento de nome social do candidato?')) {
             fetch("{{ route('inscricao.delete.arquivo', [$inscricao->id, 'requerimento_nome_social']) }}", {
                 method: "DELETE",

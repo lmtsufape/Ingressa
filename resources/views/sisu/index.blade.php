@@ -71,6 +71,11 @@
                                                 @endif
                                                 @if($sisu->chamadas->first() != null)
                                                     <a href="{{route('exportar-ingressantes', $sisu->chamadas->first())}}" title ="Exportar ingressantes SIGA" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1700.svg')}}"  alt="Icone de exportar ingressantes siga"></a>
+                                                    <a href="{{route('exportar.dados.ingressantes.csv', $sisu->chamadas->first())}}" title ="Exportar dados dos ingressantes" class="text-decoration-none" style="cursor: pointer;">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+                                                            <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0"/>
+                                                        </svg>
+                                                    </a>
                                                 @endif
                                                 @if($sisu->chamadas->count() >= 2)
                                                     <a href="{{route('exportar-ingressantes-reserva', $sisu->chamadas->first())}}" title ="Exportar ingressantes da lista de espera Sisu Gestão" style="cursor: pointer;"><img class="m-1 " width="30" src="{{asset('img/Grupo 1701.svg')}}"  alt="Icone de exportar ingressantes das listas de espera"></a>
@@ -116,6 +121,16 @@
                                     <img class="aling-middle" width="33" src="{{asset('img/Grupo 1700.svg')}}" alt="Icone de Exportar ingressantes">
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Exportar ingressantes para o SIGA
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div title="Exportar dados dos ingressantes" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+                                        <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0"/>
+                                    </svg>
+                                    <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
+                                        Exportar dados dos ingressantes
                                     </div>
                                 </div>
                             </li>

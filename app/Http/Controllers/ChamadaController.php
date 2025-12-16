@@ -18,6 +18,7 @@ use App\Models\Sisu;
 use App\Models\User;
 use App\Policies\UserPolicy;
 use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
@@ -956,7 +957,7 @@ class ChamadaController extends Controller
         $listagem->chamada_id = $chamada->id;
         $listagem->save();
 
-        $pdf = PDF::loadView('listagem.checagem', ['collect_inscricoes' => $porCurso, 'chamada' => $chamada]);
+        $pdf = FacadePdf::loadView('listagem.checagem', ['collect_inscricoes' => $porCurso, 'chamada' => $chamada]);
         $path = 'listagem/' . $listagem->id . '/';
         $nome = 'listagem.pdf';
         Storage::put('public/' . $path . $nome, $pdf->stream());

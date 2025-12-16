@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-md-6" style="margin-bottom: 10px;">
                             <div class="text-center">
-                                <a href="{{route('logar')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a>
+                                <a href="{{route('login')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a>
                             </div>
                         </div>
                         <div class="col-md-6">

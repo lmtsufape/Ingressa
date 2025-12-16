@@ -20,13 +20,11 @@
         <link rel="icon" type="imagem/png" href="{{asset('img/logo-icon.png')}}">
 
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="https://unpkg.com/@popperjs/core@2" ></script>
         <script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.2/umd/popper.min.js"></script>
-        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <script src="{{asset('js/jquery-3.6.0.min.js')}}"></script>
         <script src="{{asset('bootstrap-select/js/bootstrap-select.min.js')}}"></script>
@@ -34,6 +32,9 @@
         <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
         <!-- Barra Brasil -->
@@ -47,9 +48,41 @@
                 </li>
             </ul>
         </div>
-        <x-jet-banner />
-        @component('layouts.nav_bar')@endcomponent
+        @include('layouts.nav_bar')
+
+        <zip-status-listener />
+        <script type="module">
+            window.Echo
+                .private('user.{{ auth()->id() }}')
+                .listen('.ZipGerado', (e) => {
+                    Livewire.dispatch('zip-gerado', e);
+                });
+
+                window.addEventListener('download-zip', (event) => {
+                if (event.detail?.url) {
+                    window.location.href = event.detail.url;
+                }
+            });
+        </script>
+
+
+
+
+
         <div class="min-h-screen bg-gray-100 p-1">
+            @if (session('success'))
+                <div class="alert alert-success d-flex justify-content-between">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger d-flex justify-content-between">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            @endif
 
             {{-- @livewire('navigation-menu') --}}
 
@@ -70,7 +103,7 @@
 
         @stack('modals')
 
-        @component('layouts.footer')@endcomponent
+        @include('layouts.footer')
         @livewireScripts
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @stack('scripts')

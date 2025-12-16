@@ -1,32 +1,20 @@
 <?php
 
-use App\Http\Controllers\ChamadaController;
-use App\Http\Controllers\SisuController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CandidatoController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\CotaController;
-use App\Http\Controllers\CandidatoController;
 use App\Http\Controllers\DataChamadaController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ListagemController;
-use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ChamadaController;
+use App\Http\Controllers\SisuController;
 use Illuminate\Support\Facades\App;
-
-include "fortify.php";
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('index');
-Route::get('/login', [WelcomeController::class, 'login'])->name('logar');
 Route::get('/sobre', [WelcomeController::class, 'sobre'])->name('sobre');
 Route::get('/edicoes', [WelcomeController::class, 'edicoes'])->name('edicoes');
 Route::get('/edicoes/{id}', [WelcomeController::class, 'showEdicao'])->name('edicoes.show');
@@ -39,13 +27,16 @@ Route::post('/verificacao', [CandidatoController::class, 'verificacao'])->name('
 Route::get('/editar', [CandidatoController::class, 'editarAcesso'])->name('primeiroAcesso.editar');
 Route::post('/atualizar', [UserController::class, 'update'])->name('primeiroAcesso.atualizar');
 
-Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->get('/dashboard', function () {
+
+Route::get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+})->middleware(['auth', 'verified', 'atualizar_dados'])->name('dashboard');
+
+
 
 Route::put('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'update'])->name('candidato.atualizar');
 Route::get('candidatos/{candidato}/inscricoes/{inscricao}', [CandidatoController::class, 'edit'])->name('candidato.edit');
-Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(function () {
+Route::middleware(['auth', 'verified', 'atualizar_dados'])->group(function () {
 
     Route::resource('usuarios', UserController::class);
     Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])
@@ -102,6 +93,7 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
 
     Route::get('/listagem/{chamada}/export', [ListagemController::class, 'exportarCSV'])->name('exportar-ingressantes');
     Route::get('/sisus/{id}/export-siga', [ListagemController::class, 'exportarSigaPersonalizado'])->name('exportar-ingressantes-personalizado');
+    Route::get('/sisus/{chamada}/exportar-dados', [ListagemController::class, 'exportarDadosIngressantesCsv'])->name('exportar.dados.ingressantes.csv');
     Route::get('/sisus/{id}/lista-final', [ListagemController::class, 'gerarListagemFinalPersonalizada'])->name('gerar-lista-final-personalizada');
     Route::get('/chamada/{chamada}/export-sisu-getsao', [ChamadaController::class, 'exportarCSVSisuGestao'])->name('exportar-sisu-gestao');
     Route::get('/chamada/{chamada}/exportar-ingressantes-reserva', [ListagemController::class, 'exportarIngressantesEspera'])->name('exportar-ingressantes-reserva');
@@ -131,7 +123,9 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
     Route::put('/curso/info', [CursoController::class, 'updateAjax'])->name('cursos.update.ajax');
 
     Route::get('/curso/info', [CursoController::class, 'infoCurso'])->name('cursos.info.ajax');
-    Route::get('/cursos/{curso_id}/chamada/{chamada_id}/download-documentos', [CursoController::class, 'downloadDocumentosTodosCandidatos'])->name('baixar.documentos.candidatos.curso');
+    Route::get('/cursos/{curso_id}/chamada/{chamada_id}/gerar-zip', [CursoController::class, 'gerarDocumentosTodosCandidatos'])->name('gerar.zip.documentos.candidatos.curso');
+    Route::get('/download-zip', [CursoController::class, 'downloadDocumentosTodosCandidatos'])->name('baixar.documentos.candidatos.curso');
+
 
     Route::get('/cota/info', [CotaController::class, 'infoCota'])->name('cota.info.ajax');
     Route::put('/cota/update/modal', [CotaController::class, 'updateModal'])->name('cotas.update.modal');
@@ -142,6 +136,13 @@ Route::middleware(['auth:sanctum', 'verified', 'atualizar_dados'])->group(functi
 
     Route::post('/inscricaos/{inscricao_id}/editar-situacao-lista', [InscricaoController::class, 'editarSituacao'])->name('inscricao.situacao.update');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 
 if (App::environment(['test', 'local'])) {
     Route::get('/sisus/{sisu_id}/chamada/{chamada_id}/candidatos-chamada-aprovar', [ChamadaController::class, 'aprovarCandidatosChamada'])
@@ -517,3 +518,6 @@ if (App::environment(['test', 'local'])) {
         return redirect()->route('sisus.show', $chamada->sisu->id);
     });
 }
+
+
+require __DIR__.'/auth.php';

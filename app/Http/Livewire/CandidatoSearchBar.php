@@ -42,7 +42,7 @@ class CandidatoSearchBar extends Component
         $inscricao = $this->inscricoes[$this->highlightIndex] ?? null;
         if ($inscricao) {
             $dados = ['sisu_id' => $inscricao->sisu->id, 'chamada_id' => $inscricao->chamada->id, 'curso_id' => $inscricao->curso->id, 'inscricao_id' => $inscricao->id];
-            $this->redirect(route('inscricao.show.analisar.documentos', $dados));
+            $this->redirectRoute('inscricao.show.analisar.documentos', $dados);
         }
     }
 
