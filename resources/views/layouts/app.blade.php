@@ -50,7 +50,8 @@
         </div>
         @include('layouts.nav_bar')
 
-        <zip-status-listener />
+        <livewire:zip-status-listener />
+
         <script type="module">
             window.Echo
                 .private('user.{{ auth()->id() }}')
