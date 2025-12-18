@@ -17,13 +17,13 @@
                                 @csrf
 
                                 @if ($user->id == null)
-                                    <x-jet-input type="hidden" name="id" :value="old('id')" />
-                                    <x-jet-input type="hidden" name="role" :value="old('role')" />
-                                    <x-jet-input type="hidden" name="name" :value="old('name')" />
+                                    <x-text-input type="hidden" name="id" :value="old('id')" />
+                                    <x-text-input type="hidden" name="role" :value="old('role')" />
+                                    <x-text-input type="hidden" name="name" :value="old('name')" />
                                 @else
-                                    <x-jet-input type="hidden" name="id" value="{{ $user->id }}" />
-                                    <x-jet-input type="hidden" name="role" value="{{ $user->role }}" />
-                                    <x-jet-input type="hidden" name="name" value="{{ $user->name }}" />
+                                    <x-text-input type="hidden" name="id" value="{{ $user->id }}" />
+                                    <x-text-input type="hidden" name="role" value="{{ $user->role }}" />
+                                    <x-text-input type="hidden" name="name" value="{{ $user->name }}" />
                                 @endif
 
                                 <div class="form-group textoInput">
