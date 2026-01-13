@@ -334,8 +334,22 @@ class Candidato extends Model
         'valor_renda',
         'atualizar_dados',
         'quilombola',
-        'indigena'
+        'indigena',
+        'nome_contato_emergencia',
+        'parentesco_contato_emergencia',
+        'dispositivos_moradia',
+        'cadunico',
+        'filhos',
+        'gestante',
+        'transgenero',
+        'lgbtqiap'
     ];
+
+    protected $casts = [
+        'filhos' => 'array',
+        'dispositivos_moradia' => 'array',
+
+      ];
 
     public function inscricoes()
     {

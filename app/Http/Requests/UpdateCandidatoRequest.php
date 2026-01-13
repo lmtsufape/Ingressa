@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCandidatoRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateCandidatoRequest extends FormRequest
     protected function getValidatorInstance()
     {
         $validator = parent::getValidatorInstance();
-        
+
         $validator->sometimes('necessidades', 'required|array|max:1', function ($input) {
             return in_array('nenhuma', $input->necessidades ?? []);
         });
@@ -73,12 +74,22 @@ class UpdateCandidatoRequest extends FormRequest
             'nu_fone1' => ['required', 'string'],
             'nu_fone2' => ['nullable', 'string'],
             'nu_fone_emergencia' => ['required', 'string'],
+            'nome_contato_emergencia' => ['required'],
+            'parentesco_contato_emergencia' => ['required'],
             'edital' => ['required', 'accepted'],
             'vinculo' => ['required', 'accepted'],
             'tp_sexo' => ['required', 'in:F,M'],
             'quilombola' => ['required', 'boolean'],
             'indigena' => ['required', 'boolean'],
             'etnia_e_cor' => ['required', 'integer'],
+            'dispositivos_moradia'   => ['required', 'array'],
+            'dispositivos_moradia.*' => [Rule::in(['banda_larga','internet_movel','smartphone','computador','tablet','nenhuma'])],
+            'cadunico' => ['required', 'in:sim,nao'],
+            'filhos'   => ['required', 'array'],
+            'filhos.*' => [Rule::in(['primeira_infancia','idade_escolar','nao_tenho'])],
+            'gestante' => ['required_if:tp_sexo,F'],
+            'transgenero' => ['required', 'in:sim,nao,outro,prefiro_nao_responder'],
+            'lgbtqiap' =>   ['required', 'in:sim,nao,outro,prefiro_nao_responder'],
         ];
     }
 
@@ -89,5 +100,26 @@ class UpdateCandidatoRequest extends FormRequest
             'edital.required' => 'O termo acima é obrigatório.',
             'vinculo.required' => 'O termo acima é obrigatório.'
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+
+            $necessidades = (array) $this->input('necessidades', []);
+            if (in_array('nenhuma', $necessidades, true) && count($necessidades) > 1) {
+                $validator->errors()->add('necessidades', 'Selecione apenas "Nenhuma" ou uma ou mais deficiências.');
+            }
+
+            $moradia = (array) $this->input('dispositivos_moradia', []);
+            if (in_array('nenhuma', $moradia, true) && count($moradia) > 1) {
+                $validator->errors()->add('dispositivos_moradia', 'Selecione apenas "Não disponho..." ou uma ou mais opções acima.');
+            }
+
+            $filhos = (array) $this->input('filhos', []);
+            if (in_array('nao_tenho', $filhos, true) && count($filhos) > 1) {
+                $validator->errors()->add('filhos', 'Selecione apenas "Não tenho" ou uma das opções "Sim".');
+            }
+        });
     }
 }

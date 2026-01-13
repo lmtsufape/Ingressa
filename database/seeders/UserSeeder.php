@@ -80,7 +80,7 @@ class UserSeeder extends Seeder
             'grupo_familiar'         => fake()->numberBetween(1, 8),
             'valor_renda'            => fake()->randomFloat(2, 0, 10000),
 
-            'atualizar_dados'        => fake()->boolean(),
+            'atualizar_dados'        => true,
             'quilombola'             => fake()->boolean(),
             'indigena'               => fake()->boolean(),
         ]);
@@ -117,7 +117,7 @@ class UserSeeder extends Seeder
             'ds_complemento' => fake()->secondaryAddress(),
             'sg_uf_inscrito' => fake()->stateAbbr(),
             'no_municipio' => fake()->city(),
-            'no_bairro' => fake()->optional()->word(),
+            'no_bairro' => fake()->word(),
             'nu_cep' => fake()->numerify('########'),
 
             'nu_fone1' => fake()->numerify('###########'),
