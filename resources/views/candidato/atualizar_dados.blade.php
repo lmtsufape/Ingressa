@@ -1,4 +1,11 @@
 <x-app-layout>
+    <style>
+        label:has(+ :is(input, select, textarea)[required])::after ,
+        legend.form-label.required::after {
+        content: " *";
+        color: red;
+        }
+    </style>
     <div class="container justify-content-center my-5 mx-auto p-4 shadow caixa">
         <div class="data bordinha">
             Atualização dos dados
@@ -33,258 +40,237 @@
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="row">
-                        <div class="form-group mt-2 textoInput col-6">
-                            <label
-                                for="no_social">{{ __('Nome social (para pessoas travestis ou transsexuais)') }}</label>
-                            <input id="no_social" class="form-control form-control-sm caixaDeTexto" type="text"
-                                name="no_social" value="{{ old('no_social', $candidato->no_social) }}">
-                        </div>
-                        <div class="form-group mt-2 textoInput col-6">
-                            <label for="requerimento-nome-social"><span style="color: red; font-weight: bold;">*
-                                </span>{{ __('Requerimento para inclusão de nome social') }} <a
-                                    href="https://docs.google.com/document/d/1elnVkyCHGzaXuqaEWc1UxibqaMVtSxEz/edit"
-                                    target="_blank"
-                                    style="text-decoration: none">{{ __('(baixe o modelo aqui)') }}</a></label>
-                            <input
-                                class="form-control form-control-sm @error('requerimento_nome_social') is-invalid @enderror"
-                                type="file" id="requerimento-nome-social" name="requerimento_nome_social"
-                                value="{{ old('requerimento_nome_social') }}" accept=".pdf">
-                            @error('requerimento_nome_social')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-3 textoInput">
-                            <label for="nu_rg"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-3">
+                            <label for="nu_rg" class="form-label">
                                 {{ __('RG') }}</label>
-                            <input id="nu_rg" class="form-control form-control-sm caixaDeTexto" type="text"
-                                name="nu_rg" value="{{ old('nu_rg', $inscricao->nu_rg) }}">
+                            <input id="nu_rg" class="form-control" type="text"
+                                name="nu_rg" value="{{ old('nu_rg', $inscricao->nu_rg) }}" required>
                         </div>
-                        <div class="form-group col-md-3 textoInput">
-                            <label for="orgao_expedidor"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-3">
+                            <label for="orgao_expedidor" class="form-label">
                                 {{ __('Orgão expedidor (Sigla)') }}</label>
-                            <input id="orgao_expedidor"
-                                class="form-control form-control-sm caixaDeTexto @error('orgao_expedidor') is-invalid @enderror"
+                            <input id="orgao_expedidor" class="form-control @error('orgao_expedidor') is-invalid @enderror"
                                 type="text" placeholder="Sigla do orgão expedidor" name="orgao_expedidor"
-                                value="{{ old('orgao_expedidor', $candidato->orgao_expedidor) }}">
+                                value="{{ old('orgao_expedidor', $candidato->orgao_expedidor) }}" required>
+
                             @error('orgao_expedidor')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 textoInput">
-                            <label for="uf_rg"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-3">
+                            <label for="uf_rg" class="form-label">
                                 {{ __('UF do orgão expedidor') }}</label>
                             <select id="uf_rg"
-                                class="form-control form-control-sm caixaDeTexto @error('uf_rg') is-invalid @enderror"
-                                name="uf_rg">
+                                class="form-control @error('uf_rg') is-invalid @enderror"
+                                name="uf_rg" required>
                                 <option value="" selected disabled>-- Selecione a UF --</option>
-                                <option value="AC" @if (old('uf_rg', $candidato->uf_rg) == 'AC') selected @endif>
+                                <option value="AC" @selected (old('uf_rg', $candidato->uf_rg) == 'AC')>
                                     Acre</option>
-                                <option value="AL" @if (old('uf_rg', $candidato->uf_rg) == 'AL') selected @endif>
+                                <option value="AL" @selected (old('uf_rg', $candidato->uf_rg) == 'AL')>
                                     Alagoas</option>
-                                <option value="AP" @if (old('uf_rg', $candidato->uf_rg) == 'AP') selected @endif>
+                                <option value="AP" @selected (old('uf_rg', $candidato->uf_rg) == 'AP')>
                                     Amapá</option>
-                                <option value="AM" @if (old('uf_rg', $candidato->uf_rg) == 'AM') selected @endif>
+                                <option value="AM" @selected (old('uf_rg', $candidato->uf_rg) == 'AM')>
                                     Amazonas</option>
-                                <option value="BA" @if (old('uf_rg', $candidato->uf_rg) == 'BA') selected @endif>
+                                <option value="BA" @selected (old('uf_rg', $candidato->uf_rg) == 'BA')>
                                     Bahia</option>
-                                <option value="CE" @if (old('uf_rg', $candidato->uf_rg) == 'CE') selected @endif>
+                                <option value="CE" @selected (old('uf_rg', $candidato->uf_rg) == 'CE')>
                                     Ceará</option>
-                                <option value="DF" @if (old('uf_rg', $candidato->uf_rg) == 'DF') selected @endif>
+                                <option value="DF" @selected (old('uf_rg', $candidato->uf_rg) == 'DF')>
                                     Distrito Federal</option>
-                                <option value="ES" @if (old('uf_rg', $candidato->uf_rg) == 'ES') selected @endif>
+                                <option value="ES" @selected (old('uf_rg', $candidato->uf_rg) == 'ES')>
                                     Espírito Santo</option>
-                                <option value="GO" @if (old('uf_rg', $candidato->uf_rg) == 'GO') selected @endif>
+                                <option value="GO" @selected (old('uf_rg', $candidato->uf_rg) == 'GO')>
                                     Goiás</option>
-                                <option value="MA" @if (old('uf_rg', $candidato->uf_rg) == 'MA') selected @endif>
+                                <option value="MA" @selected (old('uf_rg', $candidato->uf_rg) == 'MA')>
                                     Maranhão</option>
-                                <option value="MT" @if (old('uf_rg', $candidato->uf_rg) == 'MT') selected @endif>
+                                <option value="MT" @selected (old('uf_rg', $candidato->uf_rg) == 'MT')>
                                     Mato Grosso</option>
-                                <option value="MS" @if (old('uf_rg', $candidato->uf_rg) == 'MS') selected @endif>
+                                <option value="MS" @selected (old('uf_rg', $candidato->uf_rg) == 'MS')>
                                     Mato Grosso do Sul</option>
-                                <option value="MG" @if (old('uf_rg', $candidato->uf_rg) == 'MG') selected @endif>
+                                <option value="MG" @selected (old('uf_rg', $candidato->uf_rg) == 'MG')>
                                     Minas Gerais</option>
-                                <option value="PA" @if (old('uf_rg', $candidato->uf_rg) == 'PA') selected @endif>
+                                <option value="PA" @selected (old('uf_rg', $candidato->uf_rg) == 'PA')>
                                     Pará</option>
-                                <option value="PB" @if (old('uf_rg', $candidato->uf_rg) == 'PB') selected @endif>
+                                <option value="PB" @selected (old('uf_rg', $candidato->uf_rg) == 'PB')>
                                     Paraíba</option>
-                                <option value="PR" @if (old('uf_rg', $candidato->uf_rg) == 'PR') selected @endif>
+                                <option value="PR" @selected (old('uf_rg', $candidato->uf_rg) == 'PR')>
                                     Paraná</option>
-                                <option value="PE" @if (old('uf_rg', $candidato->uf_rg) == 'PE') selected @endif>
+                                <option value="PE" @selected (old('uf_rg', $candidato->uf_rg) == 'PE')>
                                     Pernambuco</option>
-                                <option value="PI" @if (old('uf_rg', $candidato->uf_rg) == 'PI') selected @endif>
+                                <option value="PI" @selected (old('uf_rg', $candidato->uf_rg) == 'PI')>
                                     Piauí</option>
-                                <option value="RJ" @if (old('uf_rg', $candidato->uf_rg) == 'RJ') selected @endif>
+                                <option value="RJ" @selected (old('uf_rg', $candidato->uf_rg) == 'RJ')>
                                     Rio de Janeiro</option>
-                                <option value="RN" @if (old('uf_rg', $candidato->uf_rg) == 'RN') selected @endif>
+                                <option value="RN" @selected (old('uf_rg', $candidato->uf_rg) == 'RN')>
                                     Rio Grande do Norte</option>
-                                <option value="RS" @if (old('uf_rg', $candidato->uf_rg) == 'RS') selected @endif>
+                                <option value="RS" @selected (old('uf_rg', $candidato->uf_rg) == 'RS')>
                                     Rio Grande do Sul</option>
-                                <option value="RO" @if (old('uf_rg', $candidato->uf_rg) == 'RO') selected @endif>
+                                <option value="RO" @selected (old('uf_rg', $candidato->uf_rg) == 'RO')>
                                     Rondônia</option>
-                                <option value="RR" @if (old('uf_rg', $candidato->uf_rg) == 'RR') selected @endif>
+                                <option value="RR" @selected (old('uf_rg', $candidato->uf_rg) == 'RR')>
                                     Roraima</option>
-                                <option value="SC" @if (old('uf_rg', $candidato->uf_rg) == 'SC') selected @endif>
+                                <option value="SC" @selected (old('uf_rg', $candidato->uf_rg) == 'SC')>
                                     Santa Catarina</option>
-                                <option value="SP" @if (old('uf_rg', $candidato->uf_rg) == 'SP') selected @endif>
+                                <option value="SP" @selected (old('uf_rg', $candidato->uf_rg) == 'SP')>
                                     São Paulo</option>
-                                <option value="SE" @if (old('uf_rg', $candidato->uf_rg) == 'SE') selected @endif>
+                                <option value="SE" @selected (old('uf_rg', $candidato->uf_rg) == 'SE')>
                                     Sergipe</option>
-                                <option value="TO" @if (old('uf_rg', $candidato->uf_rg) == 'TO') selected @endif>
+                                <option value="TO" @selected (old('uf_rg', $candidato->uf_rg) == 'TO')>
                                     Tocantins</option>
                             </select>
                             @error('uf_rg')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 textoInput">
-                            <label for="data_expedicao"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-3">
+                            <label for="data_expedicao" class="form-label">
                                 {{ __('Data da expedição') }}</label>
                             <input id="data_expedicao"
-                                class="form-control form-control-sm caixaDeTexto @error('data_expedicao') is-invalid @enderror"
+                                class="form-control @error('data_expedicao') is-invalid @enderror"
                                 type="date" name="data_expedicao"
-                                value="{{ old('data_expedicao', $candidato->data_expedicao) }}">
+                                value="{{ old('data_expedicao', $candidato->data_expedicao) }}" required>
+
                             @error('data_expedicao')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
+
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="titulo">{{ __('Título de eleitor') }}</label>
+                        <div class="form-group col-md-4">
+                            <label for="titulo" class="form-label">{{ __('Título de eleitor') }}</label>
                             <input id="titulo"
-                                class="form-control form-control-sm caixaDeTexto @error('titulo') is-invalid @enderror"
+                                class="form-control @error('titulo') is-invalid @enderror"
                                 type="text" placeholder="Insira o número do título de eleitor" name="titulo"
                                 value="{{ old('titulo', $candidato->titulo) }}">
                             @error('titulo')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="zona_eleitoral">{{ __('Zona') }}</label>
+                        <div class="form-group col-md-4">
+                            <label for="zona_eleitoral" class="form-label">{{ __('Zona') }}</label>
                             <input id="zona_eleitoral"
-                                class="form-control form-control-sm caixaDeTexto @error('zona_eleitoral') is-invalid @enderror"
+                                class="form-control @error('zona_eleitoral') is-invalid @enderror"
                                 type="text" placeholder="Insira a zona eleitoral" name="zona_eleitoral"
                                 value="{{ old('zona_eleitoral', $candidato->zona_eleitoral) }}">
                             @error('zona_eleitoral')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="secao_eleitoral">{{ __('Seção') }}</label>
+                        <div class="form-group col-md-4">
+                            <label for="secao_eleitoral" class="form-label">{{ __('Seção') }}</label>
                             <input id="secao_eleitoral"
-                                class="form-control form-control-sm caixaDeTexto @error('secao_eleitoral') is-invalid @enderror"
+                                class="form-control @error('secao_eleitoral') is-invalid @enderror"
                                 type="text" placeholder="Insira a seção eleitoral" name="secao_eleitoral"
                                 value="{{ old('secao_eleitoral', $candidato->secao_eleitoral) }}">
                             @error('secao_eleitoral')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="cidade_natal"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="cidade_natal" class="form-label">
                                 {{ __('Cidade natal') }}</label>
                             <input id="cidade_natal"
-                                class="form-control form-control-sm caixaDeTexto @error('cidade_natal') is-invalid @enderror"
+                                class="form-control @error('cidade_natal') is-invalid @enderror"
                                 type="text" placeholder="Insira a cidade onde nasceu" name="cidade_natal"
-                                value="{{ old('cidade_natal', $candidato->cidade_natal) }}">
+                                value="{{ old('cidade_natal', $candidato->cidade_natal) }}" required>
+
                             @error('cidade_natal')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="uf_natural"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="uf_natural" class="form-label">
                                 {{ __('UF') }}</label>
                             <select id="uf_natural"
-                                class="form-control form-control-sm caixaDeTexto @error('uf_natural') is-invalid @enderror"
-                                name="uf_natural">
+                                class="form-control @error('uf_natural') is-invalid @enderror"
+                                name="uf_natural" required>
                                 <option value="" selected disabled>-- Selecione a UF --</option>
-                                <option value="AC" @if (old('uf_natural', $candidato->uf_natural) == 'AC') selected @endif>
+                                <option value="AC" @selected (old('uf_natural', $candidato->uf_natural) == 'AC')>
                                     Acre</option>
-                                <option value="AL" @if (old('uf_natural', $candidato->uf_natural) == 'AL') selected @endif>
+                                <option value="AL" @selected (old('uf_natural', $candidato->uf_natural) == 'AL')>
                                     Alagoas</option>
-                                <option value="AP" @if (old('uf_natural', $candidato->uf_natural) == 'AP') selected @endif>
+                                <option value="AP" @selected (old('uf_natural', $candidato->uf_natural) == 'AP')>
                                     Amapá</option>
-                                <option value="AM" @if (old('uf_natural', $candidato->uf_natural) == 'AM') selected @endif>
+                                <option value="AM" @selected (old('uf_natural', $candidato->uf_natural) == 'AM')>
                                     Amazonas</option>
-                                <option value="BA" @if (old('uf_natural', $candidato->uf_natural) == 'BA') selected @endif>
+                                <option value="BA" @selected (old('uf_natural', $candidato->uf_natural) == 'BA')>
                                     Bahia</option>
-                                <option value="CE" @if (old('uf_natural', $candidato->uf_natural) == 'CE') selected @endif>
+                                <option value="CE" @selected (old('uf_natural', $candidato->uf_natural) == 'CE')>
                                     Ceará</option>
-                                <option value="DF" @if (old('uf_natural', $candidato->uf_natural) == 'DF') selected @endif>
+                                <option value="DF" @selected (old('uf_natural', $candidato->uf_natural) == 'DF')>
                                     Distrito Federal</option>
-                                <option value="ES" @if (old('uf_natural', $candidato->uf_natural) == 'ES') selected @endif>
+                                <option value="ES" @selected (old('uf_natural', $candidato->uf_natural) == 'ES')>
                                     Espírito Santo</option>
-                                <option value="GO" @if (old('uf_natural', $candidato->uf_natural) == 'GO') selected @endif>
+                                <option value="GO" @selected (old('uf_natural', $candidato->uf_natural) == 'GO')>
                                     Goiás</option>
-                                <option value="MA" @if (old('uf_natural', $candidato->uf_natural) == 'MA') selected @endif>
+                                <option value="MA" @selected (old('uf_natural', $candidato->uf_natural) == 'MA')>
                                     Maranhão</option>
-                                <option value="MT" @if (old('uf_natural', $candidato->uf_natural) == 'MT') selected @endif>
+                                <option value="MT" @selected (old('uf_natural', $candidato->uf_natural) == 'MT')>
                                     Mato Grosso</option>
-                                <option value="MS" @if (old('uf_natural', $candidato->uf_natural) == 'MS') selected @endif>
+                                <option value="MS" @selected (old('uf_natural', $candidato->uf_natural) == 'MS')>
                                     Mato Grosso do Sul</option>
-                                <option value="MG" @if (old('uf_natural', $candidato->uf_natural) == 'MG') selected @endif>
+                                <option value="MG" @selected (old('uf_natural', $candidato->uf_natural) == 'MG')>
                                     Minas Gerais</option>
-                                <option value="PA" @if (old('uf_natural', $candidato->uf_natural) == 'PA') selected @endif>
+                                <option value="PA" @selected (old('uf_natural', $candidato->uf_natural) == 'PA')>
                                     Pará</option>
-                                <option value="PB" @if (old('uf_natural', $candidato->uf_natural) == 'PB') selected @endif>
+                                <option value="PB" @selected (old('uf_natural', $candidato->uf_natural) == 'PB')>
                                     Paraíba</option>
-                                <option value="PR" @if (old('uf_natural', $candidato->uf_natural) == 'PR') selected @endif>
+                                <option value="PR" @selected (old('uf_natural', $candidato->uf_natural) == 'PR')>
                                     Paraná</option>
-                                <option value="PE" @if (old('uf_natural', $candidato->uf_natural) == 'PE') selected @endif>
+                                <option value="PE" @selected (old('uf_natural', $candidato->uf_natural) == 'PE')>
                                     Pernambuco</option>
-                                <option value="PI" @if (old('uf_natural', $candidato->uf_natural) == 'PI') selected @endif>
+                                <option value="PI" @selected (old('uf_natural', $candidato->uf_natural) == 'PI')>
                                     Piauí</option>
-                                <option value="RJ" @if (old('uf_natural', $candidato->uf_natural) == 'RJ') selected @endif>
+                                <option value="RJ" @selected (old('uf_natural', $candidato->uf_natural) == 'RJ')>
                                     Rio de Janeiro</option>
-                                <option value="RN" @if (old('uf_natural', $candidato->uf_natural) == 'RN') selected @endif>
+                                <option value="RN" @selected (old('uf_natural', $candidato->uf_natural) == 'RN')>
                                     Rio Grande do Norte</option>
-                                <option value="RS" @if (old('uf_natural', $candidato->uf_natural) == 'RS') selected @endif>
+                                <option value="RS" @selected (old('uf_natural', $candidato->uf_natural) == 'RS')>
                                     Rio Grande do Sul</option>
-                                <option value="RO" @if (old('uf_natural', $candidato->uf_natural) == 'RO') selected @endif>
+                                <option value="RO" @selected (old('uf_natural', $candidato->uf_natural) == 'RO')>
                                     Rondônia</option>
-                                <option value="RR" @if (old('uf_natural', $candidato->uf_natural) == 'RR') selected @endif>
+                                <option value="RR" @selected (old('uf_natural', $candidato->uf_natural) == 'RR')>
                                     Roraima</option>
-                                <option value="SC" @if (old('uf_natural', $candidato->uf_natural) == 'SC') selected @endif>
+                                <option value="SC" @selected (old('uf_natural', $candidato->uf_natural) == 'SC')>
                                     Santa Catarina</option>
-                                <option value="SP" @if (old('uf_natural', $candidato->uf_natural) == 'SP') selected @endif>
+                                <option value="SP" @selected (old('uf_natural', $candidato->uf_natural) == 'SP')>
                                     São Paulo</option>
-                                <option value="SE" @if (old('uf_natural', $candidato->uf_natural) == 'SE') selected @endif>
+                                <option value="SE" @selected (old('uf_natural', $candidato->uf_natural) == 'SE')>
                                     Sergipe</option>
-                                <option value="TO" @if (old('uf_natural', $candidato->uf_natural) == 'TO') selected @endif>
+                                <option value="TO" @selected (old('uf_natural', $candidato->uf_natural) == 'TO')>
                                     Tocantins</option>
                             </select>
                             @error('uf_natural')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="pais_natural"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="pais_natural" class="form-label">
                                 {{ __('Nacionalidade') }}</label>
                             <select id="pais_natural"
-                                class="form-control form-control-sm caixaDeTexto @error('pais_natural') is-invalid @enderror"
-                                name="pais_natural">
+                                class="form-control @error('pais_natural') is-invalid @enderror"
+                                name="pais_natural" required>
                                 <option value="" selected disabled>-- Selecione o país onde nasceu --
                                 </option>
                                 <option value="BRA" @if (old('pais_natural', $candidato->pais_natural) == 'BRA') ) selected @endif>Brasil
@@ -297,177 +283,221 @@
                                 @endforeach
                             </select>
                             @error('pais_natural')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="estado_civil"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="estado_civil" class="form-label">
                                 {{ __('Estado civil') }}</label>
-                            <select id="estado_civil"
-                                class="form-control form-control-sm caixaDeTexto @error('estado_civil') is-invalid @enderror"
-                                name="estado_civil">
+                            <select id="estado_civil" class="form-control @error('estado_civil') is-invalid @enderror"
+                                name="estado_civil" required>
                                 <option value="" disabled selected>-- Selecione --</option>
                                 @foreach (\App\Models\Candidato::ESTADO_CIVIL as $valor => $estado_civil)
-                                    <option value="{{ $valor }}"
-                                        @if (old('estado_civil', $candidato->estado_civil) == $valor) ) selected @endif>
+                                    <option value="{{ $valor }}" @selected(old('estado_civil', $candidato->estado_civil) == $valor)>
                                         {{ $estado_civil }}</option>
                                 @endforeach
                             </select>
                             @error('estado_civil')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="tp_sexo">{{ __('Sexo') }}</label>
-                            <select id="tp_sexo" name="tp_sexo" class="form-control form-control-sm caixaDeTexto">
-                                <option value="M" @if ($inscricao->tp_sexo == 'M') selected @endif>
+                        <div class="form-group col-md-4">
+                            <label for="tp_sexo" class="form-label">{{ __('Sexo') }}</label>
+                            <select id="tp_sexo" name="tp_sexo" class="form-control" required>
+                                <option value="M" @selected (old('tp_sexo', $inscricao->tp_sexo) == 'M')>
                                     Masculino</option>
-                                <option value="F" @if ($inscricao->tp_sexo == 'F') selected @endif>
+                                <option value="F" @selected (old('tp_sexo', $inscricao->tp_sexo) == 'F')>
                                     Feminino</option>
                             </select>
                             @error('tp_sexo')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="cor_raca"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="etnia_e_cor" class="form-label">
                                 {{ __('Cor/Raça') }}</label>
-                            <select id="cor_raca"
-                                class="form-control form-control-sm caixaDeTexto @error('cor_raca') is-invalid @enderror"
-                                name="etnia_e_cor">
+                            <select id="etnia_e_cor"
+                                class="form-control @error('etnia_e_cor') is-invalid @enderror"
+                                name="etnia_e_cor" required>
                                 <option value="" selected disabled>-- Selecione --</option>
-                                <option value="1" @if (old('cor_raca', $candidato->etnia_e_cor) == 1) selected @endif>
+                                <option value="1" @selected (old('etnia_e_cor', $candidato->etnia_e_cor) == 1)>
                                     {{ $cores_racas[0] }}</option>
-                                <option value="4" @if (old('cor_raca', $candidato->etnia_e_cor) == 4) selected @endif>
+                                <option value="4" @selected (old('etnia_e_cor', $candidato->etnia_e_cor) == 4)>
                                     {{ $cores_racas[3] }}</option>
-                                <option value="2" @if (old('cor_raca', $candidato->etnia_e_cor) == 2) selected @endif>
+                                <option value="2" @selected (old('etnia_e_cor', $candidato->etnia_e_cor) == 2)>
                                     {{ $cores_racas[1] }}</option>
-                                <option value="3" @if (old('cor_raca', $candidato->etnia_e_cor) == 3) selected @endif>
+                                <option value="3" @selected (old('etnia_e_cor', $candidato->etnia_e_cor) == 3)>
                                     {{ $cores_racas[2] }}</option>
-                                <option value="5" @if (old('cor_raca', $candidato->etnia_e_cor) == 5) selected @endif>
+                                <option value="5" @selected (old('etnia_e_cor', $candidato->etnia_e_cor) == 5)>
                                     {{ $cores_racas[4] }}</option>
                             </select>
-                            @error('cor_raca')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                            @error('etnia_e_cor')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="form-group col-md-6">
+                            <label for="quilombola" class="form-label">
+                                {{ __('Quilombola') }}</label>
+                            <select id="quilombola"
+                                class="form-control @error('quilombola') is-invalid @enderror"
+                                name="quilombola" required>
+                                <option value="" selected disabled>-- Selecione --
+                                </option>
+                                <option value="1" @if ($candidato->quilombola == true) selected @endif>
+                                    Sim
+                                </option>
+                                <option value="0" @if ($candidato->quilombola == false) selected @endif>
+                                    Não
+                                </option>
+                            </select>
+                            @error('quilombola')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="indigena" class="form-label">
+                                {{ __('Indígena') }}</label>
+                            <select id="indigena" class="form-control @error('indigena') is-invalid @enderror"
+                                name="indigena" required>
+                                <option value="" selected disabled>-- Selecione --
+                                </option>
+                                <option value="1" @if ($candidato->indigena == true) selected @endif>
+                                    Sim
+                                </option>
+                                <option value="0" @if ($candidato->indigena == false) selected @endif>
+                                    Não
+                                </option>
+                            </select>
+                            @error('indigena')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-6 textoInput">
-                            <label for="no_mae"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-6">
+                            <label for="no_mae" class="form-label">
                                 {{ __('Nome da mãe') }}</label>
-                            <input id="no_mae" class="form-control form-control-sm caixaDeTexto" type="text"
-                                value="{{ $inscricao->no_mae }}" disabled>
+                            <input id="no_mae" class="form-control" type="text"
+                                value="{{ $inscricao->no_mae }}" required disabled>
                         </div>
-                        <div class="form-group col-md-6 textoInput">
-                            <label for="pai">{{ __('Nome do pai') }}</label>
-                            <input id="pai"
-                                class="form-control form-control-sm caixaDeTexto @error('pai') is-invalid @enderror"
+                        <div class="form-group col-md-6">
+                            <label for="pai" class="form-label">{{ __('Nome do pai') }}</label>
+                            <input id="pai" class="form-control @error('pai') is-invalid @enderror"
                                 type="text" placeholder="Insira o nome do pai" name="pai"
                                 value="{{ old('pai', $candidato->pai) }}">
                             @error('pai')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
-                    <div class="form-group mt-2 textoInput">
-                        <label for="ds_logradouro"><span style="color: red; font-weight: bold;">*</span>
+                    <div class="form-group mt-2">
+                        <label for="ds_logradouro" class="form-label">
                             {{ __('Endereço') }}</label>
                         <input id="ds_logradouro"
-                            class="form-control form-control-sm caixaDeTexto @error('ds_logradouro') is-invalid @enderror"
+                            class="form-control @error('ds_logradouro') is-invalid @enderror"
                             type="text" placeholder="Insira o endereço" name="ds_logradouro"
-                            value="{{ old('ds_logradouro', $inscricao->ds_logradouro) }}">
+                            value="{{ old('ds_logradouro', $inscricao->ds_logradouro) }}" required>
+
                         @error('ds_logradouro')
-                            <div id="validationServer03Feedback" class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="nu_endereco"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="nu_endereco" class="form-label">
                                 {{ __('Número') }}</label>
                             <input id="nu_endereco"
-                                class="form-control form-control-sm caixaDeTexto @error('nu_endereco') is-invalid @enderror"
+                                class="form-control @error('nu_endereco') is-invalid @enderror"
                                 type="text" placeholder="Insira o número do endereço" name="nu_endereco"
-                                value="{{ old('nu_endereco', $inscricao->nu_endereco) }}">
+                                value="{{ old('nu_endereco', $inscricao->nu_endereco) }}" required>
+
                             @error('nu_endereco')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="nu_cep"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="nu_cep" class="form-label">
                                 {{ __('CEP') }}</label>
                             <input id="nu_cep"
-                                class="form-control form-control-sm caixaDeTexto @error('nu_cep') is-invalid @enderror"
+                                class="form-control @error('nu_cep') is-invalid @enderror"
                                 type="text" placeholder="Insira o nu_CEP" name="nu_cep"
-                                value="{{ old('nu_cep', $inscricao->nu_cep) }}">
+                                value="{{ old('nu_cep', $inscricao->nu_cep) }}" required>
+
                             @error('nu_cep')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="ds_complemento">{{ __('Complemento') }}</label>
+                        <div class="form-group col-md-4">
+                            <label for="ds_complemento" class="form-label">{{ __('Complemento') }}</label>
                             <input id="ds_complemento"
-                                class="form-control form-control-sm caixaDeTexto @error('ds_complemento') is-invalid @enderror"
+                                class="form-control @error('ds_complemento') is-invalid @enderror"
                                 type="text" placeholder="Insira o complemento, se houver" name="ds_complemento"
-                                value="{{ old('ds_complemento', $inscricao->ds_complemento) }}">
+                                value="{{ old('ds_complemento', $inscricao->ds_complemento) }}" required>
+
                             @error('ds_complemento')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="no_bairro"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="no_bairro" class="form-label">
                                 {{ __('Bairro') }}</label>
                             <input id="no_bairro"
-                                class="form-control form-control-sm caixaDeTexto @error('no_bairro') is-invalid @enderror"
+                                class="form-control @error('no_bairro') is-invalid @enderror"
                                 type="text" placeholder="Insira o bairro do endereço" name="no_bairro"
-                                value="{{ old('no_bairro', $inscricao->no_bairro) }}">
+                                value="{{ old('no_bairro', $inscricao->no_bairro) }}" required>
                             @error('no_bairro')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="no_municipio"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="no_municipio" class="form-label">
                                 {{ __('Cidade') }}</label>
                             <input id="no_municipio"
-                                class="form-control form-control-sm caixaDeTexto @error('no_municipio') is-invalid @enderror"
+                                class="form-control @error('no_municipio') is-invalid @enderror"
                                 type="text" placeholder="Insira o municipio do endereço" name="no_municipio"
-                                value="{{ old('no_municipio', $inscricao->no_municipio) }}">
+                                value="{{ old('no_municipio', $inscricao->no_municipio) }}" required>
                             @error('no_municipio')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="sg_uf_inscrito"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="sg_uf_inscrito" class="form-label">
                                 {{ __('UF') }}</label>
                             <select id="sg_uf_inscrito"
-                                class="form-control form-control-sm caixaDeTexto @error('sg_uf_inscrito') is-invalid @enderror"
-                                name="sg_uf_inscrito">
+                                class="form-control @error('sg_uf_inscrito') is-invalid @enderror"
+                                name="sg_uf_inscrito" required>
                                 <option value="" selected disabled>-- Selecione a UF --</option>
                                 <option value="AC" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'AC') selected @endif>
                                     Acre</option>
@@ -525,87 +555,89 @@
                                 <option value="TO" @if (old('sg_uf_inscrito', $inscricao->sg_uf_inscrito) == 'TO') selected @endif>
                                     Tocantins</option>
                             </select>
+
                             @error('uf')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-6 textoInput">
-                            <label for="reside"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-6">
+                            <label for="reside" class="form-label">
                                 {{ __('Qual a Cidade/Estado onde você reside atualmente?') }}</label>
                             <input id="reside"
-                                class="form-control form-control-sm caixaDeTexto @error('reside') is-invalid @enderror"
+                                class="form-control @error('reside') is-invalid @enderror"
                                 type="text" placeholder="Cidade/UF" name="reside"
-                                value="{{ old('reside', $candidato->reside) }}">
+                                value="{{ old('reside', $candidato->reside) }}" required>
                             @error('reside')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-6 textoInput">
-                            <label for="localidade"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-6">
+                            <label for="localidade" class="form-label">
                                 {{ __('Qual a zona de sua moradia atual?') }}</label>
                             <select id="localidade"
-                                class="form-control form-control-sm caixaDeTexto @error('localidade') is-invalid @enderror"
-                                name="localidade">
+                                class="form-control @error('localidade') is-invalid @enderror"
+                                name="localidade" required>
                                 <option value="" selected disabled>-- Selecione --</option>
-                                <option value="zona_rural" @if (old('localidade', $candidato->localidade) == 'zona_rural') selected @endif>
+                                <option value="zona_rural" @selected(old('localidade', $candidato->localidade) == 'zona_rural')>
                                     Zona Rural</option>
-                                <option value="zona_urbana" @if (old('localidade', $candidato->localidade) == 'zona_urbana') selected @endif>
+                                <option value="zona_urbana" @selected(old('localidade', $candidato->localidade) == 'zona_urbana')>
                                     Zona Urbana
                                 </option>
                             </select>
+
                             @error('localidade')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-6 textoInput">
-                            <label for="escola_ens_med"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-6">
+                            <label for="escola_ens_med" class="form-label">
                                 {{ __('Estabelecimento que concluiu o Ensino Médio:') }}</label>
                             <input id="escola_ens_med"
-                                class="form-control form-control-sm caixaDeTexto @error('escola_ens_med') is-invalid @enderror"
+                                class="form-control @error('escola_ens_med') is-invalid @enderror"
                                 type="text" placeholder="Insira o nome da escola" name="escola_ens_med"
-                                value="{{ old('escola_ens_med', $candidato->escola_ens_med) }}">
+                                value="{{ old('escola_ens_med', $candidato->escola_ens_med) }}" required>
                             @error('escola_ens_med')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-6 textoInput">
-                            <label for="concluiu_publica"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-6">
+                            <label for="concluiu_publica" class="form-label">
                                 {{ __('Concluiu o Ensino Médio na rede pública?') }}</label>
                             <select id="concluiu_publica"
-                                class="form-control form-control-sm caixaDeTexto @error('concluiu_publica') is-invalid @enderror"
-                                name="concluiu_publica">
+                                class="form-control @error('concluiu_publica') is-invalid @enderror"
+                                name="concluiu_publica" required>
                                 <option value="" selected disabled>-- Selecione --</option>
-                                <option value="1" @if (old('concluiu_publica', $candidato->concluiu_publica) == '1') selected @endif>Sim
+                                <option value="1" @selected(old('concluiu_publica', $candidato->concluiu_publica) == '1')>Sim
                                 </option>
-                                <option value="0" @if (old('concluiu_publica', $candidato->concluiu_publica) == '0') selected @endif>Não
+                                <option value="0" @selected(old('concluiu_publica', $candidato->concluiu_publica) == '0')>Não
                                 </option>
                             </select>
                             @error('concluiu_publica')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="uf_escola"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="uf_escola" class="form-label">
                                 {{ __('UF') }}</label>
                             <select id="uf_escola"
-                                class="form-control form-control-sm caixaDeTexto @error('uf_escola') is-invalid @enderror"
-                                name="uf_escola">
+                                class="form-control @error('uf_escola') is-invalid @enderror"
+                                name="uf_escola" required>
                                 <option value="" selected disabled>-- Selecione a UF --</option>
                                 <option value="AC" @if (old('uf_escola', $candidato->uf_escola) == 'AC') selected @endif>Acre
                                 </option>
@@ -672,31 +704,32 @@
                                 <option value="TO" @if (old('uf_escola', $candidato->uf_escola) == 'TO') selected @endif>
                                     Tocantins</option>
                             </select>
+
                             @error('uf_escola')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="ano_conclusao"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="ano_conclusao" class="form-label">
                                 {{ __('Ano de Conclusão') }}</label>
                             <input id="ano_conclusao"
-                                class="form-control form-control-sm caixaDeTexto @error('ano_conclusao') is-invalid @enderror"
+                                class="form-control @error('ano_conclusao') is-invalid @enderror"
                                 type="text" placeholder="Insira o ano de conclusão do ensino médio"
-                                name="ano_conclusao" value="{{ old('ano_conclusao', $candidato->ano_conclusao) }}">
+                                name="ano_conclusao" value="{{ old('ano_conclusao', $candidato->ano_conclusao) }}" required>
                             @error('ano_conclusao')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="modalidade"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="modalidade" class="form-label">
                                 {{ __('Modalidade') }}</label>
                             <select id="modalidade"
-                                class="form-control form-control-sm caixaDeTexto @error('modalidade') is-invalid @enderror"
-                                name="modalidade">
+                                class="form-control @error('modalidade') is-invalid @enderror"
+                                name="modalidade" required>
                                 <option value="" disabled selected>-- Selecione --</option>
                                 <option value="{{ old('modalidade', 'regular') }}"
                                     @if (old('modalidade', $candidato->modalidade) == 'regular') selected @endif>Regular</option>
@@ -713,83 +746,114 @@
                             </select>
 
                             @error('modalidade')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group textoInput">
-                            <label for="concluiu_publica"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group">
+                            <label for="concluiu_publica" class="form-label">
                                 {{ __('Concluiu o Ensino Médio em escolas comunitárias que atuam no âmbito da educação do campo conveniadas com o poder público?') }}</label>
                             <select id="concluiu_comunitaria"
-                                class="form-control form-control-sm caixaDeTexto @error('concluiu_comunitaria') is-invalid @enderror"
-                                name="concluiu_comunitaria">
+                                class="form-control @error('concluiu_comunitaria') is-invalid @enderror"
+                                name="concluiu_comunitaria" required>
                                 <option value="" selected disabled>-- Selecione --</option>
                                 <option value="1" @if (old('concluiu_comunitaria', $candidato->concluiu_comunitaria) == '1') selected @endif>Sim
                                 </option>
                                 <option value="0" @if (old('concluiu_comunitaria', $candidato->concluiu_comunitaria) == '0') selected @endif>Não
                                 </option>
                             </select>
+
                             @error('concluiu_comunitaria')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="nu_fone1"><span style="color: red; font-weight: bold;">*</span>
+                        <div class="form-group col-md-4">
+                            <label for="nu_fone1" class="form-label">
                                 {{ __('Celular') }}</label>
                             <input id="nu_fone1"
-                                class="form-control form-control-sm caixaDeTexto @error('nu_fone1') is-invalid @enderror celular"
-                                type="text" name="nu_fone1" value="{{ old('nu_fone1', $inscricao->nu_fone1) }}">
+                                class="form-control @error('nu_fone1') is-invalid @enderror celular"
+                                type="text" name="nu_fone1" value="{{ old('nu_fone1', $inscricao->nu_fone1) }}" required>
                             @error('nu_fone1')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="nu_fone2">{{ __('Celular') }}</label>
+                        <div class="form-group col-md-4">
+                            <label for="nu_fone2" class="form-label">{{ __('Celular') }}</label>
                             <input id="nu_fone2"
-                                class="form-control form-control-sm caixaDeTexto @error('nu_fone2') is-invalid @enderror celular"
+                                class="form-control @error('nu_fone2') is-invalid @enderror celular"
                                 type="text" name="nu_fone2" value="{{ old('nu_fone2', $inscricao->nu_fone2) }}">
+
                             @error('nu_fone2')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
-                        <div class="form-group col-md-4 textoInput">
-                            <label for="nu_fone_emergencia"><span style="color: red; font-weight: bold;">*</span>
+
+                    </div>
+                    <div class="row pt-2">
+                        <div class="form-group col-md-4">
+                            <label for="nome_contato_emergencia" class="form-label">
+                                {{ __('Nome do Contato de Emergência') }}</label>
+                            <input id="nome_contato_emergencia"
+                                class="form-control @error('nome_contato_emergencia') is-invalid @enderror"
+                                type="text" name="nome_contato_emergencia"
+                                value="{{ old('nome_contato_emergencia', $candidato->nome_contato_emergencia) }}" required>
+                            @error('nome_contato_emergencia')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="parentesco_contato_emergencia" class="form-label">
+                                {{ __('Parentesco do Contato de Emergência') }} <span class="text-muted">(ex.: pai, mãe, irmão, amigo e outros)</span></label>
+                            <input id="parentesco_contato_emergencia"
+                                class="form-control @error('parentesco_contato_emergencia') is-invalid @enderror"
+                                type="text" name="parentesco_contato_emergencia"
+                                value="{{ old('parentesco_contato_emergencia', $candidato->parentesco_contato_emergencia) }}" required>
+
+                                @error('parentesco_contato_emergencia')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="nu_fone_emergencia" class="form-label">
                                 {{ __('Contato de Emergência') }}</label>
                             <input id="nu_fone_emergencia"
-                                class="form-control form-control-sm caixaDeTexto @error('nu_fone_emergencia') is-invalid @enderror celular"
+                                class="form-control @error('nu_fone_emergencia') is-invalid @enderror celular"
                                 type="text" name="nu_fone_emergencia"
-                                value="{{ old('nu_fone_emergencia', $inscricao->nu_fone_emergencia) }}">
+                                value="{{ old('nu_fone_emergencia', $inscricao->nu_fone_emergencia) }}" required>
                             @error('nu_fone_emergencia')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group col-md-4 textoInput">
-                            <label>
-                                <span style="color: red; font-weight: bold;">*</span>
-                                {{ __('Deficiências/transtornos') }}
-                            </label>
+                        <fieldset class="form-group col-md-5">
+                            <legend class="form-label required">
+                                {{ __('Possui alguma deficiência?') }}
+                            </legend>
                             <div class="border p-2 rounded @error('necessidades') is-invalid @enderror"
-                                style="max-height: 100px; overflow-y: auto;">
+                                style="max-height: 220px; overflow-y: auto;">
                                 @foreach (\App\Models\Candidato::NECESSIDADES as $valor => $necessidade)
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="{{ $valor }}"
                                             id="{{ 'checkbox' . $valor }}" name="necessidades[]"
-                                            @if (in_array($valor, old('necessidades') ?? [])) checked @endif>
+                                            @checked (in_array($valor, old('necessidades', array_map('trim', explode(',', $candidato->necessidades)))))>
                                         <label class="form-check-label" for="{{ 'checkbox' . $valor }}">
                                             {{ $necessidade }}
                                         </label>
@@ -797,18 +861,18 @@
                                 @endforeach
                             </div>
                             @error('necessidades')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group textoInput">
-                                <label for="trabalha"><span style="color: red; font-weight: bold;">*</span>
+                        </fieldset>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="trabalha" class="form-label">
                                     {{ __('Você exerce alguma atividade remunerada?') }}</label>
                                 <select id="trabalha"
-                                    class="form-control form-control-sm caixaDeTexto @error('trabalha') is-invalid @enderror"
-                                    name="trabalha">
+                                    class="form-control @error('trabalha') is-invalid @enderror"
+                                    name="trabalha" required>
                                     <option value="" selected disabled>-- Selecione --
                                     </option>
                                     <option value="1" @if (old('trabalha', $candidato->trabalha) == '1') selected @endif>
@@ -819,109 +883,260 @@
                                     </option>
                                 </select>
                                 @error('trabalha')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
                                 @enderror
                             </div>
-                            <div class="form-group textoInput mt-2">
-                                <label for="grupo_familiar"><span style="color: red; font-weight: bold;">*</span>
+                            <div class="form-group mt-2">
+                                <label for="grupo_familiar" class="form-label">
                                     {{ __('Quantas pessoas fazem parte do seu grupo familiar?') }}</label>
                                 <input id="grupo_familiar"
-                                    class="form-control form-control-sm caixaDeTexto @error('grupo_familiar') is-invalid @enderror"
+                                    class="form-control @error('grupo_familiar') is-invalid @enderror"
                                     type="number" name="grupo_familiar"
                                     value="{{ old('grupo_familiar', $candidato->grupo_familiar) }}">
+
                                 @error('grupo_familiar')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
                                 @enderror
+                            </div>
+                            <div class="pt-2">
+                                <div class="form-group">
+                                    <label for="valor_renda" class="form-label">
+                                        {{ __('Qual o valor da renda total (renda bruta) do seu grupo familiar?')}} <span class="text-muted">(Soma dos rendimentos de todo o grupo familiar, incluindo você) (Ex.: 1250,00)</span></label>
+                                    <input id="valor_renda"
+                                        class="form-control @error('valor_renda') is-invalid @enderror"
+                                        type="number" step="0.1" placeholder="1250,00" name="valor_renda"
+                                        value="{{ old('valor_renda', $candidato->valor_renda) }}" required>
+
+                                    @error('valor_renda')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group textoInput">
-                                <label for="quilombola"><span style="color: red; font-weight: bold;">*</span>
-                                    {{ __('Quilombola') }}</label>
-                                <select id="quilombola"
-                                    class="form-control form-control-sm caixaDeTexto @error('quilombola') is-invalid @enderror"
-                                    name="quilombola">
-                                    <option value="" selected disabled>-- Selecione --
-                                    </option>
-                                    <option value="1" @if ($candidato->quilombola == true) selected @endif>
-                                        Sim
-                                    </option>
-                                    <option value="0" @if ($candidato->quilombola == false) selected @endif>
-                                        Não
-                                    </option>
-                                </select>
-                                @error('quilombola')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group textoInput mt-2">
-                                <label for="indigena"><span style="color: red; font-weight: bold;">*</span>
-                                    {{ __('Indígena') }}</label>
-                                <select id="indigena"
-                                    class="form-control form-control-sm caixaDeTexto @error('indigena') is-invalid @enderror"
-                                    name="indigena">
-                                    <option value="" selected disabled>-- Selecione --
-                                    </option>
-                                    <option value="1" @if ($candidato->indigena == true) selected @endif>
-                                        Sim
-                                    </option>
-                                    <option value="0" @if ($candidato->indigena == false) selected @endif>
-                                        Não
-                                    </option>
-                                </select>
-                                @error('indigena')
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
+
                     </div>
                     <div class="row pt-2">
-                        <div class="form-group textoInput">
-                            <label for="valor_renda"><span style="color: red; font-weight: bold;">*</span>
-                                {{ __('Qual o valor da renda total (renda bruta) do seu grupo familiar? (Soma dos rendimentos de todo o grupo familiar, incluindo você) (Ex.: 1250,00)') }}</label>
-                            <input id="valor_renda"
-                                class="form-control form-control-sm caixaDeTexto @error('valor_renda') is-invalid @enderror"
-                                type="number" step="0.1" placeholder="1250,00" name="valor_renda"
-                                value="{{ old('valor_renda', $candidato->valor_renda) }}">
-                            @error('valor_renda')
-                                <div id="validationServer03Feedback" class="invalid-feedback">
-                                    {{ $message }}
+                        <fieldset class="col-md-6 form-group">
+                            <legend class="form-label required">
+                                Na sua moradia você dispõe de: <span class="text-muted">(Marcar mais de uma opção, se for o
+                                    caso)</span>
+                            </legend>
+
+                            @php
+                                $opcoes_moradia = [
+                                    'banda_larga' => 'Internet banda larga',
+                                    'internet_movel' => 'Internet móvel (4G)',
+                                    'smartphone' => 'Celular/smartphone',
+                                    'computador' => 'Computador/Notebook',
+                                    'tablet' => 'Tablet',
+                                    'nenhuma' => 'Não disponho de nenhuma das opções acima',
+                                ];
+                            @endphp
+
+                            <div class="card card-body w-75 @error('dispositivos_moradia') is-invalid @enderror">
+                                @foreach ($opcoes_moradia as $val => $label)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            id="dispositivos_moradia_{{ $val }}" name="dispositivos_moradia[]"
+                                            value="{{ $val }}"
+                                            @checked(in_array($val, old('dispositivos_moradia', $candidato->dispositivos_moradia), true))>
+                                        <label class="form-check-label"
+                                            for="dispositivos_moradia_{{ $val }}">{{ $label }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @error('dispositivos_moradia')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </fieldset>
+
+                        <div class="col-md-6">
+                            <fieldset class="form-group">
+                                <legend class="form-label required">Sua família está inscrita no CadÚnico?</legend>
+                                <div class="d-flex gap-5 @error('cadunico') is-invalid @enderror">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="cadunico" id="cad_sim"
+                                            value="sim" @checked(old('cadunico', $candidato->cadunico) === 'sim')>
+                                        <label class="form-check-label" for="cad_sim">Sim</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="cadunico" id="cad_nao"
+                                            value="nao" @checked(old('cadunico', $candidato->cadunico) === 'nao')>
+                                        <label class="form-check-label" for="cad_nao">Não</label>
+                                    </div>
                                 </div>
+                                @error('cadunico')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </fieldset>
+
+                            <fieldset class="form-group pt-2">
+                                <legend class="form-label required">
+                                    Você tem filho/a(s) na primeira infância ou em idade escolar?
+                                </legend>
+                                @php
+                                    $opcoes_filhos = [
+                                        'primeira_infancia' => 'Sim, na primeira infância',
+                                        'idade_escolar' => 'Sim, em idade escolar',
+                                        'nao_tenho' => 'Não tenho',
+                                    ];
+                                @endphp
+                                <div class="card card-body w-75 @error('filhos') is-invalid @enderror">
+                                    @foreach ($opcoes_filhos as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="filhos_{{ $val }}" name="filhos[]"
+                                                    value="{{ $val }}"
+                                                    @checked(in_array($val, old('filhos', $candidato->filhos), true))>
+                                                <label class="form-check-label"
+                                                    for="filhos_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                    @endforeach
+                                </div>
+                                @error('filhos')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <fieldset class="form-group pt-2 d-none" id="div-gestante">
+                        <legend class="form-label required">
+                            Você está gestante? <span class="text-muted">(apenas para gênero feminino)</span>
+                        </legend>
+
+                        <div class="d-flex flex-column">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gestante" id="gestante_sim"
+                                    value="sim" @checked(old('gestante', $candidato->gestante) == 'sim')>
+                                <label class="form-check-label" for="gestante_sim">Sim</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gestante" id="gestante_nao"
+                                    value="nao" @checked(old('gestante', $candidato->gestante) == 'nao')>
+                                <label class="form-check-label" for="gestante_nao">Não</label>
+                            </div>
+                        </div>
+
+                        @error('gestante')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </fieldset>
+
+                    <div class="row pt-3">
+                        <fieldset class="form-group col-md-6">
+                            <legend class="form-label required">
+                                Você é transgênero?
+                            </legend>
+                            <div class="row @error('transgenero') is-invalid @enderror">
+                                @foreach (['sim' => 'Sim', 'nao' => 'Não', 'outro' => 'Outro', 'prefiro_nao_responder' => 'Prefiro não responder'] as $val => $label)
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio"
+                                            name="transgenero" id="trans_{{ $val }}"
+                                            value="{{ $val }}" @checked(old('transgenero', $candidato->transgenero) === $val)>
+                                            <label class="form-check-label"
+                                            for="trans_{{ $val }}">{{ $label }}</label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error('transgenero')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </fieldset>
+                        <fieldset class="form-group col-md-6">
+                            <legend class="form-label required">
+                                Você se reconhece no grupo LGBTQIAP+?
+                            </legend>
+                            <div class="row @error('lgbtqiap') is-invalid @enderror">
+                                @foreach (['sim' => 'Sim', 'nao' => 'Não', 'outro' => 'Outro', 'prefiro_nao_responder' => 'Prefiro não responder'] as $val => $label)
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio"
+                                            name="lgbtqiap" id="lgbt_{{ $val }}" value="{{ $val }}"
+                                            @checked(old('lgbtqiap', $candidato->lgbtqiap) == $val)>
+                                            <label class="form-check-label"
+                                            for="lgbt_{{ $val }}">{{ $label }}</label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error('lgbtqiap')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </fieldset>
+                    </div>
+
+                    <div class="row pt-2 d-none" id="div-nome-social">
+                        <div class="form-group col-md-6">
+                            <label for="no_social" class="form-label">{{ __('Nome social (para pessoas travestis ou transsexuais)') }}</label>
+                            <input id="no_social" class="form-control" type="text"
+                                name="no_social" value="{{ old('no_social', $candidato->no_social) }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="requerimento-nome-social" class="form-label">
+                                </span>{{ __('Requerimento para inclusão de nome social') }} <a
+                                    href="https://docs.google.com/document/d/1elnVkyCHGzaXuqaEWc1UxibqaMVtSxEz/edit"
+                                    target="_blank"
+                                    style="text-decoration: none">{{ __('(baixe o modelo aqui)') }}</a></label>
+                            <input
+                                class="form-control @error('requerimento_nome_social') is-invalid @enderror"
+                                type="file" id="requerimento-nome-social" name="requerimento_nome_social"
+                                value="{{ old('requerimento_nome_social') }}" accept=".pdf">
+
+                            @error('requerimento_nome_social')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
-                    <div class="form-check mt-2 @error('edital') is-invalid @enderror">
-                        <input class="form-check-input" type="checkbox" value="true" id="checkEdital"
-                            name="edital" @if (old('edital')) checked @endif>
-                        <label class="form-check-label subtexto3" for="checkEdital">
-                            DECLARO que li o Edital e estou de acordo com os termos e condições.
-                        </label>
-                    </div>
-                    <div class="invalid-feedback">
-                        @error('edital')
-                            {{ $message }}
-                        @enderror
-                    </div>
 
-                    <div class="form-check mt-2 @error('vinculo') is-invalid @enderror">
-                        <input class="form-check-input" type="checkbox" value="true" id="checkVinculo"
-                            name="vinculo" @if (old('vinculo')) checked @endif>
-                        <label class="form-check-label subtexto3" for="checkVinculo">
-                            Estou ciente que não posso ter vínculo com mais de uma Instituição de Ensino
-                            Superior pública.
-                        </label>
-                    </div>
-                    <div class="invalid-feedback">
+                    <div class="mt-5 alert alert-warning" role="alert">
+                        <div class="form-check mt-2 @error('edital') is-invalid @enderror">
+                            <input class="form-check-input" type="checkbox" value="true" id="checkEdital"
+                                name="edital" @if (old('edital')) checked @endif>
+                            <label class="form-check-label subtexto3" for="checkEdital">
+                                DECLARO que li o Edital e estou de acordo com os termos e condições.
+                            </label>
+                        </div>
+                        @error('edital')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        <div class="form-check mt-2 @error('vinculo') is-invalid @enderror">
+                            <input class="form-check-input" type="checkbox" value="true" id="checkVinculo"
+                                name="vinculo" @if (old('vinculo')) checked @endif>
+                            <label class="form-check-label subtexto3" for="checkVinculo">
+                                Estou ciente que não posso ter vínculo com mais de uma Instituição de Ensino
+                                Superior pública.
+                            </label>
+                        </div>
                         @error('vinculo')
-                            {{ $message }}
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
                     </div>
                 </form>
@@ -1000,6 +1215,31 @@
             });
 
             verificarNomeSocial($('#no_social').val().trim());
+
+
+            function toggleNomeSocial() {
+                const mostrar = $('#trans_sim').is(':checked') || $('#lgbt_sim').is(':checked');
+                $('#div-nome-social').toggleClass('d-none', !mostrar);
+            }
+
+            function toggleGestante(){
+                const mostrar = $('#tp_sexo').val() === 'F';
+                if (mostrar) {
+                    $('input[name="gestante"]').prop('disabled', false).prop('required', true);
+                } else {
+                    $('input[name="gestante"]').prop('required', false).prop('disabled', true);
+                }
+                $('#div-gestante').toggleClass('d-none', !mostrar);
+
+            }
+
+            $(document).ready(function () {
+                toggleNomeSocial();
+                toggleGestante();
+                $(document).on('change', 'input[name="lgbtqiap"], input[name="transgenero"]', toggleNomeSocial);
+                $(document).on('change', '#tp_sexo', toggleGestante);
+
+            });
         });
 
         function verificarNomeSocial(valor) {

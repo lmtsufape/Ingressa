@@ -804,20 +804,8 @@ class ListagemController extends Controller
                 'localidade',
                 DB::raw("CASE WHEN trabalha IS TRUE THEN 'SIM' ELSE 'NÃO' END AS trabalha"),//se trabalha
                 'grupo_familiar',// quantidade de pessoas da familia
-                'valor_renda'])
-                ->selectRaw("
-                    COALESCE(
-                        curso.semestre,
-                        inscricaos.semestre_entrada,
-                        CASE
-                            WHEN row_number() OVER (
-                                PARTITION BY curso.cod_curso
-                                ORDER BY inscricaos.id
-                            ) <= 40 THEN 1
-                            ELSE 2
-                        END
-                    ) AS semestre_entrada
-                ");
+                'valor_renda',
+                'semestre_entrada']);
                 $inscritos->addBinding($necessidades, 'select');
                 $inscritos->addBinding($etnia_cor, 'select');
 

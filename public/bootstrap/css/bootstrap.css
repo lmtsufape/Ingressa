@@ -396,7 +396,7 @@ fieldset {
   border: 0;
 }
 
-legend {
+/* legend {
   float: left;
   width: 100%;
   padding: 0;
@@ -411,7 +411,7 @@ legend {
 }
 legend + * {
   clear: left;
-}
+} */
 
 ::-webkit-datetime-edit-fields-wrapper,
 ::-webkit-datetime-edit-text,
