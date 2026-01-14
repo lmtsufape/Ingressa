@@ -945,7 +945,7 @@
                                         <input class="form-check-input" type="checkbox"
                                             id="dispositivos_moradia_{{ $val }}" name="dispositivos_moradia[]"
                                             value="{{ $val }}"
-                                            @checked(in_array($val, old('dispositivos_moradia', $candidato->dispositivos_moradia), true))>
+                                            @checked(in_array($val, old('dispositivos_moradia', $candidato->dispositivos_moradia ?? [], true)))>
                                         <label class="form-check-label"
                                             for="dispositivos_moradia_{{ $val }}">{{ $label }}</label>
                                     </div>
@@ -998,7 +998,7 @@
                                                 <input class="form-check-input" type="checkbox"
                                                     id="filhos_{{ $val }}" name="filhos[]"
                                                     value="{{ $val }}"
-                                                    @checked(in_array($val, old('filhos', $candidato->filhos), true))>
+                                                    @checked(in_array($val, old('filhos', $candidato->filhos ?? []), true))>
                                                 <label class="form-check-label"
                                                     for="filhos_{{ $val }}">{{ $label }}</label>
                                             </div>
