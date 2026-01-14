@@ -1,30 +1,23 @@
 <x-guest-layout>
     <div class="fundo px-5 py-5">
         @can('isCandidato', \App\Models\User::class)
-                @php
-                    $lastInscricao = null;
-                    if(auth()->check() && optional(auth()->user())->candidato) {
-                        $lastInscricao = optional(optional(auth()->user()->candidato)->inscricoes)->last();
-                    }
-                @endphp
-
-                @if($edicao_atual != null && $lastInscricao && $lastInscricao->sisu == $edicao_atual)
-                    @if($lastInscricao->retificacao != null)
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-                                        @if($lastInscricao->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'])
-                                            Sua documentação de heteroidentificação foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao paracer da banca de heteroidentificação siga os trâmites descritos no Edital.
-                                        @elseif($lastInscricao->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'])
-                                            Sua documentação referente ao laudo médico e exames foi <strong>INVALIDADA</strong>.
-                                        @else
-                                            Sua documentação de heteroidentificação, laudo médico e exames foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao paracer da banca de heteroidentificação siga os trâmites descritos no Edital.
-                                        @endif
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
+               @if($edicao_atual != null && auth()->user()->candidato->inscricoes->last()->sisu == $edicao_atual)
+                @if(auth()->user()->candidato->inscricoes->last()->retificacao != null)
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                                    @if(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_racial'])
+                                        Sua documentação de heteroidentificação foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao paracer da banca de heteroidentificação siga os trâmites descritos no Edital.
+                                    @elseif(auth()->user()->candidato->inscricoes->last()->retificacao == App\Models\Inscricao::STATUS_RETIFICACAO['bloqueado_motivo_medico'])
+                                        Sua documentação referente ao laudo médico e exames foi <strong>INVALIDADA</strong>.
+                                    @else
+                                        Sua documentação de heteroidentificação, laudo médico e exames foi <strong>INVALIDADA</strong>. Se deseja interpor recurso em relação ao paracer da banca de heteroidentificação siga os trâmites descritos no Edital.
+                                    @endif
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
+                    </div>
                 @endif
             @endif
         @endcan
