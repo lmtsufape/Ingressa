@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
-use Livewire\FileUploadConfiguration;
+use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
 use Livewire\WithFileUploads;
 use App\Notifications\ComprovanteEnvioDocumentosNotification;
 use App\Rules\ArquivoEnviado;
@@ -244,7 +244,7 @@ class EnviarDocumentos extends Component
         $this->attributes();
         $this->withValidator(function (Validator $validator) {
             if ($validator->fails()) {
-                $this->dispatchBrowserEvent('swal:fire', [
+                $this->dispatch('swal:fire', [
                     'icon' => 'error',
                     'title' => 'Erro ao enviar os arquivos, verifique os campos inválidos!'
                 ]);
@@ -282,7 +282,7 @@ class EnviarDocumentos extends Component
         ) {
             $this->withValidator(function (Validator $validator) {
                 if ($validator->fails()) {
-                    $this->dispatchBrowserEvent('swal:fire', [
+                    $this->dispatch('swal:fire', [
                         'icon' => 'error',
                         'title' => 'Erro ao enviar o arquivo, verifique o campo inválido!'
                     ]);
@@ -313,7 +313,7 @@ class EnviarDocumentos extends Component
                     'nome' => $documento,
                 ]);
             }
-            $this->dispatchBrowserEvent('swal:fire', [
+            $this->dispatch('swal:fire', [
                 'icon' => 'success',
                 'title' => 'Arquivo enviado com sucesso!'
             ]);
@@ -337,7 +337,7 @@ class EnviarDocumentos extends Component
             if ($this->inscricao->arquivo($documento) == null)
             if($this->inscricao->isDocumentosRequeridos() || ($this->inscricao->isArquivoRecusadoOuReenviado($documento) && $this->inscricao->isDocumentosInvalidados()))
                 {
-                    $this->dispatchBrowserEvent('swal:fire', [
+                    $this->dispatch('swal:fire', [
                         'icon' => 'error',
                         'title' => 'Não é possível deletar este arquivo!'
                     ]);
@@ -348,7 +348,7 @@ class EnviarDocumentos extends Component
                 Storage::delete($arquivo->caminho);
             }
             $arquivo->delete();
-            $this->dispatchBrowserEvent('swal:fire', [
+            $this->dispatch('swal:fire', [
                 'icon' => 'success',
                 'title' => 'Arquivo deletado com sucesso.'
             ]);
@@ -361,7 +361,7 @@ class EnviarDocumentos extends Component
                 $arquivo->avaliacao->delete();
             }
             $arquivo->delete();
-            $this->dispatchBrowserEvent('swal:fire', [
+            $this->dispatch('swal:fire', [
                 'icon' => 'success',
                 'title' => 'Arquivo deletado com sucesso.'
             ]);

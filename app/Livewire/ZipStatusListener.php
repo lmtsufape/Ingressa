@@ -17,7 +17,7 @@ class ZipStatusListener extends Component
         $this->showModal   = true;
 
         if ($this->downloadUrl) {
-            $this->dispatchBrowserEvent('download-zip', [
+            $this->dispatch('download-zip', [
                 'url' => $this->downloadUrl,
             ]);
         }
