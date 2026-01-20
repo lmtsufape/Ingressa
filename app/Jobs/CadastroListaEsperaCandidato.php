@@ -46,8 +46,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $this->chamada->sisu->caminho_import_espera);
 
         // Lendo o arquivo CSV
-        $csv = Reader::createFromPath($csvPath, 'r');
-        $csv->setDelimiter(';');
+        $csv = Reader::from($csvPath, 'r');
+        $csv->setDelimiter(',');
         $csv->setHeaderOffset(0);
         $records = $csv->getRecords();
 
@@ -143,7 +143,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     $cpfC = $candidatosData[$index]['id'];
                 }
             }
-  
+
             // Adicionando inscrição apenas se o candidato não existir ou se ele não estiver inscrito nesse SiSU
             if (!$candidato || !$candidato->inscricoes()->where('sisu_id', $this->chamada->sisu->id)->exists()) {
                 $inscricoesData[] = [
@@ -193,13 +193,17 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'ensino_medio' => $record['ENSINO_MEDIO'],
                     'quilombola' => $record['QUILOMBOLA'],
                     'deficiente' => $record['PcD'],
+                    'media_simples_pdm_licenca' => $record['MEDIA_SIMPLES_PDM_LICENC'],
+                    'st_baixa_renda' => $record['ST_BAIXA_RENDA'],
+                    'st_rank_baixa_renda' => $record['ST_RANK_BAIXA_RENDA'],
+                    'st_adesao_acao_afirmativa_curso' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
                     'st_rank_ensino_medio' => $record['ST_RANK_ENSINO_MEDIO'],
                     'st_rank_raca' => $record['ST_RANK_RACA'],
                     'st_rank_quilombola' => $record['ST_RANK_QUILOMBOLA'],
                     'st_rank_pcd' => $record['ST_RANK_PcD'],
                     'st_confirma_lgpd' => $record['ST_CONFIRMA_LGPD'],
-                    'total_membros_familiar' => intval($record['TOTAL_MEMBROS_FAMILIAR']),
-                    'renda_familiar_bruta' => floatval(str_replace(',', '.', $record['RENDA_FAMILIAR_BRUTA'])),
+                    // 'total_membros_familiar' => intval($record['TOTAL_MEMBROS_FAMILIAR']),
+                    // 'renda_familiar_bruta' => floatval(str_replace(',', '.', $record['RENDA_FAMILIAR_BRUTA'])),
                     'salario_minimo' => floatval(str_replace(',', '.', $record['SALARIO_MINIMO'])),
                     'perfil_economico_lei_cotas' => $record['PERFIL_ECONOMICO_LEI_COTAS'],
                     'tipo_concorrencia' => trim($record['TIPO_CONCORRENCIA']),
@@ -259,13 +263,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         // Arrays para armazenar os candidatos convocados e reservas
         $candidatosConvocados = [];
         $candidatosReservas = [];
-        
+
 
         // Os candidatos estão agrupados por curso, turno e modalidade de concorrência. O primeiro foreach itera pelos curso, o segundo pelo turno e o terceiro pela modalidade e o quarto pelos candidatos.
         foreach ($inscricoesOrdenadas as $codCurso => $curso) {
             foreach ($curso as $nomeTurno => $turno) {
                 $vagasModalidade = []; // Armazena a quantidade de vagas restantes para cada modalidade
-                $cloneVagas = []; 
+                $cloneVagas = [];
 
                 // Processa os candidatos até preencher todas as vagas reais de todas as modalidades
                 foreach ($turno as $codCota => $modalidade) {
@@ -290,7 +294,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     $vagasModalidade[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
                     $vagasModalidade[$codCota]['reservas'] = $vagasModalidade[$codCota]['reais'] * ($multiplicador - 1); // O multiplicador é subtraído por 1 pois as vagas reais já foram contabilizadas
 
-                
+
                     $cloneVagas[$codCota]['reais'] = $cotaCurso->quantidade_vagas - $cotaCurso->vagas_ocupadas;
 
                     foreach ($modalidade as $candidato) {
@@ -355,7 +359,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     }
                 }
 
-                
+
                 // Desagrupa e ordena os candidatos pela maior nota, em seguida pelos candidatos com mais mais chances de serem convocados e por fim pela modalidade menos restritiva para a mais restritiva
                 /*$candidatosDesagrupados = $turno->flatmap(function ($modalidade) {
                     return $modalidade;
@@ -370,11 +374,11 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     }
                 ]);*/
 
-                
+
                 $candidatosDesagrupados = $turno->flatMap(function ($modalidade) {
                     return $modalidade;
                 })->sort(function ($a, $b) use ($vagasModalidade, $ordemModalidades, $cloneVagas) {
-                    
+
                     $codCotaA = Cota::getCotaModalidade($a['no_modalidade_concorrencia'])->cod_novo;
                     $codCotaB = Cota::getCotaModalidade($b['no_modalidade_concorrencia'])->cod_novo;
 
@@ -410,7 +414,7 @@ $string = $a['tipo_concorrencia'] . ' ' . $cloneVagas[$codCotaA]['reais'] . ", "
                 $vaga = [];
                 // Processa os candidatos até preencher todas as vagas reserva de todas as modalidades
                 foreach ($candidatosDesagrupados as $candidato) {
-                    
+
                /*     if(strcasecmp(trim($candidato['ds_email']), trim("mariathainaragomesdemelo@gmail.com")) === 0 ) {
                         $codCota = Cota::getCotaModalidade($candidato['no_modalidade_concorrencia'])->cod_novo;
                         $vg =  $vagasModalidade[$codCota]['reservas'] - $candidato['nu_classificacao'];
@@ -452,7 +456,7 @@ $string = $a['tipo_concorrencia'] . ' ' . $cloneVagas[$codCotaA]['reais'] . ", "
           //      if( $candidato["no_curso"] === "ADMINISTRAÇÃO" && $candidato["ds_turno"] === "Noturno")
             //        dd($candidatosDesagrupados,$nota_paulo,  $vaga_modalidade, $vaga); */
             }
-        }     
+        }
 
         // Combina todas as inscrições válidas
         $inscricoesToInsert = array_merge($candidatosConvocados, $candidatosReservas);
@@ -463,14 +467,14 @@ $string = $a['tipo_concorrencia'] . ' ' . $cloneVagas[$codCotaA]['reais'] . ", "
         // Filtra os candidatos e usuários que estão relacionados às inscrições
         $filteredCandidatosData = array_filter($candidatosData, function ($candidato) use ($candidatoIds) {
             return in_array($candidato['id'], $candidatoIds);
-        }); 
+        });
 
         $userIds = array_column($filteredCandidatosData, 'user_id');
         $filteredUsersData = array_filter($usersData, function ($user) use ($userIds) {
             return in_array($user['id'], $userIds);
         });
 
-            
+
 
         // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {

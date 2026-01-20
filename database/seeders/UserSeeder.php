@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Inscricao;
 use App\Models\TipoAnalista;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -52,7 +53,7 @@ class UserSeeder extends Seeder
             'uf_rg'                  => fake()->stateAbbr(),
             'data_expedicao'         => fake()->date(),
 
-            'titulo'                 => fake()->numerify('############'),
+            'titulo'                 => '012542110132',
             'zona_eleitoral'         => (string) fake()->numberBetween(1, 999),
             'secao_eleitoral'        => (string) fake()->numberBetween(1, 9999),
 
@@ -93,9 +94,9 @@ class UserSeeder extends Seeder
             'ds_matricula' => 'sdfsdf',
             'protocolo' => fake()->bothify('PROTO-########'),
             'protocolo_envio' => fake()->optional()->bothify('ENV-########'),
-            'status' => fake()->randomElement(['PENDENTE', 'ENVIADO', 'DEFERIDO', 'INDEFERIDO']),
+            'status' => Inscricao::STATUS_ENUM['documentos_pendentes'],
             'cd_efetivado' => fake()->boolean(),
-            'retificacao' => fake()->boolean(),
+            'retificacao' => null,
             'justificativa' => fake()->optional()->sentence(),
             'nu_etapa' => fake()->numberBetween(1, 5),
 

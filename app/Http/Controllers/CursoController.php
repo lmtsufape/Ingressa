@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Jobs\GerarZipTodosDocumentosCandidatosJob;
+
 use Illuminate\Http\Request;
 use App\Models\Curso;
 use App\Http\Requests\CursoRequest;
-use App\Jobs\DownloadTodosDocumentosCandidatos;
 use App\Models\Chamada;
 use App\Models\Inscricao;
 use App\Models\User;
@@ -138,10 +139,8 @@ class CursoController extends Controller
         $request->validate([
             'curso' => 'required',
         ]);
-
         $curso = Curso::find($request->curso);
         $curso->setAtributes($request);
-
         return redirect(route('cursos.index'))->with(['success' => 'Curso atualizado com sucesso!']);
     }
 
@@ -154,9 +153,9 @@ class CursoController extends Controller
     public function infoCurso(Request $request)
     {
         $curso = Curso::find($request->curso_id);
-
         return response()->json($curso);
     }
+
 
     public function gerarDocumentosTodosCandidatos($curso_id, $chamada_id)
     {
@@ -180,5 +179,6 @@ class CursoController extends Controller
         $fullPath = Storage::disk('local')->path($path);
 
         return response()->download($fullPath, $nomeArquivo);
+
     }
 }
