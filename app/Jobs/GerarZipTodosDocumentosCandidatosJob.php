@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Events\ZipGerado;
+use App\Events\ZipGeradoEvent;
 use App\Models\Curso;
 use App\Models\Inscricao;
 use Illuminate\Support\Facades\File;
@@ -45,7 +45,7 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
         $curso = Curso::find($this->curso_id);
         $inscricoes = Inscricao::where([['curso_id', $curso->id], ['chamada_id', $this->chamada_id]])->get();
 
-        $filename = 'Documentos dos Candidatos(' . $curso->nome . ' - ' . $curso->getTurno() . ') .zip';
+        $filename = 'Documentos dos Candidatos(' . $curso->nome . ' - ' . $curso->getTurno() . ').zip';
         $zip = new ZipArchive();
         $zip->open(Storage::path($filename), ZipArchive::CREATE);
 
@@ -73,7 +73,7 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
         if (!$temArquivo) {
             Storage::disk('local')->delete($filename);
 
-            event(new ZipGerado(
+            event(new ZipGeradoEvent(
                 $this->user_id,
                 null
             ));
@@ -81,6 +81,6 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
             return;
         }
 
-        event(new ZipGerado($this->user_id, $filename));
+        event(new ZipGeradoEvent($this->user_id, $filename));
     }
 }

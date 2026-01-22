@@ -9,17 +9,14 @@ class ZipStatusListener extends Component
 {
     public $showModal = false;
     public $downloadUrl = null;
-    public $temArquivo = false;
 
     #[On('zip-gerado')]
-    public function handleZipGerado(array $payload = [])
+    public function handleZipGerado($download_url = null)
     {
         $this->showModal = true;
 
-        $this->downloadUrl = $payload['download_url'] ?? null;
-
+        $this->downloadUrl = $download_url;
         if ($this->downloadUrl) {
-            $this->temArquivo = true;
             $this->dispatch('download-zip', url: $this->downloadUrl);
         }
     }
