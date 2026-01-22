@@ -14,14 +14,14 @@ class ZipGerado implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-      public function __construct(
+    public function __construct(
         public int $user_id,
         public $path,
     ) {}
 
     public function broadcastOn()
     {
-        return new PrivateChannel('user.'.$this->user_id);
+        return new PrivateChannel('user.' . $this->user_id);
     }
 
     public function broadcastAs()
@@ -32,9 +32,11 @@ class ZipGerado implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'download_url' => URL::signedRoute('baixar.documentos.candidatos.curso', [
-                'path' => $this->path,
-            ]),
+            'download_url' => $this->path
+                ? URL::signedRoute('baixar.documentos.candidatos.curso', [
+                    'path' => $this->path,
+                ])
+                : null,
         ];
     }
 }

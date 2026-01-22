@@ -33,7 +33,6 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
         $this->curso_id = $curso_id;
         $this->chamada_id = $chamada_id;
         $this->user_id = $user_id;
-
     }
 
     /**
@@ -46,15 +45,15 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
         $curso = Curso::find($this->curso_id);
         $inscricoes = Inscricao::where([['curso_id', $curso->id], ['chamada_id', $this->chamada_id]])->get();
 
-        $filename = 'Documentos dos Candidatos('.$curso->nome.' - '. $curso->getTurno() .') .zip';
+        $filename = 'Documentos dos Candidatos(' . $curso->nome . ' - ' . $curso->getTurno() . ') .zip';
         $zip = new ZipArchive();
-        $zip->open(Storage::path( $filename), ZipArchive::CREATE);
+        $zip->open(Storage::path($filename), ZipArchive::CREATE);
 
 
         $temArquivo = false;
 
-        foreach($inscricoes as $inscricao){
-            if($inscricao->arquivos->isNotEmpty()){
+        foreach ($inscricoes as $inscricao) {
+            if ($inscricao->arquivos->isNotEmpty()) {
                 $temArquivo = true;
                 $nomeCandidato = $inscricao->candidato->no_inscrito . ' - ' . $inscricao->co_inscricao_enem;
 
@@ -62,7 +61,7 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
 
                 $files = File::files(Storage::path("documentos/inscricaos/$inscricao->id"));
 
-                foreach($files as $file){
+                foreach ($files as $file) {
                     $relativeName = basename($file);
                     $zip->addFile($file, "$nomeCandidato/$relativeName");
                 }
@@ -70,12 +69,18 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
         }
 
         $zip->close();
-        if(!$temArquivo){
+
+        if (!$temArquivo) {
             Storage::disk('local')->delete($filename);
+
+            event(new ZipGerado(
+                $this->user_id,
+                null
+            ));
+
             return;
         }
 
-        event(new ZipGerado( $this->user_id, $filename));
-
+        event(new ZipGerado($this->user_id, $filename));
     }
 }
