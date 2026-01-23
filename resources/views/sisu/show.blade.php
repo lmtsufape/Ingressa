@@ -77,7 +77,9 @@
                                                     @if($batches[$i]->finished())
                                                         <a title="Listar candidatos da chamada" href="{{route('chamadas.candidatos', ['sisu_id' => $sisu->id, 'chamada_id' => $chamada->id])}}"><img class="m-1 " width="30" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos"></a>
                                                     @else
-                                                        <a title="Cadastrando candidatos"><img style="width: 70px;" src="http://rpg.drivethrustuff.com/shared_images/ajax-loader.gif" alt="Cadastrando todos os candidatos..."/></a>
+                                                        <div class="spinner-border spinner-border-sm mt-1 text-primary" title="Cadastrando candidatos" alt="Cadastrando todos os candidatos..." role="status">
+                                                            <span class="visually-hidden" role="status">Carregando...</span>
+                                                        </div>
                                                     @endif
                                                 @endif
                                             </div>
@@ -145,7 +147,7 @@
                                         </div>
                                     </div>
                                 </li>
-                            @else 
+                            @else
                                 <li>
                                     <div title="Listar candidatos" class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
                                         <img class="aling-middle" width="33" src="{{asset('img/Grupo 1682.svg')}}" alt="Icone de listar candidatos">

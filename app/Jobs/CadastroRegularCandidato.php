@@ -49,7 +49,7 @@ class CadastroRegularCandidato implements ShouldQueue
         $csvPath = storage_path("app/{$this->chamada->sisu->caminho_import_regular}");
 
         // Lendo o arquivo CSV
-        $csv = Reader::from($csvPath, 'r')->setDelimiter(',')->setHeaderOffset(0);
+        $csv = Reader::from($csvPath, 'r')->setDelimiter(';')->setHeaderOffset(0);
         $records = iterator_to_array($csv->getRecords(), true);
 
 
@@ -93,7 +93,7 @@ class CadastroRegularCandidato implements ShouldQueue
                     'no_social' => $record['NO_SOCIAL'],
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
-                    'dt_nascimento' => Carbon::createFromFormat('Y-m-d', $record['DT_NASCIMENTO'])->format('Y-m-d'),
+                    'dt_nascimento' => Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d H:i:s'),
                     'etnia_e_cor' => Candidato::ETNIA_E_COR[$record['COR_RACA']],
                     'user_id' => $nextUserIdValue++,
                     'created_at' => now(),
