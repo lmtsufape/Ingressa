@@ -2,24 +2,43 @@
 
 namespace App\Livewire;
 
-use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use App\Jobs\GerarZipTodosDocumentosCandidatosJob;
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ZipStatusListener extends Component
 {
+    use AuthorizesRequests;
+    
     public $showModal = false;
     public $downloadUrl = null;
+    public $processando = false;
 
+    // Escuta o evento global do Livewire disparado pelo JS
     #[On('zip-gerado')]
-    public function handleZipGerado($download_url = null)
+    public function onZipGerado($url)
     {
+        $this->processando = false;
+        $this->downloadUrl = $url;
         $this->showModal = true;
-
-        $this->downloadUrl = $download_url;
-        if ($this->downloadUrl) {
-            $this->dispatch('download-zip', url: $this->downloadUrl);
-        }
+        $this->dispatch('zip-finalizado');
     }
+
+    #[On('gerar-zip')]
+    public function gerarZip(int $cursoId, int $chamadaId)
+    {
+        $this->authorize('isAdmin', User::class);
+        $this->processando = true;
+
+        GerarZipTodosDocumentosCandidatosJob::dispatch(
+            $cursoId,
+            $chamadaId,
+            auth()->id()
+        );
+    }
+
 
     public function render()
     {

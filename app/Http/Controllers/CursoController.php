@@ -156,16 +156,6 @@ class CursoController extends Controller
         return response()->json($curso);
     }
 
-
-    public function gerarDocumentosTodosCandidatos($curso_id, $chamada_id)
-    {
-        $this->authorize('isAdmin', User::class);
-
-        GerarZipTodosDocumentosCandidatosJob::dispatch($curso_id, $chamada_id, Auth::user()->id);
-
-        return redirect()->back()->with('success', 'Os arquivos estão sendo processados e o arquivo zip ficará pronto em breve. Quando estiver pronto você será notificado!');
-    }
-
     public function downloadDocumentosTodosCandidatos(Request $request)
     {
         $path = $request->query('path');
