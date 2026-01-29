@@ -1213,18 +1213,12 @@
                     }
                 }
             });
-            $('#no_social').on('input', function() {
-                let valor = $(this).val().trim();
-
-                verificarNomeSocial(valor);
-            });
-
-            verificarNomeSocial($('#no_social').val().trim());
-
 
             function toggleNomeSocial() {
                 const mostrar = $('#trans_sim').is(':checked') || $('#lgbt_sim').is(':checked');
                 $('#div-nome-social').toggleClass('d-none', !mostrar);
+                $('#requerimento-nome-social').prop('required', mostrar && $('#no_social').val().trim() !== '');
+
             }
 
             function toggleGestante(){
@@ -1242,24 +1236,11 @@
                 toggleNomeSocial();
                 toggleGestante();
                 $(document).on('change', 'input[name="lgbtqiap"], input[name="transgenero"]', toggleNomeSocial);
+                $('#no_social').on('input change', toggleNomeSocial);
                 $(document).on('change', '#tp_sexo', toggleGestante);
 
             });
         });
 
-        function verificarNomeSocial(valor) {
-            let is_admin = {{ Auth::user()->role == App\Models\User::ROLE_ENUM['admin'] ? 'true' : 'false' }};
-            let campo_requerimento = $('#requerimento-nome-social');
-            let div_pai = campo_requerimento.parent();
-
-            if (valor !== '' && !is_admin) {
-                div_pai.show();
-                campo_requerimento.prop('required', true);
-            } else {
-                div_pai.hide();
-                campo_requerimento.prop('required', false);
-                campo_requerimento.val('');
-            }
-        }
     </script>
 </x-app-layout>
