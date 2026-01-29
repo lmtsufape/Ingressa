@@ -847,9 +847,14 @@
                             <legend class="form-label required">
                                 {{ __('Possui alguma deficiência?') }}
                             </legend>
+
+                            @php
+                                $desconsiderar = [2017, 2013, 2014, 2015, 2016]
+                            @endphp
                             <div class="border p-2 rounded @error('necessidades') is-invalid @enderror"
                                 style="max-height: 220px; overflow-y: auto;">
                                 @foreach (\App\Models\Candidato::NECESSIDADES as $valor => $necessidade)
+                                    @continue(in_array($valor, $desconsiderar, true))
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="{{ $valor }}"
                                             id="{{ 'checkbox' . $valor }}" name="necessidades[]"
