@@ -416,11 +416,10 @@
                                     <img src="{{ asset('img/download3.svg') }}" width="30">
                                 @endif
                                 <span class="subtexto3 @error('arquivos.rani') is-invalid text-danger @enderror">
-                                    Autodeclaração e Declaração de vínculo com comunidade indígena brasileira à qual
-                                    pertença
-                                    emitida por liderança indígena reconhecida ou por ancião indígena reconhecido ou por
-                                    personalidade indígena de reputação pública reconhecida ou outro documento emitido por
-                                    órgãos públicos que contenham informações pertinentes à sua condição de indígena
+                                    Declaração de vínculo com comunidade indígena brasileira à qual pertença emitida por
+                                    liderança indígena reconhecida ou por ancião indígena reconhecido ou por personalidade
+                                    indígena de reputação pública reconhecida ou outro documento emitido por órgãos públicos
+                                    que contenham informações pertinentes à sua condição de indígena
                                     (preencher e assinar modelo disponível em: <a href="http://www.ufape.edu.br/sisu"
                                         target="_blank">www.ufape.edu.br/sisu</a>)
                                 </span>
