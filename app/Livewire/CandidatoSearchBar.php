@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class CandidatoSearchBar extends Component
 {
-    public $texto;
+    public string $texto = '';
     public $inscricoes;
     public $highlightIndex;
     public $links;
@@ -46,17 +46,16 @@ class CandidatoSearchBar extends Component
         }
     }
 
-    public function updatedTexto()
+    public function updatedTexto($value)
     {
-        $texto = $this->texto;
+        $texto = trim($value);
         $cotas = $this->cotas;
         $this->inscricoes = Inscricao::whereHas('candidato', function (Builder $query) use ($texto, $cotas) {
-            $query->where(function($qry) use ($texto) {
-                $qry->where('no_inscrito', 'ilike', '%'.$texto.'%')
-                    ->orWhere('nu_cpf_inscrito', 'like', '%'.$texto.'%');
-            })->whereIn('cota_id', $cotas);
-        })
-            ->get();
+            $query->where('no_inscrito', 'ilike', "%$texto%")
+                    ->orWhere('nu_cpf_inscrito', 'like', "%$texto%");
+            })
+        ->whereIn('cota_id', $cotas)->get();
+
         $this->links = $this->inscricoes->map(function ($item) {
             $dados = ['sisu_id' => $item->sisu->id, 'chamada_id' => $item->chamada->id, 'curso_id' => $item->curso->id, 'inscricao_id' => $item->id];
             return route('inscricao.show.analisar.documentos', $dados);
