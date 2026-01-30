@@ -456,7 +456,7 @@
                             <input id="ds_complemento"
                                 class="form-control @error('ds_complemento') is-invalid @enderror"
                                 type="text" placeholder="Insira o complemento, se houver" name="ds_complemento"
-                                value="{{ old('ds_complemento', $inscricao->ds_complemento) }}" required>
+                                value="{{ old('ds_complemento', $inscricao->ds_complemento) }}">
 
                             @error('ds_complemento')
                                 <span class="invalid-feedback" role="alert">

@@ -78,7 +78,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,
-                    'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
+                    'name' => $record['NO_INSCRITO'],
                     'password' => '', // A senha será modificada quando o usuário acessar a conta pela primeira vez
                     'role' => User::ROLE_ENUM['candidato'],
                     'primeiro_acesso' => true,
@@ -88,7 +88,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 // Adiciona o candidato no array para inserção
                 $candidatosData[] = [
                     'id' => $nextCandidatoIdValue++,
-                    'no_social' => $record['NO_SOCIAL'],
+                    'no_social' => null,
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
                     'dt_nascimento' => Carbon::createFromFormat('d/m/Y', $record['DT_NASCIMENTO'])->format('Y-m-d'),
@@ -106,7 +106,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 $candidatosData[] = [
                     'id' => $candidato->id,
                     'atualizar_dados' => true,
-                    'no_social' => $record['NO_SOCIAL'],
+                    'no_social' => null,
                     'updated_at' => now(),
 
                     // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
@@ -122,7 +122,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
                 $usersData[] = [
                     'id' => $candidato->user->id,
-                    'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
+                    'name' => $record['NO_INSCRITO'],
                     'updated_at' => now(),
 
                     // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
@@ -479,7 +479,7 @@ $string = $a['tipo_concorrencia'] . ' ' . $cloneVagas[$codCotaA]['reais'] . ", "
         // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($filteredUsersData, $filteredCandidatosData, $inscricoesToInsert, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($filteredUsersData, 'id', ['name', 'updated_at']);
-            Candidato::upsert($filteredCandidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
+            Candidato::upsert($filteredCandidatosData, 'id', ['atualizar_dados', 'updated_at']);
            // Inscricao::insert($inscricoesToInsert);
 
             $batchSize = 500;
