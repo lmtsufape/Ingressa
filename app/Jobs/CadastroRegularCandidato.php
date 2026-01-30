@@ -81,7 +81,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
                     'id' =>  $nextUserIdValue,
-                    'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
+                    'name' => $record['NO_INSCRITO'],
                     'password' => '', // A senha será modificada quando o usuário acessar a conta pela primeira vez
                     'role' => User::ROLE_ENUM['candidato'],
                     'primeiro_acesso' => true,
@@ -92,7 +92,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 // Adiciona o candidato no array para inserção
                 $candidatosData[] = [
                     'id' => $nextCandidatoIdValue,
-                    'no_social' => $record['NO_SOCIAL'],
+                    'no_social' => null,
                     'no_inscrito' => $record['NO_INSCRITO'],
                     'nu_cpf_inscrito' => $record['NU_CPF_INSCRITO'],
                     'dt_nascimento' => Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_NASCIMENTO'])->format('Y-m-d H:i:s'),
@@ -108,7 +108,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 $candidatosData[] = [
                     'id' => $candidato->id,
                     'atualizar_dados' => true,
-                    'no_social' => $record['NO_SOCIAL'],
+                    'no_social' => null,
                     'updated_at' => now(),
 
                     // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
@@ -121,7 +121,7 @@ class CadastroRegularCandidato implements ShouldQueue
 
                 $usersData[] = [
                     'id' => $candidato->user->id,
-                    'name' => empty($record['NO_SOCIAL']) ? $record['NO_INSCRITO'] : $record['NO_SOCIAL'],
+                    'name' => $record['NO_INSCRITO'],
                     'updated_at' => now(),
 
                     // Os campos abaixo não serão atualizados, mas precisam ser passados para o método upsert por conta do funcionamento interno do postgres
@@ -226,7 +226,7 @@ class CadastroRegularCandidato implements ShouldQueue
         // Executa as inserções e atualizações em massa atômicamente
         DB::transaction(function () use ($usersData, $candidatosData, $inscricoesData, $nextUserIdValue, $nextCandidatoIdValue) {
             User::upsert($usersData, 'id', ['name', 'updated_at']);
-            Candidato::upsert($candidatosData, 'id', ['no_social', 'atualizar_dados', 'updated_at']);
+            Candidato::upsert($candidatosData, 'id', ['atualizar_dados', 'updated_at']);
             Inscricao::insert($inscricoesData);
 
             // Atualiza o valor do próximo id da sequência
