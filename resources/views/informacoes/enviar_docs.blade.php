@@ -14,14 +14,18 @@
             <p>Caso tenha dúvidas, preparamos alguns canais de informação, que devem ser acessados na seguinte ordem:</p>
 
             <p>1- Tutoriais - Antes de iniciar a postagem dos documentos é importante que você leia os documentos e assista aos vídeos de orientação, disponíveis em <a href="http://www.ufape.edu.br/sisu" target="_blank" >www.ufape.edu.br/sisu</a>. Leia os documentos e assista os vídeos quantas vezes quiser, antes de enviar a sua documentação, para evitar erros no processo. Esse é o primeiro passo que você deve realizar antes de buscar informações em outros canais, caso seja necessário.</p>
-
-            <p>2- Demais informações: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a><br>
-                3- E-mail: matriculas.sisu@ufape.edu.br</p>
+            <p>2- Demais informações: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a></p>
+            <p>3- E-mail: <a href="mailto:matriculas.sisu@ufape.edu.br">matriculas.sisu@ufape.edu.br</a></p>
+            <div class="w-full d-flex ">
+                <p class="">4- Conheça nossa Assistente vitual: <a href="https://ufape.edu.br/perguntAI" target="_blank">PerguntAI SiSU-UFAPE</a></p>
+                <a href="https://ufape.edu.br/perguntAI" class="ms-auto pe-5 me-5" target="_blank"><img src="{{ asset('img/mascot-perguntaAI.png') }}" class="" width="100px" alt="Chatbot perguntAI"></a>
+            </div>
 
         </div>
 
         <div class="col-md-2 mt-4">
             <a href="{{route('login')}}" type="button" class="btn botaoEntrar col-md-10" style="width: 100%;">Voltar</a>
+
         </div>
     </div>
 </x-guest-layout>

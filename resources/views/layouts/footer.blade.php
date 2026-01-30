@@ -32,14 +32,14 @@
         <div class="col-md text-center py-1">
             <div class="form-row">
                 <div class="col-md-12">
-                    <h6 style="color: #909090;">E-mail para contato</h6>
+                    <h6 style="color: #909090;">Fomas para contato</h6>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-md-12" style="margin-bottom: 1rem;">
-                    <div class="row justify-content-center">
-                        <a href="mailto:matriculas.sisu@ufape.edu.br" class="col-md-1 p-0"> <img height="30"
-                            src="{{ asset('img/Icon zocial-email.svg') }}"></a>
+                    <div class="d-flex gap-4 justify-content-center align-items-baseline">
+                        <a href="mailto:matriculas.sisu@ufape.edu.br"> <img height="30" src="{{ asset('img/Icon zocial-email.svg') }}"></a>
+                        <a href="https://ufape.edu.br/perguntAI" target="_blank"><img src="{{ asset('img/mascot-perguntaAI.png') }}" class="" width="50px" alt="Chatbot perguntAI"></a></a>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
 
         <div class="col-md text-center pb-4">
             <span class="textoRodape">Redes sociais do LMTS</span>
-            <div class="row justify-content-center text-center">
+            <div class="row justify-content-center text-center gap-2">
                 <a href="https://www.instagram.com/lmts_ufape/" target="_blank" class="col-md-1 p-0"> <img
                         height="30" src="{{ asset('img/Icon awesome-instagram.svg') }}"></a>
                 <a href="https://www.facebook.com/LMTSUFAPE/" target="_blank" class="col-md-1 p-0"> <img height="30"

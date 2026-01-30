@@ -28,6 +28,9 @@
             <div class="col-md-8" style="text-align: center;">
                 O Ingressa é um sistema desenvolvido pela Universidade Federal do Agreste de Pernambuco (UFAPE) que visa auxiliar no processo de ingresso de alunos via SiSU, facilitando o recebimento de documentos para revisão, análise e matrícula do(a) aluno(a) na Universidade. Pense no Ingressa como a continuação do SiSU, o(a) candidato(a) entra com seus dados e envia os documentos para efetivar a matrícula! É rápido, simples e fácil! <br> Confira mais informações sobre a matrícula <a href="http://www.ufape.edu.br/sisu" target="_blank">AQUI</a>
             </div>
+            <div class="text-center">
+                <p>Conheça nossa Assistente vitual: <a href="https://ufape.edu.br/perguntAI" target="_blank">PerguntAI SiSU-UFAPE</a></p>
+            </div>
         </div>
         <div class="py-3 px-4 row ms-0 justify-content-between">
             @if($edicao_atual != null)
