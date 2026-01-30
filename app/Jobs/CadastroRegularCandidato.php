@@ -49,7 +49,9 @@ class CadastroRegularCandidato implements ShouldQueue
         $csvPath = storage_path("app/{$this->chamada->sisu->caminho_import_regular}");
 
         // Lendo o arquivo CSV
-        $csv = Reader::from($csvPath, 'r')->setDelimiter(';')->setHeaderOffset(0);
+        $csv = Reader::from($csvPath, 'r');
+        $csv->setDelimiter(';');
+        $csv->setHeaderOffset(0);
         $records = iterator_to_array($csv->getRecords(), true);
 
 
@@ -169,7 +171,7 @@ class CadastroRegularCandidato implements ShouldQueue
                 'nu_notacorte_concorrida' => isset($record['NU_NOTACORTE_CONCORRIDA']) ? floatval(str_replace(',', '.', $record['NU_NOTACORTE_CONCORRIDA'])) : null,
                 'nu_classificacao' => isset($record['NU_CLASSIFICACAO']) ? intval($record['NU_CLASSIFICACAO']) : null,
                 'ds_matricula' => $record['DS_MATRICULA'],
-                'dt_operacao' => !empty($record['DT_OPERACAO']) ? Carbon::createFromFormat('d/m/Y', $record['DT_OPERACAO'])->format('Y-m-d') : null,
+                'dt_operacao' => !empty($record['DT_OPERACAO']) ? Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_OPERACAO'])->format('Y-m-d H:i:s') : null,
                 'co_ies' => $record['CO_IES'],
                 'no_ies' => $record['NO_IES'],
                 'sg_ies' => $record['SG_IES'],
@@ -188,19 +190,19 @@ class CadastroRegularCandidato implements ShouldQueue
                 'perfil_economico_lei_cotas' => $record['PERFIL_ECONOMICO_LEI_COTAS'],
                 'dt_curso_inscricao' => !empty($record['DT_CURSO_INSCRICAO']) ? Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_CURSO_INSCRICAO'])->format('Y-m-d') : null,
                 'hr_curso_inscricao' => $record['HR_CURSO_INSCRICAO'],
-                'dt_mes_dia_inscricao' => !empty($record['DT_MES_DIA_INSCRICAO']) ? Carbon::createFromFormat('d/m/Y', $record['DT_MES_DIA_INSCRICAO'])->format('Y-m-d') : null,
+                'dt_mes_dia_inscricao' => !empty($record['DT_MES_DIA_INSCRICAO']) ? Carbon::createFromFormat('m/d', $record['DT_MES_DIA_INSCRICAO'])->format('Y-m-d') : null,
                 'nu_nota_curso_l' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_L'])),
                 'nu_nota_curso_ch' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_CH'])),
                 'nu_nota_curso_cn' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_CN'])),
                 'nu_nota_curso_m' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_M'])),
                 'nu_nota_curso_r' => floatval(str_replace(',', '.', $record['NU_NOTA_CURSO_R'])),
                 'st_adesao_acao_afirmativa_curs' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
-                'media_simples_pdm_licenca' => $record['MEDIA_SIMPLES_PDM_LICENC'],
+                'media_simples_pdm_licenca' => floatval(str_replace(',', '.', $record['MEDIA_SIMPLES_PDM_LICENC'])),
                 'st_baixa_renda' => $record['ST_BAIXA_RENDA'],
                 'st_rank_baixa_renda' => $record['ST_RANK_BAIXA_RENDA'],
                 'st_adesao_acao_afirmativa_curso' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
                 'st_aprovado' => $record['ST_APROVADO'],
-                'dt_mes_dia_matricula' => empty(!$record['DT_MES_DIA_MATRICULA']) ? Carbon::createFromFormat('d/m/Y', $record['DT_MES_DIA_MATRICULA'])->format('Y-m-d') : null,
+                'dt_mes_dia_matricula' => empty(!$record['DT_MES_DIA_MATRICULA']) ? Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_MES_DIA_MATRICULA'])->format('Y-m-d H:i:s') : null,
                 'st_matricula_cancelada' => $record['ST_MATRICULA_CANCELADA'],
                 'dt_matricula_cancelada' => empty(!$record['DT_MATRICULA_CANCELADA']) ? Carbon::createFromFormat('d/m/Y', $record['DT_MATRICULA_CANCELADA'])->format('Y-m-d') : null,
                 'vaga_remanejada' => $record['VAGA_REMANEJADA'],

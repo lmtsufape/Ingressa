@@ -47,7 +47,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
         // Lendo o arquivo CSV
         $csv = Reader::from($csvPath, 'r');
-        $csv->setDelimiter(',');
+        $csv->setDelimiter(';');
         $csv->setHeaderOffset(0);
         $records = $csv->getRecords();
 
@@ -185,7 +185,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'nu_notacorte_concorrida' => str_replace(',', '.', $record['NU_NOTACORTE_CONCORRIDA']),
                     'nu_classificacao' => $record['NU_CLASSIFICACAO'],
                     'ds_matricula' => $record['DS_MATRICULA'],
-                    'dt_operacao' => !empty($record['DT_OPERACAO']) ? Carbon::createFromFormat('d/m/Y', $record['DT_OPERACAO'])->format('Y-m-d') : null,
+                    'dt_operacao' => !empty($record['DT_OPERACAO']) ? Carbon::createFromFormat('Y-m-d H:i:s', $record['DT_OPERACAO'])->format('Y-m-d H:i:s') : null,
                     'co_ies' => $record['CO_IES'],
                     'no_ies' => $record['NO_IES'],
                     'sg_ies' => $record['SG_IES'],
@@ -193,7 +193,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'ensino_medio' => $record['ENSINO_MEDIO'],
                     'quilombola' => $record['QUILOMBOLA'],
                     'deficiente' => $record['PcD'],
-                    'media_simples_pdm_licenca' => $record['MEDIA_SIMPLES_PDM_LICENC'],
+                    'media_simples_pdm_licenca' => floatval(str_replace(',', '.', $record['MEDIA_SIMPLES_PDM_LICENC'])),
                     'st_baixa_renda' => $record['ST_BAIXA_RENDA'],
                     'st_rank_baixa_renda' => $record['ST_RANK_BAIXA_RENDA'],
                     'st_adesao_acao_afirmativa_curso' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
