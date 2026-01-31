@@ -756,7 +756,7 @@
                                             <button id="nomeDocumento{{ $indice }}" class="nomeDocumento ps-3"
                                                 style="display:inline-block; text-align: left;"
                                                 for="{{ $documento }}"
-                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Autodeclaração e Declaração de vínculo com comunidade indígena brasileira à qual pertença;</button>
+                                                onclick="carregarDocumento({{ $inscricao->id }}, '{{ $documento }}', {{ $indice }})">Registro Administrativo de Nascimento de Indígena ou Declaração de vínculo com comunidade indígena brasileira à qual pertença;</button>
                                         </div>
                                     @elseif($documento == 'declaracao_quilombola')
                                         <div class="col-md-10" style="cursor:pointer;">
