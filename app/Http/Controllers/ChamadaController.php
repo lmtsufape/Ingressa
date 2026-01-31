@@ -960,7 +960,7 @@ class ChamadaController extends Controller
         $pdf = FacadePdf::loadView('listagem.checagem', ['collect_inscricoes' => $porCurso, 'chamada' => $chamada]);
         $path = 'listagem/' . $listagem->id . '/';
         $nome = 'listagem.pdf';
-        Storage::put('public/' . $path . $nome, $pdf->stream());
+        Storage::disk('public')->put('public/' . $path . $nome, $pdf->stream());
         $listagem->caminho_listagem = $path . $nome;
         $listagem->update();
     }
