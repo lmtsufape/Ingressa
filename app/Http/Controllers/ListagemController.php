@@ -215,7 +215,9 @@ class ListagemController extends Controller
     {
         $path = 'listagem/' . $listagem->id . '/';
         $nome = 'listagem.pdf';
-        Storage::put('public/' . $path . $nome, $arquivo);
+
+        Storage::disk('public')->put($path . $nome, $arquivo, ['visibility' => 'public']);
+
         return $path . $nome;
     }
 

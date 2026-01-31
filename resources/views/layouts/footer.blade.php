@@ -32,7 +32,7 @@
         <div class="col-md text-center py-1">
             <div class="form-row">
                 <div class="col-md-12">
-                    <h6 style="color: #909090;">Fomas para contato</h6>
+                    <h6 style="color: #909090;">Formas para contato</h6>
                 </div>
             </div>
             <div class="form-row">
