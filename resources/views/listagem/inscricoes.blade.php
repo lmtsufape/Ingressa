@@ -27,6 +27,10 @@
             height: 4.5cm;
         }
 
+        header img {
+            position: relative;
+            top: 1cm;
+        }
         .titulo {
             position: relative;
             top: 5px;
