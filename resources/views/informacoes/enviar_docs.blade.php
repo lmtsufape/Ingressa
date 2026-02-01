@@ -17,7 +17,7 @@
             <p>2- Demais informações: <a href="http://www.ufape.edu.br/sisu" target="_blank">www.ufape.edu.br/sisu</a></p>
             <p>3- E-mail: <a href="mailto:matriculas.sisu@ufape.edu.br">matriculas.sisu@ufape.edu.br</a></p>
             <div class="w-full d-flex ">
-                <p class="">4- Conheça nossa Assistente vitual: <a href="https://ufape.edu.br/perguntAI" target="_blank">PerguntAI SiSU-UFAPE</a></p>
+                <p class="">4- Conheça nossa Assistente virtual: <a href="https://ufape.edu.br/perguntAI" target="_blank">PerguntAI SiSU-UFAPE</a></p>
                 <a href="https://ufape.edu.br/perguntAI" class="ms-auto pe-5 me-5" target="_blank"><img src="{{ asset('img/mascot-perguntaAI.png') }}" class="" width="100px" alt="Chatbot perguntAI"></a>
             </div>
 
