@@ -104,17 +104,20 @@
     </div>
     @push('scripts')
         <script>
-            window.addEventListener('swal:fire', event => {
-                Swal.fire({
-                    position: 'bottom-end',
-                    icon: event.detail.icon,
-                    title: event.detail.title,
-                    showConfirmButton: false,
-                    timerProgressBar: true,
-                    timer: 3000,
-                    toast: true,
-                    showCancelButton: false,
-                    showConfirmButton: false
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('swal:fire', (payload) => {
+                    const data = Array.isArray(payload) ? payload[0] : payload;
+
+                    Swal.fire({
+                        icon: data.icon,
+                        title: data.title,
+                        position: 'bottom-end',
+                        timer: 3000,
+                        toast: true,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                    })
                 })
             });
         </script>
