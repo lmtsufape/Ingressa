@@ -146,17 +146,11 @@
                                                 <td class="align-middle text-center">{{ $candidato->cota->cod_novo }}
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <div class="btn-group">
+                                                    <div class="btn-group gap-2">
                                                         @if ($candidato->candidato->user->email != null)
-                                                            <img src="{{ asset('img/g830.svg') }}" alt="..."
-                                                                width="25px" data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                title="Primeiro acesso do candidato realizado">
+                                                            <i class="bi bi-person-fill-check tituloEntrada" style="font-size: 2rem;" title="Primeiro acesso do candidato realizado"></i>
                                                         @else
-                                                            <img src="{{ asset('img/Icon ionic-ios-person.svg') }}"
-                                                                alt="..." width="25px" data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                title="Primeiro acesso do candidato não realizado">
+                                                            <i class="bi bi-person-fill-exclamation text-danger" style="font-size: 2rem;" title="Primeiro acesso do candidato não realizado"></i>
                                                         @endif
                                                         @can('isAdminOrAnalistaGeral', auth()->user())
                                                             @if ($candidato->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'])
@@ -246,8 +240,8 @@
                             <li>
                                 <div title="Primeiro acesso do candidato realizado"
                                     class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
-                                    <img class="aling-middle" width="30" src="{{ asset('img/g830.svg') }}"
-                                        alt="icone-busca">
+                                    <i class="bi bi-person-fill-check tituloEntrada" style="font-size: 2rem;" title="Primeiro acesso do candidato realizado"></i>
+
                                     <div style="font-size: 14px;" class="tituloLista aling-middle mx-3">
                                         Primeiro acesso do candidato realizado
                                     </div>
@@ -256,8 +250,8 @@
                             <li>
                                 <div title="Primeiro acesso do candidato não realizado"
                                     class="d-flex align-items-center listagemLista my-1 pt-1 pb-1">
-                                    <img class="aling-middle" width="30"
-                                        src="{{ asset('img/Icon ionic-ios-person.svg') }}" alt="icone-busca">
+                                    <i class="bi bi-person-fill-exclamation text-danger" style="font-size: 2rem;" title="Primeiro acesso do candidato não realizado"></i>
+
                                     <div style="font-size: 13px;" class="tituloLista aling-middle mx-3">
                                         Primeiro acesso do candidato não realizado
                                     </div>
