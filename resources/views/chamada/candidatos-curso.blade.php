@@ -102,10 +102,7 @@
                                                 </div>
                                             </ul>
                                             @can('isAdmin', \App\Models\User::Class)
-                                                <button id="btn-gerar-zip" type="button"
-                                                    title="Baixar todos os documentos de todos os candidatos"
-                                                    onclick="startZip(this, {{ $curso->id }}, {{ $chamada->id }})">
-
+                                                <a href="{{ route('baixar.documentos.candidatos.curso', ['curso_id' => $curso->id, 'chamada_id' => $chamada->id]) }}" title="Baixar todos os documentos de todos os candidatos">
                                                     <img class="btn-img" width="35" src="{{ asset('img/download4.svg') }}"
                                                         alt="Baixar todos os documentos de todos os candidatos">
 
@@ -117,7 +114,8 @@
                                                         <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor"
                                                             stroke-width="4" fill="none" />
                                                     </svg>
-                                                </button>
+                                                </a>
+
                                             @endcan
                                         </div>
                                     </div>

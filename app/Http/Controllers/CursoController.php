@@ -158,17 +158,17 @@ class CursoController extends Controller
 
     public function downloadDocumentosTodosCandidatos(Request $request)
     {
-        $path = $request->query('path');
 
-        if (! $path || ! Storage::disk('local')->exists($path)) {
-            abort(404);
+        $path = GerarZipTodosDocumentosCandidatosJob::dispatchSync($request->curso_id, $request->chamada_id);
+
+        if (!$path) {
+            return back()->with('error', 'Nenhum documento encontrado para baixar.');
         }
 
-        $nomeArquivo = basename($path) ?: 'documentos.zip';
-
-        $fullPath = Storage::disk('local')->path($path);
-
-        return response()->download($fullPath, $nomeArquivo);
-
+        return response()->download(
+            Storage::disk('local')->path($path),
+            basename($path),
+            ['Content-Type' => 'application/zip']
+        )->deleteFileAfterSend(true);
     }
 }

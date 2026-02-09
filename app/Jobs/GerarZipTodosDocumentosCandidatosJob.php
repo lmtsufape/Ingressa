@@ -14,9 +14,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
-class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
+class GerarZipTodosDocumentosCandidatosJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -26,13 +26,11 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
 
     protected $curso_id;
     protected $chamada_id;
-    protected $user_id;
 
-    public function __construct($curso_id, $chamada_id, $user_id)
+    public function __construct($curso_id, $chamada_id)
     {
         $this->curso_id = $curso_id;
         $this->chamada_id = $chamada_id;
-        $this->user_id = $user_id;
     }
 
     /**
@@ -73,14 +71,15 @@ class GerarZipTodosDocumentosCandidatosJob implements ShouldQueue
         if (!$temArquivo) {
             Storage::disk('local')->delete($filename);
 
-            event(new ZipGeradoEvent(
-                $this->user_id,
-                null
-            ));
+            // event(new ZipGeradoEvent(
+            //     $this->user_id,
+            //     null
+            // ));
 
             return;
         }
 
-        event(new ZipGeradoEvent($this->user_id, $filename));
+        return $filename;
+        // event(new ZipGeradoEvent($this->user_id, $filename));
     }
 }
