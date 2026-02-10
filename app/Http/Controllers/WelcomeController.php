@@ -76,8 +76,8 @@ class WelcomeController extends Controller
         ]);
 
         $user = User::where('role', User::ROLE_ENUM['admin'])->first();
-        $user->email = env('MAIL_CONTATO');
-
+        $user->email = config('mail.contato');
+        
         Notification::send($user, new ContatoNotification($request, $request->assunto));
 
         return redirect()->back()->with(['success' => 'Obrigado por entrar em contato, sua mensagem foi enviada com sucesso!']);

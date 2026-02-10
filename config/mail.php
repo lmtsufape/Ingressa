@@ -114,5 +114,6 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+    'contato' => env('MAIL_CONTATO'),
 
 ];
