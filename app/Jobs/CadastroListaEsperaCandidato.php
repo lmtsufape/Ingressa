@@ -25,6 +25,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $chamada;
+    public $timeout = 900;
+    public $tries = 1;
 
     /**
      * Create a new job instance.
@@ -73,7 +75,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
 
             // Cria um novo candidato e usuário caso ele não exista
             if (!$candidato) {
-                if (!in_array($record['NO_INSCRITO'], array_column($candidatosData, 'no_inscrito'))) {
+                if (!in_array($record['NU_CPF_INSCRITO'], array_column($candidatosData, 'nu_cpf_inscrito'))) {
 
                 // Adiciona o usuário no array para inserção
                 $usersData[] = [
@@ -196,7 +198,6 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                     'media_simples_pdm_licenca' => floatval(str_replace(',', '.', $record['MEDIA_SIMPLES_PDM_LICENC'])),
                     'st_baixa_renda' => $record['ST_BAIXA_RENDA'],
                     'st_rank_baixa_renda' => $record['ST_RANK_BAIXA_RENDA'],
-                    'st_adesao_acao_afirmativa_curso' => $record['ST_ADESAO_ACAO_AFIRMATIVA_CURS'],
                     'st_rank_ensino_medio' => $record['ST_RANK_ENSINO_MEDIO'],
                     'st_rank_raca' => $record['ST_RANK_RACA'],
                     'st_rank_quilombola' => $record['ST_RANK_QUILOMBOLA'],
