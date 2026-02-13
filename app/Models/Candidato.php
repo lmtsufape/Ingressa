@@ -17,6 +17,7 @@ class Candidato extends Model
         'AMARELA' => 4,
         'INDIGENA' => 5,
         'Não informar' => 6,
+        'NÃO INFORMAR' => 6,
     ];
 
     public const NECESSIDADES = [
