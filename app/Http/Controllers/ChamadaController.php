@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
+use League\Csv\Reader;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ChamadaController extends Controller
@@ -746,12 +747,10 @@ class ChamadaController extends Controller
 
     private function gerarListagemConfirmacao($chamada)
     {
-        ini_set('auto_detect_line_endings', true);
-
         $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera);
 
         // Lendo o arquivo CSV
-        $csv = \League\Csv\Reader::createFromPath($csvPath, 'r');
+        $csv = Reader::from($csvPath, 'r');
         $csv->setDelimiter(';');
         $csv->setHeaderOffset(0);
         $records = $csv->getRecords();
@@ -960,7 +959,7 @@ class ChamadaController extends Controller
         $pdf = FacadePdf::loadView('listagem.checagem', ['collect_inscricoes' => $porCurso, 'chamada' => $chamada]);
         $path = 'listagem/' . $listagem->id . '/';
         $nome = 'listagem.pdf';
-        Storage::disk('public')->put('public/' . $path . $nome, $pdf->stream());
+        Storage::disk('public')->put( $path . $nome, $pdf->stream());
         $listagem->caminho_listagem = $path . $nome;
         $listagem->update();
     }
