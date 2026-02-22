@@ -11,7 +11,6 @@ use App\Models\MultiplicadorVaga;
 use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -235,6 +234,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
             'LB_PPI' => 9
         ];
 
+        $keysModalidades = collect(array_keys($ordemModalidades));
+
         // Agrupa inscrições por curso, turno e modalidade de concorrência juntando ampla concorrência com bônus e sem bônus em uma única modalidade.
         // Após isso, ordena as modalidades de acordo com $ordemModalidades e os inscritos por nota decrescente
         $inscricoesOrdenadas = collect($inscricoesData)
@@ -242,21 +243,21 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                 'co_ies_curso',
                 'ds_turno',
                 function ($item) {
-                    // Junta a ampla concorrência com bônus e sem bônus em uma única modalidade e agrupa usando o código da cota
                     return Cota::getCotaModalidade($item['no_modalidade_concorrencia'])->cod_novo;
                 }
-            ])->map(function ($cursos) use ($ordemModalidades) {
-                // Ordenar modalidades de acordo com $ordemModalidades
-                return $cursos->map(function ($turnos) use ($ordemModalidades) {
-                    $ordenadoPorModalidade = $turnos->sortKeysUsing(function ($key1, $key2) use ($ordemModalidades) {
-                        $ordem1 = $ordemModalidades[$key1] ?? PHP_INT_MAX;
-                        $ordem2 = $ordemModalidades[$key2] ?? PHP_INT_MAX;
-                        return $ordem1 <=> $ordem2;
+            ])
+            ->map(function ($cursos) use ($ordemModalidades, $keysModalidades) {
+                return $cursos->map(function ($turnos) use ($ordemModalidades, $keysModalidades) {
+
+                    $turnos = collect($turnos);
+
+                    // cria todas as modalidades (mesmo vazias), preservando a ordem do $ordemModalidades
+                    $comTodasModalidades = $keysModalidades->mapWithKeys(function ($codCota) use ($turnos) {
+                        return [$codCota => collect($turnos->get($codCota, []))];
                     });
 
-                    // Ordenar inscritos dentro de cada modalidade por nota decrescente
-                    return $ordenadoPorModalidade->map(function ($inscritos) {
-                        return collect($inscritos)->sortByDesc('nu_nota_candidato')->values();
+                    return $comTodasModalidades->map(function ($inscritos) {
+                        return $inscritos->sortByDesc('nu_nota_candidato')->values();
                     });
                 });
             });
@@ -264,7 +265,6 @@ class CadastroListaEsperaCandidato implements ShouldQueue
         // Arrays para armazenar os candidatos convocados e reservas
         $candidatosConvocados = [];
         $candidatosReservas = [];
-
 
         // Os candidatos estão agrupados por curso, turno e modalidade de concorrência. O primeiro foreach itera pelos curso, o segundo pelo turno e o terceiro pela modalidade e o quarto pelos candidatos.
         foreach ($inscricoesOrdenadas as $codCurso => $curso) {
@@ -330,13 +330,13 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                         foreach ($remanejamentos as $remanejamento) {
                             $preenchido = false;
 
-                            foreach ($turno->get($remanejamento->proximaCota->cod_novo) ?? [] as $candidato) {
+                            foreach ($turno->get($remanejamento->proximaCota->cod_novo) ?? [] as $candidatos) {
                                 if ($vagasModalidade[$codCota]['reais'] > 0) {
                                     $convocado = false;
 
                                     // Verifica se o candidato já foi convocado
                                     foreach ($candidatosConvocados as $candidatoConvocado) {
-                                        if ($candidato['ds_email'] === $candidatoConvocado['ds_email']) {
+                                        if ($candidatos['ds_email'] === $candidatoConvocado['ds_email']) {
                                             $convocado = true;
                                             break;
                                         }
@@ -345,8 +345,8 @@ class CadastroListaEsperaCandidato implements ShouldQueue
                                     if ($convocado) {
                                         continue;
                                     } else { // Remaneja o candidato
-                                        $candidato['cota_vaga_ocupada_id'] = $cota->id;
-                                        $candidatosConvocados[] = $candidato;
+                                        $candidatos['cota_vaga_ocupada_id'] = $cota->id;
+                                        $candidatosConvocados[] = $candidatos;
                                         $vagasModalidade[$codCota]['reais']--;
                                     }
                                 } else {
