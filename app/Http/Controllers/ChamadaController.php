@@ -6,24 +6,17 @@ use App\Exports\SisuGestaoExport;
 use App\Http\Requests\ChamadaRequest;
 use App\Jobs\CadastroListaEsperaCandidato;
 use App\Jobs\CadastroRegularCandidato;
-use App\Models\Candidato;
 use App\Models\Chamada;
 use App\Models\Cota;
 use App\Models\Curso;
 use App\Models\DataChamada;
 use App\Models\Inscricao;
 use App\Models\Listagem;
-use App\Models\MultiplicadorVaga;
 use App\Models\Sisu;
 use App\Models\User;
 use App\Policies\UserPolicy;
-use Barryvdh\DomPDF\Facade as PDF;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Hash;
-use League\Csv\Reader;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ChamadaController extends Controller
@@ -154,11 +147,6 @@ class ChamadaController extends Controller
             return redirect()->back()->with(['error' => 'Não foi possível deletar esta chamada, há listagens criadas para ela.']);
         }
         $sisu = Sisu::find($chamada->sisu_id);
-        $multiplicadores = MultiplicadorVaga::where('chamada_id', $chamada->id)->get();
-        foreach ($multiplicadores as $multiplicador) {
-            $multiplicador->delete();
-        }
-
         $chamada->delete();
 
         return redirect(route('sisus.show', ['sisu' => $sisu->id]))->with(['success' => 'Chamada deletada com sucesso!']);
@@ -175,46 +163,18 @@ class ChamadaController extends Controller
             ])->name('Importar Chamada Regular ' . $chamada->id)->dispatch();
             $chamada->job_batch_id = $batch->id;
         } else {
-            if ($chamada->confirmacao) {
-                $sisu = $chamada->sisu;
-                if ($sisu->caminho_import_espera == null) {
-                    return redirect()->back()->withErrors(['error_espera' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
-                }
-
-                $this->salvarMultiplicadores($chamada, $request);
-                $this->gerarListagemConfirmacao($chamada);
-                $chamada->confirmacao = false;
-                $chamada->update();
-                return redirect(route('chamadas.show', $chamada))->with(['success_listagem' =>  'Listagem criada com sucesso!']);
-            } else {
-                $batch = Bus::batch([
-                    new CadastroListaEsperaCandidato($chamada),
-                ])->name('Importar Chamada Lista Espera ' . $chamada->id)->dispatch();
-                $chamada->job_batch_id = $batch->id;
+            if ($chamada->sisu->caminho_import_espera == null) {
+                return redirect()->back()->withErrors(['error' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
             }
+
+            $batch = Bus::batch([
+                new CadastroListaEsperaCandidato($chamada),
+            ])->name('Importar Chamada Lista Espera ' . $chamada->id)->dispatch();
+            $chamada->job_batch_id = $batch->id;
+
         }
         $chamada->update();
         return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Cadastro feito!']);
-    }
-
-    private function salvarMultiplicadores($chamada, $request)
-    {
-        $data = $request->all();
-        $cursos = Curso::orderBy('nome')->get();
-
-        foreach ($cursos as $curso) {
-            $multiplicadores = $data['multiplicadores_curso_' . $curso->id];
-            $cotas = $data['cotas_id_' . $curso->id];
-
-            foreach ($multiplicadores as $i => $multiplicador) {
-                $cota_curso = $curso->cotas()->where('cota_id', $cotas[$i])->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-                $multi = new MultiplicadorVaga();
-                $multi->chamada_id = $chamada->id;
-                $multi->cota_curso_id = $cota_curso->id;
-                $multi->multiplicador = $multiplicador;
-                $multi->save();
-            }
-        }
     }
 
     public function candidatosChamada($sisu_id, $chamada_id)
@@ -743,283 +703,6 @@ class ChamadaController extends Controller
             $cota_curso->update();
         }
         return redirect()->back()->with(['success' => 'Candidatos efetivados com sucesso.']);
-    }
-
-    private function gerarListagemConfirmacao($chamada)
-    {
-        $csvPath = storage_path('app' . DIRECTORY_SEPARATOR . $chamada->sisu->caminho_import_espera);
-
-        // Lendo o arquivo CSV
-        $csv = Reader::from($csvPath, 'r');
-        $csv->setDelimiter(';');
-        $csv->setHeaderOffset(0);
-        $records = $csv->getRecords();
-
-        $candidatos = collect();
-        $chamados = collect();
-        $candidatosCPF = collect();
-
-        foreach ($records as $record) {
-            $inscricao = array(
-                'co_ies_curso' => strval($record['CO_IES_CURSO']),
-                'ds_turno' => strval($record['DS_TURNO']),
-                'no_inscrito' => strval($record['NO_INSCRITO']),
-                'nu_cpf_inscrito' => strval($record['NU_CPF_INSCRITO']),
-                'no_modalidade_concorrencia' => strval($record['NO_MODALIDADE_CONCORRENCIA']),
-                'st_bonus_perc' => strval($record['ST_BONUS_PERC']),
-                'nu_nota_candidato' => floatval(str_replace(',', '.', $record['NU_NOTA_CANDIDATO'])),
-                'nu_classificacao' => intval($record['NU_CLASSIFICACAO']),
-            );
-            $candidatos->push($inscricao);
-        }
-        $grouped = $candidatos->groupBy(function ($candidato) {
-            return $candidato['co_ies_curso'] . $candidato['ds_turno'];
-        });
-        $porCurso = collect();
-        foreach ($grouped as $i => $curso) {
-            $porCurso->push($curso->groupBy('no_modalidade_concorrencia'));
-        }
-
-        $cursos = collect();
-        $cotasCursosCOD = collect();
-
-        foreach ($porCurso as $i => $curso) {
-            $modalidade = collect();
-            $ampla = collect();
-            $modalidades = collect();
-
-            $cotaCOD = collect();
-            $cotaAmpla = false;
-            foreach ($curso as $porModalidade) {
-                if (
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                    $porModalidade[0]['no_modalidade_concorrencia'] == 'AMPLA CONCORRÊNCIA' || $porModalidade[0]['no_modalidade_concorrencia'] == 'Ampla concorrência'
-                ) {
-                    $ampla = $ampla->concat($porModalidade);
-                    if (!$cotaAmpla) {
-                        $cotaAmpla = true;
-                    }
-                } else {
-                    $modalidade = $porModalidade;
-                    if (!$cotaCOD->contains($modalidade[0]['no_modalidade_concorrencia'])) {
-                        $cotaCOD->push($modalidade[0]['no_modalidade_concorrencia']);
-                    }
-                    $modalidade = $modalidade->sortBy(function ($candidato) {
-                        return $candidato['nu_classificacao'];
-                    });
-                    $modalidades->push($modalidade);
-                }
-            }
-            $ampla = $ampla->sortBy(function ($candidato) {
-                return $candidato['nu_classificacao'];
-            });
-            $modalidades->push($ampla);
-            $cursos->push($modalidades);
-            if ($cotaAmpla) {
-                $cotaCOD->push(Cota::COD_COTA_ENUM['A0']);
-            }
-            $cotasCursosCOD->push($cotaCOD);
-        }
-
-        foreach ($cursos as $indexCurso => $curso) {
-            $candidato = $curso[0][0];
-            if ($candidato['ds_turno'] == 'Matutino') {
-                $turno =  Curso::TURNO_ENUM['Matutino'];
-            } elseif ($candidato['ds_turno'] == 'Vespertino') {
-                $turno = Curso::TURNO_ENUM['Vespertino'];
-            } elseif ($candidato['ds_turno'] == 'Noturno') {
-                $turno = Curso::TURNO_ENUM['Noturno'];
-            } elseif ($candidato['ds_turno'] == 'Integral') {
-                $turno = Curso::TURNO_ENUM['Integral'];
-            }
-
-            $curs = Curso::where([['cod_curso', $candidato['co_ies_curso']], ['turno', $turno]])->first();
-
-            /*Para a nova regra de chamadas da lista de espera, e necessario preencher o restante de vagas da ampla concorrencia
-            com os candidatos com as maiores notas  daquele curso*/
-
-            $candidatosCurso = collect();
-            foreach ($cursos[$indexCurso] as $modalidadeAtual) {
-                $candidatosCurso = $candidatosCurso->concat($modalidadeAtual->all());
-            }
-
-            $candidatosCurso = $candidatosCurso->sortByDesc(function ($candidato) {
-                return $candidato['nu_nota_candidato'];
-            });
-
-            $A0 = Cota::where('cod_cota', 'A0')->first();
-            $cota_cursoA0 = $curs->cotas()->where('cota_id', $A0->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-            $vagasCotaA0 = $cota_cursoA0->quantidade_vagas - $cota_cursoA0->vagas_ocupadas;
-
-            //chamamos o número de vagas disponíveis vezes o valor do multiplicador passado
-            $multiplicador = MultiplicadorVaga::where('cota_curso_id', $cota_cursoA0->id)->first();
-            if ($multiplicador != null) {
-                $vagasCotaA0 *= $multiplicador->multiplicador;
-            }
-
-            //$candidatosCurso = $candidatosCurso->slice(0, $vagasCotaA0);
-
-            $retorno = $this->fazerCadastro($A0, null, $curs, $candidatosCurso, $vagasCotaA0, $chamados, $chamada, $candidatosCPF);
-            $chamados = $retorno[1];
-            $candidatosCPF = $retorno[2];
-
-            $vagasCotaCollection = collect();
-            $vagasCotaCollection->push(0);
-
-            foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $cota) {
-                if ($cota->cod_cota != $A0->cod_cota) {
-                    $cota_curso = $curs->cotas()->where('cota_id', $cota->id)->where('sisu_id', $chamada->sisu->id)->first()->pivot;
-                    $vagasCota = $cota_curso->quantidade_vagas - $cota_curso->vagas_ocupadas;
-                    $multiplicador = MultiplicadorVaga::where([['cota_curso_id', $cota_curso->id], ['chamada_id', $chamada->id]])->first();
-                    if (!is_null($multiplicador)) {
-                        $vagasCota *= $multiplicador->multiplicador;
-                    }
-
-                    $cursoAtual = $cotasCursosCOD[$indexCurso];
-                    $modalidadeDaCotaIndex = null;
-
-                    foreach ($cursoAtual as $index => $modalidadeCursoAtual) {
-                        if ($modalidadeCursoAtual == $cota->descricao) {
-                            $modalidadeDaCotaIndex = $index;
-                            break;
-                        }
-                    }
-                    if (!is_null($modalidadeDaCotaIndex)) {
-                        $retorno = $this->fazerCadastro($cota, $cota, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada, $candidatosCPF);
-                        $vagasCota = $retorno[0];
-                        $chamados = $retorno[1];
-                        $candidatosCPF = $retorno[2];
-                    }
-                    $vagasCotaCollection->push($vagasCota);
-                }
-            }
-            foreach ($curs->cotas()->where('sisu_id', $chamada->sisu->id)->get() as $indice => $cota) {
-                if ($cota->cod_cota != $A0->cod_cota) {
-                    if ($vagasCotaCollection->has($indice)) {
-                        $vagasCota = $vagasCotaCollection[$indice];
-                        if ($vagasCota > 0) {
-                            foreach ($cota->remanejamentos as $remanejamento) {
-                                $cotaRemanejamento = $remanejamento->proximaCota;
-                                $cursoAtual = $cotasCursosCOD[$indexCurso];
-
-                                $modalidadeDaCotaIndex = null;
-
-                                foreach ($cursoAtual as $indexRemanejamento => $modalidadeCursoAtualRemanejamento) {
-                                    if ($modalidadeCursoAtualRemanejamento == $cotaRemanejamento->descricao) {
-                                        $modalidadeDaCotaIndex = $indexRemanejamento;
-                                        break;
-                                    }
-                                }
-                                if (!is_null($modalidadeDaCotaIndex)) {
-                                    $retorno = $this->fazerCadastro($cota, $cotaRemanejamento, $curs, $cursos[$indexCurso][$modalidadeDaCotaIndex], $vagasCota, $chamados, $chamada, $candidatosCPF);
-                                    $vagasCota = $retorno[0];
-                                    $chamados = $retorno[1];
-                                    $candidatosCPF = $retorno[2];
-                                }
-                                if ($vagasCota == 0) {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        $porCurso = collect();
-        $grouped = $chamados->groupBy('curso_id');
-
-        foreach ($grouped as $i => $curso) {
-            $porCurso->push($curso->groupBy('cota_id'));
-        }
-        foreach ($porCurso as $i => $curso) {
-            foreach ($curso as $j => $modalidade) {
-                $modalidade = $modalidade->sortByDesc(function ($candidato) {
-                    return $candidato['nu_nota_candidato'];
-                });
-                $porCurso[$i][$j] = $modalidade;
-            }
-            $curso = $curso->sortBy(function ($modalidade) {
-                return $modalidade->first()['cota_id'];
-            });
-            $porCurso[$i] = $curso;
-        }
-
-        $porCurso = $porCurso->sortBy(function ($curso) {
-            return $curso->first()->first()['curso_id'];
-        });
-
-        $listagem = new Listagem();
-        $listagem->caminho_listagem = 'caminho';
-        $listagem->titulo = 'Lista de convocação para checagem - ' . $chamada->nome;
-        $listagem->tipo = Listagem::TIPO_ENUM['convocacao'];
-        $listagem->chamada_id = $chamada->id;
-        $listagem->save();
-
-        $pdf = FacadePdf::loadView('listagem.checagem', ['collect_inscricoes' => $porCurso, 'chamada' => $chamada]);
-        $path = 'listagem/' . $listagem->id . '/';
-        $nome = 'listagem.pdf';
-        Storage::disk('public')->put( $path . $nome, $pdf->stream());
-        $listagem->caminho_listagem = $path . $nome;
-        $listagem->update();
-    }
-
-    private function fazerCadastro($cota, $cotaRemanejamento, $curs, $porModalidade, $vagasCota, $chamados, $chamada, $candidatosCPF)
-    {
-        $ehNull = $cotaRemanejamento;
-        foreach ($porModalidade as $inscrito) {
-            if ($vagasCota > 0) {
-                if ($ehNull == null) {
-                    $cotaRemanejamento = Cota::getCotaModalidade($inscrito['no_modalidade_concorrencia']);
-                }
-                $inscricao = array(
-                    'co_ies_curso' => $inscrito['co_ies_curso'],
-                    'ds_turno' => $inscrito['ds_turno'],
-                    'no_modalidade_concorrencia' => $inscrito['no_modalidade_concorrencia'],
-                    'st_bonus_perc' => $inscrito['st_bonus_perc'],
-                    'nu_nota_candidato' => floatval($inscrito['nu_nota_candidato']),
-                    'nu_classificacao' => intval($inscrito['nu_classificacao']),
-                    'no_inscrito' => $inscrito['no_inscrito'],
-                    'nu_cpf_inscrito' => $inscrito['nu_cpf_inscrito'],
-                    'cota_id' => $cotaRemanejamento->id,
-                    'cota_classificacao' => $cota->id,
-                    'curso_id' => $curs->id,
-                );
-
-                $candidatoExistente = Candidato::where('nu_cpf_inscrito', $inscrito['nu_cpf_inscrito'])->first();
-                if ($candidatoExistente == null) {
-                    if (!$candidatosCPF->contains($inscrito['nu_cpf_inscrito'])) {
-                        $candidatosCPF->push($inscrito['nu_cpf_inscrito']);
-                        $chamados->push($inscricao);
-                    } else {
-                        $vagasCota += 1;
-                    }
-                } else {
-                    $chamado = False;
-                    foreach ($candidatoExistente->inscricoes as $inscricaoCandidato) {
-                        if ($inscricaoCandidato->chamada->sisu->id == $chamada->sisu->id) {
-                            $chamado = True;
-                            break;
-                        }
-                    }
-                    if (!$chamado) {
-                        if (!$candidatosCPF->contains($inscrito['nu_cpf_inscrito'])) {
-                            $candidatosCPF->push($inscrito['nu_cpf_inscrito']);
-                            $chamados->push($inscricao);
-                        } else {
-                            $vagasCota += 1;
-                        }
-                    } else {
-                        $vagasCota += 1;
-                    }
-                }
-                $vagasCota -= 1;
-            } else {
-                break;
-            }
-        }
-
-        return [$vagasCota, $chamados, $candidatosCPF];
     }
 
     public function exportarCSVSisuGestao(Request $request)
