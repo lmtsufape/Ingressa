@@ -379,9 +379,6 @@
                                                                 <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
                                                                     Número de validados
                                                                 </div>
-                                                                <div class="col-md-4"style="color: #6c6c6c; font-size: 13px;">
-                                                                    Multiplicador
-                                                                </div>
                                                             </div>
                                                             <div class="row align-items-center">
                                                                 <div class="col-md-4">
@@ -390,15 +387,7 @@
                                                                 <div class="col-md-4">
                                                                     <input type="number" id="candidatos-efetivados-{{$curso->id}}-{{$cota->id}}" class="form-control" value="{{$cota->pivot->vagas_ocupadas}}" disabled>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <input type="number" name="multiplicadores_curso_{{$curso->id}}[]" id="multiplicadores-curso-{{$curso->id}}-{{$cota->id}}" class="form-control @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id) is-invalid @enderror" value="{{old('multiplicadores-curso-'.$curso->id.'-'.$cota->id)!=null ? old('multiplicadores-curso-'.$curso->id.'-'.$cota->id) : 3}}">
-                                                                    <input type="hidden" name="cotas_id_{{$curso->id}}[]" id="cota-id-{{$curso->id}}-{{$cota->id}}" value="{{$cota->id}}">
-                                                                    @error('multiplicadores-curso-'.$curso->id.'-'.$cota->id)
-                                                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                                                            {{ $message }}
-                                                                        </div>
-                                                                    @enderror
-                                                                </div>
+                                                              
                                                             </div>
                                                         </div>
                                                     @endif
