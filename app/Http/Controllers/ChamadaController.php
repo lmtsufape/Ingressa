@@ -163,22 +163,15 @@ class ChamadaController extends Controller
             ])->name('Importar Chamada Regular ' . $chamada->id)->dispatch();
             $chamada->job_batch_id = $batch->id;
         } else {
-            if ($chamada->confirmacao) {
-                $sisu = $chamada->sisu;
-                if ($sisu->caminho_import_espera == null) {
-                    return redirect()->back()->withErrors(['error_espera' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
-                }
-
-                //$this->gerarListagemConfirmacao($chamada);Utilizar useCase para criar a lista confirmação/convocação
-                $chamada->confirmacao = false;
-                $chamada->update();
-                return redirect(route('chamadas.show', $chamada))->with(['success_listagem' =>  'Listagem criada com sucesso!']);
-            } else {
-                $batch = Bus::batch([
-                    new CadastroListaEsperaCandidato($chamada),
-                ])->name('Importar Chamada Lista Espera ' . $chamada->id)->dispatch();
-                $chamada->job_batch_id = $batch->id;
+            if ($chamada->sisu->caminho_import_espera == null) {
+                return redirect()->back()->withErrors(['error' => 'Arquivo de espera ausente, envie a lista de espera e tente novamente.'])->withInput($request->all());
             }
+
+            $batch = Bus::batch([
+                new CadastroListaEsperaCandidato($chamada),
+            ])->name('Importar Chamada Lista Espera ' . $chamada->id)->dispatch();
+            $chamada->job_batch_id = $batch->id;
+
         }
         $chamada->update();
         return redirect(route('sisus.show', ['sisu' => $chamada->sisu->id]))->with(['success' => 'Cadastro feito!']);
