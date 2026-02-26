@@ -175,7 +175,6 @@ class InscricaoController extends Controller
         // Preto e pardo
         if (
             $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
-            && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
         ) {
             $documentos->push('heteroidentificacao');
             $documentos->push('fotografia');
@@ -249,7 +248,6 @@ class InscricaoController extends Controller
             // if (!$userPolicy->ehAnalistaGeral(auth()->user())) {  # Removendo heteroidentificação do analista geral
             if (
                 $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
-                && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
             ) {
                 $documentos->push('heteroidentificacao');
                 $documentos->push('fotografia');
@@ -292,7 +290,6 @@ class InscricaoController extends Controller
             if ($userPolicy->ehAnalistaHeteroidentificacao(auth()->user())) {
                 if (
                     $inscricao->cota()->whereIn('cod_novo', ['LB_PPI', 'LI_PPI'])->exists()
-                    && in_array($inscricao->candidato->etnia_e_cor, [Candidato::ETNIA_E_COR['PARDA'], Candidato::ETNIA_E_COR['PRETA']])
                 ) {
                     $documentos->push('heteroidentificacao');
                     $documentos->push('fotografia');
