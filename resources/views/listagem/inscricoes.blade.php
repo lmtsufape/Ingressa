@@ -124,95 +124,90 @@
         <img src="{{ public_path('img/cabeçalhoSISU5.fw.png') }}" width="100%" alt="">
         <span class="titulo">
             LISTA DE CONVOCADOS<br><span
-                style="font-weight: normal; text-transform:uppercase;">{{ $chamada->nome }}</span><br>
+                style="font-weight: normal; text-transform:uppercase;">{{ $chamada_nome }}</span><br>
         </span>
     </header>
     <div>
-        @foreach ($collect_inscricoes as $i => $collect)
-            @if ($collect->count() > 0)
-                @foreach ($collect as $j => $inscricoes)
-                    @php
-                        $inscricao = App\Models\Inscricao::find($inscricoes->first()['id']);
-                    @endphp
-                    <div class="subtitulo"
-                        style="margin-top: 12px;;border: 3px solid #ffffff;width: 60%;height: 10px;background-color:#ffffff;">
-                    </div>
-                    <h3 class="subtitulo">Curso: {{ $inscricao->curso->nome }} - @switch($inscricao->curso->turno)
-                            @case(App\Models\Curso::TURNO_ENUM['Matutino'])
-                                Matutino
-                            @break
+        @foreach ($collect_inscricoes as $i => $inscricoes_por_curso)
+            @foreach ($inscricoes_por_curso as $j => $inscricoes_por_cota)
+                <div class="subtitulo"
+                    style="margin-top: 12px;;border: 3px solid #ffffff;width: 60%;height: 10px;background-color:#ffffff;">
+                </div>
+                <h3 class="subtitulo">Curso: {{ $inscricoes_por_cota->first()->curso->nome }} - @switch($inscricoes_por_cota->first()->curso->turno)
+                        @case(App\Models\Curso::TURNO_ENUM['Matutino'])
+                            Matutino
+                        @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
-                                Vespertino
-                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['Vespertino'])
+                            Vespertino
+                        @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['Noturno'])
-                                Noturno
-                            @break
+                        @case(App\Models\Curso::TURNO_ENUM['Noturno'])
+                            Noturno
+                        @break
 
-                            @case(App\Models\Curso::TURNO_ENUM['Integral'])
-                                Integral
-                            @break
-                        @endswitch
-                    </h3>
-                    <div class="body">
-                        <div id="modalidade" @if ($inscricoes->count() <= 40) @endif>
-                            <h4 class="acao_afirmativa">
-                                @if (
-                                    $inscricao->no_modalidade_concorrencia ==
-                                        'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
-                                        $inscricao->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' ||
-                                        $inscricao->no_modalidade_concorrencia == 'Ampla concorrência')
-                                    Ampla concorrência / Ação afirmativa
-                                @else
-                                    Ação afirmativa: {{ $inscricao->cota->cod_novo }} -
-                                    {{ $inscricao->no_modalidade_concorrencia }}
-                                @endif
-                            </h4>
-                            <table>
-                                <thead>
-                                    <tr class="esquerda">
-                                        <th>Seq.</th>
-                                        <th>CPF</th>
-                                        <th>Nome</th>
-                                        <th>Nota</th>
-                                        <th>AF</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($inscricoes as $k => $inscricao)
-                                        @php
-                                            $inscricao = App\Models\Inscricao::find($inscricao['id']);
-                                        @endphp
-                                        <tr
-                                            class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
-                                            <th>{{ $k + 1 }}</th>
-                                            <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
-                                            <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito}}</th>
-                                            <th>{{ $inscricao->nu_nota_candidato }}</th>
-                                            @if (
-                                                $inscricao->no_modalidade_concorrencia ==
-                                                    'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.')
+                        @case(App\Models\Curso::TURNO_ENUM['Integral'])
+                            Integral
+                        @break
+                    @endswitch
+
+                </h3>
+                <div class="body">
+                    <div id="modalidade" @if ($inscricoes_por_cota->count() <= 40) @endif>
+                        <h4 class="acao_afirmativa">
+                            @if (
+                                $inscricoes_por_cota->first()->no_modalidade_concorrencia ==
+                                    'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
+                                    $inscricoes_por_cota->first()->no_modalidade_concorrencia == 'AMPLA CONCORRÊNCIA' ||
+                                    $inscricoes_por_cota->first()->no_modalidade_concorrencia == 'Ampla concorrência')
+                                Ampla concorrência / Ação afirmativa
+                            @else
+                                Ação afirmativa: {{ $inscricoes_por_cota->first()->cota->cod_novo }} -
+                                {{ $inscricoes_por_cota->first()->no_modalidade_concorrencia }}
+                            @endif
+                        </h4>
+
+                        <table>
+                            <thead>
+                                <tr class="esquerda">
+                                    <th>Seq.</th>
+                                    <th>CPF</th>
+                                    <th>Nome</th>
+                                    <th>Nota</th>
+                                    <th>AF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($inscricoes_por_cota as $k => $inscricao)
+                                    <tr
+                                        class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
+                                        <th>{{ $k + 1 }}</th>
+                                        <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
+                                        <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito}}</th>
+                                        <th>{{ $inscricao->nu_nota_candidato }}</th>
+                                        @if (
+                                            $inscricao->no_modalidade_concorrencia ==
+                                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.')
+                                            <th>SIM</th>
+                                        @else
+                                            @if ($inscricao->st_bonus_perc == 'SIM')
                                                 <th>SIM</th>
                                             @else
-                                                @if ($inscricao->st_bonus_perc == 'SIM')
-                                                    <th>SIM</th>
-                                                @else
-                                                    <th></th>
-                                                @endif
+                                                <th></th>
                                             @endif
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                @endforeach
-                @unless ($collect === $collect_inscricoes->last())
-                    <br>
-                    <div class="quebrar_pagina"></div>
-                @endunless
-            @endif
+                </div>
+            @endforeach
+            @unless ($inscricoes_por_curso === $collect_inscricoes->last())
+                <br>
+                <div class="quebrar_pagina"></div>
+            @endunless
+
         @endforeach
     </div>
 </body>
