@@ -471,7 +471,7 @@ class ListagemController extends Controller
                         $value->candidato->nu_cpf_inscrito,
                         $value->nu_rg,
                         $this->removeAcentos($value->candidato->no_inscrito),
-                        $this->getCodProgramaForm($value->curso),
+                        $value->curso->cod_siga,
                         $this->getPeriodo($value->curso),
                         $value->sisu->edicao,
                         $this->getTurno($value->curso),
@@ -547,7 +547,7 @@ class ListagemController extends Controller
                     $value->candidato->nu_cpf_inscrito,
                     $value->nu_rg,
                     $this->removeAcentos($value->candidato->no_inscrito),
-                    $this->getCodProgramaForm($value->curso),
+                    $value->curso->cod_siga,
                     $value->semestre_entrada,
                     $value->sisu->edicao,
                     $this->getTurno($value->curso),
@@ -888,21 +888,6 @@ class ListagemController extends Controller
             return $nacionalidade;
         }
         return "BRA";
-    }
-
-    private function getCodProgramaForm($curso)
-    {
-        $codigos = [
-            91555  => 44,
-            118468 => 95,
-            118466 => 93,
-            118470 => 94,
-            91969  => 47,
-            91561  => 45,
-            91738  => 46,
-            1682932 => 00 // VALOR DE TESTE, DEVE SER ALTERADO QUANDO O CÓDIGO REAL FOR FORNECIDO!
-        ];
-        return $codigos[$curso->cod_curso];
     }
 
     private function getTurno($curso)

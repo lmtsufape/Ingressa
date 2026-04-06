@@ -15,7 +15,7 @@ class AprovadosExport implements FromCollection, WithCustomCsvSettings, WithHead
             'CPF',
             'RG',
             'NOMEPESSOA',
-            'CODPROGRAMAFORM',
+            'CODSIGA',
             'SEMESTREADMISSAO',
             'ANOADMISSAO',
             'TURNO',

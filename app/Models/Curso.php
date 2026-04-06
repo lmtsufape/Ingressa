@@ -32,7 +32,8 @@ class Curso extends Model
         'cor_padrao',
         'icone',
         'grau_academico',
-        'semestre'
+        'semestre',
+        'cod_siga'
     ];
 
     public function cotas()
@@ -65,6 +66,7 @@ class Curso extends Model
         $this->nome = $request->nome;
         $this->turno = $request->turno;
         $this->cod_curso = $request->codigo;
+        $this->cod_siga = $request->cod_siga;
         $this->vagas = $request->quantidade_de_vagas;
         $this->cor_padrao = $request->cor;
         $this->semestre = $request->semestre;

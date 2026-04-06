@@ -147,7 +147,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="codigo" class="form-label">{{__('Código do curso')}}</label>
                                 <input type="text" id="codigo" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
 
@@ -157,7 +157,17 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
+                             <div class="col-md-4 mb-3">
+                                <label for="cod_siga" class="form-label">{{__('Código do SIGA')}}</label>
+                                <input type="text" id="cod_siga" name="cod_siga" class="form-control campoDeTexto @error('cod_siga') is-invalid @enderror" value="{{old('cod_siga')}}" required>
+
+                                @error('cod_siga')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="vagas" class="form-label">{{__('Quantidade de vagas')}}</label>
                                 <input type="number" id="vagas" name="quantidade_de_vagas" class="form-control campoDeTexto @error('quantidade_de_vagas') is-invalid @enderror" value="{{old('quantidade_de_vagas')}}" required>
 

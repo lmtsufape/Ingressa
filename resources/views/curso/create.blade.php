@@ -19,22 +19,32 @@
                         <form id="criar-curso-form" method="POST" action="{{route('cursos.store')}}">
                             @csrf
                             <div class="form-row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="nome">{{__('Name')}}</label>
                                     <input type="text" id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome')}}" autofocus required>
-                                
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="codigo">{{__('Código do curso')}}</label>
                                     <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
-                                
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="cod_siga">{{__('Código do SIGA')}}</label>
+                                    <input type="text" id="cod_siga" name="cod_siga" class="form-control @error('cod_siga') is-invalid @enderror" value="{{old('cod_siga')}}" required>
+
+                                    @error('cod_siga')
+                                        <div class="invalid-feedback" role="alert">
                                             {{ $message }}
                                         </div>
                                     @enderror
@@ -50,7 +60,7 @@
                                         <option @if(old('turno') == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
                                         <option @if(old('turno') == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
                                     </select>
-                                
+
                                     @error('turno')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -60,7 +70,7 @@
                                 <div class="col-md-6">
                                     <label for="vagas">{{__('Quantidade de vagas')}}</label>
                                     <input type="number" id="vagas" name="quantidade_de_vagas" class="form-control @error('quantidade_de_vagas') is-invalid @enderror" value="{{old('quantidade_de_vagas')}}" required>
-                                
+
                                     @error('quantidade_de_vagas')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
