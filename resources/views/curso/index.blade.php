@@ -340,7 +340,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="codigo-edit" class="form-label">{{__('Código do curso')}}</label>
                             <input type="text" id="codigo-edit" name="codigo" class="form-control campoDeTexto @error('codigo') is-invalid @enderror" value="{{old('codigo')}}" required>
 
@@ -350,7 +350,17 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label for="cod_siga">{{__('Código do SIGA')}}</label>
+                            <input type="text" id="cod_siga-edit" name="cod_siga" class="form-control @error('cod_siga') is-invalid @enderror" value="{{old('cod_siga')}}" required>
+
+                            @error('cod_siga')
+                                <div class="invalid-feedback" role="alert">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="vagas-edit" class="form-label">{{__('Quantidade de vagas')}}</label>
                             <input type="number" id="vagas-edit" name="quantidade_de_vagas" class="form-control campoDeTexto @error('quantidade_de_vagas') is-invalid @enderror" value="{{old('quantidade_de_vagas')}}" required>
 
@@ -453,6 +463,7 @@
                 document.getElementById('turno-edit').value = curso.turno;
                 document.getElementById('grau_acadêmico-edit').value = curso.grau_academico;
                 document.getElementById('codigo-edit').value = curso.cod_curso;
+                document.getElementById('cod_siga-edit').value = curso.cod_siga;
                 document.getElementById('vagas-edit').value = curso.vagas;
                 document.getElementById('cor-edit').value = curso.cor_padrao;
                 document.getElementById('semestre-edit').value = curso.semestre;
