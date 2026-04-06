@@ -29,6 +29,7 @@ class CursoRequest extends FormRequest
             'nome'  => 'required|string|max:255',
             'codigo'=> 'required|integer|min:5',
             'turno' => 'required',
+            'cod_siga' => ['required', 'integer'],
             'quantidade_de_vagas' => 'required|integer|min:30|max:200',
             'grau_acadêmico' => 'required',
             'icone' => 'nullable|file|mimes:png|max:2048',

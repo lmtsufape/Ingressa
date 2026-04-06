@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AprovadosExport;
 use App\Exports\InscritosExport;
 use App\Exports\SisuGestaoExport;
-use App\Http\Requests\ListagemRequest;
+use App\Http\Requests\ListagemStoreRequest;
 use App\Models\Listagem;
 use Maatwebsite\Excel\Excel as ExcelFormat;
 use Illuminate\Http\Request;
@@ -13,10 +13,10 @@ use App\Models\Inscricao;
 use App\Models\Candidato;
 use App\Models\Cota;
 use App\Models\Curso;
-use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Chamada;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Sisu;
+use App\UseCases\Listagem\CriarListagem as ListagemCriarListagem;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
@@ -50,34 +50,31 @@ class ListagemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ListagemRequest $request)
+    public function store(ListagemStoreRequest $request, ListagemCriarListagem $useCase)
     {
         $this->authorize('isAdmin', User::class);
-        $request->validated();
-        $listagem = new Listagem();
-        $listagem->setAtributes($request);
-        $listagem->caminho_listagem = 'caminho';
-        $listagem->save();
+        try {
 
-        switch ($request->tipo) {
-            case Listagem::TIPO_ENUM['convocacao']:
-                $listagem->caminho_listagem = $this->gerarListagemConvocacao($request, $listagem);
-                break;
-            case Listagem::TIPO_ENUM['pendencia']:
-                $listagem->caminho_listagem = $this->gerarListagemPendencia($request, $listagem);
-                break;
-            case Listagem::TIPO_ENUM['resultado']:
-                $listagem->caminho_listagem = $this->gerarListagemResultado($request, $listagem);
-                break;
-            case Listagem::TIPO_ENUM['final']:
+            if($request->tipo == Listagem::TIPO_ENUM['final']){
+                $request->validated();
+                $listagem = new Listagem();
+                $listagem->setAtributes($request);
+                $listagem->caminho_listagem = 'caminho';
+                $listagem->save();
                 $listagem->caminho_listagem = $this->gerarListagemFinal($request, $listagem);
-                break;
+
+                $listagem->update();
+                return back()->with('success', 'Listagem criada com sucesso');
+
+            }
+            $useCase->execute((object) $request->validated());
+
+            return back()->with('success', 'Listagem criada com sucesso');
+        } catch (\Throwable $th) {
+            report($th);
+            return back()->withInput()->with(['error' => 'Erro ao criar a listagem. Tente novamente.']);
         }
-        $listagem->update();
-
-        return redirect()->back()->with(['success_listagem' => 'Listagem criada com sucesso']);
     }
-
     /**
      * Display the specified resource.
      *
@@ -133,78 +130,6 @@ class ListagemController extends Controller
     }
 
     /**
-     * Gera o arquivo pdf da listagem de convocacao e retorna o caminho do arquivo.
-     *
-     * @param  \App\Http\Requests\ListagemRequest  $request
-     * @return string $caminho_do_arquivo
-     */
-    private function gerarListagemConvocacao(ListagemRequest $request, Listagem $listagem)
-    {
-        $chamada = Chamada::find($request->chamada);
-        $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
-        $cotas = Cota::whereIn('id', $request->cotas)->orderBy('id')->get();
-        $inscricoes = collect();
-        $ordenacao = $this->get_ordenacao($request);
-        $ordem = $this->get_ordem($request);
-
-        foreach ($cursos as $i => $curso) {
-            $inscricoes_curso = collect();
-            if ($curso->turno == Curso::TURNO_ENUM['Matutino']) {
-                $turno = 'Matutino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Vespertino']) {
-                $turno = 'Vespertino';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Noturno']) {
-                $turno = 'Noturno';
-            } elseif ($curso->turno == Curso::TURNO_ENUM['Integral']) {
-                $turno = 'Integral';
-            }
-            $ampla = collect();
-            foreach ($cotas as $j => $cota) {
-                //Juntar todos aqueles que são da ampla concorrencia independente do bonus de 10%
-                if ($cota->getCodCota() == Cota::COD_COTA_ENUM['A0']) {
-                    $ampla2 = Inscricao::select('inscricaos.*')
-                        ->where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
-                        ->whereIn(
-                            'no_modalidade_concorrencia',
-                            [
-                                'Ampla concorrência',
-                                'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.',
-                                'AMPLA CONCORRÊNCIA'
-                            ]
-                        )
-                        ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                        ->join('users', 'users.id', '=', 'candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    $ampla2 = $ampla2->map->only(['id']);
-                    $ampla = $ampla->concat($ampla2);
-                } else if ($cota->getCodCota() == Cota::COD_COTA_ENUM['B4342']) {
-                    //ignorar a de 10% visto que entra na mesma tabela que A0
-                } else {
-                    $inscritosCota = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['cota_id', $cota->id], ['chamada_id', $chamada->id]])
-                        ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                        ->join('users', 'users.id', '=', 'candidatos.user_id')
-                        ->orderBy($ordenacao, $ordem)
-                        ->get();
-                    if ($inscritosCota->count() > 0) {
-                        $inscritosCota = $inscritosCota->map->only(['id']);
-                        $inscricoes_curso->push($inscritosCota);
-                    }
-                }
-            }
-            if ($ampla->count() > 0) {
-                $inscricoes_curso->prepend($ampla);
-            }
-            if ($inscricoes_curso->count() > 0) {
-                $inscricoes->push($inscricoes_curso);
-            }
-        }
-        $pdf = FacadePdf::loadView('listagem.inscricoes', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada]);
-
-        return $this->salvarListagem($listagem, $pdf->stream());
-    }
-
-    /**
      * Salva o arquivo de listagem em seu diretorio.
      *
      * @param  \App\Models\Listagem  $listagem
@@ -221,45 +146,7 @@ class ListagemController extends Controller
         return $path . $nome;
     }
 
-    /**
-     * Gera o arquivo pdf da listagem de resultado e retorna o caminho do arquivo.
-     *
-     * @param  \App\Http\Requests\ListagemRequest  $request
-     * @return string $caminho_do_arquivo
-     */
-    private function gerarListagemResultado(ListagemRequest $request, Listagem $listagem)
-    {
-        $chamada = Chamada::find($request->chamada);
-        $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
-        $cotas = Cota::whereIn('id', $request->cotas)->orderBy('id')->get();
-        $ordenacao = $this->get_ordenacao($request);
-        $ordem = $this->get_ordem($request);
-
-        $inscricoes = collect();
-
-        foreach ($cursos as $curso) {
-            $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
-                ->whereIn(
-                    'cota_id',
-                    $cotas->pluck('id')
-                )
-                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                ->join('users', 'users.id', '=', 'candidatos.user_id')
-                ->orderBy($ordenacao, $ordem)
-                ->get();
-
-            if ($inscricoes_curso->count() > 0) {
-                $inscricoes_curso = $inscricoes_curso->map->only(['id']);
-                $inscricoes->push($inscricoes_curso);
-            }
-        }
-
-        $pdf = FacadePdf::loadView('listagem.resultado', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
-
-        return $this->salvarListagem($listagem, $pdf->stream());
-    }
-
-    private function gerarListagemFinal(ListagemRequest $request, Listagem $listagem)
+    private function gerarListagemFinal(ListagemStoreRequest $request, Listagem $listagem)
     {
         $chamada = Chamada::find($request->chamada);
         $inscricoes = $this->getInscricoesIngressantesReservas($request);
@@ -584,7 +471,7 @@ class ListagemController extends Controller
                         $value->candidato->nu_cpf_inscrito,
                         $value->nu_rg,
                         $this->removeAcentos($value->candidato->no_inscrito),
-                        $this->getCodProgramaForm($value->curso),
+                        $value->curso->cod_siga,
                         $this->getPeriodo($value->curso),
                         $value->sisu->edicao,
                         $this->getTurno($value->curso),
@@ -660,7 +547,7 @@ class ListagemController extends Controller
                     $value->candidato->nu_cpf_inscrito,
                     $value->nu_rg,
                     $this->removeAcentos($value->candidato->no_inscrito),
-                    $this->getCodProgramaForm($value->curso),
+                    $value->curso->cod_siga,
                     $value->semestre_entrada,
                     $value->sisu->edicao,
                     $this->getTurno($value->curso),
@@ -1003,21 +890,6 @@ class ListagemController extends Controller
         return "BRA";
     }
 
-    private function getCodProgramaForm($curso)
-    {
-        $codigos = [
-            91555  => 44,
-            118468 => 95,
-            118466 => 93,
-            118470 => 94,
-            91969  => 47,
-            91561  => 45,
-            91738  => 46,
-            1682932 => 00 // VALOR DE TESTE, DEVE SER ALTERADO QUANDO O CÓDIGO REAL FOR FORNECIDO!
-        ];
-        return $codigos[$curso->cod_curso];
-    }
-
     private function getTurno($curso)
     {
         $turnos = [
@@ -1082,45 +954,6 @@ class ListagemController extends Controller
         return array($primeiroSemestre, $segundoSemestre);
     }
 
-    /**
-     * Pega a string de ordenação garantindo que a coluna certa de ordenação irá ser passada.
-     *
-     * @param  \App\Http\Requests\Request  $request
-     * @return string $coluna
-     */
-    private function get_ordenacao(Request $request)
-    {
-        $coluna = 'name';
-        switch ($request->ordenacao) {
-            case 'nome':
-                $coluna = 'name';
-                break;
-            case 'nota':
-                $coluna = 'inscricaos.nu_nota_candidato';
-                break;
-        }
-        return $coluna;
-    }
-
-    /**
-     * Pega a string de ordem da coluna : ASC ou DESC.
-     *
-     * @param  \App\Http\Requests\Request  $request
-     * @return string $ordem
-     */
-    private function get_ordem(Request $request)
-    {
-        $ordem = 'ASC';
-        switch ($request->ordenacao) {
-            case 'nome':
-                $ordem = 'ASC';
-                break;
-            case 'nota':
-                $ordem = 'DESC';
-                break;
-        }
-        return $ordem;
-    }
 
     /**
      * Gera o arquivo pdf da listagem de pendencia e retorna o caminho do arquivo.
@@ -1128,37 +961,6 @@ class ListagemController extends Controller
      * @param  \App\Http\Requests\ListagemRequest  $request
      * @return string $caminho_do_arquivo
      */
-    private function gerarListagemPendencia(ListagemRequest $request, Listagem $listagem)
-    {
-        $chamada = Chamada::find($request->chamada);
-        $cursos = Curso::whereIn('id', $request->cursos)->orderBy('nome')->get();
-        $cotas = Cota::whereIn('id', $request->cotas)->orderBy('id')->get();
-        $ordenacao = $this->get_ordenacao($request);
-        $ordem = $this->get_ordem($request);
-
-        $inscricoes = collect();
-
-        foreach ($cursos as $curso) {
-            $inscricoes_curso = Inscricao::select('inscricaos.*')->where([['curso_id', $curso->id], ['chamada_id', $chamada->id]])
-                ->whereIn(
-                    'cota_id',
-                    $cotas->pluck('id')
-                )
-                ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-                ->join('users', 'users.id', '=', 'candidatos.user_id')
-                ->orderBy($ordenacao, $ordem)
-                ->get();
-
-            if ($inscricoes_curso->count() > 0) {
-                $inscricoes_curso = $inscricoes_curso->map->only(['id']);
-                $inscricoes->push($inscricoes_curso);
-            }
-        }
-
-        $pdf = FacadePdf::loadView('listagem.pendencia', ['collect_inscricoes' => $inscricoes, 'chamada' => $chamada])->setPaper('a4', 'landscape');
-
-        return $this->salvarListagem($listagem, $pdf->stream());
-    }
 
     public function publicar(Request $request)
     {

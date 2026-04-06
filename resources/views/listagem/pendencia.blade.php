@@ -131,13 +131,13 @@
         @foreach ($collect_inscricoes as $i => $curso)
             @if ($curso->count() > 0)
                 @php
-                    $inscricao = App\Models\Inscricao::find($curso->first()['id']);
+                    $info_curso = App\Models\Curso::find($i);
                 @endphp
                 <h3 class="subtitulo" style="font-weight: bolder;">
                     RESULTADO DA ETAPA DE ANÁLISE DOCUMENTAL<br><span
                         style="font-weight: normal; text-transform:uppercase;">{{ $chamada->nome }}</span><br>
-                    <span style="font-weight: normal;">Curso: {{ $inscricao->curso->nome }} -
-                        @switch($inscricao->curso->turno)
+                    <span style="font-weight: normal;">Curso: {{ $info_curso->nome }} -
+                        @switch($info_curso->turno)
                             @case(App\Models\Curso::TURNO_ENUM['Matutino'])
                                 Matutino
                             @break
@@ -174,25 +174,25 @@
                                 @endphp
                                 @foreach ($curso as $k => $inscricao)
                                     @php
-                                        $inscricao = App\Models\Inscricao::find($inscricao['id']);
+                                        $inscricao_info = App\Models\Inscricao::with('candidato')->find($k);
                                     @endphp
                                     <tr
                                         class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
                                         <th>{{ $cont }}</th>
-                                        <th>{{ $inscricao->candidato->getCpfPDF() }}</th>
-                                        <th>{{ $inscricao->cota->cod_novo }}</th>
-                                        <th class="esquerda">{{ !empty($inscricao->candidato->no_social) ? $inscricao->candidato->no_social : $inscricao->candidato->no_inscrito}}</th>
+                                        <th>{{ $inscricao_info->candidato->getCpfPDF() }}</th>
+                                        <th>{{ $inscricao_info->cota->cod_novo }}</th>
+                                        <th class="esquerda">{{ !empty($inscricao_info->candidato->no_social) ? $inscricao_info->candidato->no_social : $inscricao_info->candidato->no_inscrito}}</th>
                                         <th>
                                             @if (
-                                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] ||
-                                                    $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']
+                                                $inscricao_info->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'] ||
+                                                    $inscricao_info->status == \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']
                                             )
                                                 Sem pendências
-                                            @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                            @elseif($inscricao_info->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
                                                 Não enviado
-                                            @elseif($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])
+                                            @elseif($inscricao_info->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados'])
                                                 <div style="font-weight: normal;">
-                                                    @foreach ($inscricao->arquivos as $i => $arquivo)
+                                                    @foreach ($inscricao_info->arquivos as $i => $arquivo)
                                                         @if (
                                                             $arquivo->avaliacao != null &&
                                                                 $arquivo->avaliacao->comentario != null &&
@@ -203,10 +203,10 @@
                                                             {!! str_replace(['<p>', '</p>'], '', $arquivo->avaliacao->comentario) !!}.<br>
                                                         @endif
                                                     @endforeach
-                                                    @if ($inscricao->arquivos()->where('nome', 'heteroidentificacao')->first() != null)
+                                                    @if ($inscricao_info->arquivos()->where('nome', 'heteroidentificacao')->first() != null)
                                                         @php
-                                                            $heteroidentificacao = $inscricao->arquivos()->where('nome', 'heteroidentificacao')->first();
-                                                            $fotografia = $inscricao->arquivos()->where('nome', 'fotografia')->first();
+                                                            $heteroidentificacao = $inscricao_info->arquivos()->where('nome', 'heteroidentificacao')->first();
+                                                            $fotografia = $inscricao_info->arquivos()->where('nome', 'fotografia')->first();
                                                         @endphp
                                                         PARECER DA BANCA DE HETEROIDENTIFICAÇÃO -
                                                         @if (
@@ -234,9 +234,9 @@
                                                             Documentação aceita.<br>
                                                         @endif
                                                     @endif
-                                                    @if ($inscricao->arquivos()->where('nome', 'laudo_medico')->first() != null)
+                                                    @if ($inscricao_info->arquivos()->where('nome', 'laudo_medico')->first() != null)
                                                         @php
-                                                            $medico = $inscricao->arquivos()->where('nome', 'laudo_medico')->first();
+                                                            $medico = $inscricao_info->arquivos()->where('nome', 'laudo_medico')->first();
                                                         @endphp
                                                         PARECER DA EQUIPE MÉDICA -
                                                         @if ($medico->avaliacao != null && $medico->avaliacao->comentario != null)

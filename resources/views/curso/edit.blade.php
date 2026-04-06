@@ -18,24 +18,35 @@
                         </div>
                         <form id="editar-curso-form" method="POST" action="{{route('cursos.update', ['curso' => $curso])}}">
                             @csrf
-                            <input type="hidden" name="_method" value="PUT">
+                            @method('PUT')
                             <div class="form-row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="nome">{{__('Name')}}</label>
                                     <input type="text" id="nome" name="nome" class="form-control @error('nome') is-invalid @enderror" value="{{old('nome', $curso->nome)}}" autofocus required>
-                                
+
                                     @error('nome')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="codigo">{{__('Código do curso')}}</label>
                                     <input type="text" id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{old('codigo', $curso->cod_curso)}}" required>
-                                
+
                                     @error('codigo')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                 <div class="col-md-4">
+                                    <label for="cod_siga">{{__('Código do SIGA')}}</label>
+                                    <input type="text" id="cod_siga" name="cod_siga" class="form-control @error('cod_siga') is-invalid @enderror" value="{{old('cod_siga', $curso->cod_curso)}}" required>
+
+                                    @error('cod_siga')
+                                        <div class="invalid-feedback" role="alert">
                                             {{ $message }}
                                         </div>
                                     @enderror
@@ -51,14 +62,14 @@
                                             <option @if(old('turno') == $turnos['Vespertino']) selected @endif value="{{$turnos['Vespertino']}}">Vespertino</option>
                                             <option @if(old('turno') == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
                                             <option @if(old('turno') == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
-                                        @else 
+                                        @else
                                             <option @if($curso->turno == $turnos['Matutino']) selected @endif value="{{$turnos['Matutino']}}">Matutino</option>
                                             <option @if($curso->turno == $turnos['Vespertino']) selected @endif value="{{$turnos['Vespertino']}}">Vespertino</option>
                                             <option @if($curso->turno == $turnos['Noturno']) selected @endif value="{{$turnos['Noturno']}}">Noturno</option>
                                             <option @if($curso->turno == $turnos['Integral']) selected @endif value="{{$turnos['Integral']}}">Integral</option>
                                         @endif
                                     </select>
-                                
+
                                     @error('turno')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}
@@ -68,7 +79,7 @@
                                 <div class="col-md-6">
                                     <label for="vagas">{{__('Quantidade de vagas')}}</label>
                                     <input type="number" id="vagas" name="quantidade_de_vagas" class="form-control @error('quantidade_de_vagas') is-invalid @enderror" value="{{old('quantidade_de_vagas', $curso->vagas)}}" required>
-                                
+
                                     @error('quantidade_de_vagas')
                                         <div id="validationServer03Feedback" class="invalid-feedback">
                                             {{ $message }}

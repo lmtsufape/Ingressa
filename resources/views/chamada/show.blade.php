@@ -465,21 +465,21 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 mb-3">
-                                <label for="tipo">{{__('Ordenação')}}</label>
+                                <label for="sort">{{__('Ordenação')}}</label>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <input id="radio-ordenacao-nome" class="form-check-input" type="radio" name="ordenacao" value="nome" @if(old('ordenacao') == 'nome') @else checked @endif>
+                                        <input id="radio-ordenacao-nome" class="form-check-input" type="radio" name="sort" value="name"  @checked(old('sort', request('sort')) === 'name')>
                                         <label for="radio-ordenacao-nome">{{__('Nome do candidato')}}</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <input id="radio-ordenacao-nota" class="form-check-input" type="radio" name="ordenacao" value="nota" @if(old('ordenacao') == 'nota') checked @endif>
+                                        <input id="radio-ordenacao-nota" class="form-check-input" type="radio" name="sort" value="-nota" @checked(old('sort', request('sort')) === '-nota')>
                                         <label for="radio-ordenacao-nota">{{__('Nota do ENEM')}}</label>
                                     </div>
                                 </div>
 
-                                @error('tipo')
+                                @error('sort')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
                                     </div>

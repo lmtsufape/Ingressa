@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListagemRequest extends FormRequest
+class ListagemStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class ListagemRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->role == User::ROLE_ENUM['admin'];
+        return true;
     }
 
     /**
@@ -25,8 +25,11 @@ class ListagemRequest extends FormRequest
     public function rules()
     {
         return [
-            'titulo' => 'required|string|max:255',
-            'ordenacao' => 'required',
+            'titulo' => ['required', 'string', 'max:255'],
+            'tipo' => ['required'],
+            'cursos' => ['array'],
+            'cotas' => ['array'],
+            'chamada' => ['required'],
         ];
     }
 }
