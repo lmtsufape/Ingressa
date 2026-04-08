@@ -408,6 +408,42 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="row pt-3">
+                        <fieldset class="form-group col-md-6">
+                            <legend class="form-label required">Você possui irmão(a) gêmeo(a)?</legend>
+                            <div class="d-flex gap-5 @error('possui_gemeo') is-invalid @enderror">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="possui_gemeo" id="possui_gemeo_sim"
+                                        value="true" @checked((boolean) old('possui_gemeo', $candidato->possui_gemeo) === true)>
+                                    <label class="form-check-label" for="possui_gemeo_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="possui_gemeo" id="possui_gemeo_nao"
+                                        value="false" @checked((boolean) old('possui_gemeo', $candidato->possui_gemeo) === false)>
+                                    <label class="form-check-label" for="possui_gemeo_nao">Não</label>
+                                </div>
+                            </div>
+                            @error('possui_gemeo')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </fieldset>
+
+                        <div class="col-md-6 d-none" id="div-nome-gemeo">
+                            <div class="form-group">
+                                <label for="nome_gemeo" class="form-label">{{ __('Nome do(a) irmão(a) gêmeo(a)') }}</label>
+                                <input id="nome_gemeo" class="form-control @error('nome_gemeo') is-invalid @enderror" type="text"
+                                    name="nome_gemeo" value="{{ old('nome_gemeo', $candidato->nome_gemeo) }}">
+
+                                @error('nome_gemeo')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group mt-2">
                         <label for="ds_logradouro" class="form-label">
                             {{ __('Endereço') }}</label>
@@ -1229,15 +1265,28 @@
                     $('input[name="gestante"]').prop('required', false).prop('disabled', true);
                 }
                 $('#div-gestante').toggleClass('d-none', !mostrar);
+            }
 
+            function toggleGemeo(){
+                const mostrar = $('#possui_gemeo_sim').is(':checked');
+
+                if(mostrar){
+                    $('input[name="nome_gemeo"]').prop('disabled', false).prop('required', true);
+
+                }else{
+                    $('input[name="nome_gemeo"]').val('').prop('required', false).prop('disabled', true);
+                }
+                $('#div-nome-gemeo').toggleClass('d-none', !mostrar);
             }
 
             $(document).ready(function () {
                 toggleNomeSocial();
                 toggleGestante();
+                toggleGemeo()
                 $(document).on('change', 'input[name="lgbtqiap"], input[name="transgenero"]', toggleNomeSocial);
                 $('#no_social').on('input change', toggleNomeSocial);
                 $(document).on('change', '#tp_sexo', toggleGestante);
+                $(document).on('change', 'input[name="possui_gemeo"]', toggleGemeo);
 
             });
         });

@@ -315,6 +315,25 @@
                                 Nome do Pai: <p class="nomeDocumento" style="display: inline">
                                     {{ $inscricao->candidato->pai }}</p>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6 pt-2 tituloDocumento">
+                                    Possui irmão(a) gêmeo(a): <p class="nomeDocumento" style="display: inline">
+                                        {{
+                                            match ($inscricao->candidato->possui_gemeo) {
+                                                true => 'Possui',
+                                                false => 'Não possui',
+                                                null => 'Não informado',
+                                            }
+                                        }}
+                                        </p>
+                                </div>
+                                @if($inscricao->candidato->possui_gemeo)
+                                    <div class="col-md-6 pt-2 tituloDocumento">
+                                        Nome do(a) irmão(a) gêmeo(a): <p class="nomeDocumento" style="display: inline">
+                                        {{ $inscricao->candidato->nome_gemeo }}</p>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                         <div class="col-md-12 py-3 px-3" style="border-bottom: 2px solid #f5f5f5;">
                             <div class="row">

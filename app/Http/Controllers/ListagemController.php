@@ -705,7 +705,7 @@ class ListagemController extends Controller
             );
     }
 
-    public function gerarListagemFinalPersonalizada(Request $request, $sisu_id)
+    public function gerarListagemFinalPersonalizada(Request $request, $sisu_id)//observar
     {
         $this->authorize('isAdmin', User::class);
 
