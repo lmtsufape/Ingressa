@@ -344,12 +344,15 @@ class Candidato extends Model
         'filhos',
         'gestante',
         'transgenero',
-        'lgbtqiap'
+        'lgbtqiap',
+        'possui_gemeo',
+        'nome_gemeo'
     ];
 
     protected $casts = [
         'filhos' => 'array',
         'dispositivos_moradia' => 'array',
+        'possui_gemeo' => 'boolean',
 
       ];
 

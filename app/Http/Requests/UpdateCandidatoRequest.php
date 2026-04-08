@@ -30,6 +30,22 @@ class UpdateCandidatoRequest extends FormRequest
         return auth()->user()->role == User::ROLE_ENUM['admin'] || auth()->user()->candidato->id == request()->candidato->id;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'possui_gemeo' => match ($this->possui_gemeo) {
+                'true', true, 1, '1' => 1,
+                'false', false, 0, '0' => 0,
+                default => null,
+            },
+        ]);
+        if ($this->possui_gemeo == 0) {
+            $this->merge([
+                'nome_gemeo' => null,
+            ]);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -90,6 +106,8 @@ class UpdateCandidatoRequest extends FormRequest
             'gestante' => ['required_if:tp_sexo,F'],
             'transgenero' => ['required', 'in:sim,nao,outro,prefiro_nao_responder'],
             'lgbtqiap' =>   ['required', 'in:sim,nao,outro,prefiro_nao_responder'],
+            'possui_gemeo' => ['required', 'boolean'],
+            'nome_gemeo' => ['required_if:possui_gemeo,true', 'nullable', 'string', 'min:2', 'max:255'],
         ];
     }
 
