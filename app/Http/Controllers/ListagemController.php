@@ -613,12 +613,10 @@ class ListagemController extends Controller
             [
                 ['inscricaos.sisu_id', $sisu->id],
                 ['semestre_entrada', '!=', null],
-                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']],
+                ['desistente', false],
             ]
-        )->where(function ($query) {
-            $query->where([['desistente', true], ['realocar_vaga', false]])
-                ->orWhere('desistente', false);
-        })->orderBy('curso_id', 'ASC')->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')
+        )->orderBy('curso_id', 'ASC')->orderBy('cota_classificacao_id', 'ASC')->orderBy('nu_nota_candidato', 'DESC')
 
             ->leftJoin('candidatos as candidato', 'candidato.id', '=', 'inscricaos.candidato_id')
             ->leftJoin('sisus as sisu', 'sisu.id', '=', 'sisu_id')
@@ -693,8 +691,7 @@ class ListagemController extends Controller
                 'localidade',
                 DB::raw("CASE WHEN trabalha IS TRUE THEN 'SIM' ELSE 'NÃO' END AS trabalha"),//se trabalha
                 'grupo_familiar',// quantidade de pessoas da familia
-                'valor_renda',
-                'semestre_entrada']);
+                'valor_renda']);
                 $inscritos->addBinding($necessidades, 'select');
                 $inscritos->addBinding($etnia_cor, 'select');
 
