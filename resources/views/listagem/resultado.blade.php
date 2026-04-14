@@ -166,87 +166,95 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($curso as $k => $inscricao)
-                                    @php
-                                        $inscricao_info = App\Models\Inscricao::with('candidato')->find($k);
+                                @php
+                                    $count = 1;
+                                @endphp
+                                @foreach ($curso as $inscricoes_por_cotas)
+                                    @foreach ($inscricoes_por_cotas as $inscricao_id)
+                                        @php
+                                            $inscricao_info = App\Models\Inscricao::with('candidato')->find($inscricao_id);
 
-                                    @endphp
-                                    <tr
-                                        class="@if ($k % 2 == 0) back-color-1 @else back-color-2 @endif">
-                                        <th>{{ $k + 1 }}</th>
-                                        <th>{{ $inscricao_info->candidato->getCpfPDF() }}</th>
-                                        <th>{{ $inscricao_info->cota->cod_novo }}</th>
-                                        <th class="esquerda">{{ !empty($inscricao_info->candidato->no_social) ? $inscricao_info->candidato->no_social : $inscricao_info->candidato->no_inscrito }}</th>
-                                        @if ($inscricao_info->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                                            <th>VALIDADO</th>
-                                        @elseif($inscricao_info->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
-                                            <th>INVALIDADO<br>MOTIVO: Documentação não enviada</th>
-                                        @else
-                                            <th>INVALIDADO<br>MOTIVO(S):
-                                                <div style="font-weight: normal;">
-                                                    @foreach ($inscricao_info->arquivos as $i => $arquivo)
-                                                        @if (
-                                                            $arquivo->avaliacao != null &&
-                                                                $arquivo->avaliacao->comentario != null &&
-                                                                $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'] &&
-                                                                ($arquivo->nome != 'laudo_medico' && $arquivo->nome != 'fotografia' && $arquivo->nome != 'heteroidentificacao'))
-                                                            <span
-                                                                style="font-weight: bold">{{ $arquivo->getNomeDoc() }}</span>:
-                                                            {!! str_replace(['<p>', '</p>'], '', $arquivo->avaliacao->comentario) !!}.<br>
-                                                        @endif
-                                                    @endforeach
-                                                    @if ($inscricao_info->arquivos()->where('nome', 'heteroidentificacao')->first() != null)
-                                                        @php
-                                                            $heteroidentificacao = $inscricao_info->arquivos()->where('nome', 'heteroidentificacao')->first();
-                                                            $fotografia = $inscricao_info->arquivos()->where('nome', 'fotografia')->first();
-                                                        @endphp
-                                                        @if (
-                                                            ($heteroidentificacao->avaliacao != null &&
-                                                                $heteroidentificacao->avaliacao->comentario != null &&
-                                                                $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) ||
-                                                                ($fotografia->avaliacao != null &&
+                                        @endphp
+                                        <tr
+                                            class="@if ($count % 2 == 0) back-color-1 @else back-color-2 @endif">
+                                            <th>{{ $count }}</th>
+                                            <th>{{ $inscricao_info->candidato->getCpfPDF() }}</th>
+                                            <th>{{ $inscricao_info->cota->cod_novo }}</th>
+                                            <th class="esquerda">{{ !empty($inscricao_info->candidato->no_social) ? $inscricao_info->candidato->no_social : $inscricao_info->candidato->no_inscrito }}</th>
+                                            @if ($inscricao_info->cd_efetivado == \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
+                                                <th>VALIDADO</th>
+                                            @elseif($inscricao_info->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'])
+                                                <th>INVALIDADO<br>MOTIVO: Documentação não enviada</th>
+                                            @else
+                                                <th>INVALIDADO<br>MOTIVO(S):
+                                                    <div style="font-weight: normal;">
+                                                        @foreach ($inscricao_info->arquivos as $i => $arquivo)
+                                                            @if (
+                                                                $arquivo->avaliacao != null &&
+                                                                    $arquivo->avaliacao->comentario != null &&
+                                                                    $arquivo->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado'] &&
+                                                                    ($arquivo->nome != 'laudo_medico' && $arquivo->nome != 'fotografia' && $arquivo->nome != 'heteroidentificacao'))
+                                                                <span
+                                                                    style="font-weight: bold">{{ $arquivo->getNomeDoc() }}</span>:
+                                                                {!! str_replace(['<p>', '</p>'], '', $arquivo->avaliacao->comentario) !!}.<br>
+                                                            @endif
+                                                        @endforeach
+                                                        @if ($inscricao_info->arquivos()->where('nome', 'heteroidentificacao')->first() != null)
+                                                            @php
+                                                                $heteroidentificacao = $inscricao_info->arquivos()->where('nome', 'heteroidentificacao')->first();
+                                                                $fotografia = $inscricao_info->arquivos()->where('nome', 'fotografia')->first();
+                                                            @endphp
+                                                            @if (
+                                                                ($heteroidentificacao->avaliacao != null &&
+                                                                    $heteroidentificacao->avaliacao->comentario != null &&
+                                                                    $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']) ||
+                                                                    ($fotografia->avaliacao != null &&
+                                                                        $fotografia->avaliacao->comentario != null &&
+                                                                        $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
+                                                                PARECER DA BANCA DE HETEROIDENTIFICAÇÃO -
+                                                            @endif
+                                                            @if (
+                                                                $heteroidentificacao->avaliacao != null &&
+                                                                    $heteroidentificacao->avaliacao->comentario != null &&
+                                                                    $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
+                                                            )
+                                                                <span
+                                                                    style="font-weight: bold">{{ $heteroidentificacao->getNomeDoc() }}</span>:
+                                                                {!! str_replace(['<p>', '</p>'], '', $heteroidentificacao->avaliacao->comentario) !!}.<br>
+                                                            @endif
+                                                            @if (
+                                                                $fotografia->avaliacao != null &&
                                                                     $fotografia->avaliacao->comentario != null &&
-                                                                    $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']))
-                                                            PARECER DA BANCA DE HETEROIDENTIFICAÇÃO -
+                                                                    $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
+                                                            )
+                                                                <span
+                                                                    style="font-weight: bold">{{ $fotografia->getNomeDoc() }}</span>:
+                                                                {!! str_replace(['<p>', '</p>'], '', $fotografia->avaliacao->comentario) !!}.<br>
+                                                            @endif
                                                         @endif
-                                                        @if (
-                                                            $heteroidentificacao->avaliacao != null &&
-                                                                $heteroidentificacao->avaliacao->comentario != null &&
-                                                                $heteroidentificacao->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
-                                                        )
-                                                            <span
-                                                                style="font-weight: bold">{{ $heteroidentificacao->getNomeDoc() }}</span>:
-                                                            {!! str_replace(['<p>', '</p>'], '', $heteroidentificacao->avaliacao->comentario) !!}.<br>
+                                                        @if ($inscricao_info->arquivos()->where('nome', 'laudo_medico')->first() != null)
+                                                            @php
+                                                                $medico = $inscricao_info->arquivos()->where('nome', 'laudo_medico')->first();
+                                                            @endphp
+                                                            @if (
+                                                                $medico->avaliacao != null &&
+                                                                    $medico->avaliacao->comentario != null &&
+                                                                    $medico->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
+                                                            )
+                                                                PARECER DA EQUIPE MÉDICA -
+                                                                <span
+                                                                    style="font-weight: bold">{{ $medico->getNomeDoc() }}</span>:
+                                                                {!! str_replace(['<p>', '</p>'], '', $medico->avaliacao->comentario) !!}.<br>
+                                                            @endif
                                                         @endif
-                                                        @if (
-                                                            $fotografia->avaliacao != null &&
-                                                                $fotografia->avaliacao->comentario != null &&
-                                                                $fotografia->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
-                                                        )
-                                                            <span
-                                                                style="font-weight: bold">{{ $fotografia->getNomeDoc() }}</span>:
-                                                            {!! str_replace(['<p>', '</p>'], '', $fotografia->avaliacao->comentario) !!}.<br>
-                                                        @endif
-                                                    @endif
-                                                    @if ($inscricao_info->arquivos()->where('nome', 'laudo_medico')->first() != null)
-                                                        @php
-                                                            $medico = $inscricao_info->arquivos()->where('nome', 'laudo_medico')->first();
-                                                        @endphp
-                                                        @if (
-                                                            $medico->avaliacao != null &&
-                                                                $medico->avaliacao->comentario != null &&
-                                                                $medico->avaliacao->avaliacao == \App\Models\Avaliacao::AVALIACAO_ENUM['recusado']
-                                                        )
-                                                            PARECER DA EQUIPE MÉDICA -
-                                                            <span
-                                                                style="font-weight: bold">{{ $medico->getNomeDoc() }}</span>:
-                                                            {!! str_replace(['<p>', '</p>'], '', $medico->avaliacao->comentario) !!}.<br>
-                                                        @endif
-                                                    @endif
-                                                </div>
-                                            </th>
-                                        @endif
-                                    </tr>
+                                                    </div>
+                                                </th>
+                                            @endif
+                                        </tr>
+                                        @php
+                                            $count++;
+                                        @endphp
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
