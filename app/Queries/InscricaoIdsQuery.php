@@ -16,7 +16,9 @@ class InscricaoIdsQuery
             ->whereIn('inscricaos.curso_id', $cursos_id)
             ->whereIn('inscricaos.cota_id', $cotas_id)
             ->join('candidatos', 'inscricaos.candidato_id', '=', 'candidatos.id')
-            ->join('users', 'users.id', '=', 'candidatos.user_id');
+            ->join('users', 'users.id', '=', 'candidatos.user_id')
+            ->join('cursos', 'cursos.id', '=', 'inscricaos.curso_id')
+            ->orderBy('cursos.nome');
 
         $inscricoes = QueryBuilder::for($inscricoes)->allowedSorts([
             AllowedSort::field('name', 'name'),
