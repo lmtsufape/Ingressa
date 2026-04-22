@@ -14,7 +14,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $edicao_atual = $this->getEdicaoAtual();
+        $edicao_atual = Sisu::latest()->first();
 
         if ($edicao_atual != null) {
             $chamadas = $edicao_atual->chamadas()->orderBy('created_at', 'DESC')->get();
@@ -29,7 +29,7 @@ class WelcomeController extends Controller
 
     private function getEdicaoAtual()
     {
-        $intervalo_inicio = now()->subMonth(3);
+        $intervalo_inicio = now()->subMonth(10);
         $intervalo_fim = now()->addMonth(2);
 
         $edicao_atual = Sisu::where([['created_at', '>=', $intervalo_inicio], ['created_at', '<=', $intervalo_fim]])->orderBy('created_at', 'DESC')->first();
@@ -50,7 +50,7 @@ class WelcomeController extends Controller
     public function edicoes()
     {
         $edicoes = Sisu::orderBy('created_at')->get();
-        $edicao_atual = $this->getEdicaoAtual();
+        $edicao_atual = Sisu::latest()->first();
 
         if ($edicoes->count() > 0 && $edicao_atual != null) {
             $edicoes->pop();
@@ -77,7 +77,7 @@ class WelcomeController extends Controller
 
         $user = User::where('role', User::ROLE_ENUM['admin'])->first();
         $user->email = config('mail.contato');
-        
+
         Notification::send($user, new ContatoNotification($request, $request->assunto));
 
         return redirect()->back()->with(['success' => 'Obrigado por entrar em contato, sua mensagem foi enviada com sucesso!']);
