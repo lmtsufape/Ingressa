@@ -461,7 +461,9 @@ class ListagemController extends Controller
             '118466' => 0,
             '118470' => 0,
             '1682932' => 0,
+            '1697875' => 0
         ];
+
 
         $retorno = $this->getInscricoesIngressantesReservas($request)['ingressantes']
             ->map(function ($value, $key) {
@@ -605,6 +607,7 @@ class ListagemController extends Controller
             '118466' => 0,
             '118470' => 0,
             '1682932' => 0,
+            '1697875' => 0
         ];
 
         $chamada = Chamada::find($request->chamada);
