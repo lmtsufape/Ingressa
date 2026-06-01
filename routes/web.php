@@ -41,7 +41,7 @@ Route::middleware(['auth', 'verified', 'atualizar_dados'])->group(function () {
     Route::resource('usuarios', UserController::class);
     Route::post('/usuarios/update-analista', [UserController::class, 'updateAnalista'])
         ->name('usuarios.update.analista');
-
+    Route::get('chamada/{chamada_id}}/candidatos-chamada', [UserController::class, 'baixarEmailConvocados'])->name('admin.baixar.emails.convocados.csv');
     Route::resource('sisus', SisuController::class);
 
     Route::resource('chamadas', ChamadaController::class)->except([

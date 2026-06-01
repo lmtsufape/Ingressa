@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Requests\UserRequest;
+use App\Models\Chamada;
+use App\Models\Inscricao;
 use App\Models\TipoAnalista;
+use App\Queries\InscricaoIdsQuery;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use League\Csv\Writer;
 
 class UserController extends Controller
 {
@@ -200,4 +204,57 @@ class UserController extends Controller
 
         return redirect(route('usuarios.index'))->with(['success' => 'Analista deletado com sucesso!']);
     }
+
+    public function baixarEmailConvocados($chamada_id)
+    {
+        $this->authorize('isAdmin', User::class);
+        $chamada = Chamada::findOrFail($chamada_id);
+
+         $inscricoesAgrupadas = app(InscricaoIdsQuery::class)->byCursoAndCota(
+            $chamada->id,
+            Curso::pluck('id')->all(),
+            Cota::pluck('id')->all()
+        );
+
+        $inscricaoIds = $inscricoesAgrupadas
+            ->flatten(2)
+            ->pluck('id')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $inscricoes = Inscricao::query()
+            ->with(['candidato.user'])
+            ->whereIn('id', $inscricaoIds->all())
+            ->get();
+
+        $nomeArquivo = "lista_emails_convocados_chamada_{$chamada->id}.csv";
+
+        $caminhoArquivo = storage_path("app/{$nomeArquivo}");
+
+        $csv = Writer::from($caminhoArquivo, 'w+');
+        $csv->setDelimiter(';');
+        $csv->setOutputBOM(Writer::BOM_UTF8);
+
+        $csv->insertOne([
+            'nome',
+            'cpf',
+            'email',
+        ]);
+
+        $csv->insertAll(
+            $inscricoes->map(fn ($inscrito) => [
+                $inscrito->candidato->no_inscrito ?? '',
+                $inscrito->candidato->nu_cpf_inscrito ?? '',
+                $inscrito->ds_email ?? '',
+            ])->all()
+        );
+
+        return response()
+            ->download($caminhoArquivo, $nomeArquivo, [
+                'Content-Type' => 'text/csv; charset=UTF-8',
+            ])
+            ->deleteFileAfterSend(true);
+    }
+
 }

@@ -1,22 +1,6 @@
 <x-app-layout>
     <div class="fundo2 px-5">
         <div class="container">
-            @if(session('error'))
-                <div class="col-md-12">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('error')}}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
-            @if(session('success'))
-                <div class="col-md-12">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>{{session('success')}}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
             <div class="row tituloBorda justify-content-between">
                 <div class="d-flex align-items-center justify-content-between mx-0 px-0">
                     <span class="align-middle titulo">Ingressantes e reservas do curso de {{$curso->nome}} @if($curso->semestre != null) - {{$curso->semestre}}ª entrada @endif</span>
