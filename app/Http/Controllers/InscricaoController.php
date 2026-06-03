@@ -13,6 +13,7 @@ use App\Models\Sisu;
 use App\Models\User;
 use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -484,60 +485,69 @@ class InscricaoController extends Controller
     {
         $inscricao = Inscricao::find($request->inscricaoID);
 
-        if ($request->justificativa == null && $request->efetivar == 'false') {
-            return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
+        try {
+            DB::transaction(function () use ($inscricao, $request) {
+                if ($request->justificativa == null && $request->efetivar == 'false') {
+                    return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
+                }
+
+                if ($request->justificativa == null && $inscricao->justificativa == $request->justificativa) {
+                    $message = "Nenhuma justificativa adicionada. ";
+                } else if ($request->justificativa != null) {
+                    $message = "Justificativa adicionada. ";
+                } else if (is_null($request->justificativa) && $inscricao->justificativa != null) {
+                    $message = "Justificativa antiga deletada. ";
+                }
+
+                if ($request->justificativa != null) {
+
+                    $request->validate([
+                        'justificativa' => ['string', 'max:1000'],
+                    ]);
+
+                    $inscricao->justificativa = $request->justificativa;
+                } else {
+                    $inscricao->justificativa = null;
+                }
+
+                $cotaRemanejamento = $inscricao->cotaRemanejada;
+                if ($cotaRemanejamento == null) {
+                    $cota = $inscricao->cota;
+                } else {
+                    $cota = $cotaRemanejamento;
+                }
+                $curso = Curso::find($request->curso);
+                $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->where('sisu_id', $inscricao->sisu->id)->first()->pivot;
+                if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] && $request->efetivar == 'false') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'false')) {
+                    if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']) {
+                        $cota_curso->vagas_ocupadas -= 1;
+                    }
+                    $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'];
+                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                    $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro invalidado.";
+                } else if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'] && $request->efetivar == 'true') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'true')) {
+                    /*if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']){
+                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
+                    }*/
+                    $cota_curso->vagas_ocupadas += 1;
+                    $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
+                    $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
+                } else if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'] && $request->efetivar == 'true') {
+                    $cota_curso->vagas_ocupadas += 1;
+                    $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
+                    $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
+                }
+                $inscricao->update();
+                $cota_curso->update();
+
+                return redirect()->back()->with(['success' => $message]);
+            });
+        } catch (\Throwable $th) {
+            report($th);
+
+            return redirect()->back()->withInput()->with(['error' => "Não foi possível editar a situação do(a) candidato(a). Erro: {$th->getMessage()}"]);
         }
 
-        if ($request->justificativa == null && $inscricao->justificativa == $request->justificativa) {
-            $message = "Nenhuma justificativa adicionada. ";
-        } else if ($request->justificativa != null) {
-            $message = "Justificativa adicionada. ";
-        } else if (is_null($request->justificativa) && $inscricao->justificativa != null) {
-            $message = "Justificativa antiga deletada. ";
-        }
-
-        if ($request->justificativa != null) {
-
-            $request->validate([
-                'justificativa' => ['string', 'max:1000'],
-            ]);
-
-            $inscricao->justificativa = $request->justificativa;
-        } else {
-            $inscricao->justificativa = null;
-        }
-
-        $cotaRemanejamento = $inscricao->cotaRemanejada;
-        if ($cotaRemanejamento == null) {
-            $cota = $inscricao->cota;
-        } else {
-            $cota = $cotaRemanejamento;
-        }
-        $curso = Curso::find($request->curso);
-        $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->where('sisu_id', $inscricao->sisu->id)->first()->pivot;
-        if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] && $request->efetivar == 'false') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'false')) {
-            if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']) {
-                $cota_curso->vagas_ocupadas -= 1;
-            }
-            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'];
-            $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
-            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro invalidado.";
-        } else if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'] && $request->efetivar == 'true') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'true')) {
-            /*if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']){
-                $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
-            }*/
-            $cota_curso->vagas_ocupadas += 1;
-            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
-            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
-        } else if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'] && $request->efetivar == 'true') {
-            $cota_curso->vagas_ocupadas += 1;
-            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
-            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
-        }
-        $inscricao->update();
-        $cota_curso->update();
-
-        return redirect()->back()->with(['success' => $message]);
     }
 
     public function bloquearInscricao(Request $request)
@@ -830,11 +840,25 @@ class InscricaoController extends Controller
             'remanejar_vaga' => 'nullable|boolean'
         ]);
 
-        $inscricao = Inscricao::find($id);
-        $inscricao->desistente = $dados['desistencia'];
-        $inscricao->realocar_vaga = $dados['desistencia'] ? $dados['remanejar_vaga'] : false;
-        $inscricao->update();
+        try {
+            $inscricao = Inscricao::findOrFail($id);
 
-        return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);
+            DB::transaction(function () use ($dados, $inscricao) {
+                $inscricao->update([
+                    'desistente' => $dados['desistencia'],
+                    'realocar_vaga' => $dados['desistencia']
+                        ? $dados['remanejar_vaga']
+                        : false,
+                ]);
+            });
+
+            return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);
+        } catch (\Throwable $th) {
+            report($th);
+
+            return redirect()->back()->withInput()->with(['error' => "Não foi possível editar a situação do(a) candidato(a). Erro: {$th->getMessage()}"]);
+        }
+
+
     }
 }
