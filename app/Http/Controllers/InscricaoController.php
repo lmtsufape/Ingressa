@@ -486,7 +486,7 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($request->inscricaoID);
 
         try {
-            DB::transaction(function () use ($inscricao, $request) {
+            return DB::transaction(function () use ($inscricao, $request) {
                 if ($request->justificativa == null && $request->efetivar == 'false') {
                     return redirect()->back()->withErrors(['justificativa' => 'Informe o motivo da invalidação do cadastro.'])->withInput($request->all());
                 }
@@ -518,27 +518,29 @@ class InscricaoController extends Controller
                 }
                 $curso = Curso::find($request->curso);
                 $cota_curso = $curso->cotas()->where('cota_id', $cota->id)->where('sisu_id', $inscricao->sisu->id)->first()->pivot;
-                if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] && $request->efetivar == 'false') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'false')) {
-                    if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']) {
-                        $cota_curso->vagas_ocupadas -= 1;
-                    }
-                    $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'];
-                    $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
-                    $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro invalidado.";
-                } else if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'] && $request->efetivar == 'true') || (is_null($inscricao->cd_efetivado) && $request->efetivar == 'true')) {
-                    /*if($inscricao->status < Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']){
-                        $inscricao->status = Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias'];
-                    }*/
-                    $cota_curso->vagas_ocupadas += 1;
-                    $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
-                    $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
-                } else if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'] && $request->efetivar == 'true') {
-                    $cota_curso->vagas_ocupadas += 1;
-                    $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
-                    $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
+
+                switch ($request->efetivar) {
+                    case 'true':
+                        if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'] || is_null($inscricao->cd_efetivado) || $inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado'])) {
+                            $cota_curso->increment('vagas_ocupadas');
+                            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'];
+                            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro validado.";
+                        }
+                        break;
+
+                    case 'false':
+                        if (($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'] ) || (is_null($inscricao->cd_efetivado))) {
+                            if ($inscricao->cd_efetivado == Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']) {
+                                $cota_curso->decrement('vagas_ocupadas');
+                            }
+                            $inscricao->cd_efetivado = Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_invalidado_confirmacao'];
+                            $inscricao->status = Inscricao::STATUS_ENUM['documentos_invalidados'];
+                            $message .= "Candidato {$inscricao->candidato->no_inscrito} teve o cadastro invalidado.";
+                        }
+                        break;
                 }
+
                 $inscricao->update();
-                $cota_curso->update();
 
                 return redirect()->back()->with(['success' => $message]);
             });
@@ -852,11 +854,11 @@ class InscricaoController extends Controller
                 ]);
             });
 
-            return redirect()->back()->with(['success' => "Situação do(a) candidato(a) " . $inscricao->candidato->user->name . " editada com sucesso!"]);
+            return redirect()->back()->with(['success' => "Desistência do(a) candidato(a) " . $inscricao->candidato->user->name . " registrada com sucesso!"]);
         } catch (\Throwable $th) {
             report($th);
 
-            return redirect()->back()->withInput()->with(['error' => "Não foi possível editar a situação do(a) candidato(a). Erro: {$th->getMessage()}"]);
+            return redirect()->back()->withInput()->with(['error' => "Não foi possível registrar a desistência do(a) candidato(a). Erro: {$th->getMessage()}"]);
         }
 
 

@@ -95,6 +95,8 @@ class Inscricao extends Model
         'deficiente',
         'modalidade_escolhida',
         'tipo_concorrencia',
+        'desistente',
+        'realocar_vaga'
     ];
 
     public function candidato()

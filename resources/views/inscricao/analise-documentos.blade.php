@@ -9,33 +9,7 @@
                     </div>
                 </div>
             </div> --}}
-            @if (session('success'))
-                <div class="row mt-3" id="mensagemSucesso">
-                    <div class="col-md-12">
-                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                <path
-                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                            </symbol>
-                        </svg>
 
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                aria-label="Success:">
-                                <use xlink:href="#check-circle-fill" />
-                            </svg>{{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                        </div>
-                    </div>
-                </div>
-            @endif
-            @error('error')
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ $message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @enderror
             @can('isAdmin', \App\Models\User::class)
                 <div class="row">
                     <div class="col-md-12">
@@ -834,21 +808,10 @@
                         @endforeach
                     </div>
                     @can('isAdminOrAnalistaGeral', \App\Models\User::class)
-                        @if (
-                            $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes'] ||
-                                $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados']
-                        )
-                            <button disabled type="button" class="btn botaoVerde mt-4 py-1 col-md-12"><span
-                                    class="px-4">
-                                    @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
-                                        Validar Cadastro
-                                    @else
-                                        Cadastro Validado
-                                    @endif
-                                </span></button>
-                        @else
-                            <button @if ($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']) disabled @endif
-                                id="efetivarBotao2" type="button"
+                        <button @disabled ($inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
+                                    ||  $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_pendentes']
+                                    ||  $inscricao->status == \App\Models\Inscricao::STATUS_ENUM['documentos_enviados'])
+                                type="button"
                                 class="btn botaoVerde mt-4 py-1 col-md-12" onclick="atualizarInputEfetivar(true)"><span
                                     class="px-4">
                                     @if ($inscricao->cd_efetivado != \App\Models\Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado'])
@@ -857,12 +820,10 @@
                                         Cadastro Validado
                                     @endif
                                 </span></button>
-                        @endif
-                        <button @if ($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
+
+                        <button @disabled($inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_invalidados']
                                     && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_sem_pendencias']
                                     && $inscricao->status != \App\Models\Inscricao::STATUS_ENUM['documentos_aceitos_com_pendencias'])
-                                    disabled
-                                @endif
                             id="efetivarBotao1" type="button" class="btn botao mt-2 py-1 col-md-12"
                             onclick="atualizarInputEfetivar(false)" style="background-color: #FC605F;"> <span
                                 class="px-4">

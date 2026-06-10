@@ -66,16 +66,21 @@
 
     <div class="min-h-screen bg-gray-100 p-1">
         @if (session('success'))
-            <div class="alert alert-success d-flex justify-content-between">
-                {{ session('success') }}
-                <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            <div class="d-flex justify-content-center mt-3">
+                <div class="alert alert-success d-flex justify-content-between align-items-center w-75">
+                    <span>{{ session('success') }}</span>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
             </div>
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger d-flex justify-content-between">
-                {{ session('error') }}
-                <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            <div class="d-flex justify-content-center mt-3">
+                <div class="alert alert-danger d-flex justify-content-between w-75">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
             </div>
         @endif
 
